@@ -91,7 +91,7 @@ const handler = async (event, context) => {
       return {
         statusCode: response.status,
         headers,
-        body: JSON.stringify({ error: `API error: ${response.statusText}` })
+        body: JSON.stringify({ error: "API error: " + response.statusText })
       };
     }
     
