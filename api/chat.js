@@ -143,36 +143,35 @@ Job description: ${userMessage}`
           console.log("Rate limited or quota exceeded - using fallback");
           
           // Provide immediate fallback response
+          const jobType = getJobType(userMessage);
           const fallbackResponse = {
             content: `Job Summary
-Removal of existing vanity and installation of new bathroom vanity with faucet and drain connections.
+Based on "${userMessage}" - this appears to be a ${jobType} job requiring professional service.
 
 Suggested Materials
-- 900mm vanity unit with ceramic top
-- Chrome basin mixer tap
-- Pop-up waste and P-trap
-- Silicone sealant and fittings
-- Supply lines and connectors
+- Materials specific to ${jobType}
+- Standard consumables and fittings
+- Safety equipment and tools
 
 Labour Estimate
-3-4 hours for complete installation including removal and setup
+${getLabourEstimate(userMessage)}
 
 Estimated Quote Range (Guide Only)
-$1,200 - $1,800 depending on vanity selection and any plumbing complications
+${getPriceRange(userMessage)}
 
 Customer Message
-G'day, thanks for reaching out about your bathroom vanity installation. I've had a look at what's involved and can get this sorted for you. The price range will be roughly $1,200-$1,800 depending on the vanity you choose and if we run into any plumbing surprises. Let me know if you'd like me to come by and measure up properly.
+G'day, thanks for reaching out about your ${jobType} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
 
 Things to Confirm
-- What size vanity are you looking at? (900mm standard?)
-- Is the existing plumbing in good condition?
-- Any tiling or repairs needed after removal?
-- Access to the bathroom clear?
+- Exact scope of work required
+- Access to the work area
+- Any existing damage or complications
+- Preferred completion timeline
 
 Cheers,
 [Your Name]
 
-*Note: AI service temporarily unavailable - showing standard quote template*`,
+*Note: AI service temporarily unavailable - showing estimated quote template*`,
             fallback: true,
             apiError: true
           };
@@ -253,10 +252,31 @@ Cheers,
       });
     }
     
+        'carpentry': '4-6 hours for construction',
+        'electrical': '2-3 hours for standard work',
+        'general trade': '2-4 hours depending on complexity'
+      };
+      return estimates[type] || estimates['general trade'];
+    }
+    
+    function getPriceRange(description) {
+      const type = getJobType(description);
+      const ranges = {
+        'plumbing': '$800 - $2,500',
+        'painting': '$1,200 - $4,000',
+        'carpentry': '$1,500 - $5,000',
+        'electrical': '$600 - $2,000',
+        'general trade': '$800 - $3,000'
+      };
+      return ranges[type] || ranges['general trade'];
+    }
+    
     // Helper functions for fallback responses
     function getJobType(description) {
       const desc = description.toLowerCase();
-      if (desc.includes('vanity') || desc.includes('bathroom') || desc.includes('plumbing')) return 'plumbing';
+      if (desc.includes('vanity') || desc.includes('bathroom') || desc.includes('plumbing') || 
+          desc.includes('pipe') || desc.includes('pumbing') || desc.includes('leak') || 
+          desc.includes('drain') || desc.includes('tap') || desc.includes('faucet')) return 'plumbing';
       if (desc.includes('paint') || desc.includes('painting')) return 'painting';
       if (desc.includes('deck') || desc.includes('carpentry') || desc.includes('floor')) return 'carpentry';
       if (desc.includes('electrical') || desc.includes('power') || desc.includes('light')) return 'electrical';
@@ -266,7 +286,7 @@ Cheers,
     function getLabourEstimate(description) {
       const type = getJobType(description);
       const estimates = {
-        'plumbing': '2-4 hours for standard installation',
+        'plumbing': '2-4 hours for standard repair/installation',
         'painting': '4-8 hours depending on area',
         'carpentry': '4-6 hours for construction',
         'electrical': '2-3 hours for standard work',
