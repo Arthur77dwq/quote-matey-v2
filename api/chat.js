@@ -56,16 +56,25 @@ const handler = async (event, context) => {
     });
     
     if (!apiKey) {
+      console.error("No API keys found in environment");
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: "API key not configured. Check environment variables." })
+        body: JSON.stringify({ 
+          error: "API key not configured. Please check environment variables.",
+          debug: {
+            hasPrimaryKey: !!process.env.GEMINI_API_KEY,
+            hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
+            envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
+          }
+        })
       };
     }
     
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(15000), // 15 second timeout
       body: JSON.stringify({
         contents: [
           {
