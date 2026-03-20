@@ -29,7 +29,7 @@ async function handler(request) {
     }
 
     console.log("Parsing request body...");
-    const body = JSON.parse(request.body);
+    const body = request.body;
     console.log("Request body:", JSON.stringify(body, null, 2));
     
     const { messages } = body;
