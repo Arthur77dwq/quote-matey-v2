@@ -1,5 +1,5 @@
-// Main handler
-async function handler(event, context) {
+// Netlify Function - Root level for better compatibility
+const handler = async (event, context) => {
   // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -26,7 +26,11 @@ async function handler(event, context) {
   }
 
   try {
+    console.log("=== API FUNCTION STARTED ===");
+    console.log("Event:", JSON.stringify(event, null, 2));
+    
     const { messages } = JSON.parse(event.body);
+    console.log("Messages received:", messages);
     
     if (!messages?.length) {
       return {
@@ -37,6 +41,8 @@ async function handler(event, context) {
     }
     
     const userMessage = messages.filter(m => m.role === "user").pop()?.content;
+    console.log("User message:", userMessage);
+    
     if (!userMessage?.trim()) {
       return {
         statusCode: 400,
@@ -45,99 +51,38 @@ async function handler(event, context) {
       };
     }
     
-    // Simple Gemini API call
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP;
-    
+    // Check environment variables
     console.log("Environment check:", {
       hasPrimaryKey: !!process.env.GEMINI_API_KEY,
       hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-      apiKeyPresent: !!apiKey,
-      allEnvVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
+      apiKeyPresent: !!(process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP)
     });
     
-    if (!apiKey) {
-      console.error("No API keys found in environment");
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ 
-          error: "API key not configured. Please check environment variables.",
-          debug: {
-            hasPrimaryKey: !!process.env.GEMINI_API_KEY,
-            hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-            envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
-          }
-        })
-      };
-    }
+    // Return a simple response for now to test
+    const response = {
+      content: `QuoteMatey Test Response: "${userMessage}" - This is a test to verify the API is working. The real Gemini API integration will be added next.`,
+      timestamp: new Date().toISOString()
+    };
     
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal: AbortSignal.timeout(15000), // 15 second timeout
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `Job description:\n${userMessage}` }]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1500
-        }
-      })
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API error:", {
-        status: response.status,
-        statusText: response.statusText,
-        errorBody: errorText
-      });
-      
-      return {
-        statusCode: response.status,
-        headers,
-        body: JSON.stringify({ error: "API error: " + response.statusText })
-      };
-    }
-    
-    let data;
-    try {
-      data = await response.json();
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: "Invalid JSON response from API" })
-      };
-    }
-    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    
-    if (!content) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: "No content generated" })
-      };
-    }
+    console.log("=== API FUNCTION COMPLETED ===");
     
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ content })
+      body: JSON.stringify(response)
     };
     
   } catch (error) {
-    console.error("Function error:", error);
+    console.error("=== API FUNCTION ERROR ===");
+    console.error("Error:", error);
+    console.error("Stack:", error.stack);
+    
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({ 
-        error: error.message || "Internal server error" 
+        error: error.message || "Internal server error",
+        timestamp: new Date().toISOString()
       })
     };
   }
