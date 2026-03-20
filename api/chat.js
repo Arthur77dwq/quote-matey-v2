@@ -1,5 +1,5 @@
-// Netlify Function - Root level for better compatibility
-const handler = async (event, context) => {
+// Main handler
+async function handler(event, context) {
   // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -142,5 +142,7 @@ const handler = async (event, context) => {
     };
   }
 };
+
+export default handler;
 
 module.exports = { handler };
