@@ -98,38 +98,34 @@ Please provide a professional quote in this EXACT format:
 ---
 
 #### **1. Materials Estimate**
-| Item | Description | Estimated Cost (inc. Markup) |
-| :--- | :--- | :--- |
-| **[Material 1]** | [Description] | $[Price] |
-| **[Material 2]** | [Description] | $[Price] |
-| **[Material 3]** | [Description] | $[Price] |
-| **Total Materials** | | **$[Total]** |
+[Material 1]: [Description] - $[Price]
+[Material 2]: [Description] - $[Price]
+[Material 3]: [Description] - $[Price]
+**Total Materials:** $[Total]
 
 ---
 
 #### **2. Labor & Call-Out**
-| Service | Details | Cost |
-| :--- | :--- | :--- |
-| **Call-Out Fee** | Standard travel and initial assessment | $[Amount] |
-| **Labor** | Estimated [X] hours @ $[Rate]/hr | $[Amount] |
-| **Total Labor** | | **$[Total]** |
+Call-Out Fee: Standard travel and initial assessment - $[Amount]
+Labor: Estimated [X] hours @ $[Rate]/hr - $[Amount]
+**Total Labor:** $[Total]
 
 ---
 
 #### **3. Quote Summary**
-*   **Materials Total:** $[Amount]
-*   **Labor Total:** $[Amount]
-*   **Subtotal:** $[Amount]
-*   **GST (10%):** $[Amount]
-*   **TOTAL QUOTE:** **$[Amount]**
+Materials Total: $[Amount]
+Labor Total: $[Amount]
+Subtotal: $[Amount]
+GST (10%): $[Amount]
+TOTAL QUOTE: $[Amount]
 
 ---
 
 #### **4. Important Notes & Considerations**
-*   **[Note 1]:** [Important detail]
-*   **[Note 2]:** [Important detail]
-*   **[Note 3]:** [Important detail]
-*   **Validity:** This quote is valid for 14 days.
+Access: [Important detail]
+Restoration: [Important detail]
+Water Shut-off: [Important detail]
+Validity: This quote is valid for 14 days.
 
 ---
 
@@ -144,6 +140,7 @@ IMPORTANT:
 - Be specific about materials and labor
 - Include GST calculations
 - Keep formatting exactly as shown above
+- Use clean text format, not markdown tables
 - Do not add any extra text outside this format` 
               }]
             }
