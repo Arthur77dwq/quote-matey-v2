@@ -84,17 +84,67 @@ export async function POST(request) {
             {
               role: 'user',
               parts: [{ 
-                text: `You are QuoteMatey, an AI assistant that helps Australian tradespeople create professional quotes. Based on this job description, provide a detailed quote with materials, labor, and pricing:
+                text: `You are QuoteMatey, an AI assistant that helps Australian tradespeople create professional quotes. Based on this job description, provide a detailed quote with materials, labor, and pricing.
 
 Job: ${userMessage}
 
-Please provide:
-1. Materials needed with estimated costs
-2. Labor time and cost
-3. Total quote price
-4. Any important notes or considerations
+Please provide a professional quote in this EXACT format:
 
-Format the response professionally for a tradesperson to send to a customer.` 
+### **QUOTE: [Trade Type] Services**
+
+**Job Description:**
+[Brief description of the work]
+
+---
+
+#### **1. Materials Estimate**
+| Item | Description | Estimated Cost (inc. Markup) |
+| :--- | :--- | :--- |
+| **[Material 1]** | [Description] | $[Price] |
+| **[Material 2]** | [Description] | $[Price] |
+| **[Material 3]** | [Description] | $[Price] |
+| **Total Materials** | | **$[Total]** |
+
+---
+
+#### **2. Labor & Call-Out**
+| Service | Details | Cost |
+| :--- | :--- | :--- |
+| **Call-Out Fee** | Standard travel and initial assessment | $[Amount] |
+| **Labor** | Estimated [X] hours @ $[Rate]/hr | $[Amount] |
+| **Total Labor** | | **$[Total]** |
+
+---
+
+#### **3. Quote Summary**
+*   **Materials Total:** $[Amount]
+*   **Labor Total:** $[Amount]
+*   **Subtotal:** $[Amount]
+*   **GST (10%):** $[Amount]
+*   **TOTAL QUOTE:** **$[Amount]**
+
+---
+
+#### **4. Important Notes & Considerations**
+*   **[Note 1]:** [Important detail]
+*   **[Note 2]:** [Important detail]
+*   **[Note 3]:** [Important detail]
+*   **Validity:** This quote is valid for 14 days.
+
+---
+
+**Acceptance:**
+To go ahead with this repair, please reply to this message or call [Your Phone Number].
+
+**QuoteMatey Tip:** *[Helpful tip for the tradesperson]*
+Copy Quote
+
+IMPORTANT: 
+- Use realistic Australian pricing
+- Be specific about materials and labor
+- Include GST calculations
+- Keep formatting exactly as shown above
+- Do not add any extra text outside this format` 
               }]
             }
           ],
