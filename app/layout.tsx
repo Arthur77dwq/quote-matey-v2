@@ -11,21 +11,8 @@ export const metadata: Metadata = {
   description: 'Stop losing jobs to faster tradies. QuoteMatey turns any photo into a professional quote in 60 seconds. Join 2,847+ tradies winning more work.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    shortcut: '/icon.svg',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
     apple: '/apple-icon.png',
   },
 }
