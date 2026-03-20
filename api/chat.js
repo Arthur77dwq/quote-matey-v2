@@ -1,54 +1,50 @@
-// Netlify Function - Root level for better compatibility
-const handler = async (event, context) => {
-  // Enable CORS
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
-  };
-
-  // Handle preflight
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: ''
-    };
-  }
-
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
-  }
-
+// Vercel Serverless Function
+export async function POST(request) {
+  console.log("=== Vercel API FUNCTION STARTED ===");
+  
   try {
-    console.log("=== API FUNCTION STARTED ===");
-    console.log("Event:", JSON.stringify(event, null, 2));
+    // Enable CORS
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Content-Type': 'application/json'
+    };
+
+    // Handle preflight
+    if (request.method === 'OPTIONS') {
+      return new Response('', { status: 200, headers });
+    }
+
+    if (request.method !== 'POST') {
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+        status: 405,
+        headers
+      });
+    }
+
+    console.log("Parsing request body...");
+    const body = await request.json();
+    console.log("Request body:", JSON.stringify(body, null, 2));
     
-    const { messages } = JSON.parse(event.body);
+    const { messages } = body;
     console.log("Messages received:", messages);
     
     if (!messages?.length) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: "Messages array is required" })
-      };
+      return new Response(JSON.stringify({ error: "Messages array is required" }), {
+        status: 400,
+        headers
+      });
     }
     
     const userMessage = messages.filter(m => m.role === "user").pop()?.content;
     console.log("User message:", userMessage);
     
     if (!userMessage?.trim()) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: "User message is required" })
-      };
+      return new Response(JSON.stringify({ error: "User message is required" }), {
+        status: 400,
+        headers
+      });
     }
     
     // Check environment variables
@@ -64,28 +60,27 @@ const handler = async (event, context) => {
       timestamp: new Date().toISOString()
     };
     
-    console.log("=== API FUNCTION COMPLETED ===");
+    console.log("=== Vercel API FUNCTION COMPLETED ===");
     
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(response)
-    };
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers
+    });
     
   } catch (error) {
-    console.error("=== API FUNCTION ERROR ===");
+    console.error("=== Vercel API FUNCTION ERROR ===");
     console.error("Error:", error);
     console.error("Stack:", error.stack);
     
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ 
-        error: error.message || "Internal server error",
-        timestamp: new Date().toISOString()
-      })
-    };
+    return new Response(JSON.stringify({ 
+      error: error.message || "Internal server error",
+      timestamp: new Date().toISOString()
+    }), {
+      status: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    });
   }
-};
-
-export default handler;
+}
