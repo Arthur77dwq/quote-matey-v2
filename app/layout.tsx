@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   description: 'Stop losing jobs to faster tradies. QuoteMatey turns any photo into a professional quote in 60 seconds. Join 2,847+ tradies winning more work.',
   generator: 'v0.app',
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
+    icon: '/images/quotematey-logo.png',
+    shortcut: '/images/quotematey-logo.png',
     apple: '/apple-icon.png',
   },
 }
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/images/quotematey-logo.png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body className="font-sans antialiased">
