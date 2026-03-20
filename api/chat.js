@@ -86,7 +86,7 @@ async function handler(request) {
     console.log("API Key starts with:", apiKey ? apiKey.substring(0, 10) + "..." : "none");
     
     try {
-      const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${apiKey}`;
+      const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
       console.log("Request URL:", requestUrl.replace(apiKey, "API_KEY_HIDDEN"));
       
       const requestBody = JSON.stringify({
