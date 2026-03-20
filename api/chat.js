@@ -333,4 +333,4 @@ Cheers,
   }
 }
 
-module.exports = { handler };
+export default handler;
