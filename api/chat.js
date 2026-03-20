@@ -54,18 +54,107 @@ export async function POST(request) {
       apiKeyPresent: !!(process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP)
     });
     
-    // Return a simple response for now to test
-    const response = {
-      content: `QuoteMatey Test Response: "${userMessage}" - This is a test to verify the API is working. The real Gemini API integration will be added next.`,
-      timestamp: new Date().toISOString()
-    };
+    // Get API key
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP;
     
-    console.log("=== Vercel API FUNCTION COMPLETED ===");
+    if (!apiKey) {
+      console.error("No API keys found in environment");
+      return new Response(JSON.stringify({ 
+        error: "API key not configured. Please check environment variables.",
+        debug: {
+          hasPrimaryKey: !!process.env.GEMINI_API_KEY,
+          hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
+          envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
+        }
+      }), {
+        status: 500,
+        headers
+      });
+    }
     
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers
-    });
+    console.log("Making Gemini API call...");
+    
+    try {
+      const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(30000), // 30 second timeout
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ 
+                text: `You are QuoteMatey, an AI assistant that helps Australian tradespeople create professional quotes. Based on this job description, provide a detailed quote with materials, labor, and pricing:
+
+Job: ${userMessage}
+
+Please provide:
+1. Materials needed with estimated costs
+2. Labor time and cost
+3. Total quote price
+4. Any important notes or considerations
+
+Format the response professionally for a tradesperson to send to a customer.` 
+              }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1500
+          }
+        })
+      });
+      
+      if (!geminiResponse.ok) {
+        const errorText = await geminiResponse.text();
+        console.error("Gemini API error:", {
+          status: geminiResponse.status,
+          statusText: geminiResponse.statusText,
+          errorBody: errorText
+        });
+        
+        return new Response(JSON.stringify({ 
+          error: "AI service temporarily unavailable. Please try again.",
+          details: geminiResponse.statusText
+        }), {
+          status: 503,
+          headers
+        });
+      }
+      
+      const data = await geminiResponse.json();
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (!content) {
+        return new Response(JSON.stringify({ 
+          error: "Unable to generate quote. Please try again." 
+        }), {
+          status: 500,
+          headers
+        });
+      }
+      
+      console.log("=== Gemini API SUCCESS ===");
+      
+      return new Response(JSON.stringify({ content }), {
+        status: 200,
+        headers
+      });
+      
+    } catch (apiError) {
+      console.error("Gemini API call failed:", apiError);
+      
+      // Fallback to test response if API fails
+      const fallbackResponse = {
+        content: `QuoteMatey AI Response for "${userMessage}":\n\nBased on your job description, here's a preliminary estimate:\n\n**Materials**: $X (depending on specific requirements)\n**Labor**: $Y (estimated hours at $Z/hour)\n**Total**: $X + $Y\n\n*This is a basic estimate. A detailed quote will be provided after site inspection.*\n\n*Note: AI service temporarily unavailable - showing fallback response*`,
+        fallback: true
+      };
+      
+      return new Response(JSON.stringify(fallbackResponse), {
+        status: 200,
+        headers
+      });
+    }
     
   } catch (error) {
     console.error("=== Vercel API FUNCTION ERROR ===");
