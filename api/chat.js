@@ -75,7 +75,7 @@ export async function POST(request) {
     console.log("Making Gemini API call...");
     
     try {
-      const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(30000), // 30 second timeout
@@ -138,8 +138,8 @@ Job description: ${userMessage}`
           errorBody: errorText
         });
         
-        // Check for rate limiting or quota exceeded
-        if (geminiResponse.status === 429 || geminiResponse.status === 503) {
+        // Check for rate limiting, quota exceeded, or model not found
+        if (geminiResponse.status === 429 || geminiResponse.status === 503 || geminiResponse.status === 404) {
           console.log("Rate limited or quota exceeded - using fallback");
           
           // Provide immediate fallback response
