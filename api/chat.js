@@ -144,5 +144,3 @@ async function handler(event, context) {
 };
 
 export default handler;
-
-module.exports = { handler };
