@@ -1,5 +1,5 @@
-// Vercel Serverless Function
-export async function POST(request) {
+// Vercel Serverless Function - CommonJS format
+async function handler(request) {
   console.log("=== Vercel API FUNCTION STARTED ===");
   
   try {
@@ -13,45 +13,52 @@ export async function POST(request) {
 
     // Handle preflight
     if (request.method === 'OPTIONS') {
-      return new Response('', { status: 200, headers });
+      return {
+        statusCode: 200,
+        headers,
+        body: ''
+      };
     }
 
     if (request.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-        status: 405,
-        headers
-      });
+      return {
+        statusCode: 405,
+        headers,
+        body: JSON.stringify({ error: 'Method not allowed' })
+      };
     }
 
     console.log("Parsing request body...");
-    const body = await request.json();
+    const body = JSON.parse(request.body);
     console.log("Request body:", JSON.stringify(body, null, 2));
     
     const { messages } = body;
     console.log("Messages received:", messages);
     
     if (!messages?.length) {
-      return new Response(JSON.stringify({ error: "Messages array is required" }), {
-        status: 400,
-        headers
-      });
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Messages array is required" })
+      };
     }
     
     const userMessage = messages.filter(m => m.role === "user").pop()?.content;
     console.log("User message:", userMessage);
     
     if (!userMessage?.trim()) {
-      return new Response(JSON.stringify({ error: "User message is required" }), {
-        status: 400,
-        headers
-      });
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "User message is required" })
+      };
     }
     
     // Check environment variables
     console.log("Environment check:", {
       hasPrimaryKey: !!process.env.GEMINI_API_KEY,
       hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-      apiKeyPresent: !!(process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP)
+      envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
     });
     
     // Get API key
@@ -59,17 +66,18 @@ export async function POST(request) {
     
     if (!apiKey) {
       console.error("No API keys found in environment");
-      return new Response(JSON.stringify({ 
-        error: "API key not configured. Please check environment variables.",
-        debug: {
-          hasPrimaryKey: !!process.env.GEMINI_API_KEY,
-          hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-          envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
-        }
-      }), {
-        status: 500,
-        headers
-      });
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          error: "API key not configured. Please check environment variables.",
+          debug: {
+            hasPrimaryKey: !!process.env.GEMINI_API_KEY,
+            hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
+            envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
+          }
+        })
+      };
     }
     
     console.log("Making Gemini API call...");
@@ -189,39 +197,43 @@ Cheers,
             apiError: true
           };
           
-          return new Response(JSON.stringify(fallbackResponse), {
-            status: 200,
-            headers
-          });
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify(fallbackResponse)
+          };
         }
         
-        return new Response(JSON.stringify({ 
-          error: "AI service temporarily unavailable. Please try again.",
-          details: geminiResponse.statusText
-        }), {
-          status: 503,
-          headers
-        });
+        return {
+          statusCode: 503,
+          headers,
+          body: JSON.stringify({ 
+            error: "AI service temporarily unavailable. Please try again.",
+            details: geminiResponse.statusText
+          })
+        };
       }
       
       const data = await geminiResponse.json();
       const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
       
       if (!content) {
-        return new Response(JSON.stringify({ 
-          error: "Unable to generate quote. Please try again." 
-        }), {
-          status: 500,
-          headers
-        });
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ 
+            error: "Unable to generate quote. Please try again." 
+          })
+        };
       }
       
       console.log("=== Gemini API SUCCESS ===");
       
-      return new Response(JSON.stringify({ content }), {
-        status: 200,
-        headers
-      });
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ content })
+      };
       
     } catch (apiError) {
       console.error("Gemini API call failed:", apiError);
@@ -259,29 +271,11 @@ Cheers,
         apiError: true
       };
       
-      return new Response(JSON.stringify(fallbackResponse), {
-        status: 200,
-        headers
-      });
-    }
-    
-        'carpentry': '4-6 hours for construction',
-        'electrical': '2-3 hours for standard work',
-        'general trade': '2-4 hours depending on complexity'
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(fallbackResponse)
       };
-      return estimates[type] || estimates['general trade'];
-    }
-    
-    function getPriceRange(description) {
-      const type = getJobType(description);
-      const ranges = {
-        'plumbing': '$800 - $2,500',
-        'painting': '$1,200 - $4,000',
-        'carpentry': '$1,500 - $5,000',
-        'electrical': '$600 - $2,000',
-        'general trade': '$800 - $3,000'
-      };
-      return ranges[type] || ranges['general trade'];
     }
     
     // Helper functions for fallback responses
@@ -325,15 +319,18 @@ Cheers,
     console.error("Error:", error);
     console.error("Stack:", error.stack);
     
-    return new Response(JSON.stringify({ 
-      error: error.message || "Internal server error",
-      timestamp: new Date().toISOString()
-    }), {
-      status: 500,
+    return {
+      statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
-      }
-    });
+      },
+      body: JSON.stringify({ 
+        error: error.message || "Internal server error",
+        timestamp: new Date().toISOString()
+      })
+    };
   }
 }
+
+module.exports = { handler };
