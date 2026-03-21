@@ -77,6 +77,45 @@ function checkRateLimit(clientId: string): boolean {
   return true
 }
 
+// Helper functions for fallback responses
+function getJobType(description: string): string {
+  const desc = description.toLowerCase()
+  if (desc.includes('vanity') || desc.includes('bathroom') || desc.includes('plumbing') || 
+      desc.includes('pipe') || desc.includes('pumbing') || desc.includes('leak') || 
+      desc.includes('drain') || desc.includes('tap') || desc.includes('faucet')) return 'plumbing'
+  if (desc.includes('paint') || desc.includes('painting')) return 'painting'
+  if (desc.includes('deck') || desc.includes('carpentry') || desc.includes('floor')) return 'carpentry'
+  if (desc.includes('electrical') || desc.includes('power') || desc.includes('light')) return 'electrical'
+  if (desc.includes('wall') || desc.includes('plaster') || desc.includes('crack')) return 'plastering'
+  return 'general trade'
+}
+
+function getLabourEstimate(description: string): string {
+  const type = getJobType(description)
+  const estimates = {
+    'plumbing': '2-4 hours for standard repair/installation',
+    'painting': '4-8 hours depending on area',
+    'carpentry': '4-6 hours for construction',
+    'electrical': '2-3 hours for standard work',
+    'plastering': '3-5 hours for wall repair',
+    'general trade': '2-4 hours depending on complexity'
+  }
+  return estimates[type] || estimates['general trade']
+}
+
+function getPriceRange(description: string): string {
+  const type = getJobType(description)
+  const ranges = {
+    'plumbing': '$800 - $2,500',
+    'painting': '$1,200 - $4,000',
+    'carpentry': '$1,500 - $5,000',
+    'electrical': '$600 - $2,000',
+    'plastering': '$700 - $2,200',
+    'general trade': '$800 - $3,000'
+  }
+  return ranges[type] || ranges['general trade']
+}
+
 // Clean Gemini API call with new SDK
 async function callGemini(userMessage: string, conversationHistory: Message[]) {
   try {
@@ -130,13 +169,13 @@ async function callGemini(userMessage: string, conversationHistory: Message[]) {
       contents
     }, null, 2))
     
-    const response = await ai.models.generateContentStream({
+    const response = await ai.models.generateContent({
       model,
       config,
       contents
     });
     
-    let fullText = '';
+    let fullText = response.response.text();
     for await (const chunk of response) {
       if (chunk.text) {
         fullText += chunk.text;
