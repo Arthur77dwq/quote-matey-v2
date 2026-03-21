@@ -1,5 +1,17 @@
 // Vercel Serverless Function - CommonJS format
 async function handler(request) {
+  console.log("=== FUNCTION STARTED ===");
+  console.log("Timestamp:", new Date().toISOString());
+  
+  // Immediate test response
+  if (request.body && JSON.parse(request.body).messages?.[0]?.content === "test123") {
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: "Function is working! Test successful." })
+    };
+  }
+  
   console.log("=== Vercel API FUNCTION STARTED ===");
   console.log("Request method:", request.method);
   console.log("Request headers:", Object.keys(request.headers || {}));
