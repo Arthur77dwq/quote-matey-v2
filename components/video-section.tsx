@@ -72,7 +72,7 @@ export function VideoSection() {
               loop
               playsInline
               muted={isMuted}
-              style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none', WebkitUserDrag: 'none' }}
+              style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
             />
 
             {/* Custom Video Controls Overlay */}
