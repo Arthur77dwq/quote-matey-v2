@@ -67,7 +67,7 @@ function getJobType(description: string): string {
 
 function getLabourEstimate(description: string): string {
   const type = getJobType(description)
-  const estimates = {
+  const estimates: Record<string, string> = {
     'plumbing': '2-4 hours for standard repair/installation',
     'painting': '4-8 hours depending on area',
     'carpentry': '4-6 hours for construction',
@@ -80,7 +80,7 @@ function getLabourEstimate(description: string): string {
 
 function getPriceRange(description: string): string {
   const type = getJobType(description)
-  const ranges = {
+  const ranges: Record<string, string> = {
     'plumbing': '$800 - $2,500',
     'painting': '$1,200 - $4,000',
     'carpentry': '$1,500 - $5,000',
