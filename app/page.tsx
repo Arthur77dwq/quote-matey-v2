@@ -2,6 +2,7 @@ import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { SocialProofBar } from "@/components/social-proof-bar"
 import { HowItWorks } from "@/components/how-it-works"
+import { VideoSection } from "@/components/video-section"
 import { BeforeAfter } from "@/components/before-after"
 import { Benefits } from "@/components/benefits"
 import { Testimonials } from "@/components/testimonials"
@@ -17,6 +18,7 @@ export default function Home() {
       <HeroSection />
       <SocialProofBar />
       <HowItWorks />
+      <VideoSection />
       <BeforeAfter />
       <Benefits />
       <Testimonials />
