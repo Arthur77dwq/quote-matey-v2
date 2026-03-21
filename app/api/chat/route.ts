@@ -147,7 +147,8 @@ export async function POST(request: NextRequest) {
     
     try {
       console.log("=== MAKING GEMINI API CALL ===");
-      console.log("User message:", userMessage);
+      console.log("Full conversation history:", JSON.stringify(messages, null, 2));
+      console.log("Latest user message:", userMessage);
       console.log("API Key exists:", !!apiKey);
       console.log("API Key length:", apiKey?.length);
       
@@ -155,10 +156,10 @@ export async function POST(request: NextRequest) {
       console.log("Request URL:", requestUrl.replace(apiKey, "API_KEY_HIDDEN"));
       
       const requestBody = JSON.stringify({
-        contents: [{
-          role: 'user',
-          parts: [{ text: `${SYSTEM_PROMPT}\n\nJob description: ${userMessage}` }]
-        }],
+        contents: messages.map(msg => ({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.content }]
+        })),
         generationConfig: {
           temperature: 0.7,
           maxOutputTokens: 1500
