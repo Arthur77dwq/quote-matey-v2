@@ -68,7 +68,7 @@ export function VideoSection() {
             <video
               ref={videoRef}
               src="/video.mp4"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-b-2xl"
               loop
               playsInline
               muted={isMuted}
