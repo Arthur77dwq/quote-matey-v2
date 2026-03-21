@@ -115,7 +115,7 @@ Things to Confirm
 Cheers,
 [Your Name]
 
-*Note: AI service temporarily unavailable - showing estimated quote template*`,
+Note: AI service temporarily unavailable - showing estimated quote template*`,
     fallback: true,
     apiError: true
   }
