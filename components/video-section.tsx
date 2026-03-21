@@ -64,7 +64,7 @@ export function VideoSection() {
           </div>
 
           {/* Video Container - 1920x1080 aspect ratio with stroke */}
-          <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300">
+          <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300 rounded-b-2xl">
             <video
               ref={videoRef}
               src="/video.mp4"
