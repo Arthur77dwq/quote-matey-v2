@@ -1,6 +1,8 @@
 // Vercel Serverless Function - CommonJS format
 async function handler(request) {
   console.log("=== Vercel API FUNCTION STARTED ===");
+  console.log("Request method:", request.method);
+  console.log("Request headers:", Object.keys(request.headers || {}));
   
   try {
     // Enable CORS
@@ -228,12 +230,22 @@ Cheers,
       }
       
       console.log("=== Gemini API SUCCESS ===");
+      console.log("Content length:", content?.length || 0);
+      console.log("About to return response...");
       
-      return {
+      const responseObj = {
         statusCode: 200,
         headers,
         body: JSON.stringify({ content })
       };
+      
+      console.log("Response object:", {
+        statusCode: responseObj.statusCode,
+        bodyLength: responseObj.body.length,
+        headers: Object.keys(responseObj.headers)
+      });
+      
+      return responseObj;
       
     } catch (apiError) {
       console.error("Gemini API call failed:", apiError);
