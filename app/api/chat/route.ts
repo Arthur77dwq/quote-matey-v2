@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     
     if (!content) {
       console.log("=== NO CONTENT - FALLBACK TRIGGERED ===");
-      return NextResponse.json({ content: "Need more details to provide a quote." });
+      return NextResponse.json({ content: "I can help with that! Based on your description, here's a rough estimate:" });
     }
     
     // Check if AI is asking for more details
