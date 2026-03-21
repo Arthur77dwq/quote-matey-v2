@@ -143,7 +143,7 @@ export async function POST(request: Request) {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(8000),
         body: JSON.stringify({
           contents: [{
             role: 'user',
@@ -151,7 +151,7 @@ export async function POST(request: Request) {
           }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 500
+            maxOutputTokens: 400
           }
         })
       })
