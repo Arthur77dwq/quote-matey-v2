@@ -194,7 +194,7 @@ export async function POST(request: Request) {
         )
       }
       
-      const content = response.text();
+      const content = response?.text();
       
       if (!content) {
         return Response.json(
