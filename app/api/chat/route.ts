@@ -47,11 +47,10 @@ interface Message {
   content: string
 }
 
-// Helper functions for fallback responses
 function getJobType(description: string): string {
   const desc = description.toLowerCase()
   if (desc.includes('vanity') || desc.includes('bathroom') || desc.includes('plumbing') || 
-      desc.includes('pipe') || desc.includes('pumbing') || desc.includes('leak') || 
+      desc.includes('pipe') || desc.includes('leak') || 
       desc.includes('drain') || desc.includes('tap') || desc.includes('faucet')) return 'plumbing'
   if (desc.includes('paint') || desc.includes('painting')) return 'painting'
   if (desc.includes('deck') || desc.includes('carpentry') || desc.includes('floor')) return 'carpentry'
@@ -86,212 +85,98 @@ function getPriceRange(description: string): string {
   return ranges[type] || ranges['general trade']
 }
 
+function createFallback(userMessage: string) {
+  return {
+    content: `Job Summary
+Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
+
+Suggested Materials
+- Materials specific to ${getJobType(userMessage)}
+- Standard consumables and fittings
+- Safety equipment and tools
+
+Labour Estimate
+${getLabourEstimate(userMessage)}
+
+Estimated Quote Range (Guide Only)
+${getPriceRange(userMessage)}
+
+Customer Message
+G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
+
+Things to Confirm
+- Exact scope of work required
+- Access to the work area
+- Any existing damage or complications
+- Preferred completion timeline
+
+Cheers,
+[Your Name]
+
+*Note: AI service temporarily unavailable - showing estimated quote template*`,
+    fallback: true,
+    apiError: true
+  }
+}
+
 export async function POST(request: Request) {
-  console.log("=== QUOTEMATEY AI API STARTED ===");
-  
   try {
     const { messages }: { messages: Message[] } = await request.json()
     
     if (!messages?.length) {
-      return Response.json(
-        { error: "Messages array is required" },
-        { status: 400 }
-      )
+      return Response.json({ error: "Messages array is required" }, { status: 400 })
     }
     
     const userMessage = messages.filter(m => m.role === "user").pop()?.content
     
     if (!userMessage?.trim()) {
-      return Response.json(
-        { error: "User message is required" },
-        { status: 400 }
-      )
+      return Response.json({ error: "User message is required" }, { status: 400 })
     }
     
-    console.log("User message:", userMessage);
-    
-    // Get API key
     const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP
     
     if (!apiKey) {
-      console.error("No API keys found in environment");
-      // Return fallback immediately if no API key
-      const fallbackResponse = {
-        content: `Job Summary
-Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
-
-Suggested Materials
-- Materials specific to ${getJobType(userMessage)}
-- Standard consumables and fittings
-- Safety equipment and tools
-
-Labour Estimate
-${getLabourEstimate(userMessage)}
-
-Estimated Quote Range (Guide Only)
-${getPriceRange(userMessage)}
-
-Customer Message
-G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
-
-Things to Confirm
-- Exact scope of work required
-- Access to the work area
-- Any existing damage or complications
-- Preferred completion timeline
-
-Cheers,
-[Your Name]
-
-*Note: AI service unavailable - showing estimated quote template*`,
-        fallback: true,
-        apiError: true
-      };
-      
-      return Response.json(fallbackResponse);
+      return Response.json(createFallback(userMessage))
     }
     
-    console.log("Making Gemini API call...");
-    console.log("API Key present:", !!apiKey);
-    console.log("API Key length:", apiKey ? apiKey.length : 0);
-    
     try {
-      const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-      
-      const requestBody = JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ 
-              text: `${SYSTEM_PROMPT}
-
-Job description: ${userMessage}` 
-            }]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 800
-        }
-      });
-      
-      console.log("Request URL:", requestUrl.replace(apiKey, "API_KEY_HIDDEN"));
-      console.log("Request body length:", requestBody.length);
-      
-      const response = await fetch(requestUrl, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(15000),
-        body: requestBody
-      });
-      
-      console.log("Response status:", response.status);
+        signal: AbortSignal.timeout(10000),
+        body: JSON.stringify({
+          contents: [{
+            role: 'user',
+            parts: [{ text: `${SYSTEM_PROMPT}\n\nJob description: ${userMessage}` }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+          }
+        })
+      })
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Gemini API error:", {
-          status: response.status,
-          statusText: response.statusText,
-          errorBody: errorText
-        });
-        
-        // Return fallback for any API error
-        const fallbackResponse = {
-          content: `Job Summary
-Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
-
-Suggested Materials
-- Materials specific to ${getJobType(userMessage)}
-- Standard consumables and fittings
-- Safety equipment and tools
-
-Labour Estimate
-${getLabourEstimate(userMessage)}
-
-Estimated Quote Range (Guide Only)
-${getPriceRange(userMessage)}
-
-Customer Message
-G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
-
-Things to Confirm
-- Exact scope of work required
-- Access to the work area
-- Any existing damage or complications
-- Preferred completion timeline
-
-Cheers,
-[Your Name]
-
-*Note: AI service temporarily unavailable - showing estimated quote template*`,
-          fallback: true,
-          apiError: true
-        };
-        
-        return Response.json(fallbackResponse);
+        return Response.json(createFallback(userMessage))
       }
       
-      const data = await response.json();
-      const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const data = await response.json()
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text
       
       if (!content) {
-        return Response.json(
-          { error: "Unable to generate quote. Please try again." },
-          { status: 500 }
-        )
+        return Response.json(createFallback(userMessage))
       }
       
-      console.log("=== Gemini API SUCCESS ===");
-      console.log("Content length:", content.length);
+      return Response.json({ content })
       
-      return Response.json({ content });
-      
-    } catch (apiError) {
-      console.error("Gemini API call failed:", apiError);
-      
-      // Provide fallback response for any API failure
-      const fallbackResponse = {
-        content: `Job Summary
-Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
-
-Suggested Materials
-- Materials specific to ${getJobType(userMessage)}
-- Standard consumables and fittings
-- Safety equipment and tools
-
-Labour Estimate
-${getLabourEstimate(userMessage)}
-
-Estimated Quote Range (Guide Only)
-${getPriceRange(userMessage)}
-
-Customer Message
-G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
-
-Things to Confirm
-- Exact scope of work required
-- Access to the work area
-- Any existing damage or complications
-- Preferred completion timeline
-
-Cheers,
-[Your Name]
-
-*Note: AI service temporarily unavailable - showing estimated quote template*`,
-        fallback: true,
-        apiError: true
-      };
-      
-      return Response.json(fallbackResponse);
+    } catch (error) {
+      return Response.json(createFallback(userMessage))
     }
     
   } catch (error) {
-    console.error("=== QUOTEMATEY API ERROR ===");
-    console.error("Error:", error);
-    
     return Response.json({
       error: error instanceof Error ? error.message : "Internal server error",
       timestamp: new Date().toISOString()
-    }, { status: 500 });
+    }, { status: 500 })
   }
 }
