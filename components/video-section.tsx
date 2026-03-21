@@ -48,7 +48,7 @@ export function VideoSection() {
         {/* Video Container with MacBook-style frame */}
         <div className="relative max-w-6xl mx-auto">
           {/* MacBook Frame - Only top tab bar */}
-          <div className="bg-gray-100 rounded-t-2xl p-3 shadow-2xl">
+          <div className="bg-gray-200 rounded-t-2xl p-3 shadow-2xl">
             {/* MacBook Tab Bar */}
             <div className="flex items-center justify-between">
               {/* Traffic Light Buttons */}
@@ -63,8 +63,8 @@ export function VideoSection() {
             </div>
           </div>
 
-          {/* Video Container - 1920x1080 aspect ratio */}
-          <div className="relative aspect-video bg-black shadow-2xl">
+          {/* Video Container - 1920x1080 aspect ratio with stroke */}
+          <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300">
             <video
               ref={videoRef}
               src="/video.mp4"
@@ -72,6 +72,7 @@ export function VideoSection() {
               loop
               playsInline
               muted={isMuted}
+              style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none', WebkitUserDrag: 'none' }}
             />
 
             {/* Custom Video Controls Overlay */}
