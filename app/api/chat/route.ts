@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
         })),
         generationConfig: {
           temperature: 0.7,
-          maxOutputTokens: 1500
+          maxOutputTokens: 8000
         }
       });
       
@@ -204,6 +204,14 @@ export async function POST(request: NextRequest) {
       
       console.log("=== SUCCESS - RETURNING AI CONTENT ===");
       console.log("Content length:", content.length);
+      console.log("Content preview:", content.substring(0, 200) + "...");
+      
+      // Validate content is complete
+      if (content.length < 100) {
+        console.log("=== CONTENT SUSPICIOUSLY SHORT - POSSIBLE CUT-OFF ===");
+        console.log("Full content:", content);
+      }
+      
       return NextResponse.json({ content })
       
     } catch (error) {
