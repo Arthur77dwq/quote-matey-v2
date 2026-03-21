@@ -96,12 +96,32 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
+    console.log("=== GEMINI RESPONSE DEBUG ===");
+    console.log("Raw response data:", JSON.stringify(data, null, 2));
+    console.log("Candidates array:", data.candidates);
+    console.log("First candidate:", data.candidates?.[0]);
+    console.log("Content object:", data.candidates?.[0]?.content);
+    console.log("Parts array:", data.candidates?.[0]?.content?.parts);
+    console.log("First part text:", data.candidates?.[0]?.content?.parts?.[0]?.text);
+    
     const content = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
+    
+    console.log("=== CONTENT ANALYSIS ===");
+    console.log("Content exists:", !!content);
+    console.log("Content length:", content?.length || 0);
+    console.log("Content preview:", content?.substring(0, 200) + "...");
+    
     if (!content) {
+      console.log("=== NO CONTENT - FALLBACK TRIGGERED ===");
       return NextResponse.json({ content: "Need more details to provide a quote." });
     }
-
+    
+    // Check if AI is asking for more details
+    if (content.toLowerCase().includes("need more details") || content.toLowerCase().includes("need clarification")) {
+      console.log("=== AI ASKING FOR MORE DETAILS - POSSIBLE SYSTEM PROMPT ISSUE ===");
+      console.log("Full content:", content);
+    }
+    
     return NextResponse.json({ content: cleanOutput(content) });
 
   } catch (error) {
