@@ -1,43 +1,19 @@
 "use client"
 
 import { Check, X, Sparkles, Shield, Zap } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const plans = [
   {
-    name: "Starter",
-    price: "$19",
-    period: "/month",
-    description: "Test the waters",
+    name: "Free",
+    price: "$0",
+    period: "",
+    description: "Unlimited text quote generation (MVP)",
     features: [
-      { text: "50 quotes per month", included: true },
-      { text: "Photo & video analysis", included: true },
-      { text: "Standard templates", included: true },
-      { text: "Email support", included: true },
-      { text: "Custom branding", included: false },
-      { text: "Quote analytics", included: false },
-    ],
-    highlighted: false,
-    cta: "Start Free Trial",
-    note: "Great for getting started",
-  },
-  {
-    name: "Pro",
-    price: "$39",
-    period: "/month",
-    description: "For serious tradies",
-    badge: "Most Popular",
-    features: [
-      { text: "Unlimited quotes", included: true },
-      { text: "Priority AI (2x faster)", included: true },
-      { text: "Custom branded templates", included: true },
-      { text: "Quote history & analytics", included: true },
-      { text: "Priority support", included: true },
-      { text: "Team access (coming soon)", included: true },
+      { text: "No signup required", included: true },
     ],
     highlighted: true,
-    cta: "Start Free Trial",
-    savings: "Win 1 job = pays for 3 months",
-    annualPrice: "$29",
+    cta: "Start Free",
   },
 ]
 
@@ -48,6 +24,8 @@ const comparisonValue = [
 ]
 
 export function Pricing() {
+  const router = useRouter()
+
   return (
     <section id="pricing" className="py-24 bg-gradient-to-b from-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +60,7 @@ export function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto mb-16">
+        <div className="max-w-md mx-auto mb-16">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -92,15 +70,6 @@ export function Pricing() {
                   : "border-border shadow-lg"
               }`}
             >
-              {plan.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-[#f57a0a] to-orange-500 text-white text-sm font-bold px-5 py-1.5 rounded-full flex items-center gap-2 shadow-lg">
-                    <Sparkles className="w-4 h-4" />
-                    {plan.badge}
-                  </div>
-                </div>
-              )}
-
               <div className="text-center mb-6 pt-2">
                 <h3 className="text-2xl font-bold text-[#0a1628] mb-1">{plan.name}</h3>
                 <p className="text-muted-foreground">{plan.description}</p>
@@ -111,18 +80,7 @@ export function Pricing() {
                   <span className="text-5xl font-bold text-[#0a1628]">{plan.price}</span>
                   <span className="text-muted-foreground pb-1">{plan.period}</span>
                 </div>
-                {plan.annualPrice && (
-                  <p className="text-sm text-muted-foreground mt-2">
-                    or <span className="font-semibold text-foreground">{plan.annualPrice}/mo</span> billed annually (save 25%)
-                  </p>
-                )}
               </div>
-
-              {plan.savings && (
-                <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-6 text-center">
-                  <span className="text-green-700 font-semibold">{plan.savings}</span>
-                </div>
-              )}
 
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
@@ -144,6 +102,7 @@ export function Pricing() {
               </ul>
 
               <button
+                onClick={() => router.push('/chat')}
                 className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
                   plan.highlighted
                     ? "bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20"
@@ -152,10 +111,6 @@ export function Pricing() {
               >
                 {plan.cta}
               </button>
-
-              {plan.note && (
-                <p className="text-center text-sm text-muted-foreground mt-4">{plan.note}</p>
-              )}
             </div>
           ))}
         </div>
