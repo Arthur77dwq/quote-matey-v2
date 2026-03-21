@@ -1,8 +1,10 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { ArrowRight, Shield, Clock, CreditCard, Zap, Users } from "lucide-react"
 
 export function CTASection() {
+  const router = useRouter()
   return (
     <section id="cta" className="py-24 bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#0a1628] relative overflow-hidden">
       {/* Background elements */}
@@ -35,7 +37,10 @@ export function CTASection() {
 
           {/* CTA Button */}
           <div className="flex flex-col items-center gap-6 mb-12">
-            <button className="group inline-flex items-center gap-3 bg-[#f57a0a] text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-[#e06d00] transition-all shadow-2xl shadow-[#f57a0a]/30 hover:shadow-[#f57a0a]/40 hover:-translate-y-1">
+            <button 
+              onClick={() => router.push("/chat")}
+              className="group inline-flex items-center gap-3 bg-[#f57a0a] text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-[#e06d00] transition-all shadow-2xl shadow-[#f57a0a]/30 hover:shadow-[#f57a0a]/40 hover:-translate-y-1"
+            >
               <Zap className="w-6 h-6" />
               Start Winning Jobs Free
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />

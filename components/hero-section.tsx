@@ -60,7 +60,7 @@ export function HeroSection() {
             {/* Primary + Secondary CTA */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <button
-                onClick={() => document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => router.push("/chat")}
                 className="group inline-flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#e06d00] transition-all shadow-xl shadow-[#f57a0a]/25 hover:shadow-2xl hover:shadow-[#f57a0a]/30 hover:-translate-y-0.5"
               >
                 <Zap className="w-5 h-5" />
