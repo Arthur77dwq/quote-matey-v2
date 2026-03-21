@@ -67,7 +67,10 @@ export function HeroSection() {
                 Start Winning Jobs Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="group inline-flex items-center justify-center gap-2 bg-white text-foreground px-6 py-4 rounded-full text-lg font-semibold border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all">
+              <button 
+                onClick={() => document.getElementById("video-section")?.scrollIntoView({ behavior: "smooth" })}
+                className="group inline-flex items-center justify-center gap-2 bg-white text-foreground px-6 py-4 rounded-full text-lg font-semibold border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
+              >
                 <Play className="w-5 h-5 text-[#f57a0a] fill-[#f57a0a]/20" />
                 See it in Action
               </button>

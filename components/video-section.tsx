@@ -27,7 +27,7 @@ export function VideoSection() {
   }
 
   return (
-    <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+    <section id="video-section" className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
       {/* Background accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-[#f57a0a]/5 to-transparent rounded-full blur-3xl -z-10" />
 
