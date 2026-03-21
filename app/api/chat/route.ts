@@ -187,7 +187,7 @@ export async function POST(request: Request) {
       console.log("=== Gemini API SUCCESS ===");
       console.log("Response received");
       
-      const content = response.response.text();
+      const content = response.text();
       
       if (!content) {
         return Response.json(
