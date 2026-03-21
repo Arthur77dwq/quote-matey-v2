@@ -187,6 +187,13 @@ export async function POST(request: Request) {
       console.log("=== Gemini API SUCCESS ===");
       console.log("Response received");
       
+      if (!response) {
+        return Response.json(
+          { error: "No response from AI. Please try again." },
+          { status: 500 }
+        )
+      }
+      
       const content = response.text();
       
       if (!content) {
