@@ -71,12 +71,10 @@ export async function POST(request: NextRequest) {
     }
 
     const requestBody = JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: SYSTEM_PROMPT + "\n\n" + messages.map((msg: Message) => `${msg.role}: ${msg.content}`).join("\n") }]
-          }
-        ],
+        contents: messages.map((msg: Message) => ({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.content }]
+        })),
         generationConfig: {
           temperature: 0.7,
           maxOutputTokens: 8000
