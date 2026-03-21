@@ -1,8 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Mail } from "lucide-react"
 
 export function Footer() {
+  const router = useRouter()
   return (
     <footer className="bg-[#050d18] text-white/70">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -41,15 +43,18 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Free Early Access */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Company</h4>
-            <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-            </ul>
+            <h4 className="font-semibold text-white mb-4">Free Early Access</h4>
+            <p className="text-white/60 mb-4 text-sm leading-relaxed">
+              No signup required. Test the waters with our MVP starter.
+            </p>
+            <button
+              onClick={() => router.push('/chat')}
+              className="bg-[#f57a0a] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#e06d00] transition-all shadow-lg shadow-[#f57a0a]/20 hover:shadow-[#f57a0a]/30 hover:-translate-y-0.5"
+            >
+              Start Free
+            </button>
           </div>
         </div>
       </div>
