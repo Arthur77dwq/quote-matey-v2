@@ -135,7 +135,7 @@ Job description: ${userMessage}`
         ],
         generationConfig: {
           temperature: 0.7,
-          maxOutputTokens: 1500
+          maxOutputTokens: 800  // Reduced from 1500 for faster responses
         }
       });
       
@@ -144,7 +144,7 @@ Job description: ${userMessage}`
       const geminiResponse = await fetch(requestUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(30000), // 30 second timeout
+        signal: AbortSignal.timeout(15000), // 15 second timeout - reduced from 30
         body: requestBody
       });
       
