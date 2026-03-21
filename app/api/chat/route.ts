@@ -96,8 +96,8 @@ const requestBody = JSON.stringify({
     }
   ],
   generationConfig: {
-    temperature: 0.4,
-    maxOutputTokens: 300
+    temperature: 0.7,
+    maxOutputTokens: 3000
   }
 });
 
@@ -124,8 +124,13 @@ const requestBody = JSON.stringify({
     console.log("Parts array:", data.candidates?.[0]?.content?.parts);
     console.log("First part text:", data.candidates?.[0]?.content?.parts?.[0]?.text);
     
-    const content = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+
+const content = parts
+  .map((p: any) => p.text || "")
+  .join("")
+  .trim();
+    console.log("ALL PARTS:", parts);
     console.log("=== CONTENT ANALYSIS ===");
     console.log("Content exists:", !!content);
     console.log("Content length:", content?.length || 0);
