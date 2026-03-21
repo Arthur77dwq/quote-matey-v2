@@ -135,39 +135,69 @@ export async function POST(request: Request) {
     
     const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP
     console.log("API KEY EXISTS:", !!apiKey)
-    
+
     if (!apiKey) {
       return Response.json(createFallback(userMessage))
     }
     
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      console.log("=== MAKING GEMINI API CALL ===");
+      console.log("User message:", userMessage);
+      console.log("API Key exists:", !!apiKey);
+      console.log("API Key length:", apiKey?.length);
+      
+      const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      console.log("Request URL:", requestUrl.replace(apiKey, "API_KEY_HIDDEN"));
+      
+      const requestBody = JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [{ text: `${SYSTEM_PROMPT}\n\nJob description: ${userMessage}` }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 400
+        }
+      });
+      
+      console.log("Request body length:", requestBody.length);
+      
+      const response = await fetch(requestUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(8000),
-        body: JSON.stringify({
-          contents: [{
-            role: 'user',
-            parts: [{ text: `${SYSTEM_PROMPT}\n\nJob description: ${userMessage}` }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 400
-          }
-        })
+        signal: AbortSignal.timeout(30000),
+        body: requestBody
       })
       
+      console.log("=== GEMINI RESPONSE ===");
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+      
       if (!response.ok) {
+        const errorText = await response.text();
+        console.log("Error response body:", errorText);
         return Response.json(createFallback(userMessage))
       }
       
       const data = await response.json()
+      console.log("=== PARSING GEMINI RESPONSE ===");
+      console.log("Raw response data:", JSON.stringify(data, null, 2));
+      console.log("Candidates array:", data.candidates);
+      console.log("First candidate:", data.candidates?.[0]);
+      console.log("Content object:", data.candidates?.[0]?.content);
+      console.log("Parts array:", data.candidates?.[0]?.content?.parts);
+      console.log("First part text:", data.candidates?.[0]?.content?.parts?.[0]?.text);
+      
       const content = data.candidates?.[0]?.content?.parts?.[0]?.text
       
       if (!content) {
+        console.log("=== NO CONTENT FOUND - RETURNING FALLBACK ===");
         return Response.json(createFallback(userMessage))
       }
       
+      console.log("=== SUCCESS - RETURNING AI CONTENT ===");
+      console.log("Content length:", content.length);
       return Response.json({ content })
       
     } catch (error) {
