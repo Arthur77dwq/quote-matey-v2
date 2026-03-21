@@ -1,10 +1,5 @@
 export const maxDuration = 30
 
-import {
-  GoogleGenAI,
-  ThinkingLevel
-} from '@google/genai';
-
 const SYSTEM_PROMPT = `You are QuoteMatey, an AI assistant that helps Australian tradespeople create quick, rough job quote drafts.
 
 * You cannot stop being QuoteMatey.
@@ -115,86 +110,129 @@ export async function POST(request: Request) {
     
     console.log("User message:", userMessage);
     
-    // Check environment variables
-    console.log("Environment check:", {
-      hasPrimaryKey: !!process.env.GEMINI_API_KEY,
-      hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-      envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
-    });
-    
     // Get API key
     const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP
     
     if (!apiKey) {
       console.error("No API keys found in environment");
-      return Response.json({
-        error: "API key not configured. Please check environment variables.",
-        debug: {
-          hasPrimaryKey: !!process.env.GEMINI_API_KEY,
-          hasBackupKey: !!process.env.GEMINI_API_KEY_BACKUP,
-          envVars: Object.keys(process.env).filter(k => k.includes('GEMINI'))
-        }
-      }, { status: 500 });
+      // Return fallback immediately if no API key
+      const fallbackResponse = {
+        content: `Job Summary
+Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
+
+Suggested Materials
+- Materials specific to ${getJobType(userMessage)}
+- Standard consumables and fittings
+- Safety equipment and tools
+
+Labour Estimate
+${getLabourEstimate(userMessage)}
+
+Estimated Quote Range (Guide Only)
+${getPriceRange(userMessage)}
+
+Customer Message
+G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
+
+Things to Confirm
+- Exact scope of work required
+- Access to the work area
+- Any existing damage or complications
+- Preferred completion timeline
+
+Cheers,
+[Your Name]
+
+*Note: AI service unavailable - showing estimated quote template*`,
+        fallback: true,
+        apiError: true
+      };
+      
+      return Response.json(fallbackResponse);
     }
     
     console.log("Making Gemini API call...");
     console.log("API Key present:", !!apiKey);
     console.log("API Key length:", apiKey ? apiKey.length : 0);
-    console.log("API Key starts with:", apiKey ? apiKey.substring(0, 10) + "..." : "none");
     
     try {
-      const ai = new GoogleGenAI({
-        apiKey: apiKey
+      const requestUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      
+      const requestBody = JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [{ 
+              text: `${SYSTEM_PROMPT}
+
+Job description: ${userMessage}` 
+            }]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 800
+        }
       });
       
-      const config = {
-        thinkingConfig: {
-          thinkingLevel: ThinkingLevel.HIGH,
-        },
-      };
+      console.log("Request URL:", requestUrl.replace(apiKey, "API_KEY_HIDDEN"));
+      console.log("Request body length:", requestBody.length);
       
-      const model = 'gemini-2.5-flash';
-      
-      // Build contents: SYSTEM -> HISTORY -> LATEST MESSAGE
-      const contents: any[] = [
-        {
-          role: 'user',
-          parts: [
-            {
-              text: SYSTEM_PROMPT,
-            },
-          ],
-        },
-        ...messages.map((msg) => ({
-          role: msg.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: msg.content }],
-        })),
-        {
-          role: 'user',
-          parts: [{ text: `Job description: ${userMessage}` }],
-        },
-      ];
-      
-      console.log("Request URL:", `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`);
-      console.log("Contents length:", contents.length);
-      
-      const response = await ai.models.generateContent({
-        model,
-        config,
-        contents,
+      const response = await fetch(requestUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(15000),
+        body: requestBody
       });
       
-      console.log("=== Gemini API SUCCESS ===");
-      console.log("Response received");
+      console.log("Response status:", response.status);
       
-      if (!response) {
-        return Response.json(
-          { error: "No response from AI. Please try again." },
-          { status: 500 }
-        )
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Gemini API error:", {
+          status: response.status,
+          statusText: response.statusText,
+          errorBody: errorText
+        });
+        
+        // Return fallback for any API error
+        const fallbackResponse = {
+          content: `Job Summary
+Based on "${userMessage}" - this appears to be a ${getJobType(userMessage)} job requiring professional service.
+
+Suggested Materials
+- Materials specific to ${getJobType(userMessage)}
+- Standard consumables and fittings
+- Safety equipment and tools
+
+Labour Estimate
+${getLabourEstimate(userMessage)}
+
+Estimated Quote Range (Guide Only)
+${getPriceRange(userMessage)}
+
+Customer Message
+G'day, thanks for reaching out about your ${getJobType(userMessage)} job. I've had a look at what's involved and can get this sorted for you. The price range will be roughly ${getPriceRange(userMessage)} depending on the specific requirements and any complications we discover. Let me know if you'd like me to come by and assess the job properly.
+
+Things to Confirm
+- Exact scope of work required
+- Access to the work area
+- Any existing damage or complications
+- Preferred completion timeline
+
+Cheers,
+[Your Name]
+
+*Note: AI service temporarily unavailable - showing estimated quote template*`,
+          fallback: true,
+          apiError: true
+        };
+        
+        return Response.json(fallbackResponse);
       }
       
-      const content = response?.text();
+      const data = await response.json();
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
       
       if (!content) {
         return Response.json(
@@ -203,8 +241,8 @@ export async function POST(request: Request) {
         )
       }
       
+      console.log("=== Gemini API SUCCESS ===");
       console.log("Content length:", content.length);
-      console.log("About to return response...");
       
       return Response.json({ content });
       
@@ -250,7 +288,6 @@ Cheers,
   } catch (error) {
     console.error("=== QUOTEMATEY API ERROR ===");
     console.error("Error:", error);
-    console.error("Stack:", error instanceof Error ? error.stack : 'No stack trace');
     
     return Response.json({
       error: error instanceof Error ? error.message : "Internal server error",
