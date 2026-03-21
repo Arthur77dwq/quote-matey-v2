@@ -145,9 +145,17 @@ export async function POST(request: NextRequest) {
     console.log("GEMINI_API_KEY_BACKUP exists:", !!process.env.GEMINI_API_KEY_BACKUP);
     console.log("All env vars:", Object.keys(process.env).filter(key => key.includes('GEMINI')));
     console.log("Selected API key:", apiKey ? apiKey.substring(0, 10) + "..." : "NONE");
-    console.log("API KEY EXISTS:", !!apiKey)
+    console.log("API KEY EXISTS:", !!apiKey);
+    
+    // Additional debugging
+    console.log("=== ADDITIONAL DEBUG ===");
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("VERCEL_ENV:", process.env.VERCEL_ENV);
+    console.log("All process env:", Object.keys(process.env));
+    console.log("Vercel-specific keys:", Object.keys(process.env).filter(key => key.includes('VERCEL')));
     
     if (!apiKey) {
+      console.log("=== FALLBACK TRIGGERED - NO API KEY ===");
       return NextResponse.json(createFallback(userMessage))
     }
     
