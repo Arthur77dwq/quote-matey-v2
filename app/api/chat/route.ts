@@ -36,6 +36,10 @@ Phrase notes conversationally to sound like a helpful tradie buddy, not a robot.
 Job description:
 `;
 
+interface Message {
+  role: "user" | "assistant"
+  content: string
+}
 
 function cleanOutput(text: string) {
   return text.replace(/\*\*/g, "")
@@ -70,7 +74,7 @@ export async function POST(request: NextRequest) {
         contents: [
           {
             role: "user",
-            parts: [{ text: SYSTEM_PROMPT + "\n\n" + messages.map(msg => `${msg.role}: ${msg.content}`).join("\n") }]
+            parts: [{ text: SYSTEM_PROMPT + "\n\n" + messages.map((msg: Message) => `${msg.role}: ${msg.content}`).join("\n") }]
           }
         ],
         generationConfig: {
