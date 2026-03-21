@@ -19,3 +19,25 @@ export async function POST(request: Request) {
     }, { status: 500 })
   }
 }
+
+export async function GET(request: Request) {
+  console.log("=== API GET ROUTE HIT ===")
+  
+  // Handle trailing slash redirect
+  const url = new URL(request.url)
+  const pathname = url.pathname
+  
+  if (pathname.endsWith('/')) {
+    // Remove trailing slash and redirect
+    const newPath = pathname.slice(0, -1)
+    console.log("Redirecting from:", pathname, "to:", newPath)
+    
+    return Response.redirect(new URL(request.url).origin + newPath, 307)
+  }
+  
+  // For any other GET requests, redirect to POST or return method not allowed
+  return new Response('Method Not Allowed', { 
+    status: 405,
+    headers: { 'Allow': 'POST' }
+  })
+}
