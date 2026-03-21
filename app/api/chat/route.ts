@@ -17,6 +17,9 @@ CRITICAL RULES:
 - Prioritize showing the price first
 - Assume reasonable details if missing
 - Clearly note uncertainties in "Things to Confirm"
+- ALWAYS complete all sections fully
+- NEVER stop mid-sentence or mid-price
+
 
 USER INSTRUCTIONS
 The user will provide a job description.
@@ -93,7 +96,7 @@ const requestBody = JSON.stringify({
     }
   ],
   generationConfig: {
-    temperature: 0.5,
+    temperature: 0.4,
     maxOutputTokens: 300
   }
 });
