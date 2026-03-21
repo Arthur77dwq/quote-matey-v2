@@ -4,9 +4,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { Menu, X, ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
@@ -48,12 +50,9 @@ export function Navbar() {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-3">
-            <button className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Log in
-            </button>
+          <div className="hidden lg:flex items-center">
             <button
-              onClick={() => scrollToSection("cta")}
+              onClick={() => router.push("/chat")}
               className="group inline-flex items-center gap-1.5 bg-[#0a1628] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#1a2d45] transition-all shadow-lg shadow-[#0a1628]/10"
             >
               Start Free
@@ -87,10 +86,10 @@ export function Navbar() {
             ))}
             <div className="pt-3 mt-3 border-t border-border/50">
               <button
-                onClick={() => scrollToSection("cta")}
+                onClick={() => router.push("/chat")}
                 className="w-full bg-[#0a1628] text-white py-3 rounded-full font-semibold"
               >
-                Start Free Trial
+                Start Free
               </button>
             </div>
           </div>
