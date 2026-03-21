@@ -134,6 +134,7 @@ export async function POST(request: Request) {
     }
     
     const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_BACKUP
+    console.log("API KEY EXISTS:", !!apiKey)
     
     if (!apiKey) {
       return Response.json(createFallback(userMessage))
