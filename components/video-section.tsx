@@ -116,11 +116,6 @@ export function VideoSection() {
               </div>
             )}
           </div>
-
-          {/* MacBook Base */}
-          <div className="bg-gradient-to-b from-gray-800 to-gray-900 h-6 sm:h-8 rounded-b-2xl shadow-2xl relative">
-            <div className="absolute top-1 sm:top-2 left-1/2 -translate-x-1/2 w-16 sm:w-24 h-0.5 sm:h-1 bg-gray-600 rounded-full" />
-          </div>
         </div>
 
         {/* Feature highlights below video */}
