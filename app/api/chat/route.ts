@@ -90,7 +90,7 @@ async function callGemini(userMessage: string, conversationHistory: Message[]) {
       },
     };
     
-    const model = 'gemini-3-flash-preview';
+    const model = 'gemini-2.5-flash';
     
     // Build contents: SYSTEM -> HISTORY -> LATEST MESSAGE
     const contents: any[] = [
