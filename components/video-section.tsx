@@ -31,12 +31,7 @@ export function VideoSection() {
 
   const handleVideoLoad = () => {
     setVideoLoaded(true)
-    // Try to autoplay when loaded
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.log("Autoplay blocked:", error)
-      })
-    }
+    // Video starts paused, user must click to play
   }
 
   return (
@@ -82,7 +77,6 @@ export function VideoSection() {
               ref={videoRef}
               src="/video.mp4"
               className="w-full h-full object-cover rounded-b-2xl"
-              autoPlay
               loop
               playsInline
               muted={true}
