@@ -76,7 +76,7 @@ export function VideoSection() {
             <video
               ref={videoRef}
               src="/video.mp4"
-              className="w-full h-full object-cover rounded-b-2xl"
+              className="w-full h-full object-cover"
               loop
               playsInline
               muted={true}
@@ -85,17 +85,6 @@ export function VideoSection() {
               onError={(e) => console.log("Video error:", e)}
               style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
             />
-
-            {/* Fallback message if video doesn't load */}
-            {!videoLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-900 rounded-b-2xl">
-                <div className="text-center text-white p-8">
-                  <Play className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-xl font-semibold mb-2">Video Demo Coming Soon</h3>
-                  <p className="text-gray-400">See QuoteMatey in action with our AI-powered quoting</p>
-                </div>
-              </div>
-            )}
 
             {/* Custom Video Controls Overlay */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
