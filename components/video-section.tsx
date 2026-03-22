@@ -5,7 +5,8 @@ import { Play, Pause, Volume2, VolumeX } from "lucide-react"
 
 export function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(true) // Start muted for autoplay
+  const [videoLoaded, setVideoLoaded] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const togglePlayPause = () => {
@@ -13,7 +14,9 @@ export function VideoSection() {
       if (isPlaying) {
         videoRef.current.pause()
       } else {
-        videoRef.current.play()
+        videoRef.current.play().catch(error => {
+          console.log("Video play error:", error)
+        })
       }
       setIsPlaying(!isPlaying)
     }
@@ -23,6 +26,16 @@ export function VideoSection() {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted
       setIsMuted(!isMuted)
+    }
+  }
+
+  const handleVideoLoad = () => {
+    setVideoLoaded(true)
+    // Try to autoplay when loaded
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Autoplay blocked:", error)
+      })
     }
   }
 
@@ -69,11 +82,26 @@ export function VideoSection() {
               ref={videoRef}
               src="/video.mp4"
               className="w-full h-full object-cover rounded-b-2xl"
+              autoPlay
               loop
               playsInline
-              muted={isMuted}
+              muted={true}
+              onLoadStart={handleVideoLoad}
+              onCanPlay={handleVideoLoad}
+              onError={(e) => console.log("Video error:", e)}
               style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
             />
+
+            {/* Fallback message if video doesn't load */}
+            {!videoLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900 rounded-b-2xl">
+                <div className="text-center text-white p-8">
+                  <Play className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-xl font-semibold mb-2">Video Demo Coming Soon</h3>
+                  <p className="text-gray-400">See QuoteMatey in action with our AI-powered quoting</p>
+                </div>
+              </div>
+            )}
 
             {/* Custom Video Controls Overlay */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
