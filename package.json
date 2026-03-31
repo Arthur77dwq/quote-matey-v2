@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky || true"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
