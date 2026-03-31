@@ -1,5 +1,3 @@
-import base from "@ankesh/eslint-config";
+import base from '@ankesh/eslint-config';
 
-export default [
-  ...base
-];
+export default [...base];

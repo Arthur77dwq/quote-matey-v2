@@ -1,4 +1,4 @@
-import { Star, TrendingUp, Zap, Users } from "lucide-react"
+import { Star, TrendingUp, Zap, Users } from 'lucide-react';
 
 export function SocialProofBar() {
   return (
@@ -9,13 +9,17 @@ export function SocialProofBar() {
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center -space-x-2">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 border-2 border-[#0a1628] flex items-center justify-center text-[10px] font-bold text-slate-700">
+                <div
+                  key={i}
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 border-2 border-[#0a1628] flex items-center justify-center text-[10px] font-bold text-slate-700"
+                >
                   {String.fromCharCode(64 + i)}
                 </div>
               ))}
             </div>
             <span className="text-sm sm:text-base font-medium text-white/90">
-              Join <span className="text-[#f57a0a] font-bold">2,847+</span> tradies winning more work
+              Join <span className="text-[#f57a0a] font-bold">2,847+</span>{' '}
+              tradies winning more work
             </span>
           </div>
 
@@ -26,7 +30,9 @@ export function SocialProofBar() {
                 <Zap className="w-4 h-4 text-[#f57a0a]" />
               </div>
               <div>
-                <span className="font-bold text-white block text-lg leading-tight">127K+</span>
+                <span className="font-bold text-white block text-lg leading-tight">
+                  127K+
+                </span>
                 <span className="text-white/60 text-xs">quotes sent</span>
               </div>
             </div>
@@ -36,7 +42,9 @@ export function SocialProofBar() {
                 <TrendingUp className="w-4 h-4 text-green-400" />
               </div>
               <div>
-                <span className="font-bold text-white block text-lg leading-tight">$2.4M+</span>
+                <span className="font-bold text-white block text-lg leading-tight">
+                  $2.4M+
+                </span>
                 <span className="text-white/60 text-xs">jobs won</span>
               </div>
             </div>
@@ -46,7 +54,9 @@ export function SocialProofBar() {
                 <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
               </div>
               <div>
-                <span className="font-bold text-white block text-lg leading-tight">4.9/5</span>
+                <span className="font-bold text-white block text-lg leading-tight">
+                  4.9/5
+                </span>
                 <span className="text-white/60 text-xs">avg rating</span>
               </div>
             </div>
@@ -54,5 +64,5 @@ export function SocialProofBar() {
         </div>
       </div>
     </section>
-  )
+  );
 }
