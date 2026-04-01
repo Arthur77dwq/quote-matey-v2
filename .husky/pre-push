@@ -1,0 +1,11 @@
+echo "Running pre-push checks..."
+
+pnpm typecheck
+pnpm build
+
+if [ $? -ne 0 ]; then
+    echo "Pre-push checks failed. Push aborted."
+    exit 1
+fi
+
+echo "All checks passed. Proceeding with push."
