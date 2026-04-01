@@ -1,41 +1,44 @@
-"use client"
+'use client';
 
-import { useState, useRef } from "react"
-import { Play, Pause, Volume2, VolumeX } from "lucide-react"
+import { useState, useRef } from 'react';
+import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
 export function VideoSection() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(true) // Start muted for autoplay
-  const [videoLoaded, setVideoLoaded] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlayPause = () => {
     if (videoRef.current) {
       if (isPlaying) {
-        videoRef.current.pause()
+        videoRef.current.pause();
       } else {
-        videoRef.current.play().catch(error => {
-          console.log("Video play error:", error)
-        })
+        videoRef.current.play().catch((error) => {
+          console.log('Video play error:', error);
+        });
       }
-      setIsPlaying(!isPlaying)
+      setIsPlaying(!isPlaying);
     }
-  }
+  };
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted
-      setIsMuted(!isMuted)
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
-  }
+  };
 
   const handleVideoLoad = () => {
-    setVideoLoaded(true)
+    setVideoLoaded(true);
     // Video starts paused, user must click to play
-  }
+  };
 
   return (
-    <section id="video-section" className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+    <section
+      id="video-section"
+      className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden"
+    >
       {/* Background accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-[#f57a0a]/5 to-transparent rounded-full blur-3xl -z-10" />
 
@@ -46,7 +49,10 @@ export function VideoSection() {
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a1628] mb-4 tracking-tight">
             Watch how QuoteMatey
-            <span className="block text-[#f57a0a]"> transforms your quoting</span>
+            <span className="block text-[#f57a0a]">
+              {' '}
+              transforms your quoting
+            </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             See the fastest way to create professional quotes that win more jobs
@@ -66,7 +72,9 @@ export function VideoSection() {
                 <button className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-600 transition-colors" />
               </div>
               {/* Window Title */}
-              <div className="text-gray-700 text-sm font-medium">QuoteMatey Demo</div>
+              <div className="text-gray-700 text-sm font-medium">
+                QuoteMatey Demo
+              </div>
               <div className="w-20" /> {/* Spacer for balance */}
             </div>
           </div>
@@ -82,7 +90,7 @@ export function VideoSection() {
               muted={true}
               onLoadStart={handleVideoLoad}
               onCanPlay={handleVideoLoad}
-              onError={(e) => console.log("Video error:", e)}
+              onError={(e) => console.log('Video error:', e)}
               style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
             />
 
@@ -117,7 +125,7 @@ export function VideoSection() {
 
             {/* Click to play overlay (when paused) */}
             {!isPlaying && (
-              <div 
+              <div
                 onClick={togglePlayPause}
                 className="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer group"
               >
@@ -135,25 +143,37 @@ export function VideoSection() {
             <div className="w-12 h-12 bg-[#f57a0a]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
               <Play className="w-6 h-6 text-[#f57a0a]" />
             </div>
-            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">Watch the Magic</h3>
-            <p className="text-xs sm:text-sm text-muted-foreground">See how AI transforms simple descriptions into professional quotes</p>
+            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">
+              Watch the Magic
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              See how AI transforms simple descriptions into professional quotes
+            </p>
           </div>
           <div className="text-center">
             <div className="w-12 h-12 bg-[#0a1628]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
               <Volume2 className="w-6 h-6 text-[#0a1628]" />
             </div>
-            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">Custom Controls</h3>
-            <p className="text-xs sm:text-sm text-muted-foreground">Pause, play, and control volume exactly how you want</p>
+            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">
+              Custom Controls
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Pause, play, and control volume exactly how you want
+            </p>
           </div>
           <div className="text-center">
             <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
               <div className="w-3 h-3 bg-green-500 rounded-full" />
             </div>
-            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">Ready to Go</h3>
-            <p className="text-xs sm:text-sm text-muted-foreground">Start generating quotes in seconds, not hours</p>
+            <h3 className="font-semibold text-[#0a1628] mb-2 text-sm sm:text-base">
+              Ready to Go
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Start generating quotes in seconds, not hours
+            </p>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

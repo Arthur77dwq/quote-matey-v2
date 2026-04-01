@@ -1,65 +1,74 @@
-import { Star, Quote, TrendingUp, Clock, Trophy } from "lucide-react"
+import { Star, Quote, TrendingUp, Clock, Trophy } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "I won 3 extra jobs in my first week. The customer said I was the first to respond, and that's why she picked me. QuoteMatey paid for itself on day one.",
-    name: "Mike Thompson",
-    role: "Electrician",
-    location: "Sydney",
-    metric: "+$4,200",
-    metricLabel: "extra this month",
-    avatar: "MT",
+    quote:
+      "I won 3 extra jobs in my first week. The customer said I was the first to respond, and that's why she picked me. QuoteMatey paid for itself on day one.",
+    name: 'Mike Thompson',
+    role: 'Electrician',
+    location: 'Sydney',
+    metric: '+$4,200',
+    metricLabel: 'extra this month',
+    avatar: 'MT',
   },
   {
-    quote: "Used to spend my evenings doing quotes. Now I quote on-site before I even leave. My wife loves that I'm home for dinner again.",
-    name: "Dave Wilson",
-    role: "Plumber",
-    location: "Melbourne",
-    metric: "15 hrs",
-    metricLabel: "saved per month",
-    avatar: "DW",
+    quote:
+      "Used to spend my evenings doing quotes. Now I quote on-site before I even leave. My wife loves that I'm home for dinner again.",
+    name: 'Dave Wilson',
+    role: 'Plumber',
+    location: 'Melbourne',
+    metric: '15 hrs',
+    metricLabel: 'saved per month',
+    avatar: 'DW',
   },
   {
-    quote: "My quotes look so professional now, customers think I'm a bigger operation. One client said 'you guys have your act together.' It's just me and QuoteMatey.",
-    name: "Sarah Chen",
-    role: "Carpenter",
-    location: "Brisbane",
-    metric: "47%",
-    metricLabel: "higher close rate",
-    avatar: "SC",
+    quote:
+      "My quotes look so professional now, customers think I'm a bigger operation. One client said 'you guys have your act together.' It's just me and QuoteMatey.",
+    name: 'Sarah Chen',
+    role: 'Carpenter',
+    location: 'Brisbane',
+    metric: '47%',
+    metricLabel: 'higher close rate',
+    avatar: 'SC',
   },
   {
-    quote: "I was underquoting jobs for years. QuoteMatey caught materials I was forgetting. I've added $380 to my average job price without losing customers.",
+    quote:
+      "I was underquoting jobs for years. QuoteMatey caught materials I was forgetting. I've added $380 to my average job price without losing customers.",
     name: "James O'Brien",
-    role: "Handyman",
-    location: "Perth",
-    metric: "+$380",
-    metricLabel: "per job average",
-    avatar: "JO",
+    role: 'Handyman',
+    location: 'Perth',
+    metric: '+$380',
+    metricLabel: 'per job average',
+    avatar: 'JO',
   },
   {
-    quote: "The AI is scary accurate. Sent it a photo of a busted pipe, got a quote back in 45 seconds. Materials, labour, everything. Spot on.",
-    name: "Tom Nguyen",
-    role: "Plumber",
-    location: "Adelaide",
-    metric: "45 sec",
-    metricLabel: "quote time",
-    avatar: "TN",
+    quote:
+      'The AI is scary accurate. Sent it a photo of a busted pipe, got a quote back in 45 seconds. Materials, labour, everything. Spot on.',
+    name: 'Tom Nguyen',
+    role: 'Plumber',
+    location: 'Adelaide',
+    metric: '45 sec',
+    metricLabel: 'quote time',
+    avatar: 'TN',
   },
   {
-    quote: "Tried 3 other quoting apps. This is the only one my tradie brain can actually use. No training needed. Just works.",
-    name: "Chris Miller",
-    role: "Electrician",
-    location: "Gold Coast",
-    metric: "2 min",
-    metricLabel: "to learn",
-    avatar: "CM",
+    quote:
+      'Tried 3 other quoting apps. This is the only one my tradie brain can actually use. No training needed. Just works.',
+    name: 'Chris Miller',
+    role: 'Electrician',
+    location: 'Gold Coast',
+    metric: '2 min',
+    metricLabel: 'to learn',
+    avatar: 'CM',
   },
-]
+];
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="py-24 bg-gradient-to-b from-slate-50 to-white">
+    <section
+      id="testimonials"
+      className="py-24 bg-gradient-to-b from-slate-50 to-white"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <span className="inline-block text-sm font-semibold text-[#f57a0a] bg-[#f57a0a]/10 px-4 py-1.5 rounded-full mb-4">
@@ -69,7 +78,8 @@ export function Testimonials() {
             2,847 tradies can't be wrong
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            These aren't actors. These are real tradies who stopped losing jobs to slow quotes.
+            These aren't actors. These are real tradies who stopped losing jobs
+            to slow quotes.
           </p>
         </div>
 
@@ -80,7 +90,9 @@ export function Testimonials() {
               <TrendingUp className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-foreground block">$2.4M+</span>
+              <span className="text-2xl font-bold text-foreground block">
+                $2.4M+
+              </span>
               <span className="text-sm text-muted-foreground">in jobs won</span>
             </div>
           </div>
@@ -89,8 +101,12 @@ export function Testimonials() {
               <Clock className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-foreground block">127,000+</span>
-              <span className="text-sm text-muted-foreground">quotes generated</span>
+              <span className="text-2xl font-bold text-foreground block">
+                127,000+
+              </span>
+              <span className="text-sm text-muted-foreground">
+                quotes generated
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -98,8 +114,12 @@ export function Testimonials() {
               <Trophy className="w-6 h-6 text-amber-600" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-foreground block">4.9/5</span>
-              <span className="text-sm text-muted-foreground">average rating</span>
+              <span className="text-2xl font-bold text-foreground block">
+                4.9/5
+              </span>
+              <span className="text-sm text-muted-foreground">
+                average rating
+              </span>
             </div>
           </div>
         </div>
@@ -114,12 +134,19 @@ export function Testimonials() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-amber-400 text-amber-400"
+                    />
                   ))}
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-green-600 block">{testimonial.metric}</span>
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide">{testimonial.metricLabel}</span>
+                  <span className="text-lg font-bold text-green-600 block">
+                    {testimonial.metric}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    {testimonial.metricLabel}
+                  </span>
                 </div>
               </div>
 
@@ -137,8 +164,12 @@ export function Testimonials() {
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <p className="font-semibold text-foreground">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}, {testimonial.location}</p>
+                  <p className="font-semibold text-foreground">
+                    {testimonial.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {testimonial.role}, {testimonial.location}
+                  </p>
                 </div>
               </div>
             </div>
@@ -146,5 +177,5 @@ export function Testimonials() {
         </div>
       </div>
     </section>
-  )
+  );
 }
