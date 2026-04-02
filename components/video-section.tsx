@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { useRef,useState } from 'react';
+
+import { useObserver } from '@/hooks/use-intersection-observer';
 
 export function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlayPause = () => {
@@ -14,13 +16,30 @@ export function VideoSection() {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play().catch((error) => {
-          console.log('Video play error:', error);
+        videoRef.current.play().catch(() => {
+          setVideoLoaded(false);
         });
       }
       setIsPlaying(!isPlaying);
     }
   };
+
+  useObserver(
+    videoRef,
+    (entries) => {
+      entries.forEach((entry) => {
+        // Play when more or equal to 70% of element visible on viewport
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
+          if (!isPlaying) togglePlayPause();
+        }
+        // Pause when less then 30% of element visible on viewport
+        if (!entry.isIntersecting && entry.intersectionRatio <= 0.3) {
+          if (isPlaying) togglePlayPause();
+        }
+      });
+    },
+    { threshold: [0.7, 0.3] },
+  );
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -87,10 +106,10 @@ export function VideoSection() {
               className="w-full h-full object-cover"
               loop
               playsInline
-              muted={true}
+              muted
               onLoadStart={handleVideoLoad}
               onCanPlay={handleVideoLoad}
-              onError={(e) => console.log('Video error:', e)}
+              onError={() => setVideoLoaded(false)}
               style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
             />
 
