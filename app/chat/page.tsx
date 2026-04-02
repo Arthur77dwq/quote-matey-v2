@@ -181,7 +181,12 @@ function ChatContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       <ChatNavbar />
-      <div className="flex flex-col justify-center h-screen w-full">
+      <div
+        className={twMerge(
+          'flex flex-col h-screen w-full',
+          messages?.length > 0 ? 'justify-start' : 'justify-center',
+        )}
+      >
         {/* Chat Container */}
         {messages?.length > 0 ? (
           <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full pt-20 lg:pt-24 pb-32">
