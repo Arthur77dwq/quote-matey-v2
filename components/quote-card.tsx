@@ -1,7 +1,7 @@
 'use client';
 
+import { Check, Clock,Copy, Wrench } from 'lucide-react';
 import Image from 'next/image';
-import { Copy, Check, Wrench, Clock } from 'lucide-react';
 import { useState } from 'react';
 
 interface QuoteCardProps {

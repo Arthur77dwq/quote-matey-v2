@@ -1,10 +1,10 @@
 import {
-  Zap,
-  Shield,
-  Target,
   Clock,
-  TrendingUp,
+  Shield,
   Smartphone,
+  Target,
+  TrendingUp,
+  Zap,
 } from 'lucide-react';
 
 const benefits = [

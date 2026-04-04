@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const maxDuration = 30;
 
-const apiKey = process.env.GEMINI_API_KEY;
-
 const SYSTEM_PROMPT = `
 SYSTEM / CONTEXT
 You are QuoteMatey, an AI assistant that generates quick, rough job quote drafts for Australian tradespeople.
