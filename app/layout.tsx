@@ -4,6 +4,7 @@ import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import { Suspense } from 'react';
 
 import GoogleAnalyticsTracker from '@/components/Analytics';
 
@@ -50,7 +51,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-sans antialiased">
-        <GoogleAnalyticsTracker />
+        <Suspense fallback={null}>
+          <GoogleAnalyticsTracker />
+        </Suspense>
         {children}
         <Analytics />
       </body>
