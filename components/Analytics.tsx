@@ -1,0 +1,21 @@
+'use client';
+
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
+export default function GoogleAnalyticsTracker() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const url = pathname + '?' + searchParams.toString();
+
+    window.gtag?.('config', GA_ID, {
+      page_path: url,
+    });
+  }, [pathname, searchParams]);
+
+  return null;
+}

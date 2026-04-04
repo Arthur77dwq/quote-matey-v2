@@ -1,10 +1,17 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
-const _geist = Geist({ subsets: ['latin'] });
-const _geistMono = Geist_Mono({ subsets: ['latin'] });
+// import { Geist, Geist_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from 'next';
+import Script from 'next/script';
+import { Suspense } from 'react';
+
+import GoogleAnalyticsTracker from '@/components/Analytics';
+
+// const _geist = Geist({ subsets: ['latin'] });
+// const _geistMono = Geist_Mono({ subsets: ['latin'] });
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   title: 'QuoteMatey - Quote Faster, Win More Jobs | AI Quoting for Tradies',
@@ -28,8 +35,25 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/QuoteMateyAppIcon.png" />
         <link rel="apple-touch-icon" href="/images/QuoteMateyAppIcon.png" />
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
       </head>
       <body className="font-sans antialiased">
+        <Suspense fallback={null}>
+          <GoogleAnalyticsTracker />
+        </Suspense>
         {children}
         <Analytics />
       </body>
