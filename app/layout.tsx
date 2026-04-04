@@ -8,8 +8,8 @@ import { Suspense } from 'react';
 
 import GoogleAnalyticsTracker from '@/components/Analytics';
 
-const _geist = Geist({ subsets: ['latin'] });
-const _geistMono = Geist_Mono({ subsets: ['latin'] });
+const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
@@ -51,7 +51,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${_geist.className} ${_geistMono.className} font-sans antialiased`}
+        className={`${_geist.variable} ${_geistMono.variable} font-sans antialiased`}
       >
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
