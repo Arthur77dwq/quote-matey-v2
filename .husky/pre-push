@@ -1,7 +1,7 @@
 echo "Running pre-push checks..."
 
-npm typecheck
-npm build
+npm run typecheck
+npm run build
 
 if [ $? -ne 0 ]; then
     echo "Pre-push checks failed. Push aborted."
