@@ -1,9 +1,9 @@
 'use client';
 
+import { Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail } from 'lucide-react';
 
 export function Footer() {
   const router = useRouter();

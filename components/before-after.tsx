@@ -1,10 +1,10 @@
 import {
-  X,
   Check,
+  Clock,
+  DollarSign,
   TrendingDown,
   TrendingUp,
-  DollarSign,
-  Clock,
+  X,
 } from 'lucide-react';
 
 const beforeItems = [

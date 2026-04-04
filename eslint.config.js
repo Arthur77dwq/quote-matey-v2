@@ -1,4 +1,5 @@
-import base from '@ankesh/eslint-config';
-import react from '@ankesh/eslint-config/react';
+import createReactConfig from '@ankesh/eslint-config/react';
 
-export default [...base, ...react];
+export default createReactConfig({
+  ignores: ['.next'],
+});

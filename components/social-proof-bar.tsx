@@ -1,4 +1,4 @@
-import { Star, TrendingUp, Zap, Users } from 'lucide-react';
+import { Star, TrendingUp, Users,Zap } from 'lucide-react';
 
 export function SocialProofBar() {
   return (
