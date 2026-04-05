@@ -4,6 +4,8 @@
 
 [![CI](https://github.com/Arthur77dwq/quote-matey-v2/actions/workflows/ci.yml/badge.svg)](https://github.com/Arthur77dwq/quote-matey-v2/actions)
 
+---
+
 ## 🛠️ Tech Stack
 
 <!-- markdownlint-disable-next-line MD033 -->
@@ -15,8 +17,8 @@
 
 **QuoteMatey** helps tradies, freelancers, and service businesses:
 
-👉 Generate **clear, professional quotes instantly**
-👉 Improve **client communication**
+👉 Generate **clear, professional quotes instantly**  
+👉 Improve **client communication**  
 👉 Close deals faster with **structured pricing**
 
 ---
@@ -46,16 +48,17 @@ Creating quotes manually is:
 
 ## 🖥️ Live Demo
 
-👉 [https://quotematey.com](https://quotematey.com) _(update if needed)_
+👉 https://quotematey.com _(update if needed)_
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack (Detailed)
 
 - **Framework:** Next.js 16
 - **Frontend:** React 19
 - **UI:** Tailwind CSS + shadcn/ui
 - **Validation:** Zod
+- **Testing:** Vitest + Playwright
 - **Tooling:** ESLint, Prettier, Husky
 
 ---
@@ -86,12 +89,46 @@ npm run dev
 ## 🔧 Scripts
 
 ```bash
-npm run dev        # start dev server
-npm run build      # production build
-npm run start      # start prod server
-npm run lint       # lint
-npm run typecheck  # type check
-npm run format     # format code
+npm run dev         # start dev server
+npm run build       # production build
+npm run start       # start prod server
+npm run lint        # lint
+npm run typecheck   # type check
+npm run format      # format code
+npm run test        # unit tests (vitest)
+npm run e2e         # end-to-end tests (playwright)
+```
+
+---
+
+## 🧪 Testing
+
+### ⚡ Unit Testing (Vitest)
+
+```bash
+npm run test
+```
+
+- Test business logic (usage limits, API handling)
+- Fast feedback during development
+
+---
+
+### 🚀 E2E Testing (Playwright)
+
+```bash
+npm run e2e
+```
+
+- Tests real user flows:
+  - Login
+  - Image upload → quote
+  - Payment flow
+
+👉 Tests are located in:
+
+```text
+e2e/
 ```
 
 ---
@@ -110,11 +147,13 @@ NEXT_PUBLIC_GA_ID=
 
 ## 🧪 CI / Quality
 
-Your project includes:
+This project includes:
 
 - ✅ Linting
 - ✅ Type checking
 - ✅ Build validation
+- ✅ Unit testing (Vitest)
+- ✅ E2E testing (Playwright)
 - ✅ Pre-push checks (Husky)
 
 ---
@@ -129,6 +168,8 @@ Your project includes:
 ├── lib/
 ├── public/
 ├── styles/
+├── e2e/        # Playwright tests
+├── tests/      # Unit tests (optional)
 ├── types/
 ```
 
@@ -149,17 +190,6 @@ Recommended: **Vercel**
 ```bash
 npm run build
 ```
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Quote history & dashboard
-- [ ] Export to PDF
-- [ ] Email sharing
-- [ ] Pricing templates
-- [ ] Team collaboration
-- [ ] CRM integrations
 
 ---
 
