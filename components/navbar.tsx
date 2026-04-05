@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight,Menu, X } from 'lucide-react';
+import { ChevronRight, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,7 @@ export function Navbar() {
   const router = useRouter();
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
+    const element = document.querySelector(`#${id}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
