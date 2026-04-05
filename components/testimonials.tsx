@@ -1,4 +1,4 @@
-import { Star, Quote, TrendingUp, Clock, Trophy } from 'lucide-react';
+import { Clock, Quote, Star, TrendingUp, Trophy } from 'lucide-react';
 
 const testimonials = [
   {

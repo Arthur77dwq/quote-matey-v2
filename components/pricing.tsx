@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, X, Sparkles, Shield, Zap } from 'lucide-react';
+import { Check, Shield, X, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const plans = [

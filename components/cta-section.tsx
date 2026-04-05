@@ -1,14 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
-  Shield,
   Clock,
   CreditCard,
-  Zap,
+  Shield,
   Users,
+  Zap,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function CTASection() {
   const router = useRouter();
