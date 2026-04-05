@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera, Zap, Send, ChevronRight } from 'lucide-react';
+import { Camera, ChevronRight,Send, Zap } from 'lucide-react';
 
 const steps = [
   {
@@ -111,7 +111,7 @@ export function HowItWorks() {
           <button
             onClick={() =>
               document
-                .getElementById('cta')
+                .querySelector('#cta')
                 ?.scrollIntoView({ behavior: 'smooth' })
             }
             className="inline-flex items-center gap-2 text-[#f57a0a] font-semibold hover:gap-3 transition-all"

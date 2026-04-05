@@ -12,16 +12,16 @@ const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
+const ICON = '/images/QuoteMateyAppIcon.png';
 export const metadata: Metadata = {
   title: 'QuoteMatey - Quote Faster, Win More Jobs | AI Quoting for Tradies',
   description:
     'Stop losing jobs to faster tradies. QuoteMatey turns any photo into a professional quote in 60 seconds. Join 2,847+ tradies winning more work.',
   generator: 'v0.app',
   icons: {
-    icon: '/images/QuoteMateyAppIcon.png',
-    shortcut: '/images/QuoteMateyAppIcon.png',
-    apple: '/images/QuoteMateyAppIcon.png',
+    icon: ICON,
+    shortcut: ICON,
+    apple: ICON,
   },
 };
 

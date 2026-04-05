@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const maxDuration = 30;
 
-const apiKey = process.env.GEMINI_API_KEY;
-
 const SYSTEM_PROMPT = `
 SYSTEM / CONTEXT
 You are QuoteMatey, an AI assistant that generates quick, rough job quote drafts for Australian tradespeople.
@@ -49,11 +47,6 @@ Things to Confirm
 [Bullet points of assumptions/uncertainties]
 `;
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
 function cleanOutput(text: string) {
   return text
     .replace(/\*\*/g, '')
@@ -71,12 +64,23 @@ function getApiKey(): string | null {
   return null;
 }
 
+type Message = {
+  content: string;
+  id: string;
+  role: string;
+};
+
+type Part = {
+  text: string;
+};
+
 export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
+
     const userMessage =
       messages
-        ?.filter((m: any) => m.role === 'user')
+        ?.filter((m: Message) => m.role === 'user')
         .pop()
         ?.content?.trim() || '';
 
@@ -124,31 +128,30 @@ ${userMessage}`;
     }
 
     const data = await response.json();
-    console.log('=== GEMINI RESPONSE DEBUG ===');
-    console.log('Raw response data:', JSON.stringify(data, null, 2));
-    console.log('Candidates array:', data.candidates);
-    console.log('First candidate:', data.candidates?.[0]);
-    console.log('Content object:', data.candidates?.[0]?.content);
-    console.log('Parts array:', data.candidates?.[0]?.content?.parts);
-    console.log(
-      'First part text:',
-      data.candidates?.[0]?.content?.parts?.[0]?.text,
-    );
+    // console.log('=== GEMINI RESPONSE DEBUG ===');
+    // console.log('Raw response data:', JSON.stringify(data, null, 2));
+    // console.log('Candidates array:', data.candidates);
+    // console.log('First candidate:', data.candidates?.[0]);
+    // console.log('Content object:', data.candidates?.[0]?.content);
+    // console.log('Parts array:', data.candidates?.[0]?.content?.parts);
+    // console.log(
+    //   'First part text:',
+    //   data.candidates?.[0]?.content?.parts?.[0]?.text,
+    // );
 
-    const parts = data?.candidates?.[0]?.content?.parts || [];
-
+    const parts: Part[] = data?.candidates?.[0]?.content?.parts || [];
     const content = parts
-      .map((p: any) => p.text || '')
+      .map((p) => p.text || '')
       .join('')
       .trim();
-    console.log('ALL PARTS:', parts);
-    console.log('=== CONTENT ANALYSIS ===');
-    console.log('Content exists:', !!content);
-    console.log('Content length:', content?.length || 0);
-    console.log('Content preview:', content?.substring(0, 200) + '...');
+    // console.log('ALL PARTS:', parts);
+    // console.log('=== CONTENT ANALYSIS ===');
+    // console.log('Content exists:', !!content);
+    // console.log('Content length:', content?.length || 0);
+    // console.log('Content preview:', content?.substring(0, 200) + '...');
 
     if (!content) {
-      console.log('=== NO CONTENT - FALLBACK TRIGGERED ===');
+      // console.log('=== NO CONTENT - FALLBACK TRIGGERED ===');
       return NextResponse.json({
         content:
           "I can help with that! Based on your description, here's a rough estimate:",
@@ -160,14 +163,14 @@ ${userMessage}`;
       content.toLowerCase().includes('need more details') ||
       content.toLowerCase().includes('need clarification')
     ) {
-      console.log(
-        '=== AI ASKING FOR MORE DETAILS - POSSIBLE SYSTEM PROMPT ISSUE ===',
-      );
-      console.log('Full content:', content);
+      // console.log(
+      //   '=== AI ASKING FOR MORE DETAILS - POSSIBLE SYSTEM PROMPT ISSUE ===',
+      // );
+      // console.log('Full content:', content);
     }
 
     return NextResponse.json({ content: cleanOutput(content) });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ content: '❌ API request failed' });
   }
 }

@@ -1,6 +1,6 @@
 echo "Running commit message checks..."
 
-pnpm exec commitlint --edit "${1}"
+npx --no-install commitlint --edit "${1}"
 
 if [ $? -ne 0 ]; then
 echo "Commit message checks failed. Please fix the issues before committing."

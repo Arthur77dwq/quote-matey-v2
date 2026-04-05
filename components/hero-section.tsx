@@ -1,19 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
-  Camera,
-  Video,
-  Play,
   ArrowRight,
-  Sparkles,
-  Clock,
+  Camera,
   CheckCircle2,
-  Zap,
-  X,
+  Clock,
+  Play,
+  Sparkles,
   Upload,
+  Video,
+  X,
+  Zap,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function HeroSection() {
   const [jobDescription, setJobDescription] = useState('');
@@ -90,7 +90,7 @@ export function HeroSection() {
               <button
                 onClick={() =>
                   document
-                    .getElementById('video-section')
+                    .querySelector('#video-section')
                     ?.scrollIntoView({ behavior: 'smooth' })
                 }
                 className="group inline-flex items-center justify-center gap-2 bg-white text-foreground px-6 py-4 rounded-full text-lg font-semibold border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
