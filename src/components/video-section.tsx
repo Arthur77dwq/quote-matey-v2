@@ -3,7 +3,7 @@
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-import { useObserver } from '@/src/hooks/use-intersection-observer';
+import { useObserver } from '@/hooks/use-intersection-observer';
 
 export function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
