@@ -1,3 +1,4 @@
+import { AuthScreen } from '@/components/auth-screen';
 import { BeforeAfter } from '@/components/before-after';
 import { Benefits } from '@/components/benefits';
 import { CTASection } from '@/components/cta-section';
@@ -14,6 +15,7 @@ import { VideoSection } from '@/components/video-section';
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <AuthScreen />
       <Navbar />
       <HeroSection />
       <SocialProofBar />

@@ -1,4 +1,4 @@
-import './globals.css';
+import '@/styles/globals.css';
 
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
@@ -6,7 +6,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Suspense } from 'react';
 
-import GoogleAnalyticsTracker from '@/components/Analytics';
+import GoogleAnalyticsTracker from '@/components/analytics';
+import { AuthProvider } from '@/context/AuthContext';
 
 const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
@@ -56,7 +57,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
         </Suspense>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         <Analytics />
       </body>
     </html>
