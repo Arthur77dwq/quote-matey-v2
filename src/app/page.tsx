@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { AuthScreen } from '@/components/auth-screen';
 import { BeforeAfter } from '@/components/before-after';
 import { Benefits } from '@/components/benefits';
@@ -11,11 +13,12 @@ import { Pricing } from '@/components/pricing';
 import { SocialProofBar } from '@/components/social-proof-bar';
 import { Testimonials } from '@/components/testimonials';
 import { VideoSection } from '@/components/video-section';
-
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <AuthScreen />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AuthScreen />
+      </Suspense>
       <Navbar />
       <HeroSection />
       <SocialProofBar />
