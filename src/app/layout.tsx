@@ -6,7 +6,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Suspense } from 'react';
 
-import GoogleAnalyticsTracker from '@/components/Analytics';
+import GoogleAnalyticsTracker from '@/components/analytics';
 import { AuthProvider } from '@/context/AuthContext';
 
 const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
