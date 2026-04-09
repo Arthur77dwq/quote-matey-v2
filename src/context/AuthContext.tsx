@@ -14,8 +14,8 @@ import {
   useState,
 } from 'react';
 
-import { removeAuthCookie,setAuthCookie } from '@/app/actions/auth';
-import { auth, googleProvider } from '@/config/firebase';
+import { removeAuthCookie, setAuthCookie } from '@/app/actions/auth';
+import { getFirebaseAuth, getGoogleProvider } from '@/config/firebase';
 import { AuthContextType, User } from '@/types/global';
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,32 +24,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const auth = getFirebaseAuth();
+  const googleProvider = getGoogleProvider();
 
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      const token = await firebaseUser?.getIdToken();
+    if (auth) {
+      const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        const token = await firebaseUser?.getIdToken();
 
-      if (token) {
-        setUser({
-          uid: firebaseUser?.uid || '',
-          email: firebaseUser?.email || '',
-          displayName: firebaseUser?.displayName || '',
-          photoURL: firebaseUser?.photoURL || '',
-          token,
-        });
-        await setAuthCookie(token);
-      } else {
-        await removeAuthCookie();
-      }
-    });
+        if (token) {
+          setUser({
+            uid: firebaseUser?.uid || '',
+            email: firebaseUser?.email || '',
+            displayName: firebaseUser?.displayName || '',
+            photoURL: firebaseUser?.photoURL || '',
+            token,
+          });
+          await setAuthCookie(token);
+        } else {
+          await removeAuthCookie();
+        }
+      });
 
-    return () => unSubscribe();
+      return () => unSubscribe();
+    }
   }, []);
 
   const withPopUp = async () => {
     try {
       setLoading(true);
-      await signInWithPopup(auth, googleProvider);
+      if (auth) await signInWithPopup(auth, googleProvider);
     } catch {
       setError('Something went wrong.');
     } finally {
@@ -70,11 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(
-        auth,
-        'ankeshsharma@protonmail.com',
-        'AlbAnkesh@09',
-      );
+      if (auth) await signInWithEmailAndPassword(auth, email, password);
     } catch {
       setError('Unable to signin');
     } finally {
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       setLoading(true);
-      await createUserWithEmailAndPassword(auth, email, password);
+      if (auth) await createUserWithEmailAndPassword(auth, email, password);
     } catch {
       setError('Unable to signup.');
     } finally {
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logOut = async () => {
     try {
       setLoading(true);
-      await firebaseSignOut(auth);
+      if (auth) await firebaseSignOut(auth);
     } catch {
       throw Error('Unable to logout.');
     } finally {
