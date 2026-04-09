@@ -12,13 +12,24 @@ export function AuthScreen() {
 
   const renderAuthForm = () => {
     if (hasAccount) {
-      return <Login toggle={() => setHasAccount(!hasAccount)} />;
+      return (
+        <Login
+          className="animate-drop"
+          toggle={() => setHasAccount(!hasAccount)}
+        />
+      );
     }
-    return <SignUp toggle={() => setHasAccount(!hasAccount)} />;
+    return (
+      <SignUp
+        className="animate-drop"
+        toggle={() => setHasAccount(!hasAccount)}
+      />
+    );
   };
 
   if (params.get('reason') === 'unauthorized') {
     return <OverlayBg>{renderAuthForm()}</OverlayBg>;
   }
+
   return null;
 }

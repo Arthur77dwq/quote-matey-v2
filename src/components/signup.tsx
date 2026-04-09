@@ -18,11 +18,18 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { GoogleIcon } from '@/constant/icons';
+import { cn } from '@/lib/utils';
 
-export function SignUp({ toggle }: { toggle: () => void }) {
+export function SignUp({
+  toggle,
+  className,
+}: {
+  toggle: () => void;
+  className?: string;
+}) {
   // const handleSubmit = () => {};
   return (
-    <Card className="w-full max-w-lg px-5 h-auto relative">
+    <Card className={cn('w-full max-w-lg px-5 h-auto relative', className)}>
       <Link
         href="/"
         className="size-fit absolute top-3 right-3 rounded-full bg-sky-50 p-2 flex justify-center items-center"
