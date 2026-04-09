@@ -14,14 +14,14 @@ export function AuthScreen() {
     if (hasAccount) {
       return (
         <Login
-          className="animate-drop"
+          className="animate-drop w-full rounded-none sm:rounded-xl"
           toggle={() => setHasAccount(!hasAccount)}
         />
       );
     }
     return (
       <SignUp
-        className="animate-drop"
+        className="animate-drop w-full rounded-none sm:rounded-xl"
         toggle={() => setHasAccount(!hasAccount)}
       />
     );

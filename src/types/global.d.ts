@@ -11,9 +11,9 @@ export type AuthContextType = {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  withPopUp: (email?: string, password?: string) => Promise<void>;
-  withPassword: (email?: string, password?: string) => Promise<void>;
-  signUp: (email?: string, password?: string) => Promise<void>;
+  withPopUp: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
 };
 

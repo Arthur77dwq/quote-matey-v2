@@ -24,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const auth = getFirebaseAuth();
   const googleProvider = getGoogleProvider();
 
@@ -36,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser({
             uid: firebaseUser?.uid || '',
             email: firebaseUser?.email || '',
-            displayName: firebaseUser?.displayName || '',
+            displayName: firebaseUser?.displayName || displayName || '',
             photoURL: firebaseUser?.photoURL || '',
             token,
           });
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return () => unSubscribe();
     }
-  }, []);
+  }, [auth]);
 
   const withPopUp = async () => {
     try {
@@ -61,17 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const withPassword = async (email?: string, password?: string) => {
-    // TODO: Remove below block
-    if (!email) {
-      setError('Provide Email');
-      return;
-    }
-    if (!password) {
-      setError('Provide Password');
-      return;
-    }
-
+  const signIn = async (email: string, password: string) => {
     try {
       setLoading(true);
       if (auth) await signInWithEmailAndPassword(auth, email, password);
@@ -82,20 +73,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (email?: string, password?: string) => {
-    // TODO: Remove below block
-    if (!email) {
-      setError('Provide Email');
-      return;
-    }
-    if (!password) {
-      setError('Provide Password');
-      return;
-    }
-
+  const signUp = async (name: string, email: string, password: string) => {
     try {
       setLoading(true);
       if (auth) await createUserWithEmailAndPassword(auth, email, password);
+      setDisplayName(name);
     } catch {
       setError('Unable to signup.');
     } finally {
@@ -118,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     loading,
     withPopUp,
-    withPassword,
+    signIn,
     signUp,
     logOut,
     error,
