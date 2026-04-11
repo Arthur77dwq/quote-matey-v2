@@ -15,10 +15,13 @@ import {
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { useAuth } from '@/context//AuthContext';
+
 export function HeroSection() {
   const [jobDescription, setJobDescription] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const router = useRouter();
+  const { logOut } = useAuth();
 
   const generateQuote = () => {
     if (jobDescription.trim()) {
@@ -168,6 +171,12 @@ export function HeroSection() {
                 className="w-full bg-gradient-to-r from-[#0a1628] to-[#1a3a5c] text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
               >
                 Generate My Quote Now
+              </button>
+              <button
+                onClick={logOut}
+                className="w-full bg-gradient-to-r from-[#0a1628] to-[#1a3a5c] text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+              >
+                Logout
               </button>
 
               <p className="text-center text-sm text-muted-foreground mt-5">

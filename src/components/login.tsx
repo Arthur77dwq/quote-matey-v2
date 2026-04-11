@@ -3,7 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, LockKeyhole, Mail, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { OverlayBg } from '@/components/overlay-bg';
@@ -12,7 +13,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -27,10 +27,15 @@ import { useAuth } from '@/context/AuthContext';
 import { loginFormData, loginSchema } from '@/lib/schemas/auth.schema';
 import { cn } from '@/lib/utils';
 
-type Props = { toggle: () => void; className?: string };
+type Props = {
+  resetPassword: () => void;
+  toggle: () => void;
+  className?: string;
+};
 
-export function Login({ toggle, className }: Props) {
-  const { loading, signIn, withPopUp } = useAuth();
+export function Login({ resetPassword, toggle, className }: Props) {
+  const { loading, error, user, signIn, withPopUp } = useAuth();
+  const params = useSearchParams();
   const [show, setShow] = useState(false);
   const {
     register,
@@ -44,8 +49,15 @@ export function Login({ toggle, className }: Props) {
     setShow(!show);
   };
 
-  const onSubmit = (data: loginFormData) => {
-    signIn(data.email, data.password);
+  useEffect(() => {
+    if (user) {
+      const target = new URL(params.get('target') || '');
+      window.location.href = String(target);
+    }
+  }, [user]);
+
+  const onSubmit = async (data: loginFormData) => {
+    await signIn(data.email, data.password);
   };
 
   return (
@@ -83,7 +95,7 @@ export function Login({ toggle, className }: Props) {
         </CardHeader>
         <CardContent>
           <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 py-3">
               <div className="grid gap-2">
                 <InputGroup className="min-h-13">
                   <InputGroupInput
@@ -121,51 +133,57 @@ export function Login({ toggle, className }: Props) {
                 <p className="text-red-500 text-xs">
                   {errors.password?.message}
                 </p>
-                <div className="flex items-center">
-                  <a
-                    href="#"
+                <div className="flex-col flex items-center">
+                  <p className="text-red-500 w-full text-left text-xs">
+                    {error}
+                  </p>
+                  <Link
+                    href={''}
+                    onClick={resetPassword}
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Button
+                type="submit"
+                // form="loginForm"
+                disabled={loading}
+                className="w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
+              >
+                Log In
+              </Button>
+              <div className="w-full relative h-5 flex justify-center items-center">
+                <div className="w-full border-dashed border-t border-neutral-300"></div>
+                <span className="absolute top-1/2 -translate-y-1/2 bg-white px-2 py-0 text-xl text-neutral-400">
+                  or
+                </span>
+              </div>
+              <Button
+                onClick={withPopUp}
+                variant="outline"
+                disabled={loading}
+                className="w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
+              >
+                <GoogleIcon className="size-6" />
+                Continue with Google
+              </Button>
+              <div className="text-lg flex justify-center items-center">
+                <span>Don't have an account?</span>
+                <Button
+                  variant="ghost"
+                  className="p-0 pl-1 text-bold text-lg hover:underline text-[#f57a0a] bg-white hover:bg-white hover:text-[#f57a0a] cursor-pointer"
+                  onClick={() => toggle()}
+                >
+                  Sign up now
+                </Button>
               </div>
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            form="loginForm"
-            className="w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
-          >
-            Log In
-          </Button>
-          <div className="w-full relative h-5 flex justify-center items-center">
-            <div className="w-full border-dashed border-t border-neutral-300"></div>
-            <span className="absolute top-1/2 -translate-y-1/2 bg-white px-2 text-xl text-neutral-400">
-              or
-            </span>
-          </div>
-          <Button
-            onClick={withPopUp}
-            variant="outline"
-            className="w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
-          >
-            <GoogleIcon className="size-6" />
-            Continue with Google
-          </Button>
-          <div className="text-lg">
-            <span>Don't have an account?</span>
-            <Button
-              variant="ghost"
-              className="p-0 pl-1 text-bold text-lg hover:underline text-[#f57a0a] bg-white hover:bg-white hover:text-[#f57a0a] cursor-pointer"
-              onClick={() => toggle()}
-            >
-              Sign up now
-            </Button>
-          </div>
-        </CardFooter>
       </Card>
     </>
   );
