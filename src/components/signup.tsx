@@ -3,7 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, LockKeyhole, Mail, User, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { OverlayBg } from '@/components/overlay-bg';
@@ -27,10 +28,15 @@ import { useAuth } from '@/context/AuthContext';
 import { signUpFormData, signUpSchema } from '@/lib/schemas/auth.schema';
 import { cn } from '@/lib/utils';
 
-type Props = { toggle: () => void; className?: string };
+type Props = {
+  resetPassword: () => void;
+  toggle: () => void;
+  className?: string;
+};
 
-export function SignUp({ toggle, className }: Props) {
-  const { loading, signUp, withPopUp } = useAuth();
+export function SignUp({ resetPassword, toggle, className }: Props) {
+  const { user, error, loading, signUp, withPopUp } = useAuth();
+  const params = useSearchParams();
   const [show, setShow] = useState(false);
   const {
     register,
@@ -44,8 +50,15 @@ export function SignUp({ toggle, className }: Props) {
     setShow(!show);
   };
 
-  const onSubmit = (data: signUpFormData) => {
-    signUp(data.name, data.email, data.password);
+  useEffect(() => {
+    if (user) {
+      const target = new URL(params.get('target') || '');
+      window.location.href = String(target);
+    }
+  }, [user]);
+
+  const onSubmit = async (data: signUpFormData) => {
+    await signUp(data.name, data.email, data.password);
   };
 
   return (
@@ -135,13 +148,17 @@ export function SignUp({ toggle, className }: Props) {
                 <p className="text-red-500 text-xs">
                   {errors.password?.message}
                 </p>
-                <div className="flex items-center">
-                  <a
-                    href="#"
+                <div className="flex-col flex items-center">
+                  <p className="text-red-500 w-full text-left text-xs">
+                    {error}
+                  </p>
+                  <Link
+                    href={''}
+                    onClick={resetPassword}
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ export default function proxy(request: NextRequest) {
   if (!token) {
     const url = new URL('/', request.url);
     url.searchParams.set('reason', 'unauthorized');
+    url.searchParams.set('target', request.url);
     return NextResponse.redirect(url);
   }
 
