@@ -15,7 +15,7 @@
 
 ## ✨ What is QuoteMatey?
 
-**QuoteMatey** helps tradies, freelancers, and service businesses:
+**QuoteMatey** helps tradesmens
 
 👉 Generate **clear, professional quotes instantly**  
 👉 Improve **client communication**  
@@ -214,4 +214,4 @@ If you like this project:
 
 ## 💡 Vision
 
-> Make quoting effortless, professional, and scalable for every service business.
+> Make quoting effortless, professional, and scalable for every tradie business.
