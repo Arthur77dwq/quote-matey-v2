@@ -152,7 +152,7 @@ export function Login({ resetPassword, toggle, className }: Props) {
                 type="submit"
                 // form="loginForm"
                 disabled={loading}
-                className="w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
+                className="cursor-pointer w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
               >
                 Log In
               </Button>
@@ -166,7 +166,7 @@ export function Login({ resetPassword, toggle, className }: Props) {
                 onClick={withPopUp}
                 variant="outline"
                 disabled={loading}
-                className="w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
+                className="cursor-pointer w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
               >
                 <GoogleIcon className="size-6" />
                 Continue with Google

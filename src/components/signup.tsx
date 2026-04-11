@@ -168,7 +168,7 @@ export function SignUp({ resetPassword, toggle, className }: Props) {
           <Button
             type="submit"
             form="signupForm"
-            className="w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
+            className="cursor-pointer w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
           >
             Sign Up
           </Button>
@@ -181,7 +181,7 @@ export function SignUp({ resetPassword, toggle, className }: Props) {
           <Button
             onClick={withPopUp}
             variant="outline"
-            className="w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
+            className="cursor-pointer w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
           >
             <GoogleIcon className="size-6" />
             Continue with Google
