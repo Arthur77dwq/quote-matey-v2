@@ -89,7 +89,10 @@ export function VideoSection() {
   );
 
   return (
-    <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+    <section
+  id="video-section"
+  className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden"
+>
 
       {/* background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#f57a0a]/5 rounded-full blur-3xl -z-10" />
