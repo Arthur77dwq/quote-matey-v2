@@ -66,20 +66,23 @@ export function VideoSection() {
       const video = videoRef.current;
       if (!entry || !video) return;
 
-      // STOP autoplay after user interaction
+      // stop autoplay after user interaction
       if (userInteracted) return;
 
+      const ratio = entry.intersectionRatio;
+
       // pause when out of view
-      if (entry.intersectionRatio < 0.3) {
-        video.pause();
-        syncState();
+      if (ratio < 0.3) {
+        if (!video.paused) {
+          video.pause();
+          syncState();
+        }
         return;
       }
 
       // play when visible
-      if (entry.intersectionRatio > 0.7) {
-        video.play().catch(() => {});
-        syncState();
+      if (ratio > 0.7 && video.paused) {
+        video.play().then(syncState).catch(() => {});
       }
     },
     { threshold: [0.3, 0.7] }
@@ -111,11 +114,6 @@ export function VideoSection() {
           </p>
         </div>
 
-          <p className="text-muted-foreground mt-4">
-            See the fastest way to create professional quotes
-          </p>
-        </div>
-
         {/* VIDEO WRAPPER */}
         <div className="max-w-6xl mx-auto">
 
@@ -136,11 +134,12 @@ export function VideoSection() {
             </div>
           </div>
 
-          {/* VIDEO BOX */}
+          {/* VIDEO BOX (FIXED CLIPPING BUG) */}
           <div className="relative aspect-video bg-black border-4 border-gray-300 rounded-b-2xl overflow-hidden">
 
-            {/* VIDEO */}
-            <div className="absolute inset-0 overflow-hidden rounded-b-2xl bg-black">
+            {/* double clip fix for corner + border bleed */}
+            <div className="absolute inset-0 overflow-hidden rounded-b-2xl">
+
               <video
                 ref={videoRef}
                 src="/video.mp4"
@@ -151,6 +150,7 @@ export function VideoSection() {
                 onPlay={syncState}
                 onPause={syncState}
               />
+
             </div>
 
             {/* CONTROLS */}
