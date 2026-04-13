@@ -105,7 +105,7 @@ export function VideoSection() {
           <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300 rounded-b-2xl overflow-hidden">
             <video
               ref={videoRef}
-              src="/video.mp4"
+              src={process.env.NEXT_PUBLIC_VIDEO_URL || ''}
               className="w-full h-full object-cover"
               loop
               playsInline
