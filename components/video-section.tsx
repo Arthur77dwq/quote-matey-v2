@@ -13,7 +13,7 @@ export function VideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const lastActionRef = useRef(0);
 
-  // reset interaction when user leaves tab (fixes stuck autoplay state)
+  // reset interaction when tab hidden
   useEffect(() => {
     const onVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
@@ -26,83 +26,78 @@ export function VideoSection() {
       document.removeEventListener('visibilitychange', onVisibilityChange);
   }, []);
 
-  const syncPlayingState = () => {
-    if (!videoRef.current) return;
-    setIsPlaying(!videoRef.current.paused);
-  };
-
+  // PLAY
   const playVideo = async () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
 
     try {
-      await videoRef.current.play();
-      setTimeout(syncPlayingState, 50);
+      await video.play();
+      setIsPlaying(true);
     } catch {
-      videoRef.current.pause();
-      syncPlayingState();
+      setIsPlaying(false);
     }
   };
 
+  // PAUSE
   const pauseVideo = () => {
-    if (!videoRef.current) return;
-    videoRef.current.pause();
-    syncPlayingState();
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.pause();
+    setIsPlaying(false);
   };
 
-  const togglePlayPause = () => {
-    if (!videoRef.current) return;
+  // TOGGLE PLAY
+  const togglePlayPause = async () => {
+    const video = videoRef.current;
+    if (!video) return;
 
     setUserInteracted(true);
 
-    if (videoRef.current.paused) {
-      playVideo();
+    if (video.paused) {
+      await playVideo();
     } else {
       pauseVideo();
     }
   };
 
+  // OBSERVER (stable + no flicker)
   useObserver(
     videoRef,
     (entries) => {
       const entry = entries[0];
-      if (!entry || !videoRef.current) return;
+      const video = videoRef.current;
+      if (!entry || !video) return;
 
-      // debounce scroll spam (prevents flicker completely)
+      // debounce scroll spam
       const now = Date.now();
       if (now - lastActionRef.current < 250) return;
       lastActionRef.current = now;
 
-      const video = videoRef.current;
-
-      // always allow pause (important UX)
-      const shouldPause = entry.intersectionRatio <= 0.25;
-
-      if (shouldPause && !video.paused) {
-        pauseVideo();
+      // ALWAYS allow pause
+      if (entry.intersectionRatio <= 0.25) {
+        if (!video.paused) pauseVideo();
         return;
       }
 
-      // auto-play logic (disabled only when actively interacting AND video already playing)
-      const blockAutoplay =
-        userInteracted && !video.paused && document.visibilityState === 'visible';
+      // block autoplay after user interaction
+      if (userInteracted) return;
 
-      if (blockAutoplay) return;
-
-      const shouldPlay =
-        entry.isIntersecting && entry.intersectionRatio >= 0.75;
-
-      if (shouldPlay && video.paused) {
-        playVideo();
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.75) {
+        if (video.paused) playVideo();
       }
     },
     { threshold: [0.25, 0.75] }
   );
 
+  // MUTE
   const toggleMute = () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
   };
 
   const handleVideoLoad = () => {
@@ -110,11 +105,9 @@ export function VideoSection() {
   };
 
   return (
-    <section
-      id="video-section"
-      className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden"
-    >
-      {/* background */}
+    <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+
+      {/* background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-[#f57a0a]/5 to-transparent rounded-full blur-3xl -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,13 +133,13 @@ export function VideoSection() {
         {/* VIDEO WRAPPER */}
         <div className="relative max-w-6xl mx-auto">
 
-          {/* Mac header */}
+          {/* MAC HEADER */}
           <div className="bg-gray-200 rounded-t-2xl p-3 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <button className="w-3 h-3 bg-red-500 rounded-full" />
-                <button className="w-3 h-3 bg-yellow-500 rounded-full" />
-                <button className="w-3 h-3 bg-green-500 rounded-full" />
+                <div className="w-3 h-3 bg-red-500 rounded-full" />
+                <div className="w-3 h-3 bg-yellow-500 rounded-full" />
+                <div className="w-3 h-3 bg-green-500 rounded-full" />
               </div>
 
               <div className="text-gray-700 text-sm font-medium">
@@ -157,23 +150,20 @@ export function VideoSection() {
             </div>
           </div>
 
-          {/* VIDEO */}
-          <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300 rounded-b-2xl overflow-hidden will-change-transform">
+          {/* VIDEO FRAME (FIXED CORNERS + NO BLACK LINE) */}
+          <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300 rounded-b-2xl overflow-hidden isolate">
 
-            {/* clip fix */}
-            <div className="absolute inset-0 overflow-hidden rounded-b-2xl">
-
-              <video
-                ref={videoRef}
-                src="/video.mp4"
-                className="absolute inset-0 w-full h-full object-cover"
-                loop
-                playsInline
-                muted
-                onLoadStart={handleVideoLoad}
-                onCanPlay={handleVideoLoad}
-              />
-            </div>
+            {/* VIDEO */}
+            <video
+              ref={videoRef}
+              src="/video.mp4"
+              className="absolute inset-0 w-full h-full object-cover block rounded-b-2xl"
+              loop
+              playsInline
+              muted
+              onLoadStart={handleVideoLoad}
+              onCanPlay={handleVideoLoad}
+            />
 
             {/* CONTROLS */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
@@ -181,7 +171,7 @@ export function VideoSection() {
 
                 <button
                   onClick={togglePlayPause}
-                  className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all hover:scale-105"
+                  className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition"
                 >
                   {isPlaying ? (
                     <Pause className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -192,7 +182,7 @@ export function VideoSection() {
 
                 <button
                   onClick={toggleMute}
-                  className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all hover:scale-105"
+                  className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition"
                 >
                   {isMuted ? (
                     <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -204,11 +194,11 @@ export function VideoSection() {
               </div>
             </div>
 
-            {/* OVERLAY */}
+            {/* CLICK OVERLAY */}
             {!isPlaying && (
               <div
                 onClick={togglePlayPause}
-                className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/50 transition cursor-pointer"
+                className="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer"
               >
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center text-white">
                   <Play className="w-6 h-6 sm:w-8 sm:h-8 ml-1" />
