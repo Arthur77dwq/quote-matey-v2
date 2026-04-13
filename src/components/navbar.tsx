@@ -43,7 +43,7 @@ export function Navbar() {
           {/* Logo - navigates to home */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="w-full flex justify-center items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
             <Image
               src="/images/quotematey-logo.png"
