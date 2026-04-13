@@ -4,11 +4,17 @@ import { NextResponse } from 'next/server';
 export default function proxy(request: NextRequest) {
   const token = request.cookies.get('token');
 
+  const url = new URL('/', request.url);
   if (!token) {
-    const url = new URL('/', request.url);
-    url.searchParams.set('reason', 'unauthorized');
-    url.searchParams.set('target', request.url);
-    return NextResponse.redirect(url);
+    if (request.url.includes('/chat')) {
+      url.searchParams.set('reason', 'unauthorized');
+      url.searchParams.set('target', request.url);
+      return NextResponse.redirect(url);
+    }
+  } else {
+    if (request.url.includes('/login') || request.url.includes('/signup')) {
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
@@ -16,5 +22,5 @@ export default function proxy(request: NextRequest) {
 
 // Apply only to specified routes.
 export const config = {
-  matcher: ['/chat'],
+  matcher: ['/chat', '/login', '/signup', '/reset-password'],
 };

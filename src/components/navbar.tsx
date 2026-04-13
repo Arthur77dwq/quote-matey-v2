@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -85,13 +85,18 @@ export function Navbar() {
               <AccountMenu user={user} logOut={logOut} />
             </div>
           ) : (
-            <div className="hidden lg:flex items-center">
+            <div className="hidden lg:flex justify-center items-center gap-2.5">
               <button
-                onClick={() => router.push('/chat')}
-                className="group inline-flex items-center gap-1.5 bg-[#0a1628] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#1a2d45] transition-all shadow-lg shadow-[#0a1628]/10"
+                onClick={() => router.push('/login')}
+                className="bg-white text-foreground px-6 py-2 rounded-full text-md font-medium border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
               >
-                Start Free
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                Log In
+              </button>
+              <button
+                onClick={() => router.push('/signup')}
+                className="bg-[#f57a0a] text-white px-6 py-2 rounded-full text-md font-medium hover:bg-[#e06d00] transition-all shadow-xl shadow-[#f57a0a]/25 hover:shadow-2xl hover:shadow-[#f57a0a]/30"
+              >
+                Sign Up
               </button>
             </div>
           )}
@@ -128,12 +133,18 @@ export function Navbar() {
               ),
             )}
 
-            <div className="pt-3 mt-3 border-t border-border/50">
+            <div className="w-full flex lg:hidden justify-center items-center gap-2.5">
               <button
-                onClick={() => router.push('/chat')}
-                className="w-full bg-[#0a1628] text-white py-3 rounded-full font-semibold"
+                onClick={() => router.push('/login')}
+                className="w-full bg-white text-foreground px-6 py-2 rounded-full text-md font-medium border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
               >
-                Start Free
+                Log In
+              </button>
+              <button
+                onClick={() => router.push('/signup')}
+                className="w-full bg-[#f57a0a] text-white px-6 py-2 rounded-full text-md font-medium hover:bg-[#e06d00] transition-all shadow-xl shadow-[#f57a0a]/25 hover:shadow-2xl hover:shadow-[#f57a0a]/30"
+              >
+                Sign Up
               </button>
             </div>
           </div>
