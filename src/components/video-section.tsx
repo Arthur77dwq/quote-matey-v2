@@ -7,12 +7,14 @@ import { useObserver } from '@/hooks/use-intersection-observer';
 
 export function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
   const [, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlayPause = () => {
     if (videoRef.current) {
+      setUserInteracted(true);
       if (isPlaying) {
         videoRef.current.pause();
       } else {
@@ -27,6 +29,7 @@ export function VideoSection() {
   useObserver(
     videoRef,
     (entries) => {
+      if (userInteracted) return;
       entries.forEach((entry) => {
         // Play when more or equal to 70% of element visible on viewport
         if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
