@@ -95,12 +95,21 @@ export function VideoSection() {
 
         {/* HEADER */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#0a1628]">
+          <span className="inline-block text-sm font-semibold text-[#0a1628] bg-[#0a1628]/10 px-4 py-1.5 rounded-full mb-4">
+            See It In Action
+          </span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a1628] mb-4 tracking-tight">
             Watch how QuoteMatey
             <span className="block text-[#f57a0a]">
               transforms your quoting
             </span>
           </h2>
+
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            See the fastest way to create professional quotes that win more jobs
+          </p>
+        </div>
 
           <p className="text-muted-foreground mt-4">
             See the fastest way to create professional quotes
