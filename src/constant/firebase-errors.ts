@@ -1,6 +1,12 @@
 import { ErrorConfig } from '@/types/global';
 
 export const FIREBASE_ERROR_MAP: Record<string, ErrorConfig> = {
+  // Auth Init Error
+  'auth/init': {
+    message: 'Auth not initialized',
+    type: 'error',
+  },
+
   // Auth / Login / Reset
   'auth/invalid-email': {
     message: 'Please enter a valid email address.',
