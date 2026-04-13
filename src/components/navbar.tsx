@@ -27,6 +27,19 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-[72px]">
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
+
           {/* Logo - navigates to home */}
           <Link
             href="/"
@@ -68,7 +81,9 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           {user ? (
-            <AccountMenu user={user} logOut={logOut} />
+            <div className="hidden lg:flex">
+              <AccountMenu user={user} logOut={logOut} />
+            </div>
           ) : (
             <div className="hidden lg:flex items-center">
               <button
@@ -81,18 +96,12 @@ export function Navbar() {
             </div>
           )}
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </button>
+          {/* user Profile */}
+          {user && (
+            <div className="lg:hidden">
+              <AccountMenu user={user} logOut={logOut} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -118,6 +127,7 @@ export function Navbar() {
                 </button>
               ),
             )}
+
             <div className="pt-3 mt-3 border-t border-border/50">
               <button
                 onClick={() => router.push('/chat')}
