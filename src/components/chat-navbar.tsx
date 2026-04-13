@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -17,16 +17,16 @@ export function ChatNavbar() {
           {/* Back to Home */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/80"
+            className="w-fit inline-flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/80"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            <ChevronLeft className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
+            <span className="hidden lg:flex">Back to Home</span>
           </Link>
 
           {/* Logo - navigates to home */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="w-full flex justify-center items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
             <Image
               src="/images/quotematey-logo.png"

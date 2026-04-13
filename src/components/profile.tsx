@@ -38,7 +38,9 @@ export function Profile({ user, children, className, onClick }: Props) {
             )}
           </div>
 
-          {user?.displayName && <span className="">{user.displayName}</span>}
+          {user?.displayName && (
+            <span className="hidden lg:flex">{user.displayName}</span>
+          )}
         </div>
       </button>
       {children}
