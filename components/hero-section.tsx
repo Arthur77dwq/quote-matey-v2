@@ -67,13 +67,7 @@ export function HeroSection() {
             </h1>
 
             {/* Subheadline - Speed + Money + Advantage */}
-          <p className="text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed max-w-xl">
-  QuoteMatey is an AI quoting tool that helps tradies send professional quotes in under{' '}
-  <span className="text-foreground font-semibold">60 seconds</span>{' '}
-  from job photos, videos, or messages.
-  <br /><br />
-  While you're still writing things up, faster tradies are already sending quotes and winning the job.
-</p>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed max-w-xl"> Your competitors are quoting in{' '} <span className="text-foreground font-semibold">60 seconds</span>{' '} while you're still doing the math. Every slow quote costs you{' '} <span className="text-foreground font-semibold"> $3,000-$5,000 </span>{' '} in lost jobs per month. </p>
 
             {/* Primary + Secondary CTA */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
