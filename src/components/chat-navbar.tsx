@@ -26,7 +26,7 @@ export function ChatNavbar() {
           {/* Logo - navigates to home */}
           <Link
             href="/"
-            className="w-full flex justify-center items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="w-full lg:w-auto flex justify-center items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
             <Image
               src="/images/quotematey-logo.png"
