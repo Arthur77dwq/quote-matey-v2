@@ -2,6 +2,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -106,6 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await updateProfile(userCredential.user, {
         displayName: name,
       });
+
+      await sendEmailVerification(userCredential.user);
     } catch (error: unknown) {
       const err = getFirebaseErrorMessage(error);
       setError(err.message);
