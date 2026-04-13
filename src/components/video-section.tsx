@@ -103,18 +103,22 @@ export function VideoSection() {
 
           {/* Video Container - 1920x1080 aspect ratio with stroke */}
           <div className="relative aspect-video bg-black shadow-2xl border-4 border-gray-300 rounded-b-2xl overflow-hidden">
-            <video
-              ref={videoRef}
-              src={process.env.NEXT_PUBLIC_VIDEO_URL || ''}
-              className="w-full h-full object-cover"
-              loop
-              playsInline
-              muted
-              onLoadStart={handleVideoLoad}
-              onCanPlay={handleVideoLoad}
-              onError={() => setVideoLoaded(false)}
-              style={{ WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
-            />
+            {process.env.NEXT_PUBLIC_VIDEO_URL && (
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                loop
+                playsInline
+                muted
+                onCanPlayThrough={handleVideoLoad}
+                onError={() => setVideoLoaded(false)}
+              >
+                <source
+                  src={process.env.NEXT_PUBLIC_VIDEO_URL}
+                  type="video/mp4"
+                />
+              </video>
+            )}
 
             {/* Custom Video Controls Overlay */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
