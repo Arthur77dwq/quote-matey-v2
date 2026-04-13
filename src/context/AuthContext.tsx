@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
+  updateProfile,
 } from 'firebase/auth';
 import {
   createContext,
@@ -26,9 +27,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
   const auth = getFirebaseAuth();
   const googleProvider = getGoogleProvider();
+
+  const authInitError = {
+    code: 'auth/init',
+    message: 'Auth not initialized',
+  };
 
   useEffect(() => {
     if (auth) {
@@ -39,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser({
             uid: firebaseUser?.uid || '',
             email: firebaseUser?.email || '',
-            displayName: firebaseUser?.displayName || displayName || '',
+            displayName: firebaseUser?.displayName || '',
             photoURL: firebaseUser?.photoURL || '',
             token,
           });
@@ -57,7 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      if (!auth) throw new Error('Auth not initialized');
+      if (!auth)
+        throw new Error(getFirebaseErrorMessage(authInitError).message);
 
       await signInWithPopup(auth, googleProvider);
     } catch (error: unknown) {
@@ -72,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      if (!auth) throw new Error('Auth not initialized');
+      if (!auth)
+        throw new Error(getFirebaseErrorMessage(authInitError).message);
 
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
@@ -87,11 +94,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      if (!auth) throw new Error('Auth not initialized');
+      if (!auth)
+        throw new Error(getFirebaseErrorMessage(authInitError).message);
 
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
 
-      setDisplayName(name);
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
     } catch (error: unknown) {
       const err = getFirebaseErrorMessage(error);
       setError(err.message);
@@ -104,7 +118,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      if (!auth) throw new Error('Auth not initialized');
+      if (!auth)
+        throw new Error(getFirebaseErrorMessage(authInitError).message);
 
       await firebaseSignOut(auth);
 
@@ -123,7 +138,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      if (!auth) throw new Error('Auth not initialized');
+      if (!auth)
+        throw new Error(getFirebaseErrorMessage(authInitError).message);
 
       await sendPasswordResetEmail(auth, email);
 

@@ -1,21 +1,19 @@
 'use client';
 
-import { ChevronRight, LogOut as LogOutIcon,Menu, X } from 'lucide-react';
+import { ChevronRight, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '@/context/AuthContext';
 
-import { Profile } from './profile';
+import { AccountMenu } from './account-menu';
 
 export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [show, setShow] = useState(false);
-  const router = useRouter();
   const { user, logOut } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   const scrollToSection = (id: string) => {
     const element = document.querySelector(`#${id}`);
@@ -70,33 +68,7 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           {user ? (
-            <div className="flex flex-col h-auto bg-white">
-              <Profile
-                className={twMerge(
-                  'w-fit',
-                  show ? 'border-b-0 border rounded-b-none shadow-sm' : '',
-                )}
-                user={user}
-                onClick={() => setShow(!show)}
-              >
-                <div
-                  className={twMerge(
-                    'px-12 py-2 shadow-sm flex flex-col justify-center items-center bg-white border-l fixed -bottom-6 gap-2 z-50',
-                    !show && 'hidden',
-                    show ? 'border border-t-0' : '',
-                    'rounded-b-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hover:bg-secondary/80',
-                  )}
-                >
-                  <div
-                    className="flex justify-center items-center gap-3"
-                    onClick={logOut}
-                  >
-                    <LogOutIcon size={18} />
-                    <span>Log out</span>
-                  </div>
-                </div>
-              </Profile>
-            </div>
+            <AccountMenu user={user} logOut={logOut} />
           ) : (
             <div className="hidden lg:flex items-center">
               <button
