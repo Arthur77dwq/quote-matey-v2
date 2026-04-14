@@ -52,12 +52,12 @@ export const FIREBASE_ERROR_MAP: Record<string, ErrorConfig> = {
   },
 
   'auth/invalid-user-token': {
-    message: 'Session expired. Please log in again.',
+    message: 'Session expired. Please login again.',
     type: 'warning',
   },
 
   'auth/user-token-expired': {
-    message: 'Session expired. Please log in again.',
+    message: 'Session expired. Please login again.',
     type: 'warning',
   },
 

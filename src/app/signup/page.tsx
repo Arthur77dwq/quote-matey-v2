@@ -55,12 +55,12 @@ export default function SignupPage() {
           <Spinner className="size-10" />
         </OverlayBg>
       ) : null}
-      <div className="min-h-screen bg-[#0a1628] flex">
+      <div className="min-h-screen bg-[#0a1628] p-10 lg:p-0 flex flex-col lg:flex-row items-center lg:items-stretch">
         <Achievemnet />
 
-        <div className="w-full max-w-xl bg-white flex items-center justify-center px-8 py-16">
+        <div className="w-fit lg:w-full lg:max-w-xl bg-white lg:flex items-center justify-center px-8 py-16 rounded-xl lg:rounded-none shadow-lg shadow-white/50 lg:shadow-none">
           <div className="w-full max-w-md">
-            <div className="mb-8">
+            <div className="mb-8 flex flex-col items-center lg:items-start">
               <Link href={'/'}>
                 <div className="flex items-center gap-2 mb-8">
                   <Image
@@ -75,7 +75,7 @@ export default function SignupPage() {
                 </div>
               </Link>
               <h2 className="font-semibold text-4xl">Sign up</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-center lg:text-left text-gray-500">
                 Get started in seconds. Create your account.
               </p>
             </div>
@@ -172,7 +172,7 @@ export default function SignupPage() {
                   <GoogleIcon className="size-6" />
                   Continue with Google
                 </Button>
-                <div className="text-lg flex justify-center items-center">
+                <div className="whitespace-nowrap text-lg flex justify-center items-center">
                   <span>Already have an account?</span>
                   <Link
                     href="/login"

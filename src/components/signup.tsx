@@ -193,7 +193,7 @@ export function SignUp({ resetPassword, toggle, className }: Props) {
               className="p-0 pl-1 text-bold text-lg hover:underline text-[#f57a0a] bg-white hover:bg-white hover:text-[#f57a0a] cursor-pointer"
               onClick={() => toggle()}
             >
-              Log in
+              Login
             </Button>
           </div>
         </CardFooter>

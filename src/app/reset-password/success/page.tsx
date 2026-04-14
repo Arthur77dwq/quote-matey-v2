@@ -27,11 +27,12 @@ export default function SuccessResetPasswordPage() {
         </OverlayBg>
       ) : null}
 
-      <div className="min-h-screen bg-[#0a1628] flex">
+      <div className="min-h-screen bg-[#0a1628] p-10 lg:p-0 flex flex-col lg:flex-row items-center lg:items-stretch">
         <Achievemnet />
-        <div className="w-full max-w-xl bg-white flex items-center justify-center px-8 py-16">
+
+        <div className="w-fit lg:w-full lg:max-w-xl bg-white lg:flex items-center justify-center px-8 py-16 rounded-xl lg:rounded-none shadow-lg shadow-white/50 lg:shadow-none">
           <div className="w-full max-w-md">
-            <div className="mb-8">
+            <div className="mb-8 flex flex-col items-center lg:items-start">
               <div className="flex justify-center mb-6">
                 <div className="bg-[#f57a0a]/8 rounded-full w-fit h-fit p-3">
                   <Mail color="#f57a0a" size={30} />
@@ -41,7 +42,7 @@ export default function SuccessResetPasswordPage() {
               <h2 className="text-3xl text-gray-900 mb-2 text-center">
                 Check your email
               </h2>
-              <p className="text-sm text-gray-500 text-center">
+              <p className="text-sm text-center lg:text-left text-gray-500">
                 We've sent a password reset link to your email address. Please
                 check your inbox and follow the instructions to reset your
                 password.
@@ -65,7 +66,7 @@ export default function SuccessResetPasswordPage() {
               </Button>
             </div>
 
-            <div className="mt-8 text-center text-sm text-gray-600">
+            <div className="whitespace-nowrap mt-8 text-center text-sm text-gray-600">
               Didn't receive the email? Check your spam folder or{' '}
               <Link
                 href="/reset-password"

@@ -87,10 +87,10 @@ export function Login({ resetPassword, toggle, className }: Props) {
             </div>
           </div>
           <CardTitle className="font-semibold text-4xl text-center">
-            Log in
+            Login
           </CardTitle>
           <CardDescription className="text-center text-lg">
-            Welcome back! Log in to your account.
+            Welcome back! Login to your account.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -154,7 +154,7 @@ export function Login({ resetPassword, toggle, className }: Props) {
                 disabled={loading}
                 className="cursor-pointer w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
               >
-                Log In
+                Login
               </Button>
               <div className="w-full relative h-5 flex justify-center items-center">
                 <div className="w-full border-dashed border-t border-neutral-300"></div>
