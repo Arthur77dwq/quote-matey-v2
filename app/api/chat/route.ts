@@ -351,8 +351,14 @@ ${userMessage}`;
     );
 
     if (!response.ok) {
-      return NextResponse.json({ content: '❌ API request failed' });
-    }
+  const err = await response.text();
+
+  return NextResponse.json({
+    content: '❌ API request failed',
+    status: response.status,
+    error: err,
+  });
+}
 
     const data = await response.json();
     // console.log('=== GEMINI RESPONSE DEBUG ===');
