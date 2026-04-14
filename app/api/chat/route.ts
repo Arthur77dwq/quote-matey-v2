@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const SYSTEM_PROMPT = `
 SYSTEM / CONTEXT
@@ -258,7 +258,7 @@ ${userMessage}`;
       ],
       generationConfig: {
         temperature: 0.7,
-        maxOutputTokens: 3000,
+        maxOutputTokens: 10000,
       },
     });
 
