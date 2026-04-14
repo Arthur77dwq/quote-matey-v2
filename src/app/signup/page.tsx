@@ -1,140 +1,191 @@
 'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, LockKeyhole, Mail, User } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import Achievemnet from '@/components/achievement';
+import { OverlayBg } from '@/components/overlay-bg';
+import { Button } from '@/components/ui/button';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group';
+import { Spinner } from '@/components/ui/spinner';
+import { GoogleIcon } from '@/constant/icons';
+import { useAuth } from '@/context/AuthContext';
+import { signUpFormData, signUpSchema } from '@/lib/schemas/auth.schema';
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { user, error, loading, signUp, withPopUp } = useAuth();
+  const [show, setShow] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<signUpFormData>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const toggleShowPassword = () => {
+    setShow(!show);
+  };
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user]);
+
+  const onSubmit = async (data: signUpFormData) => {
+    await signUp(data.name, data.email, data.password);
   };
 
   return (
-    <div className="min-h-screen bg-[#0a1628] flex">
-      <Achievemnet />
+    <>
+      {loading ? (
+        <OverlayBg>
+          <Spinner className="size-10" />
+        </OverlayBg>
+      ) : null}
+      <div className="min-h-screen bg-[#0a1628] flex">
+        <Achievemnet />
 
-      <div className="w-full max-w-xl bg-white flex items-center justify-center px-8 py-16">
-        <div className="w-full max-w-md">
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-6 h-6 bg-[#0a1628] rounded"></div>
-              <span className="text-sm">QuoteMalay</span>
-            </div>
-            <h2 className="text-3xl text-gray-900 mb-2">Sign up</h2>
-            <p className="text-sm text-gray-500">
-              Create an account to get started
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm text-gray-700 mb-2"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b2c] focus:border-transparent"
-                placeholder="your@email.com"
-                required
-              />
+        <div className="w-full max-w-xl bg-white flex items-center justify-center px-8 py-16">
+          <div className="w-full max-w-md">
+            <div className="mb-8">
+              <Link href={'/'}>
+                <div className="flex items-center gap-2 mb-8">
+                  <Image
+                    src={'/images/QuoteMateyAppIcon.png'}
+                    alt=""
+                    width={40}
+                    height={20}
+                  />
+                  <div className="text-3xl">
+                    <span className="font-bold">Quote</span>Matey
+                  </div>
+                </div>
+              </Link>
+              <h2 className="font-semibold text-4xl">Sign up</h2>
+              <p className="text-sm text-gray-500">
+                Get started in seconds. Create your account.
+              </p>
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm text-gray-700 mb-2"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b2c] focus:border-transparent"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+            <form id="signupForm" onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-2">
+                <div className="grid gap-2">
+                  <InputGroup className="min-h-13">
+                    <InputGroupInput
+                      {...register('name')}
+                      name="name"
+                      className="md:text-lg"
+                      placeholder="Full Name"
+                    />
+                    <InputGroupAddon>
+                      <User />
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <p className="text-red-500 text-xs">{errors.name?.message}</p>
+                </div>
+                <div className="grid gap-2">
+                  <InputGroup className="min-h-13">
+                    <InputGroupInput
+                      {...register('email')}
+                      name="email"
+                      className="md:text-lg"
+                      placeholder="Email"
+                    />
+                    <InputGroupAddon>
+                      <Mail />
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <p className="text-red-500 text-xs">
+                    {errors.email?.message}
+                  </p>
+                </div>
 
-            <div>
-              <label
-                htmlFor="confirm-password"
-                className="block text-sm text-gray-700 mb-2"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirm-password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b2c] focus:border-transparent"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+                <div className="grid gap-2">
+                  <InputGroup className="min-h-13">
+                    <InputGroupInput
+                      {...register('password')}
+                      name="password"
+                      type={show ? 'text' : 'password'}
+                      className="md:text-lg"
+                      placeholder="Password"
+                    />
+                    <InputGroupAddon>
+                      <LockKeyhole />
+                    </InputGroupAddon>
+                    <InputGroupAddon align="inline-end">
+                      <Eye
+                        className="cursor-pointer"
+                        onClick={toggleShowPassword}
+                      />
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <p className="text-red-500 text-xs">
+                    {errors.password?.message}
+                  </p>
+                  <div className="flex-col flex items-center">
+                    <p className="text-red-500 w-full text-left text-xs">
+                      {error}
+                    </p>
+                    <Link
+                      href={'/reset-password'}
+                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
+                  </div>
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              className="w-full bg-[#ff6b2c] text-white py-3.5 rounded-lg hover:bg-[#ff5515] transition-colors mt-6"
-            >
-              Create Account
-            </button>
-          </form>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">or</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="w-full border border-gray-200 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path
-                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
-                fill="#4285F4"
-              />
-              <path
-                d="M9.003 18c2.43 0 4.467-.806 5.956-2.184L12.05 13.56c-.806.54-1.836.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z"
-                fill="#34A853"
-              />
-              <path
-                d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.426 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z"
-                fill="#EA4335"
-              />
-            </svg>
-            Continue with Google
-          </button>
-
-          <div className="mt-8 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link href="/login" className="text-[#ff6b2c] hover:underline">
-              Log in
-            </Link>
+              <div className="flex flex-col gap-2 mt-4">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="cursor-pointer w-full h-13 flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 text-base font-medium hover:bg-[#e06d00] transition-all hover:-translate-y-0.1"
+                >
+                  Sign Up
+                </Button>
+                <div className="w-full relative h-5 flex justify-center items-center">
+                  <div className="w-full border-dashed border-t border-neutral-300"></div>
+                  <span className="absolute top-1/2 -translate-y-1/2 bg-white px-2 py-0 text-xl text-neutral-400">
+                    or
+                  </span>
+                </div>
+                <Button
+                  onClick={withPopUp}
+                  variant="outline"
+                  disabled={loading}
+                  className="cursor-pointer w-full h-13 flex items-center justify-center gap-2 bg-white px-6 py-2 hover:text-black text-lg font-medium border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
+                >
+                  <GoogleIcon className="size-6" />
+                  Continue with Google
+                </Button>
+                <div className="text-lg flex justify-center items-center">
+                  <span>Already have an account?</span>
+                  <Link
+                    href="/login"
+                    className="p-0 pl-1 text-bold text-lg hover:underline text-[#f57a0a] bg-white hover:bg-white hover:text-[#f57a0a] cursor-pointer"
+                  >
+                    Login
+                  </Link>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
