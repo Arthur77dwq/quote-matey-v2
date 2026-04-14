@@ -56,8 +56,8 @@ export default function RootLayout({
       >
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
+          <AuthProvider>{children}</AuthProvider>
         </Suspense>
-        <AuthProvider>{children}</AuthProvider>
         <Analytics />
       </body>
     </html>
