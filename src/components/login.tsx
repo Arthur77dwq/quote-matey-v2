@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, LockKeyhole, Mail, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -36,6 +36,8 @@ type Props = {
 export function Login({ resetPassword, toggle, className }: Props) {
   const { loading, error, user, signIn, withPopUp } = useAuth();
   const params = useSearchParams();
+  const router = useRouter();
+
   const [show, setShow] = useState(false);
   const {
     register,
@@ -50,11 +52,16 @@ export function Login({ resetPassword, toggle, className }: Props) {
   };
 
   useEffect(() => {
-    if (user) {
-      const target = new URL(params.get('target') || '');
-      window.location.href = String(target);
+    if (!user) return;
+
+    const target = params.get('target');
+
+    if (target) {
+      router.replace(target);
+    } else {
+      router.replace('/');
     }
-  }, [user]);
+  }, [user, params, router]);
 
   const onSubmit = async (data: loginFormData) => {
     await signIn(data.email, data.password);

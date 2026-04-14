@@ -40,9 +40,9 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.replace('/');
     }
-  }, [user]);
+  }, [user, router]);
 
   const onSubmit = async (data: signUpFormData) => {
     await signUp(data.name, data.email, data.password);
