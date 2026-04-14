@@ -350,23 +350,27 @@ ${userMessage}`;
       },
     );
 
-  if (!response.ok) {
-  let errorBody;
+if (!response.ok) {
+  const status = response.status;
+  const statusText = response.statusText;
 
+  let raw;
   try {
-    // Try to parse structured JSON error (BEST CASE)
-    errorBody = await response.json();
-  } catch {
-    // Fallback to raw text if not JSON
-    errorBody = await response.text();
+    raw = await response.text();
+  } catch (e) {
+    raw = 'Failed to read response body';
   }
 
-  console.log('GEMINI FULL ERROR:', errorBody);
+  console.log('❌ GEMINI FAILED REQUEST');
+  console.log('STATUS:', status);
+  console.log('STATUS TEXT:', statusText);
+  console.log('RAW RESPONSE:', raw);
 
   return NextResponse.json({
     content: '❌ API request failed',
-    status: response.status,
-    error: errorBody,
+    status,
+    statusText,
+    error: raw,
   });
 }
 
