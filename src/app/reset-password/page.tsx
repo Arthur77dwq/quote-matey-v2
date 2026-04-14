@@ -43,12 +43,12 @@ export default function ResetPasswordPage() {
           <Spinner className="size-10" />
         </OverlayBg>
       ) : null}
-      <div className="min-h-screen bg-[#0a1628] flex">
+      <div className="min-h-screen bg-[#0a1628] p-10 lg:p-0 flex flex-col lg:flex-row items-center lg:items-stretch">
         <Achievemnet />
 
-        <div className="w-full max-w-xl bg-white flex items-center justify-center px-8 py-16">
+        <div className="w-fit lg:w-full lg:max-w-xl bg-white lg:flex items-center justify-center px-8 py-16 rounded-xl lg:rounded-none shadow-lg shadow-white/50 lg:shadow-none">
           <div className="w-full max-w-md">
-            <div className="mb-8">
+            <div className="mb-8 flex flex-col items-center lg:items-start">
               <Link href={'/'}>
                 <div className="flex items-center gap-2 mb-8">
                   <Image
@@ -63,7 +63,7 @@ export default function ResetPasswordPage() {
                 </div>
               </Link>
               <h2 className="font-semibold text-4xl">Reset password</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-center lg:text-left text-gray-500">
                 Enter your email to reset your password
               </p>
             </div>
@@ -107,10 +107,10 @@ export default function ResetPasswordPage() {
               </div>
             </form>
 
-            <div className="mt-8 text-center text-sm text-gray-600">
+            <div className="whitespace-nowrap mt-8 text-center text-sm text-gray-600">
               Remember your password?{' '}
               <Link href="/login" className="text-[#ff6b2c] hover:underline">
-                Log in
+                Login
               </Link>
             </div>
           </div>

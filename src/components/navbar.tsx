@@ -90,7 +90,7 @@ export function Navbar() {
                 onClick={() => router.push('/login')}
                 className="bg-white text-foreground px-6 py-2 rounded-full text-md font-medium border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
               >
-                Log In
+                Login
               </button>
               <button
                 onClick={() => router.push('/signup')}
@@ -138,7 +138,7 @@ export function Navbar() {
                 onClick={() => router.push('/login')}
                 className="w-full bg-white text-foreground px-6 py-2 rounded-full text-md font-medium border-2 border-border hover:border-[#0a1628]/20 hover:bg-slate-50 transition-all"
               >
-                Log In
+                Login
               </button>
               <button
                 onClick={() => router.push('/signup')}
