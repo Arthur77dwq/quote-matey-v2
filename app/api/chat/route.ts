@@ -350,13 +350,23 @@ ${userMessage}`;
       },
     );
 
-    if (!response.ok) {
-  const err = await response.text();
+  if (!response.ok) {
+  let errorBody;
+
+  try {
+    // Try to parse structured JSON error (BEST CASE)
+    errorBody = await response.json();
+  } catch {
+    // Fallback to raw text if not JSON
+    errorBody = await response.text();
+  }
+
+  console.log('GEMINI FULL ERROR:', errorBody);
 
   return NextResponse.json({
     content: '❌ API request failed',
     status: response.status,
-    error: err,
+    error: errorBody,
   });
 }
 
