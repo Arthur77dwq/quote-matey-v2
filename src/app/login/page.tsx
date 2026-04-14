@@ -39,9 +39,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.replace('/');
     }
-  }, [user]);
+  }, [user, router]);
 
   const onSubmit = async (data: loginFormData) => {
     await signIn(data.email, data.password);
