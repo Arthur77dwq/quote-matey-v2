@@ -5,6 +5,7 @@
     "eamodio.gitlens",
     "usernamehw.errorlens",
     "christian-kohler.path-intellisense",
-    "wix.vscode-import-cost"
+    "wix.vscode-import-cost",
+    "gruntfuggly.todo-tree"
   ]
 }
