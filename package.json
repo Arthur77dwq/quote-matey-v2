@@ -28,7 +28,7 @@
   "dependencies": {
     "@ai-sdk/react": "^3.0.118",
     "@azure-rest/ai-inference": "^1.0.0-beta.6",
-    "@google/genai": "^1.46.0",
+    "@google/genai": "^1.50.1",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",
