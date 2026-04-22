@@ -6,11 +6,39 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
+import { Message } from '@/types/chat';
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
+export async function fetchWithRetry(
+  fn: () => Promise<Response>,
+  retries = 2,
+  delay = 1500,
+): Promise<Response> {
+  let attempt = 0;
+
+  while (attempt <= retries) {
+    try {
+      const res = await fn();
+
+      if (!res.ok) throw new Error('Request failed');
+
+      const data = await res.clone().json();
+
+      // retry if backend says "busy"
+      if (data?.content?.includes('High demand')) {
+        throw new Error('Server busy');
+      }
+
+      return res;
+    } catch {
+      attempt++;
+
+      if (attempt > retries) break;
+
+      await new Promise((r) => setTimeout(r, delay * attempt));
+    }
+  }
+
+  throw new Error('Max retries reached');
 }
 
 function ChatContent() {
@@ -47,7 +75,6 @@ function ChatContent() {
   }, [isLoading]);
 
   const handleSendMessage = async (text: string) => {
-    // console.log('=== handleSendMessage called with:', text);
     const trimmedText = text.trim();
     if (!trimmedText) return;
 
@@ -55,8 +82,6 @@ function ChatContent() {
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
     setIsLoading(true);
-
-    // console.log('=== About to call API');
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -71,47 +96,27 @@ function ChatContent() {
     setMessages(currentMessages);
 
     try {
-      // console.log('=== Making fetch call to /api/chat');
-      // console.log(
-      //   '=== Request body:',
-      //   JSON.stringify(
-      //     {
-      //       messages: currentMessages.map((m) => ({
-      //         role: m.role,
-      //         content: m.content,
-      //       })),
-      //     },
-      //     null,
-      //     2,
-      //   ),
-      // );
-
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: currentMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
+      const response = await fetchWithRetry(() =>
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: currentMessages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+          }),
         }),
-      });
+      );
 
       const data = await response.json();
-      // console.log('Full API Response:', JSON.stringify(data, null, 2));
-      // console.log('Response status:', response.status);
-      // console.log('Response ok:', response.ok);
 
       if (!response.ok) {
-        // console.error('Response not OK:', response.status, data);
         throw new Error(
           data?.error || data?.message || 'Failed to get response',
         );
       }
 
-      // console.log('Setting assistant message:', data.content);
-      // console.log('Content type:', typeof data.content);
-      // console.log('Content length:', data.content?.length);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -120,12 +125,6 @@ function ChatContent() {
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      // console.error('Error sending message:', error);
-      // console.error('Error details:', {
-      //   message: error instanceof Error ? error.message : 'Unknown error',
-      //   stack: error instanceof Error ? error.stack : 'No stack trace',
-      // });
-
       let errorContent =
         'Sorry mate, something went wrong. Give it another go!';
       if (error instanceof Error) {
