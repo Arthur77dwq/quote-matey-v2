@@ -1,8 +1,8 @@
-export type Message = {
-  content: string;
+interface Message {
   id: string;
-  role: string;
-};
+  role: 'user' | 'assistant';
+  content: string;
+}
 
 export type Part = {
   text: string;
