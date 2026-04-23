@@ -5,7 +5,6 @@
 - [Test Case Design Framework](#test-case-design-framework)
 - [Chat API](#chat-api)
   - [What does this system do](#what-does-this-system-do)
-  - [Test Cases](#test-cases)
 
 ## Introduction
 
@@ -47,8 +46,16 @@ When `/chat` endpoint is called with required input.
 
 **Core Functionalities:**
 
-1. TC-01: Should extract user message.
-2. TC-02: Should fetch api key from environment variables.
-3. TC-03: Should build prompt which contains user message.
-4. TC-04: Should call ai model to generate quote.
-5. TC-05: Should provide response.
+1. **TC-01:** Should extract user message.
+2. **TC-02:** Should fetch api key from environment variables.
+3. **TC-03:** Should build prompt which contains user message.
+4. **TC-04:** Should call ai model to generate quote.
+5. **TC-05:** Should provide response.
+
+**Invalid Inputs:**
+
+**Edge Cases:**
+
+**Failure Handling:**
+
+**Security (if relevant):**
