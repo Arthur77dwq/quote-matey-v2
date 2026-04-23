@@ -121,7 +121,7 @@ async function tryModels(
   return null;
 }
 
-// MAIN HANDLER (now clean & simple)
+// MAIN HANDLER
 export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
