@@ -33,7 +33,7 @@ Expected: <Expected Output>
 
 ### What does this system do
 
-When `/chat` endpoint is called with required input.
+When `/api/chat` endpoint is called with required input.
 
 - Extracts user messages.
 - Fetchs api key from environment variables.
@@ -53,6 +53,15 @@ When `/chat` endpoint is called with required input.
 5. **TC-05:** Should provide response.
 
 **Invalid Inputs:**
+
+1. TC-06: Returns error if messages array is empty.
+2. TC-07: Returns error if messages is undefined.
+3. TC-08: Returns error if no user message present.
+4. TC-09: Returns error if user message is empty.
+5. TC-10: Handles null content safely.
+6. TC-11: Handles non-string user content.
+7. TC-12: Handles invalid messages type (not array).
+8. TC-13: Handles very long input safely.
 
 **Edge Cases:**
 

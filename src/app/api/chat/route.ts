@@ -44,7 +44,7 @@ function isRetryable(error: unknown) {
 }
 
 // Extract user message
-function extractUserMessage(messages: Message[]): string {
+export function extractUserMessage(messages: Message[]): string {
   return (
     messages
       ?.filter((m) => m.role === 'user')
@@ -127,7 +127,11 @@ export async function POST(request: NextRequest) {
     const { messages } = await request.json();
     const userMessage = extractUserMessage(messages);
 
-    if (!userMessage) {
+    if (
+      !userMessage ||
+      typeof userMessage !== 'string' ||
+      (typeof userMessage === 'string' && userMessage.trim() === '')
+    ) {
       return NextResponse.json({
         content: 'Need more details to provide a quote.',
       });
