@@ -223,7 +223,10 @@ function ChatContent() {
                         {!isUser && message.content && (
                           <button
                             onClick={() =>
-                              copyToClipboard(message.content, message.id)
+                              copyToClipboard(
+                                message.content,
+                                message?.id || '',
+                              )
                             }
                             className="absolute -bottom-3 right-4 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
                           >
