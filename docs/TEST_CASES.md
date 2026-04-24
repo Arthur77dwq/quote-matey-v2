@@ -4,7 +4,7 @@
 - [Test case structure](#test-case-structure)
 - [Test Case Design Framework](#test-case-design-framework)
 - [Chat API](#chat-api)
-  - [What does this system do](#what-does-this-system-do)
+- [Chat Page](#chat-page)
 
 ## Introduction
 
@@ -31,7 +31,7 @@ Expected: <Expected Output>
 
 ## Chat API
 
-### What does this system do
+**_What does this system do_**
 
 When `/api/chat` endpoint is called with required input.
 
@@ -86,4 +86,76 @@ When `/api/chat` endpoint is called with required input.
 8. **TC-29:** does not retry on non-retryable error
 9. **TC-30:** handles unexpected error gracefully
 
-**Security (if relevant):**
+## Chat Page
+
+```txt
+Manual testing is enough for now.
+```
+
+**_What does this system do_**
+
+When user interacts with the chat page:
+
+- Accepts user input
+- Prevents invalid submissions
+- Sends request to /api/chat
+- Shows loading state
+- Displays assistant response
+- Handles errors gracefully
+- Prevents duplicate requests
+- Maintains conversation history
+
+**_Scenarios:_**
+
+**Core Functionalities:**
+
+1. **TC-01:** Should render input field and send button
+2. **TC-02:** Should allow user to type message
+3. **TC-03:** Should send message on button click
+4. **TC-04:** Should display user message in chat
+5. **TC-05:** Should call /api/chat with correct payload
+6. **TC-06:** Should display assistant response
+7. **TC-07:** Should clear input after sending message
+8. **TC-08:** Should maintain message history (conversation flow)
+
+**Invalid Inputs:**
+
+1. **TC-09:** Should not send request if input is empty
+2. **TC-10:** Should not send request if input contains only spaces
+3. **TC-11:** Should handle null/undefined input safely
+4. **TC-12:** Should trim input before sending
+5. **TC-13:** Should prevent submission if already loading
+
+**Edge Cases:**
+
+1. **TC-14:** Should prevent duplicate submissions (double click)
+2. **TC-15:** Should handle very long user input
+3. **TC-16:** Should handle special characters in input
+4. **TC-17:** Should handle empty response from API
+5. **TC-18:** Should handle missing content in API response
+6. **TC-19:** Should display fallback text if response is empty
+7. **TC-20:** Should keep scroll at bottom on new message (if implemented)
+8. **TC-21:** Should preserve previous messages when new message is added
+
+**Failure Handling:**
+
+1. **TC-22:** Should show network error message when fetch fails
+2. **TC-23:** Should show error message for non-OK API response
+3. **TC-24:** Should handle invalid JSON response gracefully
+4. **TC-25:** Should show fallback message on unexpected error
+5. **TC-26:** Should recover and allow retry after error
+6. **TC-27:** Should stop loading state after error
+
+**Loading & UX Behavior:**
+
+1. **TC-28:** Should show loading indicator while waiting for response
+2. **TC-29:** Should disable input/button during loading
+3. **TC-30:** Should remove loading indicator after response
+4. **TC-31:** Should not allow multiple requests during loading
+
+**Integration Behavior (Frontend ↔ API):**
+
+1. **TC-32:** Should send correct message structure to API
+2. **TC-33:** Should handle API fallback message ("High demand")
+3. **TC-34:** Should display API response exactly as returned
+4. **TC-35:** Should handle delayed API response
