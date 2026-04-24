@@ -54,16 +54,25 @@ When `/api/chat` endpoint is called with required input.
 
 **Invalid Inputs:**
 
-1. TC-06: Returns error if messages array is empty.
-2. TC-07: Returns error if messages is undefined.
-3. TC-08: Returns error if no user message present.
-4. TC-09: Returns error if user message is empty.
-5. TC-10: Handles null content safely.
-6. TC-11: Handles non-string user content.
-7. TC-12: Handles invalid messages type (not array).
-8. TC-13: Handles very long input safely.
+1. **TC-06:** Returns error if messages array is empty.
+2. **TC-07:** Returns error if messages is undefined.
+3. **TC-08:** Returns error if no user message present.
+4. **TC-09:** Returns error if user message is empty.
+5. **TC-10:** Handles null content safely.
+6. **TC-11:** Handles non-string user content.
+7. **TC-12:** Handles invalid messages type (not array).
+8. **TC-13:** Handles very long input safely.
 
 **Edge Cases:**
+
+1. **TC-14:** uses the last user message
+2. **TC-15:** falls back if AI returns empty string
+3. **TC-16:** handles undefined AI response safely
+4. **TC-17:** handles very large input
+5. **TC-18:** handles special characters safely
+6. **TC-19:** cleans markdown and emojis from output
+7. **TC-20:** stops retry after max attempts
+8. **TC-21:** ignores assistant/system messages
 
 **Failure Handling:**
 

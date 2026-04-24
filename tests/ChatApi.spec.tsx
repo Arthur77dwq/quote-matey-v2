@@ -1,22 +1,94 @@
-import { NextRequest } from 'next/server';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+const mockGenerate = vi.fn();
 
-import { extractUserMessage, POST } from '@/app/api/chat/route';
+vi.mock('@google/genai', () => {
+  class MockGoogleGenAI {
+    models = {
+      generateContent: mockGenerate,
+    };
+  }
+
+  return { GoogleGenAI: MockGoogleGenAI };
+});
+
+import { NextRequest } from 'next/server';
+
+import {
+  buildPrompt,
+  extractUserMessage,
+  getApiKey,
+  POST,
+} from '@/app/api/chat/route';
 import { Message } from '@/types/chat';
+
+function createRequest<T>(body: T): NextRequest {
+  return {
+    json: async () => body,
+  } as unknown as NextRequest;
+}
 
 describe('Chat API', () => {
   describe('Core Functionality', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      process.env.GEMINI_API_KEY = 'test-key';
+    });
+
     test('TC-01: Should extract user message.', () => {
       const mockMessages: Message[] = [
         { role: 'user', content: 'leaking tap' },
       ];
+
       const userMessage = extractUserMessage(mockMessages);
+
       expect(userMessage).toBe('leaking tap');
     });
-    test('TC-02: Should fetch api key from environment variables.', () => {});
-    test('TC-03: Should build prompt which contains user message.', () => {});
-    test('TC-04: Should call ai model to generate quote.', () => {});
-    test('TC-05: Should provide response.', () => {});
+
+    test('TC-02: Should fetch api key from environment variables.', () => {
+      process.env.GEMINI_API_KEY = 'primary-key';
+
+      const key = getApiKey();
+
+      expect(key).toBe('primary-key');
+    });
+
+    test('TC-03: Should build prompt which contains user message.', () => {
+      const prompt = buildPrompt('Fix AC');
+
+      expect(prompt).toContain('Fix AC');
+      expect(prompt).toContain('[SYSTEM]');
+      expect(prompt).toContain('[INPUT START]');
+    });
+
+    test('TC-04: Should call ai model to generate quote.', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Quote generated' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'Need plumbing work' }],
+      });
+
+      await POST(req);
+
+      expect(mockGenerate).toHaveBeenCalledTimes(1);
+
+      const args = mockGenerate.mock.calls[0][0];
+
+      expect(args).toHaveProperty('model');
+      expect(args).toHaveProperty('contents');
+    });
+
+    test('TC-05: Should provide response.', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Final quote' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'Need electrician' }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('Final quote');
+    });
   });
 
   describe('Invalid Inputs', () => {
@@ -26,12 +98,6 @@ describe('Chat API', () => {
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
     });
-
-    function createRequest<T>(body: T): NextRequest {
-      return {
-        json: async () => body,
-      } as unknown as NextRequest;
-    }
 
     test('TC-06: Returns error if messages array is empty', async () => {
       const req = createRequest({ messages: [] });
@@ -121,9 +187,148 @@ describe('Chat API', () => {
     });
   });
 
-  //   describe('Edge Cases', () => {});
+  describe('Edge Cases', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      vi.useFakeTimers();
 
-  //   describe('Failure Handling', () => {});
+      process.env.GEMINI_API_KEY = 'test-key';
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test('TC-14: uses the last user message', async () => {
+      mockGenerate.mockResolvedValue({ text: 'ok' });
+
+      const req = createRequest({
+        messages: [
+          { role: 'user', content: 'first' },
+          { role: 'user', content: 'second' },
+        ],
+      });
+
+      await POST(req);
+
+      expect(mockGenerate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          contents: expect.stringContaining('second'),
+        }),
+      );
+    });
+
+    test('TC-15: falls back if AI returns empty string', async () => {
+      mockGenerate
+        .mockResolvedValueOnce({ text: '' })
+        .mockResolvedValueOnce({ text: 'Recovered' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'test' }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('Recovered');
+    });
+
+    test('TC-16: handles undefined AI response safely', async () => {
+      mockGenerate
+        .mockResolvedValueOnce({})
+        .mockResolvedValueOnce({ text: 'Fallback works' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'test' }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('Fallback works');
+    });
+
+    test('TC-17: handles very large input', async () => {
+      const largeInput = 'a'.repeat(20000);
+
+      mockGenerate.mockResolvedValue({ text: 'Handled large input' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: largeInput }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('Handled large input');
+    });
+
+    test('TC-18: handles special characters safely', async () => {
+      mockGenerate.mockResolvedValue({ text: 'ok' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: '!@#$%^&*()_+' }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('ok');
+    });
+
+    test('TC-19: cleans markdown and emojis from output', async () => {
+      mockGenerate.mockResolvedValue({
+        text: '**Hello** ## World 🎯',
+      });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'test' }],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.content).toBe('Hello  World');
+    });
+
+    test('TC-20: stops retry after max attempts', async () => {
+      mockGenerate.mockRejectedValue({ status: 429 });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'retry fail' }],
+      });
+
+      const resPromise = POST(req);
+
+      await vi.runAllTimersAsync();
+
+      const res = await resPromise;
+      const data = await res.json();
+
+      expect(data.content).toContain('High demand');
+    });
+
+    test('TC-21: ignores assistant/system messages', async () => {
+      mockGenerate.mockResolvedValue({ text: 'ok' });
+
+      const req = createRequest({
+        messages: [
+          { role: 'assistant', content: 'ignore this' },
+          { role: 'user', content: 'real input' },
+        ],
+      });
+
+      await POST(req);
+
+      expect(mockGenerate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          contents: expect.stringContaining('real input'),
+        }),
+      );
+    });
+  });
+
+  // describe('Failure Handling', () => {});
 
   //   describe('Security', () => {});
 });
