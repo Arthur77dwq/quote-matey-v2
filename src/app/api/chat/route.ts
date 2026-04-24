@@ -78,7 +78,7 @@ async function generateWithRetry(
 ): Promise<string | null> {
   let attempt = 0;
 
-  while (attempt <= MAX_RETRIES) {
+  while (attempt < MAX_RETRIES) {
     try {
       const response = await ai.models.generateContent({
         model,

@@ -76,4 +76,14 @@ When `/api/chat` endpoint is called with required input.
 
 **Failure Handling:**
 
+1. **TC-22:** retries on 429
+2. **TC-23:** retries on 503
+3. **TC-24:** retries on AbortError
+4. **TC-25:** stops after max retries
+5. **TC-26:** falls back to next model
+6. **TC-27:** uses next model if response is empty
+7. **TC-28:** returns fallback if all models fail
+8. **TC-29:** does not retry on non-retryable error
+9. **TC-30:** handles unexpected error gracefully
+
 **Security (if relevant):**

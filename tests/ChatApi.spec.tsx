@@ -11,6 +11,14 @@ vi.mock('@google/genai', () => {
   return { GoogleGenAI: MockGoogleGenAI };
 });
 
+vi.mock('@/constant/ai', () => ({
+  MODELS: [
+    { model: 'model-1', maxOutputTokens: 1000 },
+    { model: 'model-2', maxOutputTokens: 1000 },
+  ],
+  SYSTEM_PROMPT: 'test',
+}));
+
 import { NextRequest } from 'next/server';
 
 import {
@@ -328,7 +336,179 @@ describe('Chat API', () => {
     });
   });
 
-  // describe('Failure Handling', () => {});
+  describe('Failure Handling', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      vi.useFakeTimers();
+    });
 
-  //   describe('Security', () => {});
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test('TC-22: retries on 429', async () => {
+      mockGenerate
+        .mockRejectedValueOnce({ status: 429 })
+        .mockResolvedValueOnce({ text: 'Recovered' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'retry test' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(mockGenerate).toHaveBeenCalledTimes(2);
+      expect(data.content).toBe('Recovered');
+    });
+
+    test('TC-23: retries on 503', async () => {
+      mockGenerate
+        .mockRejectedValueOnce({ status: 503 })
+        .mockResolvedValueOnce({ text: 'Recovered 503' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'test' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(mockGenerate).toHaveBeenCalledTimes(2);
+      expect(data.content).toBe('Recovered 503');
+    });
+
+    test('TC-24: retries on AbortError', async () => {
+      const error = new Error('timeout');
+      error.name = 'AbortError';
+
+      mockGenerate
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce({ text: 'Recovered timeout' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'timeout test' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(mockGenerate).toHaveBeenCalledTimes(2);
+      expect(data.content).toBe('Recovered timeout');
+    });
+
+    test('TC-25: stops after max retries', async () => {
+      mockGenerate.mockRejectedValue({ status: 429 });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'max retry' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(mockGenerate).toHaveBeenCalled(); // count depends on MAX_RETRIES
+      expect(data.content).toContain('High demand');
+    });
+
+    test('TC-26: falls back to next model', async () => {
+      mockGenerate
+        .mockRejectedValueOnce({ status: 503 })
+        .mockResolvedValueOnce({ text: 'Second model works' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'fallback' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(data.content).toBe('Second model works');
+    });
+
+    test('TC-27: uses next model if response is empty', async () => {
+      mockGenerate
+        .mockResolvedValueOnce({ text: '' })
+        .mockResolvedValueOnce({ text: 'Fallback response' });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'empty test' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(data.content).toBe('Fallback response');
+    });
+
+    test('TC-28: returns fallback if all models fail', async () => {
+      mockGenerate.mockRejectedValue({ status: 503 });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'fail all' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(data.content).toContain('High demand');
+    });
+
+    test('TC-29: does not retry on non-retryable error', async () => {
+      mockGenerate.mockRejectedValue({ status: 400 });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'bad request' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(mockGenerate).toHaveBeenCalledTimes(2);
+      expect(data.content).toContain('High demand');
+    });
+
+    test('TC-30: handles unexpected error gracefully', async () => {
+      mockGenerate.mockImplementation(() => {
+        throw new Error('Unexpected');
+      });
+
+      const req = createRequest({
+        messages: [{ role: 'user', content: 'crash' }],
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      const res = await resPromise;
+
+      const data = await res.json();
+
+      expect(data.content).toContain('High demand right now');
+    });
+  });
 });
