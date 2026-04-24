@@ -36,6 +36,7 @@ function createRequest<T>(body: T): NextRequest {
 }
 
 describe('Chat API', () => {
+  const expectedErrorMessage = 'High demand';
   describe('Core Functionality', () => {
     beforeEach(() => {
       vi.clearAllMocks();
@@ -313,7 +314,7 @@ describe('Chat API', () => {
       const res = await resPromise;
       const data = await res.json();
 
-      expect(data.content).toContain('High demand');
+      expect(data.content).toContain(expectedErrorMessage);
     });
 
     test('TC-21: ignores assistant/system messages', async () => {
@@ -421,7 +422,7 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalled(); // count depends on MAX_RETRIES
-      expect(data.content).toContain('High demand');
+      expect(data.content).toContain(expectedErrorMessage);
     });
 
     test('TC-26: falls back to next model', async () => {
@@ -473,7 +474,7 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(data.content).toContain('High demand');
+      expect(data.content).toContain(expectedErrorMessage);
     });
 
     test('TC-29: does not retry on non-retryable error', async () => {
@@ -490,7 +491,7 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalledTimes(2);
-      expect(data.content).toContain('High demand');
+      expect(data.content).toContain(expectedErrorMessage);
     });
 
     test('TC-30: handles unexpected error gracefully', async () => {
