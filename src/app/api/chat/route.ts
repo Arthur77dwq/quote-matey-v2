@@ -21,7 +21,7 @@ function cleanOutput(text?: string) {
     .trim();
 }
 
-function getApiKey(): string | null {
+export function getApiKey(): string | null {
   const key = process.env.GEMINI_API_KEY?.trim();
   if (key && key !== 'false' && key !== 'undefined') return key;
 
@@ -54,7 +54,7 @@ export function extractUserMessage(messages: Message[]): string {
 }
 
 // Build safer prompt
-function buildPrompt(userMessage: string) {
+export function buildPrompt(userMessage: string) {
   return `
 [SYSTEM]
 ${SYSTEM_PROMPT}
@@ -93,7 +93,7 @@ async function generateWithRetry(
       const text = cleanOutput(response?.text);
       if (text) return text;
 
-      return null; // empty → try next model
+      return null; // empty > try next model
     } catch (error) {
       if (!isRetryable(error)) return null;
 
