@@ -8,39 +8,6 @@ import { twMerge } from 'tailwind-merge';
 import { ChatNavbar } from '@/components/chat-navbar';
 import { Message } from '@/types/chat';
 
-export async function fetchWithRetry(
-  fn: () => Promise<Response>,
-  retries = 2,
-  delay = 1500,
-): Promise<Response> {
-  let attempt = 0;
-
-  while (attempt <= retries) {
-    try {
-      const res = await fn();
-
-      if (!res.ok) throw new Error('Request failed');
-
-      const data = await res.clone().json();
-
-      // retry if backend says "busy"
-      if (data?.content?.includes('High demand')) {
-        throw new Error('Server busy');
-      }
-
-      return res;
-    } catch {
-      attempt++;
-
-      if (attempt > retries) break;
-
-      await new Promise((r) => setTimeout(r, delay * attempt));
-    }
-  }
-
-  throw new Error('Max retries reached');
-}
-
 function ChatContent() {
   const searchParams = useSearchParams();
   const initialMessage = searchParams.get('message') || '';
@@ -96,18 +63,16 @@ function ChatContent() {
     setMessages(currentMessages);
 
     try {
-      const response = await fetchWithRetry(() =>
-        fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: currentMessages.map((m) => ({
-              role: m.role,
-              content: m.content,
-            })),
-          }),
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: currentMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
         }),
-      );
+      });
 
       const data = await response.json();
 
