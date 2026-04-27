@@ -6,12 +6,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-}
+import { Message } from '@/types/chat';
 
 function ChatContent() {
   const searchParams = useSearchParams();
@@ -47,7 +42,6 @@ function ChatContent() {
   }, [isLoading]);
 
   const handleSendMessage = async (text: string) => {
-    // console.log('=== handleSendMessage called with:', text);
     const trimmedText = text.trim();
     if (!trimmedText) return;
 
@@ -55,8 +49,6 @@ function ChatContent() {
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
     setIsLoading(true);
-
-    // console.log('=== About to call API');
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -71,21 +63,6 @@ function ChatContent() {
     setMessages(currentMessages);
 
     try {
-      // console.log('=== Making fetch call to /api/chat');
-      // console.log(
-      //   '=== Request body:',
-      //   JSON.stringify(
-      //     {
-      //       messages: currentMessages.map((m) => ({
-      //         role: m.role,
-      //         content: m.content,
-      //       })),
-      //     },
-      //     null,
-      //     2,
-      //   ),
-      // );
-
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -98,20 +75,13 @@ function ChatContent() {
       });
 
       const data = await response.json();
-      // console.log('Full API Response:', JSON.stringify(data, null, 2));
-      // console.log('Response status:', response.status);
-      // console.log('Response ok:', response.ok);
 
       if (!response.ok) {
-        // console.error('Response not OK:', response.status, data);
         throw new Error(
           data?.error || data?.message || 'Failed to get response',
         );
       }
 
-      // console.log('Setting assistant message:', data.content);
-      // console.log('Content type:', typeof data.content);
-      // console.log('Content length:', data.content?.length);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -120,12 +90,6 @@ function ChatContent() {
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      // console.error('Error sending message:', error);
-      // console.error('Error details:', {
-      //   message: error instanceof Error ? error.message : 'Unknown error',
-      //   stack: error instanceof Error ? error.stack : 'No stack trace',
-      // });
-
       let errorContent =
         'Sorry mate, something went wrong. Give it another go!';
       if (error instanceof Error) {
@@ -224,7 +188,10 @@ function ChatContent() {
                         {!isUser && message.content && (
                           <button
                             onClick={() =>
-                              copyToClipboard(message.content, message.id)
+                              copyToClipboard(
+                                message.content,
+                                message?.id || '',
+                              )
                             }
                             className="absolute -bottom-3 right-4 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
                           >
