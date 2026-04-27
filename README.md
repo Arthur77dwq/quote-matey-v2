@@ -215,3 +215,11 @@ If you like this project:
 ## 💡 Vision
 
 > Make quoting effortless, professional, and scalable for every tradie business.
+
+## 💰 Bounty Contribution
+
+- **Task:** Payments Setup (PayPal Integration and Pricing UI)
+- **Reward:** $29
+- **Source:** GitHub-Paid
+- **Date:** 2026-04-27
+
