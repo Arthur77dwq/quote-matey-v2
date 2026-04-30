@@ -3,34 +3,16 @@ import { Check, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { ImageIcon, TextIcon } from '@/constant/icons';
+import { SubscriptionPlan } from '@/types/subscription';
 
 import { Label } from './label';
-
-type Props = {
-  name: string;
-  trend: { text: string; tranding: boolean };
-  description: string;
-  pricing: { price: string; currency: string };
-  period: string;
-  features: {
-    icon?: string;
-    text: string;
-    included: boolean;
-  }[];
-  points: {
-    text: string;
-    included: boolean;
-  }[];
-  highlighted: boolean;
-  cta: { text: string; target: string };
-};
 
 const IconMap: Record<string, React.FC<{ className?: string }>> = {
   image: ImageIcon,
   text: TextIcon,
 };
 
-export function PriceCard(plan: Props) {
+export function PriceCard(plan: SubscriptionPlan) {
   const router = useRouter();
 
   const IconMapper = (name: string) => {
