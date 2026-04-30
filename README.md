@@ -9,7 +9,7 @@
 ## 🛠️ Tech Stack
 
 <!-- markdownlint-disable-next-line MD033 -->
-<img src="https://skillicons.dev/icons?i=react,typescript,nextjs,tailwind" alt="Tech stack: React, TypeScript, Next.js, Tailwind CSS" />
+<img src="https://skillicons.dev/icons?i=typescript,nextjs,tailwind,postgresql,prisma" alt="Tech stack:TypeScript, Next.js, Tailwind CSS, PostgreSQL, Prisma" />
 
 ---
 
@@ -142,6 +142,36 @@ Create `.env`:
 GEMINI_API_KEY=
 GEMINI_API_KEY_BACKUP=
 
+# Payment Environment
+PAYPAL_ENV=sandbox # -- Use this for development
+# PAYPAL_ENV=live #-- Use this for production
+
+# Sandbox Payment Credentials
+PAYPAL_SANDBOX_CLIENT_ID=
+PAYPAL_SANDBOX_CLIENT_SECRET=
+
+# Live Payment Credentials
+PAYPAL_LIVE_CLIENT_ID=
+PAYPAL_LIVE_CLIENT_SECRET=
+
+#  Local / Dev Database
+DEV_DATABASE_CLIENT=
+DEV_DATABASE_HOST=
+DEV_DATABASE_PORT=
+DEV_DATABASE_NAME=
+DEV_DATABASE_USERNAME=
+DEV_DATABASE_PASSWORD=
+DEV_DATABASE_SSL=
+
+#  Production Database
+PROD_DATABASE_CLIENT=
+PROD_DATABASE_HOST=
+PROD_DATABASE_PORT=
+PROD_DATABASE_NAME=
+PROD_DATABASE_USERNAME=
+PROD_DATABASE_PASSWORD=
+PROD_DATABASE_SSL=
+
 # GA4 ID/ firebase measurement id
 NEXT_PUBLIC_GA_ID=
 
@@ -156,6 +186,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 
 # Assets
 NEXT_PUBLIC_VIDEO_URL=
+
 ```
 
 ---
