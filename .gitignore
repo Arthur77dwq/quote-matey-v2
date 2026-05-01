@@ -47,3 +47,5 @@ node_modules/
 
 # Vitest (if using coverage)
 coverage/
+
+/src/generated/prisma
