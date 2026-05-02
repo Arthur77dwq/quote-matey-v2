@@ -243,6 +243,10 @@ firebase_uid;
 
 ---
 
+## Database ERD
+
+![Database ERD](./ERD.svg)
+
 ## Key Design Decisions
 
 - **Versioning (`version`)** → allows safe pricing updates
