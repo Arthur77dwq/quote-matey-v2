@@ -5,7 +5,7 @@ datasource db {
 generator erd {
   provider = "prisma-erd-generator"
   output   = "..\\docs\\ERD.svg"
-  puppeteerConfig = ".\\puppeteer-config.json"
+  puppeteerConfig = "\\puppeteer-config.json"
   theme    = "forest"
 }
 
