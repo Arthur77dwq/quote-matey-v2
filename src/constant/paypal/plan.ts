@@ -23,7 +23,7 @@ export const plans: SubscriptionPlan[] = [
       { text: 'Webhook or business integrations', included: false },
       { text: 'Advanced consistency tuning', included: false },
     ],
-    highlighted: false,
+    highlighted: true,
     cta: {
       text: 'Get Started',
       target: '/chat',
@@ -51,7 +51,7 @@ export const plans: SubscriptionPlan[] = [
       { text: 'Webhook or business integrations', included: true },
       { text: 'Advanced consistency tuning', included: true },
     ],
-    highlighted: true,
+    highlighted: false,
     cta: {
       text: 'Get Started',
       target: '',

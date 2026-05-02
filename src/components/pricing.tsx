@@ -1,6 +1,6 @@
 'use client';
 
-import { plans } from '@/constant/subscription-plan';
+import { plans } from '@/constant/paypal/plan';
 
 import { PriceCard } from './price-card';
 
