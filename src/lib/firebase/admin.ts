@@ -1,0 +1,26 @@
+import admin from 'firebase-admin';
+
+function isFirebaseAdminConfigured() {
+  return (
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+    process.env.FIREBASE_ADMIN_CLIENT_EMAIL &&
+    process.env.FIREBASE_ADMIN_PRIVATE_KEY
+  );
+}
+
+if (!isFirebaseAdminConfigured()) {
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(
+          /\\n/g,
+          '\n',
+        ),
+      }),
+    });
+  }
+}
+
+export const firebaseAdmin = admin;
