@@ -1,28 +1,14 @@
 import { prisma } from '@/lib/prisma';
 
-export async function createPendingSubscription(data: {
-  firebase_uid: string;
-  plan_id: string;
-  paypal_subscription_id: string;
-}) {
-  return prisma.subscription.create({
-    data: {
-      firebase_uid: data.firebase_uid,
-      plan_id: data.plan_id,
-      paypal_subscription_id: data.paypal_subscription_id,
-      status: 'APPROVAL_PENDING',
-    },
-  });
-}
-
-export async function activateSubscription(data: {
+export async function activateSubscriptionDB(data: {
   paypal_subscription_id: string;
   start_date?: Date;
   next_billing_date?: Date;
 }) {
-  return prisma.subscription.update({
+  return prisma.subscription.updateMany({
     where: {
       paypal_subscription_id: data.paypal_subscription_id,
+      status: { not: 'ACTIVE' },
     },
     data: {
       status: 'ACTIVE',
@@ -51,7 +37,7 @@ export async function markCancelAtPeriodEnd(paypal_subscription_id: string) {
   });
 }
 
-export async function updatePaymentInfo(data: {
+export async function markPaymentSuccessDB(data: {
   paypal_subscription_id: string;
   amount: number;
   currency: string;
@@ -65,6 +51,15 @@ export async function updatePaymentInfo(data: {
       last_payment_date: data.date,
       last_payment_amount: data.amount,
       currency: data.currency,
+    },
+  });
+}
+
+export async function markPaymentFailedDB(paypal_subscription_id: string) {
+  return prisma.subscription.update({
+    where: { paypal_subscription_id },
+    data: {
+      status: 'SUSPENDED',
     },
   });
 }
