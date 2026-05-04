@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { AUTH_ROUTES, PROTECTED_ROUTES } from './constant/config/route';
 import { matchRoute } from './lib/utils';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const pathname = request.nextUrl.pathname;
 
