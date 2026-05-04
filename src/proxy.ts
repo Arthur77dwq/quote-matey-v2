@@ -11,6 +11,15 @@ export function proxy(request: NextRequest) {
   const isAuthPage = matchRoute(pathname, AUTH_ROUTES);
   const isProtectedPage = matchRoute(pathname, PROTECTED_ROUTES);
 
+  const url = new URL('/', request.url);
+  if (!token) {
+    if (request.url.includes('/chat')) {
+      url.searchParams.set('reason', 'unauthorized');
+      url.searchParams.set('target', request.url);
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Not logged in → block protected pages
   if (!token && isProtectedPage) {
     const url = new URL('/login', request.url);
@@ -28,5 +37,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/chat/:path*', '/billing/:path*', '/login', '/signup'],
+  matcher: ['/chat', '/billing/:path*', '/login', '/signup'],
 };

@@ -6,6 +6,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
+import { Api } from '@/lib/api';
 import { Message } from '@/types/chat';
 
 function ChatContent() {
@@ -42,7 +43,7 @@ function ChatContent() {
     setMessages(currentMessages);
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await Api('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
