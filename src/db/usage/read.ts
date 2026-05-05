@@ -23,3 +23,12 @@ export async function canUserGenerateText(data: {
 
   return usage.text_count < limit.text_limit;
 }
+
+export async function getUserUsage(firebase_uid: string, plan_id: string) {
+  return prisma.usage.findFirst({
+    where: {
+      firebase_uid,
+      plan_id,
+    },
+  });
+}

@@ -1,10 +1,10 @@
-// import { getCurrentUserSubscription } from '@/services/subscription';
+import { withAuth } from '@/lib/auth/withAuth';
+import { getCurrentUserSubscription } from '@/services/subscription';
 
-export async function GET() {
-  //   const userId = await getUserId(); // your auth
+export async function GET(req: Request) {
+  return withAuth(req, async (userId) => {
+    const data = await getCurrentUserSubscription(userId);
 
-  //   const data = await getCurrentUserSubscription(userId);
-  const data = {};
-
-  return Response.json(data);
+    return Response.json(data);
+  });
 }
