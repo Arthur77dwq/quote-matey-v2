@@ -1,4 +1,4 @@
-import createReactConfig from '@ankesh/eslint-config/react';
+import createReactConfig from '@iamankeshsharma/eslint-config/react';
 
 export default createReactConfig({
   ignores: ['.next'],

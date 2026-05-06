@@ -6,6 +6,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
+import { Api } from '@/lib/api';
 import { Message } from '@/types/chat';
 
 function ChatContent() {
@@ -19,27 +20,6 @@ function ChatContent() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
-
-  // Auto-send initial message from landing page (only once)
-  useEffect(() => {
-    if (initialMessage && !hasInitializedRef.current) {
-      hasInitializedRef.current = true;
-      handleSendMessage(initialMessage);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Focus input after response
-  useEffect(() => {
-    if (!isLoading && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isLoading]);
 
   const handleSendMessage = async (text: string) => {
     const trimmedText = text.trim();
@@ -63,7 +43,7 @@ function ChatContent() {
     setMessages(currentMessages);
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await Api('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -121,6 +101,27 @@ function ChatContent() {
     }
   };
 
+  // Auto-send initial message from landing page (only once)
+  useEffect(() => {
+    if (initialMessage && !hasInitializedRef.current) {
+      hasInitializedRef.current = true;
+      handleSendMessage(initialMessage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Focus input after response
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading || isLoadingRef.current) return;
@@ -143,7 +144,7 @@ function ChatContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       <ChatNavbar />
       <div
         className={twMerge(
@@ -166,7 +167,7 @@ function ChatContent() {
                       className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
                     >
                       {!isUser && (
-                        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
+                        <div className="shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
                           <Bot className="w-5 h-5 text-white" />
                         </div>
                       )}
@@ -211,7 +212,7 @@ function ChatContent() {
                       </div>
 
                       {isUser && (
-                        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#f57a0a] flex items-center justify-center shadow-lg">
+                        <div className="shrink-0 w-10 h-10 rounded-xl bg-[#f57a0a] flex items-center justify-center shadow-lg">
                           <User className="w-5 h-5 text-white" />
                         </div>
                       )}
@@ -222,7 +223,7 @@ function ChatContent() {
                 {/* Loading indicator */}
                 {isLoading && (
                   <div className="flex gap-4 justify-start">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
+                    <div className="shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
                       <Bot className="w-5 h-5 text-white" />
                     </div>
                     <div className="bg-white border border-border/80 shadow-lg rounded-2xl px-5 py-4">
@@ -245,7 +246,7 @@ function ChatContent() {
         {/* Fixed Input Area */}
         <div
           className={twMerge(
-            'left-0 right-0 bg-gradient-to-t from-white via-white to-white/80 backdrop-blur-xl',
+            'left-0 right-0 bg-linear-to-t from-white via-white to-white/80 backdrop-blur-xl',
             messages?.length > 0
               ? 'fixed bottom-0 border-t border-border/50'
               : '',
@@ -268,7 +269,7 @@ function ChatContent() {
                   placeholder="Describe the job... (e.g., 'Leaking tap, need new fitting')"
                   rows={1}
                   disabled={isLoading}
-                  className="flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-[48px] max-h-32"
+                  className="flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-12 max-h-32"
                   style={{ height: 'auto' }}
                   onInput={(e) => {
                     const target = e.target as HTMLTextAreaElement;
@@ -279,7 +280,7 @@ function ChatContent() {
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
+                  className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
                 >
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -304,7 +305,7 @@ export default function ChatPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 flex items-center justify-center">
+        <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex items-center justify-center">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Loading chat...</span>

@@ -1,13 +1,14 @@
 'use client';
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  onIdTokenChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
   updateProfile,
+  type User as FirebaseUser,
 } from 'firebase/auth';
 import {
   createContext,
@@ -36,23 +37,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     message: 'Auth not initialized',
   };
 
+  async function handleAuthStateChange(firebaseUser: FirebaseUser | null) {
+    try {
+      if (!firebaseUser) {
+        setUser(null);
+        await removeAuthCookie();
+        return;
+      }
+
+      const token = await firebaseUser.getIdToken();
+
+      setUser({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email || '',
+        displayName: firebaseUser.displayName || '',
+        photoURL: firebaseUser.photoURL || '',
+        token,
+      });
+
+      await setAuthCookie(token);
+    } catch {
+      setUser(null);
+
+      await removeAuthCookie();
+    }
+  }
   useEffect(() => {
     if (auth) {
-      const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        const token = await firebaseUser?.getIdToken();
-
-        if (token) {
-          setUser({
-            uid: firebaseUser?.uid || '',
-            email: firebaseUser?.email || '',
-            displayName: firebaseUser?.displayName || '',
-            photoURL: firebaseUser?.photoURL || '',
-            token,
-          });
-          await setAuthCookie(token);
-        } else {
-          await removeAuthCookie();
-        }
+      const unSubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
+        void handleAuthStateChange(firebaseUser);
       });
 
       return () => unSubscribe();
