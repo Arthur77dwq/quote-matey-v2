@@ -2,10 +2,11 @@ import { cookies } from 'next/headers';
 
 import { firebaseAdmin } from '@/lib/firebase/admin';
 
-export async function getUserId() {
-  const cookieStore = await cookies();
-
-  const token = cookieStore.get('token')?.value;
+export async function getUserId(token?: string) {
+  if (!token) {
+    const cookieStore = await cookies();
+    token = cookieStore.get('token')?.value;
+  }
 
   if (!token) {
     throw new Error('Unauthorized');
@@ -13,8 +14,7 @@ export async function getUserId() {
 
   try {
     const decoded = await firebaseAdmin.auth().verifyIdToken(token);
-    const uid: string = decoded.uid;
-    return uid;
+    return decoded;
   } catch {
     throw new Error('Unauthorized');
   }

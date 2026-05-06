@@ -18,10 +18,10 @@ export async function createSubscriptionAction(formData: FormData) {
     throw new Error('planId is required');
   }
 
-  const firebase_uid = await getUserId();
+  const { uid } = await getUserId();
 
   const { approvalUrl } = await createSubscriptionService({
-    firebase_uid,
+    firebase_uid: uid,
     planId,
   });
 
@@ -38,10 +38,10 @@ export async function cancelSubscriptionAction(formData: FormData) {
     throw new Error('subscriptionId is required');
   }
 
-  const firebase_uid = await getUserId();
+  const { uid } = await getUserId();
 
   await cancelSubscriptionService({
-    firebase_uid,
+    firebase_uid: uid,
     subscriptionId,
   });
 

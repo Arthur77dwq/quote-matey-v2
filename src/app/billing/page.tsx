@@ -1,36 +1,63 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 import {
   cancelSubscriptionAction,
   createSubscriptionAction,
 } from '@/app/actions/billing';
-import { getActiveSubscriptionByUser } from '@/db/subscription';
-import { getUserId } from '@/lib/auth/user';
+import { apiJson } from '@/lib/api';
+import { Subscription } from '@/types/subscription';
 
-export default async function BillingPage() {
-  const uid = await getUserId();
-  const sub = await getActiveSubscriptionByUser(uid);
+interface BillingData {
+  plan: string;
+  isActive: boolean;
+  subscription: Subscription | null;
+}
+
+export default function BillingPage() {
+  const [me, setMe] = useState<BillingData | null>(null);
+  const [, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadBilling() {
+      try {
+        const data = await apiJson<BillingData>('/api/billing/me');
+
+        setMe(data);
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to load billing data',
+        );
+      }
+    }
+
+    void loadBilling();
+  }, []);
 
   return (
     <div>
       <h1>Billing</h1>
 
-      <p>Plan: {sub?.plan?.name || 'Free'}</p>
-      <p>Status: {sub ? sub.status : 'Inactive'}</p>
+      <p>Plan: {me?.subscription?.plan?.name || 'Free'}</p>
+      <p>Status: {me?.subscription ? me.subscription?.status : 'Inactive'}</p>
 
-      {/* SUBSCRIBE */}
-      {!sub && (
-        <form action={createSubscriptionAction}>
-          <input type="hidden" name="planId" value="starter_monthly_v1" />
-          <button type="submit">Upgrade to Starter</button>
-        </form>
-      )}
+      {!me?.subscription ||
+        (me?.subscription?.plan?.isFree && (
+          <form action={createSubscriptionAction}>
+            <input type="hidden" name="planId" value="starter_monthly_v1" />
+            <button type="submit">Upgrade to Starter</button>
+          </form>
+        ))}
 
-      {/* CANCEL */}
-      {sub && (
+      {me?.subscription && !me?.subscription?.plan?.isFree && (
         <form action={cancelSubscriptionAction}>
           <input
             type="hidden"
             name="subscriptionId"
-            value={sub.paypal_subscription_id || ''}
+            value={me.subscription.paypal_subscription_id || ''}
           />
           <button type="submit">Cancel Subscription</button>
         </form>

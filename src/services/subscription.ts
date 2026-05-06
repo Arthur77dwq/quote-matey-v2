@@ -3,6 +3,7 @@ import {
   createPendingSubscription,
   getActiveSubscriptionByUser,
 } from '@/db/subscription';
+import { createNewUserFreeSubscription } from '@/db/subscription/create';
 import { getUserSubscriptionById } from '@/db/subscription/read';
 import { markCancelAtPeriodEnd } from '@/db/subscription/update';
 import { cancelSubscription, createSubscription } from '@/lib/paypal';
@@ -70,4 +71,8 @@ export async function cancelSubscriptionService(params: {
   await markCancelAtPeriodEnd(params.subscriptionId);
 
   return { success: true };
+}
+
+export async function ensureUserSubscription(firebaseUid: string) {
+  return createNewUserFreeSubscription(firebaseUid);
 }
