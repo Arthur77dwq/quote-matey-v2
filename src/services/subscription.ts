@@ -1,3 +1,4 @@
+import { getPlanById } from '@/db/plan/read';
 import {
   createPendingSubscription,
   getActiveSubscriptionByUser,
@@ -28,10 +29,15 @@ export async function createSubscriptionService(params: {
   firebase_uid: string;
   planId: string;
 }) {
-  const { id, approvalUrl } = await createSubscription({
-    planId: params.planId,
-  });
+  const plan = await getPlanById(params.planId);
 
+  if (!plan.paypal_plan_id) {
+    throw new Error('Invalid plan');
+  }
+
+  const { id, approvalUrl } = await createSubscription({
+    planId: plan.paypal_plan_id,
+  });
   await createPendingSubscription({
     firebase_uid: params.firebase_uid,
     plan_id: params.planId,

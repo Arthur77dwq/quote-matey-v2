@@ -1,15 +1,20 @@
+import { cookies } from 'next/headers';
+
 import { firebaseAdmin } from '@/lib/firebase/admin';
 
-export async function getUserId(req: Request) {
-  const authHeader = req.headers.get('authorization');
+export async function getUserId() {
+  const cookieStore = await cookies();
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const token = cookieStore.get('token')?.value;
+
+  if (!token) {
     throw new Error('Unauthorized');
   }
 
-  const token = authHeader.split('Bearer ')[1];
-
-  const decoded = await firebaseAdmin.auth().verifyIdToken(token);
-
-  return decoded.uid;
+  try {
+    const decoded = await firebaseAdmin.auth().verifyIdToken(token);
+    return decoded.uid;
+  } catch {
+    throw new Error('Unauthorized');
+  }
 }

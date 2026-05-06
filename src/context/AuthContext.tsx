@@ -1,7 +1,7 @@
 'use client';
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  onIdTokenChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -38,8 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (auth) {
-      const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        const token = await firebaseUser?.getIdToken();
+      const unSubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
+        const token = await firebaseUser?.getIdToken(true);
 
         if (token) {
           setUser({

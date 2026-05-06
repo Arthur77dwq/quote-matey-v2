@@ -8,7 +8,7 @@ function isFirebaseAdminConfigured() {
   );
 }
 
-if (!isFirebaseAdminConfigured()) {
+if (isFirebaseAdminConfigured() && !admin.apps.length) {
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert({

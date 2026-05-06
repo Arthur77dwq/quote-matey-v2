@@ -10,9 +10,9 @@ export async function createSubscription(params: { planId: string }) {
   const body: CreateSubscriptionBody = {
     plan_id: params.planId,
     application_context: {
-      brand_name: 'Your App Name',
-      return_url: `${process.env.APP_URL}/billing/success`,
-      cancel_url: `${process.env.APP_URL}/billing/cancel`,
+      brand_name: 'Quote Matey',
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/cancel`,
       user_action: 'SUBSCRIBE_NOW',
     },
   };
