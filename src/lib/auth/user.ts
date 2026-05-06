@@ -13,7 +13,8 @@ export async function getUserId() {
 
   try {
     const decoded = await firebaseAdmin.auth().verifyIdToken(token);
-    return decoded.uid;
+    const uid: string = decoded.uid;
+    return uid;
   } catch {
     throw new Error('Unauthorized');
   }

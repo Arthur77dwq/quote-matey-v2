@@ -2,7 +2,7 @@ import { withAuth } from '@/lib/auth/withAuth';
 import { cancelSubscriptionService } from '@/services/subscription';
 
 export async function POST(req: Request) {
-  return withAuth(req, async (firebase_uid) => {
+  return withAuth(async (firebase_uid) => {
     try {
       const body = await req.json();
       const { subscriptionId } = body;
