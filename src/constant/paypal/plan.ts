@@ -2,7 +2,7 @@ import { SubscriptionPlan } from '@/types/subscription';
 
 export const plans: SubscriptionPlan[] = [
   {
-    id: '0',
+    id: 'free_v1',
     version: 'v1',
     name: 'Free',
     trend: {
@@ -30,7 +30,7 @@ export const plans: SubscriptionPlan[] = [
     },
   },
   {
-    id: '1',
+    id: 'starter_monthly_v1',
     version: 'v1',
     name: 'Starter Plan',
     trend: {
@@ -53,7 +53,7 @@ export const plans: SubscriptionPlan[] = [
     ],
     highlighted: false,
     cta: {
-      text: 'Get Started',
+      text: 'Upgrade to Starter',
       target: '',
     },
   },

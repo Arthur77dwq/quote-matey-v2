@@ -1,10 +1,17 @@
 'use client';
 
-import { plans } from '@/constant/paypal/plan';
+import { createSubscriptionAction } from '@/app/actions/billing';
+import { MergedPlan } from '@/app/billing/page';
 
 import { PriceCard } from './price-card';
 
-export function Pricing() {
+export function Pricing({
+  active,
+  data,
+}: {
+  active?: string;
+  data?: MergedPlan[];
+}) {
   return (
     <section
       id="pricing"
@@ -28,8 +35,28 @@ export function Pricing() {
 
         {/* Pricing Cards */}
         <div className="max-w-full mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8">
-          {plans.map((plan, index) => (
-            <PriceCard key={index} {...plan} />
+          {data?.map((plan, index) => (
+            <PriceCard key={index} plan={plan}>
+              {
+                <form action={createSubscriptionAction} className="w-full">
+                  <input
+                    type="hidden"
+                    name="planId"
+                    value={plan?.db?.paypal_plan_id || plan.id}
+                  />
+                  <button
+                    type="submit"
+                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+                      plan?.db?.paypal_plan_id === active || plan.id === active
+                        ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
+                        : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
+                    }`}
+                  >
+                    {plan.cta.text || 'Upgrade Now'}
+                  </button>
+                </form>
+              }
+            </PriceCard>
           ))}
         </div>
       </div>

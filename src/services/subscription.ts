@@ -11,19 +11,7 @@ import { cancelSubscription, createSubscription } from '@/lib/paypal';
 export async function getCurrentUserSubscription(firebase_uid: string) {
   const sub = await getActiveSubscriptionByUser(firebase_uid);
 
-  if (!sub) {
-    return {
-      plan: 'FREE',
-      isActive: false,
-      subscription: null,
-    };
-  }
-
-  return {
-    plan: sub.plan.name,
-    isActive: true,
-    subscription: sub,
-  };
+  return { ...sub };
 }
 
 export async function createSubscriptionService(params: {
@@ -41,7 +29,7 @@ export async function createSubscriptionService(params: {
   });
   await createPendingSubscription({
     firebase_uid: params.firebase_uid,
-    plan_id: params.planId,
+    plan_id: plan.id,
     paypal_subscription_id: id,
   });
 

@@ -12,7 +12,13 @@ const IconMap: Record<string, React.FC<{ className?: string }>> = {
   text: TextIcon,
 };
 
-export function PriceCard(plan: SubscriptionPlan) {
+export function PriceCard({
+  plan,
+  children,
+}: {
+  plan: SubscriptionPlan;
+  children?: React.ReactNode;
+}) {
   const router = useRouter();
 
   const IconMapper = (name: string) => {
@@ -91,17 +97,20 @@ export function PriceCard(plan: SubscriptionPlan) {
         {plan.description ||
           'A basic plan for getting started with our service.'}
       </p>
-
-      <button
-        onClick={() => router.push(plan.cta.target)}
-        className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
-          plan.highlighted
-            ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
-            : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
-        }`}
-      >
-        {plan.cta.text || 'Get Started'}
-      </button>
+      {children ? (
+        children
+      ) : (
+        <button
+          onClick={() => router.push(plan.cta.target)}
+          className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+            plan.highlighted
+              ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
+              : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
+          }`}
+        >
+          {plan.cta.text || 'Get Started'}
+        </button>
+      )}
     </div>
   );
 }

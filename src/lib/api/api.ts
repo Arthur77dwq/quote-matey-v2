@@ -5,6 +5,7 @@ export async function Api(input: RequestInfo, init?: RequestInit) {
       ...(init?.headers || {}),
       credentials: 'include',
       'Content-Type': 'application/json',
+      method: init?.method || 'GET',
     },
   });
 

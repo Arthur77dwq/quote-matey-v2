@@ -20,13 +20,14 @@ export async function createPendingSubscription(data: {
 }
 
 export async function createNewUserFreeSubscription(firebaseUid: string) {
-  const existingSubscription = await prisma.subscription.findFirst({
+  const existingSubscription = await prisma.subscription.findMany({
     where: {
       firebase_uid: firebaseUid,
+      status: 'ACTIVE',
     },
   });
 
-  if (existingSubscription) {
+  if (existingSubscription.length > 0) {
     return existingSubscription;
   }
 
@@ -55,11 +56,8 @@ export async function createNewUserFreeSubscription(firebaseUid: string) {
     const subscription = await tx.subscription.create({
       data: {
         firebase_uid: firebaseUid,
-
         plan_id: freePlan.id,
-
         status: 'ACTIVE',
-
         start_date: now,
       },
     });
@@ -69,14 +67,10 @@ export async function createNewUserFreeSubscription(firebaseUid: string) {
         tx.usage.create({
           data: {
             firebase_uid: firebaseUid,
-
             plan_id: freePlan.id,
-
             text_count: 0,
             image_count: 0,
-
             period_start: now,
-
             period_end:
               limit.interval === 'WEEK'
                 ? new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)

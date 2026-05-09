@@ -35,3 +35,13 @@ export async function getUserSubscriptionById(params: {
     },
   });
 }
+
+export async function getSubscriptionByPaypalId(
+  paypal_subscription_id: string,
+) {
+  return prisma.subscription.findUnique({
+    where: {
+      paypal_subscription_id,
+    },
+  });
+}

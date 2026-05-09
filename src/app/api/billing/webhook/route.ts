@@ -4,6 +4,8 @@ import {
   markPaymentFailedDB,
   markPaymentSuccessDB,
 } from '@/db/subscription';
+import { getSubscriptionByPaypalId } from '@/db/subscription/read';
+import { deactivateOtherActiveSubscriptions } from '@/db/subscription/update';
 import { verifyPaypalWebhook } from '@/lib/paypal';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
 
@@ -51,6 +53,11 @@ export async function handlePaypalWebhook(event: PaypalWebhookEvent) {
           ? toDate(event.resource.billing_info.next_billing_time)
           : undefined,
       });
+      const subscription = await getSubscriptionByPaypalId(event.resource.id);
+      await deactivateOtherActiveSubscriptions(
+        subscription?.firebase_uid || '',
+        event.resource.id,
+      );
       break;
     }
 

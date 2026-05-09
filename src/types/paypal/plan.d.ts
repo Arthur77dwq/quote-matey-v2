@@ -40,3 +40,22 @@ export interface PaypalPlanResponse {
     method: string;
   }>;
 }
+
+export interface AllPlan {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  currency: string;
+  billing_interval?: string;
+  isFree: boolean;
+  paypal_plan_id?: string;
+  paypal_product_id?: string;
+  environment: 'sandbox' | 'production';
+  version: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  subscriptions: Subscription[];
+  limits: PlanLimit[];
+}

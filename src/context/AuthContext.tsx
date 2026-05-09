@@ -20,6 +20,7 @@ import {
 
 import { removeAuthCookie, setAuthCookie } from '@/app/actions/auth';
 import { getFirebaseAuth, getGoogleProvider } from '@/config/firebase';
+import { apiJson } from '@/lib/api';
 import { getFirebaseErrorMessage } from '@/lib/errors/firebase-error';
 import { AuthContextType, User } from '@/types/global';
 
@@ -65,7 +66,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (auth) {
       const unSubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
-        void handleAuthStateChange(firebaseUser);
+        await handleAuthStateChange(firebaseUser);
+        if (firebaseUser) {
+          await apiJson('/api/user', { method: 'POST' });
+        }
       });
 
       return () => unSubscribe();
