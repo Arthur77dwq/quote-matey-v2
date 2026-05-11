@@ -8,7 +8,7 @@ export default function SuccessPage() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push('/billing');
+      router.push('/pricing');
     }, 3000);
   });
 

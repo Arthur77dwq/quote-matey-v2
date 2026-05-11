@@ -1,7 +1,7 @@
 'use client';
 
-import { createSubscriptionAction } from '@/app/actions/billing';
-import { MergedPlan } from '@/app/billing/page';
+import { createSubscriptionAction } from '@/app/actions/pricing';
+import { MergedPlan } from '@/app/pricing/page';
 
 import { PriceCard } from './price-card';
 

@@ -45,6 +45,6 @@ export async function cancelSubscriptionAction(formData: FormData) {
     subscriptionId,
   });
 
-  // refresh billing page
-  revalidatePath('/billing');
+  // refresh pricing page
+  revalidatePath('/pricing');
 }
