@@ -1,21 +1,28 @@
 'use client';
 
-import { createSubscriptionAction } from '@/app/actions/pricing';
+import {
+  cancelSubscriptionAction,
+  createSubscriptionAction,
+} from '@/app/actions/pricing';
 import { MergedPlan } from '@/app/pricing/page';
 
 import { PriceCard } from './price-card';
 
 export function Pricing({
+  subscription_id,
   active,
   data,
+  showCTA,
 }: {
+  subscription_id?: string | null | undefined;
   active?: string;
   data?: MergedPlan[];
+  showCTA?: boolean;
 }) {
   return (
     <section
       id="pricing"
-      className="py-24 bg-linear-to-b from-white to-slate-50"
+      className="pt-24 bg-linear-to-b from-white to-slate-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -37,12 +44,14 @@ export function Pricing({
         <div className="max-w-full mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8">
           {data?.map((plan, index) => (
             <PriceCard key={index} plan={plan}>
-              {
-                <form action={createSubscriptionAction} className="w-full">
+              {showCTA &&
+              (plan?.db?.paypal_plan_id == active || plan.id === active) &&
+              subscription_id ? (
+                <form action={cancelSubscriptionAction} className="w-full">
                   <input
                     type="hidden"
-                    name="planId"
-                    value={plan?.db?.paypal_plan_id || plan.id}
+                    name="subscriptionId"
+                    value={subscription_id}
                   />
                   <button
                     type="submit"
@@ -52,10 +61,30 @@ export function Pricing({
                         : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
                     }`}
                   >
-                    {plan.cta.text || 'Upgrade Now'}
+                    {'Cancel'}
                   </button>
                 </form>
-              }
+              ) : (
+                <form action={createSubscriptionAction} className="w-full">
+                  <input
+                    type="hidden"
+                    name="planId"
+                    value={plan?.db?.paypal_plan_id || plan.id}
+                  />
+                  <button
+                    type="submit"
+                    className={`w-full py-4 rounded-xl  text-lg transition-all ${
+                      plan?.db?.paypal_plan_id === active || plan.id === active
+                        ? 'text-semibold  text-[#1a3a5c]/70  border'
+                        : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c] font-bold'
+                    }`}
+                  >
+                    {plan?.db?.paypal_plan_id === active || plan.id === active
+                      ? 'Current Plan'
+                      : 'Upgrade Now'}
+                  </button>
+                </form>
+              )}
             </PriceCard>
           ))}
         </div>

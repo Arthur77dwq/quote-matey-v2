@@ -11,8 +11,8 @@ export async function createSubscription(params: { planId: string }) {
     plan_id: params.planId,
     application_context: {
       brand_name: 'Quote Matey',
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/cancel`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing/cancel`,
       user_action: 'SUBSCRIBE_NOW',
     },
   };

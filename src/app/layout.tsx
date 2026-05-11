@@ -7,6 +7,7 @@ import Script from 'next/script';
 import { Suspense } from 'react';
 
 import GoogleAnalyticsTracker from '@/components/analytics';
+import { Navbar } from '@/components/navbar';
 import { AuthProvider } from '@/context/AuthContext';
 
 const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
@@ -56,7 +57,10 @@ export default function RootLayout({
       >
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
         </Suspense>
         <Analytics />
       </body>

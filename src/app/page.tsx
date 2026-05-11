@@ -8,7 +8,6 @@ import { FAQ } from '@/components/faq';
 import { Footer } from '@/components/footer';
 import { HeroSection } from '@/components/hero-section';
 import { HowItWorks } from '@/components/how-it-works';
-import { Navbar } from '@/components/navbar';
 import { Pricing } from '@/components/pricing';
 import { SocialProofBar } from '@/components/social-proof-bar';
 import { Testimonials } from '@/components/testimonials';
@@ -19,7 +18,6 @@ export default function Home() {
       <Suspense fallback={<div>Loading...</div>}>
         <AuthScreen />
       </Suspense>
-      <Navbar />
       <HeroSection />
       <SocialProofBar />
       <HowItWorks />

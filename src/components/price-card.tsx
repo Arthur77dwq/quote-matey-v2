@@ -1,6 +1,5 @@
 'use client';
 import { Check, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 import { ImageIcon, TextIcon } from '@/constant/icons';
 import { SubscriptionPlan } from '@/types/subscription';
@@ -19,8 +18,6 @@ export function PriceCard({
   plan: SubscriptionPlan;
   children?: React.ReactNode;
 }) {
-  const router = useRouter();
-
   const IconMapper = (name: string) => {
     const Icon = IconMap[name];
     return Icon ? <Icon /> : null;
@@ -97,20 +94,7 @@ export function PriceCard({
         {plan.description ||
           'A basic plan for getting started with our service.'}
       </p>
-      {children ? (
-        children
-      ) : (
-        <button
-          onClick={() => router.push(plan.cta.target)}
-          className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
-            plan.highlighted
-              ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
-              : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
-          }`}
-        >
-          {plan.cta.text || 'Get Started'}
-        </button>
-      )}
+      {children}
     </div>
   );
 }

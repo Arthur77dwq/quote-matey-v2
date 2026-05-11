@@ -15,17 +15,17 @@ export function proxy(request: NextRequest) {
   if (!token) {
     if (request.url.includes('/chat')) {
       url.searchParams.set('reason', 'unauthorized');
-      url.searchParams.set('target', request.url);
+      url.searchParams.set('target', pathname);
       return NextResponse.redirect(url);
     }
-  }
 
-  // Not logged in → block protected pages
-  if (!token && isProtectedPage) {
-    const url = new URL('/login', request.url);
-    url.searchParams.set('reason', 'unauthorized');
-    url.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(url);
+    // Not logged in → block protected pages
+    if (isProtectedPage) {
+      const url = new URL('/login', request.url);
+      url.searchParams.set('reason', 'unauthorized');
+      url.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(url);
+    }
   }
 
   // Logged in → block auth pages

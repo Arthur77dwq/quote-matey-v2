@@ -6,7 +6,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // allowedDevOrigins: [],
+  allowedDevOrigins: ['*.ngrok-free.dev'],
 };
 
 export default nextConfig;
