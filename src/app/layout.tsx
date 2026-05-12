@@ -26,7 +26,6 @@ export const metadata: Metadata = {
     apple: ICON,
   },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

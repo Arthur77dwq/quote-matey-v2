@@ -48,5 +48,5 @@ export async function createPlan(params: {
     body,
   );
 
-  return data.id as string;
+  return data?.id as string;
 }

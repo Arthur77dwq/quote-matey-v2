@@ -20,5 +20,5 @@ export async function verifyPaypalWebhook(params: {
     webhook_event: body,
   });
 
-  return response.verification_status === 'SUCCESS';
+  return response?.verification_status === 'SUCCESS';
 }

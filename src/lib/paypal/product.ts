@@ -13,5 +13,5 @@ export async function createProduct() {
     Product,
   );
 
-  return data.id;
+  return data?.id;
 }
