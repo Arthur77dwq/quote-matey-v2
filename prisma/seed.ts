@@ -13,7 +13,7 @@ const log = (message: string) => {
 };
 
 export async function seedPlans() {
-  let productId: string;
+  let productId: string | undefined;
 
   const existingProduct = await prisma.plan.findFirst({
     where: {
