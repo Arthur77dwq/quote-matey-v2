@@ -1,23 +1,35 @@
 import { prisma } from '@/lib/prisma';
+import { SubscriptionStatus } from '@/types/subscription';
 
-export async function getActiveSubscriptionByUser(firebase_uid: string) {
+export async function getSubscriptionByUser(
+  firebase_uid: string,
+  status?: SubscriptionStatus,
+) {
   const now = new Date();
 
-  return prisma.subscription.findFirst({
+  return prisma.subscription.findMany({
     where: {
       firebase_uid,
+
+      ...(status && {
+        status,
+      }),
+
       OR: [
         {
-          status: 'ACTIVE',
+          cancel_at_period_end: false,
         },
+
         {
           cancel_at_period_end: true,
+
           end_date: {
-            gt: now, // still within access period
+            gt: now,
           },
         },
       ],
     },
+
     include: {
       plan: true,
     },

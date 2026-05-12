@@ -1,12 +1,12 @@
 import { getPlanLimit } from '@/db/planLimit/read';
-import { getActiveSubscriptionByUser } from '@/db/subscription';
+import { getSubscriptionByUser } from '@/db/subscription';
 import { getUserUsage } from '@/db/usage/read';
 
 export async function canUserUseFeature(params: {
   firebase_uid: string;
   type: 'text' | 'image';
 }) {
-  const sub = await getActiveSubscriptionByUser(params.firebase_uid);
+  const sub = await getSubscriptionByUser(params.firebase_uid, 'ACTIVE');
   if (!sub) return false;
 
   const usage = await getUserUsage(params.firebase_uid, sub.plan_id);

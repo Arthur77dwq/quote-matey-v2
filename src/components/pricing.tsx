@@ -22,7 +22,6 @@ export function Pricing({
   const showBtns = (plan: MergedPlan) => {
     return showCTA && !plan?.db?.isFree;
   };
-
   return (
     <section
       id="pricing"

@@ -1,15 +1,18 @@
 import { getPlanById } from '@/db/plan/read';
 import {
   createPendingSubscription,
-  getActiveSubscriptionByUser,
+  getSubscriptionByUser,
 } from '@/db/subscription';
 import { createNewUserFreeSubscription } from '@/db/subscription/create';
 import { getUserSubscriptionById } from '@/db/subscription/read';
-import { markCancelAtPeriodEnd } from '@/db/subscription/update';
+import {
+  cancelSubscriptionDB,
+  markCancelAtPeriodEnd,
+} from '@/db/subscription/update';
 import { cancelSubscription, createSubscription } from '@/lib/paypal';
 
 export async function getCurrentUserSubscription(firebase_uid: string) {
-  const sub = await getActiveSubscriptionByUser(firebase_uid);
+  const sub = await getSubscriptionByUser(firebase_uid, 'ACTIVE');
 
   return { ...sub };
 }
@@ -36,7 +39,7 @@ export async function createSubscriptionService(params: {
   return { approvalUrl, subscriptionId: id };
 }
 
-export async function cancelSubscriptionService(params: {
+export async function requestCancelSubscriptionService(params: {
   firebase_uid: string;
   subscriptionId: string;
 }) {
@@ -56,7 +59,14 @@ export async function cancelSubscriptionService(params: {
   });
 
   // 2. Mark locally (soft state)
-  await markCancelAtPeriodEnd(params.subscriptionId);
+  await markCancelAtPeriodEnd(params.firebase_uid, params.subscriptionId);
+
+  return { success: true };
+}
+
+export async function cancelSubscriptionService(id: string) {
+  const subscription = await cancelSubscriptionDB(id);
+  await getSubscriptionByUser(subscription.firebase_uid);
 
   return { success: true };
 }

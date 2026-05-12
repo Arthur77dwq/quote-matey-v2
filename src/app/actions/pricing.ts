@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation';
 
 import { getUserId } from '@/lib/auth/user';
 import {
-  cancelSubscriptionService,
   createSubscriptionService,
+  requestCancelSubscriptionService,
 } from '@/services/subscription';
 
 // CREATE SUBSCRIPTION
@@ -40,7 +40,7 @@ export async function cancelSubscriptionAction(formData: FormData) {
 
   const { uid } = await getUserId();
 
-  await cancelSubscriptionService({
+  await requestCancelSubscriptionService({
     firebase_uid: uid,
     subscriptionId,
   });

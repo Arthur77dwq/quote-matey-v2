@@ -47,9 +47,12 @@ export async function cancelSubscriptionDB(paypal_subscription_id: string) {
   });
 }
 
-export async function markCancelAtPeriodEnd(paypal_subscription_id: string) {
+export async function markCancelAtPeriodEnd(
+  firebase_uid: string,
+  paypal_subscription_id: string,
+) {
   return prisma.subscription.update({
-    where: { paypal_subscription_id },
+    where: { firebase_uid, paypal_subscription_id },
     data: {
       cancel_at_period_end: true,
     },

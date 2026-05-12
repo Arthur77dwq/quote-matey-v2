@@ -50,20 +50,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const token = await firebaseUser.getIdToken();
-      const subscription = await apiJson<Subscription>('/api/user', {
-        method: 'POST',
-      });
-
       setUser({
         uid: firebaseUser.uid,
         email: firebaseUser.email || '',
         displayName: firebaseUser.displayName || '',
         photoURL: firebaseUser.photoURL || '',
-        subscription,
+        subscription: null,
         token,
       });
-
       await setAuthCookie(token);
+
+      // Default user state
+      let subscription: Subscription | null = null;
+      try {
+        subscription = await apiJson<Subscription>('/api/user', {
+          method: 'POST',
+        });
+
+        setUser((prev) => {
+          if (!prev) return null;
+
+          return {
+            ...prev,
+            subscription,
+          };
+        });
+      } catch {
+        throw Error('Something went wrong');
+      }
     } catch {
       setUser(null);
 

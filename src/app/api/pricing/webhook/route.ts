@@ -1,6 +1,5 @@
 import {
   activateSubscriptionDB,
-  cancelSubscriptionDB,
   markPaymentFailedDB,
   markPaymentSuccessDB,
 } from '@/db/subscription';
@@ -8,6 +7,7 @@ import { getSubscriptionByPaypalId } from '@/db/subscription/read';
 import { deactivateOtherActiveSubscriptions } from '@/db/subscription/update';
 import { verifyPaypalWebhook } from '@/lib/paypal';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
+import { cancelSubscriptionService } from '@/services/subscription';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -63,7 +63,7 @@ export async function handlePaypalWebhook(event: PaypalWebhookEvent) {
 
     //  CANCELLED
     case 'BILLING.SUBSCRIPTION.CANCELLED': {
-      await cancelSubscriptionDB(event.resource.id);
+      await cancelSubscriptionService(event.resource.id);
       break;
     }
 
