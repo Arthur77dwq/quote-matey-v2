@@ -23,11 +23,14 @@ import { getFirebaseAuth, getGoogleProvider } from '@/config/firebase';
 import { apiJson } from '@/lib/api';
 import { getFirebaseErrorMessage } from '@/lib/errors/firebase-error';
 import { AuthContextType, User } from '@/types/global';
+import { Subscription } from '@/types/subscription';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<
+    (User & { subscription: Subscription | null }) | null
+  >(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const auth = getFirebaseAuth();
@@ -47,12 +50,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const token = await firebaseUser.getIdToken();
+      const subscription = await apiJson<Subscription>('/api/user', {
+        method: 'POST',
+      });
 
       setUser({
         uid: firebaseUser.uid,
         email: firebaseUser.email || '',
         displayName: firebaseUser.displayName || '',
         photoURL: firebaseUser.photoURL || '',
+        subscription,
         token,
       });
 
@@ -67,9 +74,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (auth) {
       const unSubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
         await handleAuthStateChange(firebaseUser);
-        if (firebaseUser) {
-          await apiJson('/api/user', { method: 'POST' });
-        }
       });
 
       return () => unSubscribe();
