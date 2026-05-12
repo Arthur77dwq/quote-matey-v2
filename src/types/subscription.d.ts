@@ -107,3 +107,6 @@ export type SubscriptionPlan = {
   highlighted: boolean;
   cta: { text: string; target: string };
 };
+export interface MergedPlan extends SubscriptionPlan {
+  db: AllPlan | null;
+}

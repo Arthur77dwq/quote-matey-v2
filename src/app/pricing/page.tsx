@@ -2,15 +2,18 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { OverlayBg } from '@/components/overlay-bg';
 import { Pricing } from '@/components/pricing';
+import { Spinner } from '@/components/ui/spinner';
 import { plans } from '@/constant/paypal/plan';
 import { useAuth } from '@/context/AuthContext';
 import { apiJson } from '@/lib/api';
 import { AllPlan } from '@/types/paypal/plan';
-import { Subscription, SubscriptionPlan } from '@/types/subscription';
-export interface MergedPlan extends SubscriptionPlan {
-  db: AllPlan | null;
-}
+import {
+  MergedPlan,
+  Subscription,
+  SubscriptionPlan,
+} from '@/types/subscription';
 
 export function useMappedPlans(
   plans: SubscriptionPlan[],
@@ -43,10 +46,8 @@ export default function BillingPage() {
   const [allPlans, setAllPlans] = useState<AllPlan[]>([]);
   const [, setError] = useState<string | null>(null);
   const { isAuthenticated } = useAuth();
-
-  // useEffect(() => {
-  //   console.log(me, allPlans, plans);
-  // }, [me, allPlans]);
+  const [loading, setLoading] = useState(true);
+  const data = useMappedPlans(plans, allPlans);
 
   useEffect(() => {
     async function loadBilling() {
@@ -64,17 +65,26 @@ export default function BillingPage() {
             : 'Failed to load billing data',
         );
       }
+      setLoading(false);
     }
 
     void loadBilling();
   }, [isAuthenticated]);
 
   return (
-    <Pricing
-      subscription_id={me?.paypal_subscription_id}
-      active={me?.plan?.paypal_plan_id || me?.plan_id}
-      data={useMappedPlans(plans, allPlans)}
-      showCTA={isAuthenticated}
-    />
+    <>
+      {loading ? (
+        <OverlayBg>
+          <Spinner className="size-10" />
+        </OverlayBg>
+      ) : (
+        <Pricing
+          subscription_id={me?.paypal_subscription_id}
+          active={me?.plan?.paypal_plan_id || me?.plan_id}
+          data={data}
+          showCTA={isAuthenticated}
+        />
+      )}
+    </>
   );
 }
