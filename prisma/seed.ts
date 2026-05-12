@@ -13,7 +13,7 @@ const log = (message: string) => {
 };
 
 export async function seedPlans() {
-  let productId: string | undefined;
+  let productId: string;
 
   const existingProduct = await prisma.plan.findFirst({
     where: {
@@ -26,7 +26,7 @@ export async function seedPlans() {
   if (existingProduct?.paypal_product_id) {
     productId = existingProduct.paypal_product_id;
   } else {
-    productId = await createProduct();
+    productId = (await createProduct()) || '';
   }
 
   for (const plan of plans) {
