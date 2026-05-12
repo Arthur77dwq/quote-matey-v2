@@ -4,7 +4,7 @@ import {
   cancelSubscriptionAction,
   createSubscriptionAction,
 } from '@/app/actions/pricing';
-import { MergedPlan } from '@/types/subscription';
+import { MergedPlan, SubscriptionPlan } from '@/types/subscription';
 
 import { PriceCard } from './price-card';
 
@@ -16,7 +16,7 @@ export function Pricing({
 }: {
   subscription_id?: string | null | undefined;
   active?: string;
-  data?: MergedPlan[];
+  data?: MergedPlan[] | SubscriptionPlan[];
   showCTA?: boolean;
 }) {
   const showBtns = (plan: MergedPlan) => {

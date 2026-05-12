@@ -12,7 +12,9 @@ import { Pricing } from '@/components/pricing';
 import { SocialProofBar } from '@/components/social-proof-bar';
 import { Testimonials } from '@/components/testimonials';
 import { VideoSection } from '@/components/video-section';
-export default function Home() {
+import { plans } from '@/constant/paypal/plan';
+
+export default async function Home() {
   return (
     <main className="min-h-screen">
       <Suspense fallback={<div>Loading...</div>}>
@@ -25,7 +27,7 @@ export default function Home() {
       <BeforeAfter />
       <Benefits />
       <Testimonials />
-      <Pricing />
+      <Pricing data={plans} />
       <FAQ />
       <CTASection />
       <Footer />
