@@ -53,8 +53,8 @@ export default function BillingPage() {
     async function loadBilling() {
       try {
         if (isAuthenticated) {
-          const data = await apiJson<Subscription>('/api/user/me');
-          setMe(data);
+          const data = await apiJson<Subscription[]>('/api/user/me');
+          setMe(data[0]);
         }
         const allPlans = await apiJson<AllPlan[]>('/api/pricing/plan/list');
         setAllPlans(allPlans);

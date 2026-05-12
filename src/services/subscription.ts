@@ -6,15 +6,14 @@ import {
 import { createNewUserFreeSubscription } from '@/db/subscription/create';
 import { getUserSubscriptionById } from '@/db/subscription/read';
 import {
+  activateSubscriptionByID,
   cancelSubscriptionDB,
   markCancelAtPeriodEnd,
 } from '@/db/subscription/update';
 import { cancelSubscription, createSubscription } from '@/lib/paypal';
 
 export async function getCurrentUserSubscription(firebase_uid: string) {
-  const sub = await getSubscriptionByUser(firebase_uid, 'ACTIVE');
-
-  return { ...sub };
+  return await getSubscriptionByUser(firebase_uid, 'ACTIVE');
 }
 
 export async function createSubscriptionService(params: {
@@ -33,7 +32,7 @@ export async function createSubscriptionService(params: {
   await createPendingSubscription({
     firebase_uid: params.firebase_uid,
     plan_id: plan.id,
-    paypal_subscription_id: id,
+    paypal_subscription_id: id || '',
   });
 
   return { approvalUrl, subscriptionId: id };
@@ -66,7 +65,14 @@ export async function requestCancelSubscriptionService(params: {
 
 export async function cancelSubscriptionService(id: string) {
   const subscription = await cancelSubscriptionDB(id);
-  await getSubscriptionByUser(subscription.firebase_uid);
+  const plans = await getSubscriptionByUser(subscription.firebase_uid);
+  const plan = plans.filter((plan) => {
+    if (plan.plan.isFree) {
+      return plan;
+    }
+  });
+
+  await activateSubscriptionByID(subscription.firebase_uid, plan[0].id);
 
   return { success: true };
 }

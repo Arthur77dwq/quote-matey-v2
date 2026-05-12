@@ -21,15 +21,17 @@ export async function createSubscription(params: { planId: string }) {
     PaypalSubscriptionResponse,
     CreateSubscriptionBody
   >('/v1/billing/subscriptions', 'POST', body);
+  let approvalUrl = null;
+  if (data) {
+    approvalUrl = data.links.find((link) => link.rel === 'approve')?.href;
 
-  const approvalUrl = data.links.find((link) => link.rel === 'approve')?.href;
-
-  if (!approvalUrl) {
-    throw new Error('PayPal approval URL not found');
+    if (!approvalUrl) {
+      throw new Error('PayPal approval URL not found');
+    }
   }
 
   return {
-    id: data.id,
+    id: data?.id,
     approvalUrl,
   };
 }

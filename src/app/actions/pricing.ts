@@ -26,7 +26,7 @@ export async function createSubscriptionAction(formData: FormData) {
   });
 
   // Redirect to PayPal
-  redirect(approvalUrl);
+  if (approvalUrl) redirect(approvalUrl);
 }
 
 // CANCEL SUBSCRIPTION

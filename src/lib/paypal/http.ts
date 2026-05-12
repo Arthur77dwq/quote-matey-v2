@@ -38,7 +38,7 @@ export async function paypalHttp<TResponse, TBody = unknown>(
   path: string,
   method: HttpMethod,
   body?: TBody,
-): Promise<TResponse> {
+): Promise<TResponse | null> {
   const { accessToken, baseUrl } = await getAccessToken();
 
   const res = await fetch(`${baseUrl}${path}`, {
@@ -53,6 +53,9 @@ export async function paypalHttp<TResponse, TBody = unknown>(
   if (!res.ok) {
     const error = await res.text();
     throw new Error(`PayPal API Error: ${error}`);
+  }
+  if (res.status === 204) {
+    return null;
   }
 
   return res.json() as Promise<TResponse>;

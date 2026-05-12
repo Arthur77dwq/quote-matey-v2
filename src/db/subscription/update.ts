@@ -18,6 +18,19 @@ export async function activateSubscriptionDB(data: {
   });
 }
 
+export async function activateSubscriptionByID(
+  firebase_uid: string,
+  id: string,
+) {
+  return prisma.subscription.update({
+    where: { firebase_uid, id, status: { not: 'ACTIVE' } },
+    data: {
+      status: 'ACTIVE',
+      end_date: new Date(),
+    },
+  });
+}
+
 export async function deactivateOtherActiveSubscriptions(
   uid: string,
   paypal_subscription_id: string,
