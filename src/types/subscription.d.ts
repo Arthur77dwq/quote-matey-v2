@@ -108,5 +108,5 @@ export type SubscriptionPlan = {
   cta: { text: string; target: string };
 };
 export interface MergedPlan extends SubscriptionPlan {
-  db: AllPlan | null;
+  db?: AllPlan | null;
 }

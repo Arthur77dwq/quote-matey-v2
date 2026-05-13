@@ -4,7 +4,7 @@ import {
   cancelSubscriptionAction,
   createSubscriptionAction,
 } from '@/app/actions/pricing';
-import { MergedPlan, SubscriptionPlan } from '@/types/subscription';
+import { MergedPlan } from '@/types/subscription';
 
 import { PriceCard } from './price-card';
 
@@ -16,7 +16,7 @@ export function Pricing({
 }: {
   subscription_id?: string | null | undefined;
   active?: string;
-  data?: MergedPlan[] | SubscriptionPlan[];
+  data?: MergedPlan[];
   showCTA?: boolean;
 }) {
   const showBtns = (plan: MergedPlan) => {
@@ -46,7 +46,11 @@ export function Pricing({
         {/* Pricing Cards */}
         <div className="max-w-full mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8">
           {data?.map((plan, index) => (
-            <PriceCard key={index} plan={plan} active={active}>
+            <PriceCard
+              key={index}
+              plan={plan}
+              active={plan?.db?.paypal_plan_id === active || plan.id === active}
+            >
               {showBtns(plan) &&
                 ((plan?.db?.paypal_plan_id == active || plan.id === active) &&
                 subscription_id ? (

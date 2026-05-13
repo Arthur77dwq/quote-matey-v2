@@ -2,7 +2,7 @@
 import { Check, X } from 'lucide-react';
 
 import { ImageIcon, TextIcon } from '@/constant/icons';
-import { MergedPlan } from '@/types/subscription';
+import { SubscriptionPlan } from '@/types/subscription';
 
 import { Label } from './label';
 
@@ -16,8 +16,8 @@ export function PriceCard({
   active,
   children,
 }: {
-  plan: MergedPlan;
-  active?: string;
+  plan: SubscriptionPlan;
+  active?: boolean;
   children?: React.ReactNode;
 }) {
   const IconMapper = (name: string) => {
@@ -28,7 +28,7 @@ export function PriceCard({
   return (
     <div
       className={`relative bg-white rounded-3xl p-6 border-2 transition-all ${
-        plan?.db?.paypal_plan_id === active || plan.id === active
+        active
           ? 'border-[#f57a0a] shadow-2xl shadow-[#f57a0a]/10 scale-[1.02]'
           : 'border-border shadow-lg'
       }`}
