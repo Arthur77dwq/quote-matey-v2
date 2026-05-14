@@ -62,23 +62,35 @@ model PlanLimit {
 // SUBSCRIPTION
 //////////////////////////////////////////////////////
 
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+  SUSPENDED
+  APPROVAL_PENDING
+}
+
 model Subscription {
   id                      String   @id @default(cuid())
 
   firebase_uid            String
 
   plan_id                 String
-  plan                    Plan     @relation(fields: [plan_id], references: [id])
+  plan                    Plan @relation(fields: [plan_id], references: [id])
 
-  paypal_subscription_id  String?  @unique
+  paypal_subscription_id  String? @unique
 
-  status                  String   // ACTIVE | CANCELLED | etc.
+  status                  SubscriptionStatus
 
   start_date              DateTime?
   next_billing_date       DateTime?
   end_date                DateTime?
 
-  cancel_at_period_end    Boolean  @default(false)
+  cancel_at_period_end    Boolean @default(false)
+
+  grace_period_end        DateTime?
+  failed_payment_count    Int @default(0)
 
   last_payment_date       DateTime?
   last_payment_amount     Int?
@@ -86,8 +98,11 @@ model Subscription {
 
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
-
+ 
   @@index([firebase_uid, status])
+  @@index([firebase_uid, end_date])
+  @@index([status])
+  @@index([next_billing_date])
 }
 
 //////////////////////////////////////////////////////

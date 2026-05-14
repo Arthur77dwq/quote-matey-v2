@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma';
 
 const PAYPAL_ENV = process.env.PAYPAL_ENV!;
 
-// Optional: structured logger (safe fallback)
 const log = (message: string) => {
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
@@ -15,88 +14,159 @@ const log = (message: string) => {
 export async function seedPlans() {
   let productId: string;
 
+  // Reuse existing PayPal product if already seeded
   const existingProduct = await prisma.plan.findFirst({
     where: {
-      paypal_product_id: { not: null },
+      paypal_product_id: {
+        not: null,
+      },
+
       environment: PAYPAL_ENV,
     },
-    select: { paypal_product_id: true },
+
+    select: {
+      paypal_product_id: true,
+    },
   });
 
   if (existingProduct?.paypal_product_id) {
     productId = existingProduct.paypal_product_id;
   } else {
     productId = (await createProduct()) || '';
+
+    if (!productId) {
+      throw new Error('Failed to create PayPal product');
+    }
   }
 
   for (const plan of plans) {
     const isFree = plan.pricing.price === '$0';
+
     const price = parseInt(plan.pricing.price.replace('$', ''));
 
-    const slug = plan.name === 'Free' ? 'free' : 'starter_monthly';
-    const version = 1;
-    const dbId = `${slug}_v${version}`;
+    const version = plan.version;
 
-    const existing = await prisma.plan.findFirst({
+    // Final DB identity
+    const dbId = `${plan.id}_v${version}`;
+
+    // Check existing DB plan
+    const existingPlan = await prisma.plan.findUnique({
       where: {
         id: dbId,
-        environment: PAYPAL_ENV,
       },
     });
 
-    if (existing) continue;
+    let paypalPlanId: string | null = existingPlan?.paypal_plan_id || null;
 
-    let paypalPlanId: string | null = null;
-
-    if (!isFree) {
+    // Create PayPal plan only if:
+    // - paid plan
+    // - PayPal plan missing
+    if (!isFree && !paypalPlanId) {
       paypalPlanId = await createPlan({
         productId,
+
         name: `${plan.name} (v${version})`,
+
         description: plan.description,
+
         price,
+
         currency: plan.pricing.currency,
+
         interval: 'MONTH',
       });
+
+      if (!paypalPlanId) {
+        throw new Error(`Failed to create PayPal plan for ${dbId}`);
+      }
     }
 
-    await prisma.plan.create({
-      data: {
-        id: dbId,
-        name: plan.name,
-        description: plan.description,
-        price,
-        currency: plan.pricing.currency,
-        billing_interval: 'MONTH',
-        isFree,
-        paypal_plan_id: paypalPlanId,
-        paypal_product_id: isFree ? null : productId,
-        environment: PAYPAL_ENV,
-        version,
-        isActive: true,
-      },
-    });
+    // Transaction keeps DB consistent
+    await prisma.$transaction(async (tx) => {
+      // PLAN
+      await tx.plan.upsert({
+        where: {
+          id: dbId,
+        },
 
-    await prisma.planLimit.upsert({
-      where: {
-        plan_id_interval: {
+        update: {
+          name: plan.name,
+
+          description: plan.description,
+
+          price,
+
+          currency: plan.pricing.currency,
+
+          billing_interval: 'MONTH',
+
+          isActive: true,
+
+          paypal_plan_id: paypalPlanId,
+
+          paypal_product_id: isFree ? null : productId,
+        },
+
+        create: {
+          id: dbId,
+
+          name: plan.name,
+
+          description: plan.description,
+
+          price,
+
+          currency: plan.pricing.currency,
+
+          billing_interval: 'MONTH',
+
+          isFree,
+
+          paypal_plan_id: paypalPlanId,
+
+          paypal_product_id: isFree ? null : productId,
+
+          environment: PAYPAL_ENV,
+
+          version,
+
+          isActive: true,
+        },
+      });
+
+      // PLAN LIMITS
+      await tx.planLimit.upsert({
+        where: {
+          plan_id_interval: {
+            plan_id: dbId,
+
+            interval: 'WEEK',
+          },
+        },
+
+        update: {
+          text_limit: isFree ? 3 : -1,
+
+          image_limit: isFree ? 1 : -1,
+        },
+
+        create: {
           plan_id: dbId,
+
+          text_limit: isFree ? 3 : -1,
+
+          image_limit: isFree ? 1 : -1,
+
           interval: 'WEEK',
         },
-      },
-      update: {},
-      create: {
-        plan_id: dbId,
-        text_limit: isFree ? 3 : -1,
-        image_limit: isFree ? 1 : -1,
-        interval: 'WEEK',
-      },
+      });
     });
 
     log(`Seeded plan: ${dbId}`);
   }
 }
 
-// Proper execution wrapper
+// EXECUTION WRAPPER
 async function main() {
   try {
     await seedPlans();
@@ -108,5 +178,6 @@ async function main() {
 main().catch((error) => {
   // eslint-disable-next-line no-console
   console.error('Seed failed:', error);
+
   process.exit(1);
 });

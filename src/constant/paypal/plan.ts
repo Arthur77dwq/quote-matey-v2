@@ -2,8 +2,8 @@ import { SubscriptionPlan } from '@/types/subscription';
 
 export const plans: SubscriptionPlan[] = [
   {
-    id: 'free_v1',
-    version: 'v1',
+    id: 'free',
+    version: 1,
     name: 'Free',
     trend: {
       text: 'Most Popular',
@@ -30,8 +30,8 @@ export const plans: SubscriptionPlan[] = [
     },
   },
   {
-    id: 'starter_monthly_v1',
-    version: 'v1',
+    id: 'starter_monthly',
+    version: 1,
     name: 'Starter Plan',
     trend: {
       text: 'Most Popular',

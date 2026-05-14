@@ -89,7 +89,7 @@ export interface Subscription {
 
 export type SubscriptionPlan = {
   id: string;
-  version: string;
+  version: number;
   name: string;
   trend: { text: string; tranding: boolean };
   description: string;
