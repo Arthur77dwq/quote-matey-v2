@@ -8,3 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 export function matchRoute(pathname: string, routes: readonly string[]) {
   return routes.some((route) => pathname.startsWith(route));
 }
+
+export function toDate(value?: string) {
+  if (!value) return undefined;
+
+  const date = new Date(value);
+
+  return isNaN(date.getTime()) ? undefined : date;
+}

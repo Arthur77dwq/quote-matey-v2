@@ -56,7 +56,7 @@ export type SubscriptionStatus =
   | 'ACTIVE'
   | 'CANCELLED'
   | 'EXPIRED'
-  | 'PENDING'
+  | 'APPROVAL_PENDING'
   | 'SUSPENDED';
 
 export interface Subscription {
@@ -109,4 +109,5 @@ export type SubscriptionPlan = {
 };
 export interface MergedPlan extends SubscriptionPlan {
   db?: AllPlan | null;
+  cancel_at_period_end?: boolean;
 }

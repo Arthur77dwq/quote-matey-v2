@@ -26,3 +26,14 @@ export interface PaypalSubscriptionResponse {
     method: string;
   }>;
 }
+
+export interface PaypalVerifyResponse {
+  id: string;
+  status: string;
+  plan_id?: string;
+  start_time?: string;
+
+  billing_info?: {
+    next_billing_time?: string;
+  };
+}
