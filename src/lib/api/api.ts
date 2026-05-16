@@ -1,9 +1,9 @@
 export async function Api(input: RequestInfo, init?: RequestInit) {
   const res = await fetch(input, {
     ...init,
+    credentials: 'include',
     headers: {
       ...(init?.headers || {}),
-      credentials: 'include',
       'Content-Type': 'application/json',
       method: init?.method || 'GET',
     },
