@@ -50,14 +50,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const token = await firebaseUser.getIdToken();
-      setUser({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email || '',
-        displayName: firebaseUser.displayName || '',
-        photoURL: firebaseUser.photoURL || '',
-        subscription: null,
-        token,
-      });
       await setAuthCookie(token);
 
       // Default user state
@@ -66,17 +58,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         subscription = await apiJson<Subscription>('/api/user', {
           method: 'POST',
         });
-
-        setUser((prev) => {
-          if (!prev) return null;
-
-          return {
-            ...prev,
-            subscription,
-          };
-        });
       } catch {
-        throw Error('Something went wrong');
+        // Intentionally ignored
+      } finally {
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email || '',
+          displayName: firebaseUser.displayName || '',
+          photoURL: firebaseUser.photoURL || '',
+          token,
+          subscription,
+        });
       }
     } catch {
       setUser(null);
