@@ -390,6 +390,7 @@ You win jobs by being:
 - opportunistic with upsells
 
 You do not aim for perfection.
+DO not add * use dot points instead.
 
 You aim to win work in the real world.
 `;
