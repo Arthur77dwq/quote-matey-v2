@@ -1,13 +1,10 @@
-import {
-  activateSubscriptionDB,
-  markPaymentFailedDB,
-  markPaymentSuccessDB,
-} from '@/db/subscription';
-import { getSubscriptionByPaypalId } from '@/db/subscription/read';
-import { deactivateOtherActiveSubscriptions } from '@/db/subscription/update';
+import { markPaymentFailedDB, markPaymentSuccessDB } from '@/db/subscription';
 import { verifyPaypalWebhook } from '@/lib/paypal';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
-import { cancelSubscriptionService } from '@/services/subscription';
+import {
+  activateSubscriptionService,
+  cancelSubscriptionService,
+} from '@/services/subscription';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -32,32 +29,11 @@ export async function POST(req: Request) {
   return new Response('OK');
 }
 
-function toDate(value?: string) {
-  if (!value) return undefined;
-
-  const date = new Date(value);
-
-  return isNaN(date.getTime()) ? undefined : date;
-}
-
 export async function handlePaypalWebhook(event: PaypalWebhookEvent) {
   switch (event.event_type) {
     //  ACTIVATED
     case 'BILLING.SUBSCRIPTION.ACTIVATED': {
-      await activateSubscriptionDB({
-        paypal_subscription_id: event.resource.id,
-        start_date: toDate(event.resource.start_time),
-
-        // safer optional chaining
-        next_billing_date: event.resource.billing_info?.next_billing_time
-          ? toDate(event.resource.billing_info.next_billing_time)
-          : undefined,
-      });
-      const subscription = await getSubscriptionByPaypalId(event.resource.id);
-      await deactivateOtherActiveSubscriptions(
-        subscription?.firebase_uid || '',
-        event.resource.id,
-      );
+      await activateSubscriptionService(event);
       break;
     }
 

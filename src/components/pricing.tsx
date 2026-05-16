@@ -1,5 +1,7 @@
 'use client';
 
+import { twMerge } from 'tailwind-merge';
+
 import {
   cancelSubscriptionAction,
   createSubscriptionAction,
@@ -7,6 +9,7 @@ import {
 import { MergedPlan } from '@/types/subscription';
 
 import { PriceCard } from './price-card';
+import { Button } from './ui/button';
 
 export function Pricing({
   subscription_id,
@@ -19,6 +22,9 @@ export function Pricing({
   data?: MergedPlan[];
   showCTA?: boolean;
 }) {
+  const isActive = (plan: MergedPlan) =>
+    plan?.db?.paypal_plan_id === active || plan.id === active;
+
   const showBtns = (plan: MergedPlan) => {
     return showCTA && !plan?.db?.isFree;
   };
@@ -46,31 +52,35 @@ export function Pricing({
         {/* Pricing Cards */}
         <div className="max-w-full mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8">
           {data?.map((plan, index) => (
-            <PriceCard
-              key={index}
-              plan={plan}
-              active={plan?.db?.paypal_plan_id === active || plan.id === active}
-            >
+            <PriceCard key={index} plan={plan} active={isActive(plan)}>
               {showBtns(plan) &&
-                ((plan?.db?.paypal_plan_id == active || plan.id === active) &&
-                subscription_id ? (
+                (isActive(plan) && subscription_id ? (
                   <form action={cancelSubscriptionAction} className="w-full">
-                    <input
-                      type="hidden"
-                      name="subscriptionId"
-                      value={subscription_id}
-                    />
-                    <button
-                      type="submit"
-                      className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
-                        plan?.db?.paypal_plan_id === active ||
-                        plan.id === active
-                          ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
-                          : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c]'
-                      }`}
-                    >
-                      {'Cancel'}
-                    </button>
+                    {plan?.cancel_at_period_end || false ? (
+                      <Button variant="outline" className="w-full" disabled>
+                        {'Current Plan'}
+                      </Button>
+                    ) : (
+                      <>
+                        <input
+                          type="hidden"
+                          name="subscriptionId"
+                          value={subscription_id}
+                        />
+
+                        <Button
+                          type="submit"
+                          className={twMerge(
+                            `w-full cursor-pointer py-4 rounded-xl font-bold text-lg transition-all`,
+                            isActive(plan)
+                              ? 'bg-[#f57a0a] text-white hover:bg-[#e06d00] shadow-lg shadow-[#f57a0a]/20'
+                              : ' text-black hover:bg-[#1a3a5c]',
+                          )}
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    )}
                   </form>
                 ) : (
                   <form action={createSubscriptionAction} className="w-full">
@@ -81,16 +91,14 @@ export function Pricing({
                     />
                     <button
                       type="submit"
-                      className={`w-full py-4 rounded-xl  text-lg transition-all ${
-                        plan?.db?.paypal_plan_id === active ||
-                        plan.id === active
+                      className={twMerge(
+                        `w-full py-4 rounded-xl  text-lg transition-all`,
+                        isActive(plan)
                           ? 'text-semibold  text-[#1a3a5c]/70  border'
-                          : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c] font-bold'
-                      }`}
+                          : 'bg-[#0a1628] text-white hover:bg-[#1a3a5c] font-bold',
+                      )}
                     >
-                      {plan?.db?.paypal_plan_id === active || plan.id === active
-                        ? 'Current Plan'
-                        : 'Upgrade Now'}
+                      {'Upgrade Now'}
                     </button>
                   </form>
                 ))}

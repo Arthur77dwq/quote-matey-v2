@@ -69,6 +69,7 @@ enum SubscriptionStatus {
   EXPIRED
   SUSPENDED
   APPROVAL_PENDING
+  INACTIVE
 }
 
 model Subscription {

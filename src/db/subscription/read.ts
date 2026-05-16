@@ -27,6 +27,13 @@ export async function getSubscriptionByUser(
             gt: now,
           },
         },
+        {
+          cancel_at_period_end: true,
+
+          next_billing_date: {
+            gt: now,
+          },
+        },
       ],
     },
 

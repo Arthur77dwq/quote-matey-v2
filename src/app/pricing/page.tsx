@@ -14,18 +14,27 @@ import {
   Subscription,
   SubscriptionPlan,
 } from '@/types/subscription';
-
 export function useMappedPlans(
   plans: SubscriptionPlan[],
   allPlans: AllPlan[],
+  me: Subscription | null,
 ): MergedPlan[] {
   const mapped = useMemo(() => {
     return plans.map((plan) => {
-      const matchedPlan = allPlans.find((item) => item.id === plan.id);
+      const matchedPlan = allPlans.find(
+        (item) => item.id === `${plan.id}_v${plan.version}`,
+      );
+
+      const cancelData = () => {
+        if (!me) return {};
+        if (matchedPlan?.id != me.plan_id) return {};
+        return { cancel_at_period_end: me.cancel_at_period_end };
+      };
 
       return {
         ...plan,
-
+        id: `${plan.id}_v${plan.version}`,
+        ...cancelData(),
         pricing: {
           price: matchedPlan ? `$${matchedPlan.price}` : plan.pricing.price,
 
@@ -37,7 +46,7 @@ export function useMappedPlans(
         db: matchedPlan || null,
       };
     });
-  }, [plans, allPlans]);
+  }, [plans, allPlans, me]);
   return mapped;
 }
 
@@ -47,7 +56,7 @@ export default function BillingPage() {
   const [, setError] = useState<string | null>(null);
   const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
-  const data = useMappedPlans(plans, allPlans);
+  const data = useMappedPlans(plans, allPlans, me);
 
   useEffect(() => {
     async function loadBilling() {

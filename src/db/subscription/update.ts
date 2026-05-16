@@ -1,3 +1,5 @@
+import { SubscriptionStatus } from '@prisma/client';
+
 import { prisma } from '@/lib/prisma';
 
 export async function activateSubscriptionDB(data: {
@@ -8,10 +10,10 @@ export async function activateSubscriptionDB(data: {
   return prisma.subscription.updateMany({
     where: {
       paypal_subscription_id: data.paypal_subscription_id,
-      status: { not: 'ACTIVE' },
+      status: { not: SubscriptionStatus.ACTIVE },
     },
     data: {
-      status: 'ACTIVE',
+      status: SubscriptionStatus.ACTIVE,
       start_date: data.start_date,
       next_billing_date: data.next_billing_date,
     },
@@ -23,9 +25,9 @@ export async function activateSubscriptionByID(
   id: string,
 ) {
   return prisma.subscription.update({
-    where: { firebase_uid, id, status: { not: 'ACTIVE' } },
+    where: { firebase_uid, id, status: { not: SubscriptionStatus.ACTIVE } },
     data: {
-      status: 'ACTIVE',
+      status: SubscriptionStatus.ACTIVE,
       end_date: new Date(),
     },
   });
@@ -38,14 +40,14 @@ export async function deactivateOtherActiveSubscriptions(
   return prisma.subscription.updateMany({
     where: {
       firebase_uid: uid,
-      status: 'ACTIVE',
+      status: SubscriptionStatus.ACTIVE,
       OR: [
         { paypal_subscription_id: { not: paypal_subscription_id } },
         { paypal_subscription_id: null },
       ],
     },
     data: {
-      status: 'INACTIVE',
+      status: SubscriptionStatus.INACTIVE,
     },
   });
 }
@@ -54,7 +56,7 @@ export async function cancelSubscriptionDB(paypal_subscription_id: string) {
   return prisma.subscription.update({
     where: { paypal_subscription_id },
     data: {
-      status: 'CANCELLED',
+      status: SubscriptionStatus.CANCELLED,
       end_date: new Date(),
     },
   });
@@ -94,7 +96,7 @@ export async function markPaymentFailedDB(paypal_subscription_id: string) {
   return prisma.subscription.update({
     where: { paypal_subscription_id },
     data: {
-      status: 'SUSPENDED',
+      status: SubscriptionStatus.SUSPENDED,
     },
   });
 }
