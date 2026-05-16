@@ -3,6 +3,7 @@ import { SubscriptionStatus } from '@/types/subscription';
 
 export async function getSubscriptionByUser(
   firebase_uid: string,
+  isFree: boolean | null = null,
   status?: SubscriptionStatus,
 ) {
   const now = new Date();
@@ -13,6 +14,11 @@ export async function getSubscriptionByUser(
 
       ...(status && {
         status,
+      }),
+      ...(isFree != null && {
+        plan: {
+          isFree: false,
+        },
       }),
 
       OR: [

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { getUserId } from '@/lib/auth/user';
 import {
   createSubscriptionService,
+  hasActivePlanByUid,
   requestCancelSubscriptionService,
 } from '@/services/subscription';
 
@@ -19,14 +20,19 @@ export async function createSubscriptionAction(formData: FormData) {
   }
 
   const { uid } = await getUserId();
+  const activePlan = await hasActivePlanByUid(uid);
+  // console.log(activePlan);
+  // TODO: If any paid plan is active restrict to create new subscription.
+  // Check if all data is valid
+  if (!activePlan.has) {
+    const { approvalUrl } = await createSubscriptionService({
+      firebase_uid: uid,
+      planId,
+    });
 
-  const { approvalUrl } = await createSubscriptionService({
-    firebase_uid: uid,
-    planId,
-  });
-
-  // Redirect to PayPal
-  if (approvalUrl) redirect(approvalUrl);
+    // Redirect to PayPal
+    if (approvalUrl) redirect(approvalUrl);
+  }
 }
 
 // CANCEL SUBSCRIPTION

@@ -22,16 +22,19 @@ import { PaypalWebhookEvent } from '@/lib/paypal/schema';
 import { toDate } from '@/lib/utils';
 import { PaypalVerifyResponse } from '@/types/paypal/subscription';
 
+export async function hasActivePlanByUid(uid: string) {
+  const subscription = await getSubscriptionByUser(uid, true);
+  return {
+    has: Boolean(subscription.length),
+    subscription,
+  };
+}
+
 export async function hasActivePlan() {
   return await withAuth(async (uid: string) => {
-    const subscription = await getSubscriptionByUser(uid);
-    return Response.json(
-      {
-        has: true,
-        subscription,
-      },
-      { status: 200 },
-    );
+    const result = await hasActivePlanByUid(uid);
+
+    return Response.json(result);
   });
 }
 
