@@ -111,6 +111,17 @@ Start: G'day,
 include price naturally
 end: Cheers
 
+10/10 Customer Example
+G'day,
+
+Lawn mowing and edging will be carried out for your property.
+This includes mowing all lawn areas, whipper snipping edges, and clearing all clippings.
+The price sits between $150 and $250.
+All work is completed clean and tidy on completion.
+Let me know if you want to lock it in.
+
+Cheers
+
 ------------------------------------------------------------
 TRADE MAPPING (INTERNAL)
 
@@ -134,10 +145,10 @@ quick fix: 180
 mixed: 2200
 
 ------------------------------------------------------------
+USE BOLD ON HEADINGS
 
 DO NOT use:
 
-bold
 markdown
 asterisks
 extra spacing rules
