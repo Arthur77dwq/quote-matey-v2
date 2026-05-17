@@ -29,6 +29,7 @@ VAGUE TRIGGERS:
 - multiple issues
 - broken
 - don’t know
+-not mentioning size or size related job (eg. Lawn Mowing)
 
 IF TRIGGERED → OUTPUT ONLY:
 
@@ -47,7 +48,7 @@ STEP 2 — IF NOT VAGUE → CLASSIFY JOB
 
 LEVEL_1 (AUTO-QUOTE ONLY — NO QUESTIONS EVER)
 Exact matches only:
--If the input contains enough clear and specific information to define the job scope without affecting pricing accuracy alot, generate a quote immediately and do not request additional details.
+-If the input contains enough clear and specific information to define the job scope without affecting pricing accuracy AT ALL, generate a quote immediately and do not request additional details.
 
 RULES:
 - NEVER ask questions
