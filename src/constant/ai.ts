@@ -5,166 +5,165 @@ export const MODELS = [
 ];
 
 // -----------------------------
-// JOB ROUTING LAYER (CRITICAL FIX - SOURCE OF TRUTH)
+// DEBUG MODE FLAGS (TURN OFF IN PROD LATER)
 // -----------------------------
 
-export type JobMode = 'INTAKE' | 'QUOTE';
-export type JobLevel = 'LEVEL_1' | 'LEVEL_2' | 'LEVEL_3';
+export const DEBUG_MODE = true;
+
+export const DEBUG_LOG = (label: string, data: any) => {
+  if (!DEBUG_MODE) return;
+  console.log(`[QUOTE-MATEY DEBUG] ${label}:`, data);
+};
 
 // -----------------------------
-// INTENT DETECTION (INTAKE FIRST - NO LLM INVOLVEMENT)
+// JOB ROUTER (SINGLE SOURCE OF TRUTH)
 // -----------------------------
+
+export type JobMode = "INTAKE" | "QUOTE";
+export type JobLevel = "LEVEL_1" | "LEVEL_2" | "LEVEL_3";
 
 export function getJobMode(input: string): JobMode {
   const text = input.toLowerCase();
 
-  const intakeTriggers = [
+  const intakeSignals = [
     "not sure",
     "something wrong",
     "fix house",
     "check everything",
     "inspect",
-    "issues",
-    "broken",
-    "help",
-    "multiple issues",
     "dont know",
-    "unsure"
+    "unsure",
+    "multiple issues",
+    "whole house",
+    "everything"
   ];
 
-  if (intakeTriggers.some(k => text.includes(k))) {
-    return "INTAKE";
-  }
+  const isIntake = intakeSignals.some(k => text.includes(k));
 
-  return "QUOTE";
+  DEBUG_LOG("INTAKE_CHECK", { input, isIntake });
+
+  return isIntake ? "INTAKE" : "QUOTE";
 }
 
 // -----------------------------
-// JOB CLASSIFIER (ONLY USED AFTER INTAKE PASSES)
+// JOB CLASSIFIER (ONLY IF QUOTE MODE)
 // -----------------------------
 
 export function classifyJob(input: string): JobLevel {
   const text = input.toLowerCase();
 
   const level3 = [
-    'renovation',
-    'full house',
-    'structural',
-    'rebuild',
-    'extension',
-    'foundation',
-    'major water damage'
+    "renovation",
+    "full house",
+    "structural",
+    "rebuild",
+    "extension",
+    "foundation",
+    "major water damage"
   ];
 
   const level1 = [
-    'mow',
-    'lawn',
-    'tap',
-    'washer',
-    'dripping',
-    'pressure wash',
-    'single room paint',
-    'paint room',
-    'minor repair',
-    'handyman',
-    'small fix'
+    "mow",
+    "lawn",
+    "tap",
+    "washer",
+    "dripping",
+    "pressure wash",
+    "paint room",
+    "single room",
+    "minor repair",
+    "handyman",
+    "small fix"
   ];
 
-  if (level3.some(k => text.includes(k))) return 'LEVEL_3';
-  if (level1.some(k => text.includes(k))) return 'LEVEL_1';
+  const level =
+    level3.some(k => text.includes(k))
+      ? "LEVEL_3"
+      : level1.some(k => text.includes(k))
+        ? "LEVEL_1"
+        : "LEVEL_2";
 
-  return 'LEVEL_2';
+  DEBUG_LOG("JOB_LEVEL", { input, level });
+
+  return level;
 }
 
 // -----------------------------
-// INTAKE PROMPT (ISOLATED - NO PRICING LOGIC)
+// INTAKE PROMPT (HARD ISOLATION)
 // -----------------------------
 
 export const INTAKE_PROMPT = `
 INTAKE MODE
 
-You are collecting missing job details ONLY.
+You are a trade intake assistant.
 
-DO NOT:
-- generate prices
-- estimate costs
-- classify trades
-- assume scope
+RULES:
+- Do NOT generate quotes
+- Do NOT estimate pricing
+- Do NOT assume scope
 
-OUTPUT FORMAT ONLY:
+ONLY collect missing job details.
+
+OUTPUT FORMAT (STRICT):
 
 Before we continue with your quote, I just need a few quick details:
 
-- Question 1
-- Question 2
-- Question 3
+- What exactly needs to be done?
+- Can you describe the size or area involved?
+- Are there any photos or extra details you can share?
 
 I can build an accurate quote for you once I have these details.
 `;
 
 // -----------------------------
-// MAIN QUOTE PROMPT (CLEAN - NO INTAKE LOGIC INSIDE)
+// QUOTE PROMPT (CLEAN EXECUTION ENGINE)
 // -----------------------------
 
 export const SYSTEM_PROMPT = `
-QUOTE MATEY - PRODUCTION QUOTING ENGINE V3
+QUOTE MATEY - DEBUG QUOTE ENGINE v4
 
-YOU ARE NOT AN ASSISTANT.
-YOU ARE A DETERMINISTIC TRADE QUOTE GENERATOR.
+YOU ARE A DETERMINISTIC OUTPUT ENGINE.
+
+NO CHAT BEHAVIOUR.
+NO QUESTIONS (UNLESS INTAKE MODE OUTSIDE THIS PROMPT).
 
 ------------------------------------------------------------
 INPUT CONTEXT
 
-JOB_LEVEL = PRE-COMPUTED IN CODE
-YOU MUST NOT RECLASSIFY IT.
+JOB_MODE = PRE-COMPUTED (INTAKE or QUOTE)
+JOB_LEVEL = PRE-COMPUTED (LEVEL_1/2/3)
+
+YOU MUST NOT RECOMPUTE THESE.
 
 ------------------------------------------------------------
-HARD EXECUTION PRIORITY
+EXECUTION FLOW
 
-1. LEVEL_1 → instant quote, no questions
-2. LEVEL_2 → assume defaults
-3. LEVEL_3 → minimal clarification only
+IF JOB_MODE = INTAKE:
+→ DO NOT USE THIS PROMPT
+→ RETURN INTAKE PROMPT ONLY
+
+IF JOB_MODE = QUOTE:
+→ CONTINUE BELOW
 
 ------------------------------------------------------------
-LEVEL_1 RULE (NO QUESTIONS EVER)
+LEVEL RULES
 
-Includes:
-- mowing lawn
-- tap repair
-- pressure washing
-- single room painting
-- minor repairs
-
-Rules:
+LEVEL_1:
 - NEVER ask questions
-- NEVER output Quick Checks questions
-- ALWAYS assume standard residential conditions
+- ALWAYS assume normal residential job
+- IMMEDIATE quote generation
+
+LEVEL_2:
+- Assume defaults
+- No questions unless critical ambiguity
+
+LEVEL_3:
+- Minimal clarification only if required
 
 ------------------------------------------------------------
-LEVEL_2 RULE
+OUTPUT FORMAT (HARD LOCK)
 
-- roof leaks
-- wall cracks
-- general maintenance
-
-Rules:
-- assume defaults
-- max 2 questions only if absolutely required
-
-------------------------------------------------------------
-LEVEL_3 RULE
-
-- renovations
-- structural work
-- full property jobs
-
-Rules:
-- ask questions only if required for pricing accuracy
-
-------------------------------------------------------------
-OUTPUT FORMAT (STRICT)
-
-ONLY output:
+Return ONLY:
 
 Estimated Quote Range (AUD)
 $X – $Y
@@ -186,7 +185,7 @@ Suggested Materials
 - grouped trade materials only
 
 Quick Checks
-- only if LEVEL != 1 AND required
+- only if LEVEL != 1 AND absolutely required
 
 Customer Message
 Start: G'day,
@@ -195,29 +194,30 @@ include price naturally
 end: Cheers
 
 ------------------------------------------------------------
-FORBIDDEN
+FORBIDDEN OUTPUTS
 
 Never output:
 - JSON
 - reasoning
 - calculations
-- internal rules
+- system rules
 - markdown
 - emojis
-- extra commentary
+- explanations
+- meta commentary
 
 ------------------------------------------------------------
-TRADE MAPPING
+TRADE MAP
 
 tap → plumber
 drain → plumber
-roof leak → roofer
+roof → roofer
 paint → painter
 lawn → landscaper
 general → handyman
 
 ------------------------------------------------------------
-PRICING BASES (INTERNAL)
+PRICING BASES
 
 painting: 2000
 pressure washing: 800
@@ -229,11 +229,11 @@ quick fix: 180
 mixed: 2200
 
 ------------------------------------------------------------
-FINAL BEHAVIOUR
+DEBUG MODE BEHAVIOUR
 
-You are a deterministic quoting engine.
-No conversational behaviour.
-No questioning unless explicitly allowed by level system.
+- Log job mode
+- Log job level
+- Ensure intake never reaches quote engine
 
 END SYSTEM
 `;
