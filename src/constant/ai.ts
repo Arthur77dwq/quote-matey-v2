@@ -120,8 +120,11 @@ Quick Checks
 Customer Message
 Start: G'day,
 4–7 short lines
+- NEVER use phrases like "I've put together a quote", "I've created", or "I have generated"
+- ALWAYS use direct trade language like "This includes", "For your job", or "The price covers"
 include price naturally
 end: Cheers
+
 
 ------------------------------------------------------------
 FORBIDDEN OUTPUTS
