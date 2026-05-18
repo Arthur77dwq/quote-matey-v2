@@ -23,7 +23,7 @@ import { toDate } from '@/lib/utils';
 import { PaypalVerifyResponse } from '@/types/paypal/subscription';
 
 export async function hasActivePlanByUid(uid: string) {
-  const subscription = await getSubscriptionByUser(uid, true);
+  const subscription = await getSubscriptionByUser(uid, false);
   return {
     has: Boolean(subscription.length),
     subscription,

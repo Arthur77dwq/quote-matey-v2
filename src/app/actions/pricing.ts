@@ -21,9 +21,7 @@ export async function createSubscriptionAction(formData: FormData) {
 
   const { uid } = await getUserId();
   const activePlan = await hasActivePlanByUid(uid);
-  // console.log(activePlan);
-  // TODO: If any paid plan is active restrict to create new subscription.
-  // Check if all data is valid
+
   if (!activePlan.has) {
     const { approvalUrl } = await createSubscriptionService({
       firebase_uid: uid,

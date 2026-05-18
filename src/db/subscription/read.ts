@@ -11,13 +11,17 @@ export async function getSubscriptionByUser(
   return prisma.subscription.findMany({
     where: {
       firebase_uid,
+      status: {
+        notIn: ['EXPIRED', 'APPROVAL_PENDING', 'SUSPENDED'],
+      },
 
       ...(status && {
         status,
       }),
+
       ...(isFree != null && {
         plan: {
-          isFree: false,
+          isFree,
         },
       }),
 
@@ -25,17 +29,14 @@ export async function getSubscriptionByUser(
         {
           cancel_at_period_end: false,
         },
-
         {
           cancel_at_period_end: true,
-
           end_date: {
             gt: now,
           },
         },
         {
           cancel_at_period_end: true,
-
           next_billing_date: {
             gt: now,
           },
