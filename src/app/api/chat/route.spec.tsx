@@ -36,6 +36,10 @@ function createRequest<T>(body: T): NextRequest {
   } as unknown as NextRequest;
 }
 
+vi.mock('@/services/usage', () => ({
+  updateUsage: vi.fn(),
+}));
+
 vi.mock('@/lib/auth/user', () => ({
   getUserId: vi.fn(),
 }));
@@ -46,6 +50,7 @@ vi.mock('@/services/access', () => ({
 
 import { getUserId } from '@/lib/auth/user';
 import { canUserUseFeature } from '@/services/access';
+import { updateUsage } from '@/services/usage';
 
 describe('Chat API', () => {
   const expectedErrorMessage = 'High demand';
@@ -57,7 +62,7 @@ describe('Chat API', () => {
       vi.mocked(getUserId).mockResolvedValue({
         uid: 'test-user-id',
       } as DecodedIdToken);
-
+      vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(canUserUseFeature).mockResolvedValue(true);
     });
 
@@ -124,7 +129,7 @@ describe('Chat API', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
-
+      vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
         uid: 'test-user-id',
       } as DecodedIdToken);
@@ -224,7 +229,7 @@ describe('Chat API', () => {
       vi.useFakeTimers();
 
       process.env.GEMINI_API_KEY = 'test-key';
-
+      vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
         uid: 'test-user-id',
       } as DecodedIdToken);
@@ -367,7 +372,7 @@ describe('Chat API', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       vi.useFakeTimers();
-
+      vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
         uid: 'test-user-id',
       } as DecodedIdToken);
