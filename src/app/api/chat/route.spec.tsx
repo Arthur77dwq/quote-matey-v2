@@ -1,3 +1,4 @@
+import type { DecodedIdToken } from 'firebase-admin/auth';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 const mockGenerate = vi.fn();
 
@@ -35,12 +36,29 @@ function createRequest<T>(body: T): NextRequest {
   } as unknown as NextRequest;
 }
 
+vi.mock('@/lib/auth/user', () => ({
+  getUserId: vi.fn(),
+}));
+
+vi.mock('@/services/access', () => ({
+  canUserUseFeature: vi.fn(),
+}));
+
+import { getUserId } from '@/lib/auth/user';
+import { canUserUseFeature } from '@/services/access';
+
 describe('Chat API', () => {
   const expectedErrorMessage = 'High demand';
   describe('Core Functionality', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
+
+      vi.mocked(getUserId).mockResolvedValue({
+        uid: 'test-user-id',
+      } as DecodedIdToken);
+
+      vi.mocked(canUserUseFeature).mockResolvedValue(true);
     });
 
     test('TC-01: Should extract user message.', () => {
@@ -106,6 +124,10 @@ describe('Chat API', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
+
+      vi.mocked(getUserId).mockResolvedValue({
+        uid: 'test-user-id',
+      } as DecodedIdToken);
     });
 
     test('TC-06: Returns error if messages array is empty', async () => {
@@ -202,6 +224,10 @@ describe('Chat API', () => {
       vi.useFakeTimers();
 
       process.env.GEMINI_API_KEY = 'test-key';
+
+      vi.mocked(getUserId).mockResolvedValue({
+        uid: 'test-user-id',
+      } as DecodedIdToken);
     });
 
     afterEach(() => {
@@ -341,6 +367,10 @@ describe('Chat API', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       vi.useFakeTimers();
+
+      vi.mocked(getUserId).mockResolvedValue({
+        uid: 'test-user-id',
+      } as DecodedIdToken);
     });
 
     afterEach(() => {

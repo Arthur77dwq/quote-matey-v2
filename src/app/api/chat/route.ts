@@ -139,22 +139,27 @@ export async function POST(request: NextRequest) {
           content: 'Need more details to provide a quote.',
         });
       }
+      const isAvailable = await canUserUseFeature({
+        firebase_uid: uid,
+        type: 'text',
+      });
 
-      await canUserUseFeature({ firebase_uid: uid, type: 'text' });
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        return NextResponse.json({
-          content: 'Something went wrong, Try again after some time.',
-        });
-      }
+      if (isAvailable) {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+          return NextResponse.json({
+            content: 'Something went wrong, Try again after some time.',
+          });
+        }
 
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = buildPrompt(userMessage);
+        const ai = new GoogleGenAI({ apiKey });
+        const prompt = buildPrompt(userMessage);
 
-      const result = await tryModels(ai, prompt);
+        const result = await tryModels(ai, prompt);
 
-      if (result) {
-        return NextResponse.json({ content: result });
+        if (result) {
+          return NextResponse.json({ content: result });
+        }
       }
 
       return NextResponse.json({
