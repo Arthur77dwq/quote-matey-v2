@@ -114,7 +114,7 @@ export async function verify(subscriptionId: string | undefined) {
 }
 
 export async function getCurrentUserSubscription(firebase_uid: string) {
-  return await getSubscriptionByUser(firebase_uid);
+  return await getSubscriptionByUser(firebase_uid, null, 'ACTIVE');
 }
 
 export async function createSubscriptionService(params: {
