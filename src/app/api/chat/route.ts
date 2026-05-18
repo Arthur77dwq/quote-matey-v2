@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
         const result = await tryModels(ai, prompt);
 
         if (result) {
-          await updateUsage();
+          await updateUsage('text');
           return NextResponse.json({ content: result });
         }
       } else {

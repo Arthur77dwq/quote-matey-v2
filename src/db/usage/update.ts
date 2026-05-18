@@ -36,3 +36,23 @@ export async function incrementTextUsage(data: {
     },
   });
 }
+
+export async function incrementImageUsage(data: {
+  firebase_uid: string;
+  plan_id: string;
+}) {
+  return prisma.usage.updateMany({
+    where: {
+      firebase_uid: data.firebase_uid,
+      plan_id: data.plan_id,
+      period_end: {
+        gte: new Date(),
+      },
+    },
+    data: {
+      image_count: {
+        increment: 1,
+      },
+    },
+  });
+}
