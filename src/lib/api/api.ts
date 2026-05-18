@@ -2,10 +2,10 @@ export async function Api(input: RequestInfo, init?: RequestInit) {
   const res = await fetch(input, {
     ...init,
     credentials: 'include',
+    method: init?.method || 'GET',
     headers: {
+      ...(init?.body ? { 'Content-Type': 'application/json' } : {}),
       ...(init?.headers || {}),
-      'Content-Type': 'application/json',
-      method: init?.method || 'GET',
     },
   });
 

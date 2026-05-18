@@ -114,7 +114,27 @@ export async function verify(subscriptionId: string | undefined) {
 }
 
 export async function getCurrentUserSubscription(firebase_uid: string) {
-  return await getSubscriptionByUser(firebase_uid, null, 'ACTIVE');
+  const subscriptions = await getSubscriptionByUser(firebase_uid);
+
+  const now = new Date();
+
+  // 1. Find active paid subscription
+  const paidSubscription = subscriptions.find((sub) => {
+    if (sub.plan.isFree) return false;
+
+    if (!sub.next_billing_date) return false;
+
+    const isActive = sub.next_billing_date.getTime() >= now.getTime();
+
+    return isActive;
+  });
+
+  if (paidSubscription) {
+    return paidSubscription;
+  }
+
+  // 2. Fallback to free plan
+  return subscriptions.find((sub) => sub.plan.isFree);
 }
 
 export async function createSubscriptionService(params: {
