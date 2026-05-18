@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { getUserId } from '@/lib/auth/user';
@@ -44,11 +43,18 @@ export async function cancelSubscriptionAction(formData: FormData) {
 
   const { uid } = await getUserId();
 
-  await requestCancelSubscriptionService({
+  const { success, subscription } = await requestCancelSubscriptionService({
     firebase_uid: uid,
     subscriptionId,
   });
+  if (success && subscription.next_billing_date != null) {
+    const date = new Date(subscription.next_billing_date);
+    const params = new URLSearchParams({
+      next_billing_date: date.toISOString(),
+      plan: subscription.plan.name,
+    });
 
-  // refresh pricing page
-  revalidatePath('/pricing');
+    redirect(`/pricing/cancel?${params.toString()}`);
+  }
+  redirect('/pricing');
 }

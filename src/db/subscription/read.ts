@@ -59,6 +59,9 @@ export async function getUserSubscriptionById(params: {
       firebase_uid: params.firebase_uid,
       paypal_subscription_id: params.paypal_subscription_id,
     },
+    include: {
+      plan: true,
+    },
   });
 }
 

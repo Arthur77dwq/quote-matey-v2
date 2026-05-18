@@ -34,6 +34,10 @@ export interface PaypalVerifyResponse {
   start_time?: string;
 
   billing_info?: {
+    last_payment?: {
+      amount?: { currency_code: string; value: string };
+      time?: string;
+    };
     next_billing_time?: string;
   };
 }

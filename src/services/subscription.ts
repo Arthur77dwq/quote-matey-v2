@@ -152,7 +152,7 @@ export async function createSubscriptionService(params: {
     });
   }
 
-  return { approvalUrl, subscriptionId: id };
+  return { approvalUrl };
 }
 
 export async function requestCancelSubscriptionService(params: {
@@ -177,7 +177,7 @@ export async function requestCancelSubscriptionService(params: {
   // 2. Mark locally (soft state)
   await markCancelAtPeriodEnd(params.firebase_uid, params.subscriptionId);
 
-  return { success: true };
+  return { success: true, subscription: sub };
 }
 
 export async function cancelSubscriptionService(id: string) {

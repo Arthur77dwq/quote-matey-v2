@@ -6,26 +6,31 @@ import { matchRoute } from './lib/utils';
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
-  const pathname = request.nextUrl.pathname;
+  const nextUrl = request.nextUrl;
+  const pathname = nextUrl.pathname;
 
   const isAuthPage = matchRoute(pathname, AUTH_ROUTES);
   const isProtectedPage = matchRoute(pathname, PROTECTED_ROUTES);
 
   const url = new URL('/', request.url);
+  const paramRequirement = !(
+    nextUrl.searchParams.get('subscription_id') &&
+    nextUrl.searchParams.get('ba_token') &&
+    nextUrl.searchParams.get('token')
+  );
 
-  if (
-    request.nextUrl.pathname.includes('/pricing/success') ||
-    request.nextUrl.pathname.includes('/pricing/cancel')
-  ) {
+  if (nextUrl.pathname.includes('/pricing/success'))
+    if (paramRequirement)
+      return NextResponse.redirect(new URL('/pricing', request.url));
+
+  if (nextUrl.pathname.includes('/pricing/cancel'))
     if (
       !(
-        request.nextUrl.searchParams.get('subscription_id') &&
-        request.nextUrl.searchParams.get('ba_token') &&
-        request.nextUrl.searchParams.get('token')
+        nextUrl.searchParams.get('plan') &&
+        nextUrl.searchParams.get('next_billing_date')
       )
     )
       return NextResponse.redirect(new URL('/pricing', request.url));
-  }
 
   if (!token) {
     if (request.url.includes('/chat')) {
