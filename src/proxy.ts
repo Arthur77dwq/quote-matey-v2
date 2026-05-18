@@ -12,6 +12,21 @@ export function proxy(request: NextRequest) {
   const isProtectedPage = matchRoute(pathname, PROTECTED_ROUTES);
 
   const url = new URL('/', request.url);
+
+  if (
+    request.nextUrl.pathname.includes('/pricing/success') ||
+    request.nextUrl.pathname.includes('/pricing/cancel')
+  ) {
+    if (
+      !(
+        request.nextUrl.searchParams.get('subscription_id') &&
+        request.nextUrl.searchParams.get('ba_token') &&
+        request.nextUrl.searchParams.get('token')
+      )
+    )
+      return NextResponse.redirect(new URL('/pricing', request.url));
+  }
+
   if (!token) {
     if (request.url.includes('/chat')) {
       url.searchParams.set('reason', 'unauthorized');
