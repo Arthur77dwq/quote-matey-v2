@@ -1,4 +1,4 @@
-export type Interval = 'MONTH' | 'YEAR';
+export type Interval = 'WEEK' | 'MONTH' | 'YEAR';
 
 export type TenureType = 'REGULAR' | 'TRIAL';
 

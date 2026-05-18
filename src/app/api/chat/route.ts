@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { MODELS, SYSTEM_PROMPT } from '@/constant/ai';
 import { withAuth } from '@/lib/auth/withAuth';
 import { canUserUseFeature } from '@/services/access';
+import { updateUsage } from '@/services/usage';
 import { ApiError, Message } from '@/types/chat';
 
 export const maxDuration = 60;
@@ -158,8 +159,13 @@ export async function POST(request: NextRequest) {
         const result = await tryModels(ai, prompt);
 
         if (result) {
+          await updateUsage();
           return NextResponse.json({ content: result });
         }
+      } else {
+        return NextResponse.json({
+          content: 'Usage limit exceed.',
+        });
       }
 
       return NextResponse.json({

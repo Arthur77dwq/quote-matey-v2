@@ -2,7 +2,7 @@ import { CreatePaypalPlanBody, PaypalPlanResponse } from '@/types/paypal/plan';
 
 import { paypalHttp } from './http';
 
-type Interval = 'MONTH' | 'YEAR';
+type Interval = 'WEEK' | 'MONTH' | 'YEAR';
 
 export async function createPlan(params: {
   productId: string;

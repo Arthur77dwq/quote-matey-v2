@@ -11,6 +11,7 @@ const log = (message: string) => {
   }
 };
 
+type Interval = 'WEEK' | 'MONTH' | 'YEAR';
 export async function seedPlans() {
   let productId: string;
 
@@ -73,7 +74,7 @@ export async function seedPlans() {
 
         currency: plan.pricing.currency,
 
-        interval: 'MONTH',
+        interval: plan.period as Interval,
       });
 
       if (!paypalPlanId) {
@@ -140,7 +141,7 @@ export async function seedPlans() {
           plan_id_interval: {
             plan_id: dbId,
 
-            interval: 'WEEK',
+            interval: plan.period as Interval,
           },
         },
 
@@ -157,7 +158,7 @@ export async function seedPlans() {
 
           image_limit: isFree ? 1 : -1,
 
-          interval: 'WEEK',
+          interval: plan.period as Interval,
         },
       });
     });

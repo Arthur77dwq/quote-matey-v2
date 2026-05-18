@@ -14,7 +14,7 @@ export async function canUserUseFeature(params: {
 
     const usage = await getUserUsage(params.firebase_uid, sub.plan_id);
     const limit = await getPlanLimit(sub.plan_id);
-
+    // console.log(sub.plan_id, usage, limit);
     if (!usage || !limit) return false;
 
     if (params.type === 'text') {

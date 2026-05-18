@@ -10,7 +10,7 @@ export const plans: SubscriptionPlan[] = [
       tranding: false,
     },
     pricing: { price: '$0', currency: 'AUD' },
-    period: 'month',
+    period: 'WEEK',
     description: 'Designed for trial users and light use.',
     features: [
       { icon: 'image', text: '1 Image quote/week', included: true },
@@ -38,7 +38,7 @@ export const plans: SubscriptionPlan[] = [
       tranding: true,
     },
     pricing: { price: '$29', currency: 'AUD' },
-    period: 'month',
+    period: 'MONTH',
     description: 'Designed for working tradies using it daily.',
     features: [
       { icon: 'image', text: 'Unlimited Image quote', included: true },

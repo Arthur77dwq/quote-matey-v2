@@ -1,4 +1,5 @@
 import { getPlanById } from '@/db/plan/read';
+import { getPlanLimit } from '@/db/planLimit/read';
 import {
   createPendingSubscription,
   getSubscriptionByUser,
@@ -15,6 +16,8 @@ import {
   deactivateOtherActiveSubscriptions,
   markCancelAtPeriodEnd,
 } from '@/db/subscription/update';
+import { createUsage } from '@/db/usage';
+import { getUserUsage } from '@/db/usage/read';
 import { withAuth } from '@/lib/auth/withAuth';
 import { cancelSubscription, createSubscription } from '@/lib/paypal';
 import { paypalHttp } from '@/lib/paypal/http';
@@ -170,6 +173,25 @@ export async function createSubscriptionService(params: {
         },
       },
     });
+
+    const now = new Date();
+    const nextMonth = new Date(now);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+    const availableUsage = await getUserUsage(params.firebase_uid, plan.id);
+    if (availableUsage) {
+      const limit = await getPlanLimit(plan.id);
+      if (limit)
+        await createUsage({
+          firebase_uid: params.firebase_uid,
+          plan_id: plan.id,
+          period_start: now,
+          period_end:
+            limit.interval === 'WEEK'
+              ? new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+              : nextMonth,
+        });
+    }
   }
 
   return { approvalUrl };
