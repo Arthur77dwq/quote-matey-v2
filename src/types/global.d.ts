@@ -37,3 +37,7 @@ declare global {
     gtag?: (...args: unknown[]) => void;
   }
 }
+
+export type PreviewFile = File & {
+  preview: string;
+};

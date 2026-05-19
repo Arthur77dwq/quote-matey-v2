@@ -1,13 +1,16 @@
 'use client';
 
-import { Bot, Check, Copy, Loader2, Send, User } from 'lucide-react';
+import { Bot, Check, Copy, Loader2, Plus, Send, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
+import ImagePreview from '@/components/ui/images-preview-grid';
 import { Api } from '@/lib/api';
 import { Message } from '@/types/chat';
+import { PreviewFile } from '@/types/global';
 
 function ChatContent() {
   const searchParams = useSearchParams();
@@ -20,6 +23,30 @@ function ChatContent() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
+  const [files, setFiles] = useState<PreviewFile[]>([]);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const mapped = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      }),
+    );
+
+    setFiles((prev) => [...prev, ...mapped]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    accept: {
+      'image/*': [],
+    },
+    multiple: true,
+  });
+
+  const handelRemoveFile = (i: number) => {
+    setFiles((prev) => prev.filter((_, index) => index !== i));
+  };
 
   const handleSendMessage = async (text: string) => {
     const trimmedText = text.trim();
@@ -146,12 +173,23 @@ function ChatContent() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       <ChatNavbar />
+
+      {isDragActive && (
+        <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
+          <div className="flex flex-col justify-center items-center">
+            <p className="text-lg font-medium">Drop images here</p>
+          </div>
+        </div>
+      )}
+
       <div
+        {...getRootProps()}
         className={twMerge(
           'flex flex-col h-screen w-full',
           messages?.length > 0 ? 'justify-start' : 'justify-center',
         )}
       >
+        <input {...getInputProps()} />
         {/* Chat Container */}
         {messages?.length > 0 ? (
           <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full pt-20 lg:pt-24 pb-32">
@@ -260,7 +298,20 @@ function ChatContent() {
             ) : null}
 
             <form onSubmit={handleSubmit} className="relative">
-              <div className="flex items-end gap-3 bg-white border border-border/80 rounded-2xl shadow-lg p-2">
+              {/* Preview Grid */}
+              <ImagePreview files={files} removeFile={handelRemoveFile} />
+              <div className="relative flex items-end gap-3 bg-white border border-border/80 rounded-2xl shadow-lg p-2">
+                <button
+                  onClick={open}
+                  // disabled={isLoading}
+                  className="cursor-pointer shrink-0 w-12 h-12 rounded-full text-black flex items-center justify-center hover:opacity-90 transition-all"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Plus />
+                  )}
+                </button>
                 <textarea
                   ref={inputRef}
                   value={input}
