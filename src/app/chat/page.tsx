@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge';
 import { ChatNavbar } from '@/components/chat-navbar';
 import ImagePreview from '@/components/ui/images-preview-grid';
 import { Api } from '@/lib/api';
+import { compressImage } from '@/lib/utils/compress-image';
 import { Message } from '@/types/chat';
 import { PreviewFile } from '@/types/global';
 
@@ -25,14 +26,19 @@ function ChatContent() {
   const isLoadingRef = useRef(false);
   const [files, setFiles] = useState<PreviewFile[]>([]);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const mapped = acceptedFiles.map((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const compressedFiles = await Promise.all(
+      acceptedFiles.map(async (file) => {
+        const compressed = await compressImage(file);
+
+        return Object.assign(compressed, {
+          preview: URL.createObjectURL(compressed),
+          id: crypto.randomUUID(),
+        });
       }),
     );
 
-    setFiles((prev) => [...prev, ...mapped]);
+    setFiles((prev) => [...prev, ...compressedFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
