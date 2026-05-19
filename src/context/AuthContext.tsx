@@ -1,13 +1,14 @@
 'use client';
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  onIdTokenChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
   updateProfile,
+  type User as FirebaseUser,
 } from 'firebase/auth';
 import {
   createContext,
@@ -19,13 +20,17 @@ import {
 
 import { removeAuthCookie, setAuthCookie } from '@/app/actions/auth';
 import { getFirebaseAuth, getGoogleProvider } from '@/config/firebase';
+import { apiJson } from '@/lib/api';
 import { getFirebaseErrorMessage } from '@/lib/errors/firebase-error';
 import { AuthContextType, User } from '@/types/global';
+import { Subscription } from '@/types/subscription';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<
+    (User & { subscription: Subscription | null }) | null
+  >(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const auth = getFirebaseAuth();
@@ -36,23 +41,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     message: 'Auth not initialized',
   };
 
+  async function handleAuthStateChange(firebaseUser: FirebaseUser | null) {
+    try {
+      if (!firebaseUser) {
+        setUser(null);
+        await removeAuthCookie();
+        return;
+      }
+
+      const token = await firebaseUser.getIdToken();
+      await setAuthCookie(token);
+
+      // Default user state
+      let subscription: Subscription | null = null;
+      try {
+        subscription = await apiJson<Subscription>('/api/user', {
+          method: 'POST',
+        });
+      } catch {
+        // Intentionally ignored
+      } finally {
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email || '',
+          displayName: firebaseUser.displayName || '',
+          photoURL: firebaseUser.photoURL || '',
+          token,
+          subscription,
+        });
+      }
+    } catch {
+      setUser(null);
+
+      await removeAuthCookie();
+    }
+  }
   useEffect(() => {
     if (auth) {
-      const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        const token = await firebaseUser?.getIdToken();
-
-        if (token) {
-          setUser({
-            uid: firebaseUser?.uid || '',
-            email: firebaseUser?.email || '',
-            displayName: firebaseUser?.displayName || '',
-            photoURL: firebaseUser?.photoURL || '',
-            token,
-          });
-          await setAuthCookie(token);
-        } else {
-          await removeAuthCookie();
-        }
+      const unSubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
+        await handleAuthStateChange(firebaseUser);
       });
 
       return () => unSubscribe();

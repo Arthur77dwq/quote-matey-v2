@@ -58,14 +58,29 @@ function Carousel({
     },
     plugins,
   );
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
+  // 🔥 Force re-render when Embla state changes
+  const [, forceUpdate] = React.useState(0);
+
+  React.useEffect(() => {
     if (!api) return;
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, []);
+
+    const onSelect = () => {
+      forceUpdate((x) => x + 1);
+    };
+
+    api.on('select', onSelect);
+    api.on('reInit', onSelect);
+
+    return () => {
+      api.off('select', onSelect);
+      api.off('reInit', onSelect);
+    };
+  }, [api]);
+
+  // 🔥 Derived values (no state)
+  const canScrollPrev = api?.canScrollPrev() ?? false;
+  const canScrollNext = api?.canScrollNext() ?? false;
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev();
@@ -88,27 +103,17 @@ function Carousel({
     [scrollPrev, scrollNext],
   );
 
+  // 🔹 expose API externally
   React.useEffect(() => {
     if (!api || !setApi) return;
     setApi(api);
   }, [api, setApi]);
 
-  React.useEffect(() => {
-    if (!api) return;
-    onSelect(api);
-    api.on('reInit', onSelect);
-    api.on('select', onSelect);
-
-    return () => {
-      api?.off('select', onSelect);
-    };
-  }, [api, onSelect]);
-
   return (
     <CarouselContext.Provider
       value={{
         carouselRef,
-        api: api,
+        api,
         opts,
         orientation:
           orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
@@ -119,8 +124,9 @@ function Carousel({
       }}
     >
       <div
+        ref={carouselRef}
         onKeyDownCapture={handleKeyDown}
-        className={cn('relative', className)}
+        className={cn('relative overflow-hidden', className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"

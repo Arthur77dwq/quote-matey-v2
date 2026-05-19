@@ -5,6 +5,7 @@
     "eamodio.gitlens",
     "usernamehw.errorlens",
     "christian-kohler.path-intellisense",
+    "bradlc.vscode-tailwindcss",
     "wix.vscode-import-cost",
     "gruntfuggly.todo-tree"
   ]

@@ -2,6 +2,9 @@ import { GoogleGenAI } from '@google/genai';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { MODELS, SYSTEM_PROMPT } from '@/constant/ai';
+import { withAuth } from '@/lib/auth/withAuth';
+import { canUserUseFeature } from '@/services/access';
+import { updateUsage } from '@/services/usage';
 import { ApiError, Message } from '@/types/chat';
 
 export const maxDuration = 60;
@@ -123,42 +126,55 @@ async function tryModels(
 
 // MAIN HANDLER
 export async function POST(request: NextRequest) {
-  try {
-    const { messages } = await request.json();
-    const userMessage = extractUserMessage(messages);
+  return withAuth(async (uid) => {
+    try {
+      const { messages } = await request.json();
+      const userMessage = extractUserMessage(messages);
 
-    if (
-      !userMessage ||
-      typeof userMessage !== 'string' ||
-      (typeof userMessage === 'string' && userMessage.trim() === '')
-    ) {
+      if (
+        !userMessage ||
+        typeof userMessage !== 'string' ||
+        (typeof userMessage === 'string' && userMessage.trim() === '')
+      ) {
+        return NextResponse.json({
+          content: 'Need more details to provide a quote.',
+        });
+      }
+      const isAvailable = await canUserUseFeature({
+        firebase_uid: uid,
+        type: 'text',
+      });
+
+      if (isAvailable) {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+          return NextResponse.json({
+            content: 'Something went wrong, Try again after some time.',
+          });
+        }
+
+        const ai = new GoogleGenAI({ apiKey });
+        const prompt = buildPrompt(userMessage);
+
+        const result = await tryModels(ai, prompt);
+
+        if (result) {
+          await updateUsage('text');
+          return NextResponse.json({ content: result });
+        }
+      } else {
+        return NextResponse.json({
+          content: 'Usage limit exceed.',
+        });
+      }
+
       return NextResponse.json({
-        content: 'Need more details to provide a quote.',
+        content: '⚠️ High demand right now. Try again in a few seconds.',
+      });
+    } catch {
+      return NextResponse.json({
+        content: '❌ Something went wrong. Please try again.',
       });
     }
-
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      return NextResponse.json({
-        content: 'No API key available',
-      });
-    }
-
-    const ai = new GoogleGenAI({ apiKey });
-    const prompt = buildPrompt(userMessage);
-
-    const result = await tryModels(ai, prompt);
-
-    if (result) {
-      return NextResponse.json({ content: result });
-    }
-
-    return NextResponse.json({
-      content: '⚠️ High demand right now. Try again in a few seconds.',
-    });
-  } catch {
-    return NextResponse.json({
-      content: '❌ Something went wrong. Please try again.',
-    });
-  }
+  });
 }
