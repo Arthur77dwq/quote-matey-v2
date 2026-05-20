@@ -24,7 +24,7 @@ import { NextRequest } from 'next/server';
 
 import {
   buildPrompt,
-  extractUserMessage,
+  extractCurrectMessage,
   getApiKey,
   POST,
 } from '@/app/api/chat/route';
@@ -68,10 +68,10 @@ describe('Chat API', () => {
 
     test('TC-01: Should extract user message.', () => {
       const mockMessages: Message[] = [
-        { role: 'user', content: 'leaking tap' },
+        { id: '1', role: 'user', parts: [{ text: 'leaking tap' }] },
       ];
 
-      const userMessage = extractUserMessage(mockMessages);
+      const userMessage = extractCurrectMessage(mockMessages);
 
       expect(userMessage).toBe('leaking tap');
     });
@@ -85,7 +85,7 @@ describe('Chat API', () => {
     });
 
     test('TC-03: Should build prompt which contains user message.', () => {
-      const prompt = buildPrompt('Fix AC');
+      const prompt = buildPrompt('Fix AC', false);
 
       expect(prompt).toContain('Fix AC');
       expect(prompt).toContain('[SYSTEM]');

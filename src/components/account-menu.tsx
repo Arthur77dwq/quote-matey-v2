@@ -1,4 +1,4 @@
-import { KeyRound, LogOut as LogOutIcon } from 'lucide-react';
+import { KeyRound, LogOut as LogOutIcon, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -52,6 +52,16 @@ export function AccountMenu({ user, logOut }: Props) {
             </p>
           </div>
 
+          <Link
+            href="/reset-password"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-red-50 transition group"
+          >
+            <Sparkles
+              size={16}
+              className="text-gray-500 group-hover:text-amber-500"
+            />
+            <span className="group-hover:text-amber-500">Upgrade Plan</span>
+          </Link>
           <Link
             href="/reset-password"
             className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-red-50 transition group"

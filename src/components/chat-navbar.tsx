@@ -13,7 +13,7 @@ export function ChatNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border/50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-[72px]">
+        <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Back to Home */}
           <Link
             href="/"
