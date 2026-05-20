@@ -3,27 +3,40 @@ import { getUserUsage } from '@/db/usage/read';
 
 import { getCurrentUserSubscription } from './subscription';
 
-export async function canUserUseFeature(params: {
+export async function canUserUseFeature({
+  firebase_uid,
+  image = false,
+  text = false,
+}: {
   firebase_uid: string;
-  type: 'text' | 'image';
+  image?: boolean;
+  text?: boolean;
 }) {
-  if (params.firebase_uid) {
-    const sub = await getCurrentUserSubscription(params.firebase_uid);
+  const sub = await getCurrentUserSubscription(firebase_uid);
 
-    if (!sub) return false;
-
-    const usage = await getUserUsage(params.firebase_uid, sub.plan_id);
-    const limit = await getPlanLimit(sub.plan_id);
-    if (!usage || !limit) return false;
-
-    if (params.type === 'text') {
-      return usage.text_count < limit.text_limit;
-    }
-
-    if (params.type === 'image') {
-      return usage.image_count < limit.image_limit;
-    }
-
+  if (!sub) {
     return false;
   }
+
+  const usage = await getUserUsage(firebase_uid, sub.plan_id);
+
+  const limit = await getPlanLimit(sub.plan_id);
+
+  if (!usage || !limit) {
+    return false;
+  }
+
+  const canUseImage = usage.image_count < limit.image_limit;
+
+  const canUseText = usage.text_count < limit.text_limit;
+
+  if (image && !canUseImage) {
+    return false;
+  }
+
+  if (text && !canUseText) {
+    return false;
+  }
+
+  return true;
 }

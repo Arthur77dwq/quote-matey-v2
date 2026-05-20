@@ -40,4 +40,5 @@ declare global {
 
 export type PreviewFile = File & {
   preview: string;
+  base64: string;
 };
