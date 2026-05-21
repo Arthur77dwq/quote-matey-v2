@@ -53,7 +53,7 @@ export function AccountMenu({ user, logOut }: Props) {
           </div>
 
           <Link
-            href="/reset-password"
+            href="/pricing"
             className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-red-50 transition group"
           >
             <Sparkles
