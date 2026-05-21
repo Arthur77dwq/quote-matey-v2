@@ -55,8 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Default user state
       let subscription: Subscription | null = null;
       try {
-        subscription = await apiJson<Subscription>('/api/user', {
+        subscription = await await apiJson('/api/user', {
           method: 'POST',
+          token,
         });
       } catch {
         // Intentionally ignored

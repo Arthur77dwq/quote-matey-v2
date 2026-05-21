@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import { firebaseAdmin } from '@/lib/firebase/admin';
+import { verify } from './verify';
 
 export async function getUserId(token?: string) {
   if (!token) {
@@ -13,8 +13,7 @@ export async function getUserId(token?: string) {
   }
 
   try {
-    const decoded = await firebaseAdmin.auth().verifyIdToken(token);
-    return decoded;
+    return await verify(token);
   } catch {
     throw new Error('Unauthorized');
   }

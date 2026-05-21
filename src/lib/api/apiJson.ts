@@ -1,14 +1,33 @@
+type ApiJsonOptions = RequestInit & {
+  token?: string;
+};
+
 import { Api } from '.';
 
 export async function apiJson<T>(
   input: RequestInfo,
-  init?: RequestInit,
+  init?: ApiJsonOptions,
 ): Promise<T> {
-  const res = await Api(input, init);
+  const { token, headers, ...rest } = init || {};
 
-  if (!res.ok) {
-    throw new Error(`API request failed with status ${res.status}`);
-  }
+  const normalizedHeaders =
+    headers instanceof Headers
+      ? Object.fromEntries(headers.entries())
+      : Array.isArray(headers)
+        ? Object.fromEntries(headers)
+        : headers || {};
+
+  const res = await Api(input, {
+    ...rest,
+    headers: {
+      ...normalizedHeaders,
+      ...(token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {}),
+    },
+  });
 
   return (await res.json()) as T;
 }
