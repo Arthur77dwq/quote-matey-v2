@@ -1,13 +1,19 @@
 'use client';
 
-import { Bot, Check, Copy, Loader2, Send, User } from 'lucide-react';
+import { Bot, Check, Copy, Loader2, Plus, Send, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
+import ImagePreview from '@/components/ui/images-preview-grid';
+import UsageLimitNotification from '@/components/ui/usage-limit-notification';
 import { Api } from '@/lib/api';
-import { Message } from '@/types/chat';
+import { compressImage } from '@/lib/utils/compress-image';
+import { fileToBase64 } from '@/lib/utils/image-to-base64';
+import { Message, Part } from '@/types/chat';
+import { PreviewFile } from '@/types/global';
 
 function ChatContent() {
   const searchParams = useSearchParams();
@@ -20,10 +26,69 @@ function ChatContent() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
+  const [files, setFiles] = useState<PreviewFile[]>([]);
+
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const compressedFiles = await Promise.all(
+      acceptedFiles.map(async (file) => {
+        const compressed = await compressImage(file);
+
+        return Object.assign(compressed, {
+          preview: URL.createObjectURL(compressed),
+          base64: await fileToBase64(compressed),
+        });
+      }),
+    );
+    setFiles((prev) => [...prev, ...compressedFiles]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    accept: {
+      'image/*': [],
+    },
+    multiple: true,
+  });
+
+  const handleRemoveFile = (i: number) => {
+    setFiles((prev) => prev.filter((_, index) => index !== i));
+  };
+
+  const prepareParts = (
+    images: PreviewFile[] | null,
+    videos: PreviewFile[] | null,
+    text: string | null,
+  ) => {
+    const parts: Part[] = [];
+
+    if (text) parts.push({ text: text });
+    if (images !== null && images.length > 0)
+      parts.push(
+        ...images.map((image) => ({
+          inlineData: {
+            mimeType: 'image/jpeg',
+            data: image.base64,
+          },
+        })),
+      );
+
+    // VIDEO NOT SUPPORTED YET
+    if (videos !== null && videos.length > 0)
+      parts.push(
+        ...videos.map((video) => ({
+          inlineData: {
+            mimeType: 'video/mp4',
+            data: video.base64,
+          },
+        })),
+      );
+
+    return parts;
+  };
 
   const handleSendMessage = async (text: string) => {
-    const trimmedText = text.trim();
-    if (!trimmedText) return;
+    const trimmedText = text.trim() || null;
 
     // Prevent duplicate calls using ref (survives re-renders)
     if (isLoadingRef.current) return;
@@ -33,7 +98,7 @@ function ChatContent() {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: trimmedText,
+      parts: prepareParts(files, null, trimmedText),
     };
 
     // Build messages array directly instead of relying on state update
@@ -41,16 +106,13 @@ function ChatContent() {
 
     // Update state
     setMessages(currentMessages);
-
+    setFiles([]);
     try {
       const response = await Api('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: currentMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
+          messages: currentMessages,
         }),
       });
 
@@ -64,8 +126,8 @@ function ChatContent() {
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
+        ...data,
         role: 'assistant',
-        content: data.content,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -92,7 +154,7 @@ function ChatContent() {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: errorContent,
+        parts: [{ text: errorContent }],
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -124,9 +186,16 @@ function ChatContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading || isLoadingRef.current) return;
+    if (
+      files.length === 0 &&
+      (!input.trim() || isLoading || isLoadingRef.current)
+    ) {
+      return;
+    }
+
     const messageToSend = input;
     setInput('');
+    if (inputRef.current) inputRef.current.style.height = 'auto';
     handleSendMessage(messageToSend);
   };
 
@@ -146,12 +215,28 @@ function ChatContent() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       <ChatNavbar />
+
+      {isDragActive && (
+        <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
+          <div className="flex flex-col justify-center items-center">
+            <p className="text-lg font-medium">Drop images here</p>
+          </div>
+        </div>
+      )}
+
       <div
+        {...getRootProps()}
         className={twMerge(
           'flex flex-col h-screen w-full',
           messages?.length > 0 ? 'justify-start' : 'justify-center',
         )}
       >
+        <input
+          {...getInputProps({
+            accept: 'image/*',
+            capture: 'environment',
+          })}
+        />
         {/* Chat Container */}
         {messages?.length > 0 ? (
           <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full pt-20 lg:pt-24 pb-32">
@@ -166,56 +251,97 @@ function ChatContent() {
                       key={message.id}
                       className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
                     >
-                      {!isUser && (
-                        <div className="shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
-                          <Bot className="w-5 h-5 text-white" />
-                        </div>
-                      )}
-
-                      <div
-                        className={`relative max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-4 ${
-                          isUser
-                            ? 'bg-[#0a1628] text-white'
-                            : 'bg-white border border-border/80 shadow-lg'
-                        }`}
-                      >
-                        <div
-                          className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
-                        >
-                          {message.content}
-                        </div>
-
-                        {/* Copy button for assistant messages */}
-                        {!isUser && message.content && (
-                          <button
-                            onClick={() =>
-                              copyToClipboard(
-                                message.content,
-                                message?.id || '',
-                              )
+                      <div className="flex flex-row items-end gap-1.5 max-w-2/3">
+                        {!isUser && (
+                          <div className="shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-[#0a1628] to-[#1a3a5c] flex items-center justify-center shadow-lg">
+                            <Bot className="w-5 h-5 text-white" />
+                          </div>
+                        )}
+                        <div className="flex flex-col-reverse gap-1 items-end">
+                          {message?.notification && (
+                            <UsageLimitNotification
+                              variant="compact"
+                              info={message.notification.info_text}
+                              link_text={message.notification.link_text}
+                              href="/pricing"
+                            />
+                          )}
+                          {message?.parts?.map((part: Part, i: number) => {
+                            if ('inlineData' in part) {
+                              if (part.inlineData.mimeType === 'image/jpeg') {
+                                return (
+                                  <img
+                                    key={`${i}${message.id}img`}
+                                    src={`data:image/jpeg;base64,${part.inlineData.data}`}
+                                    className="rounded-2xl size-30 object-cover"
+                                  />
+                                );
+                              } else {
+                                return (
+                                  <video
+                                    className="rounded-2xl size-30"
+                                    key={`${i}${message.id}`}
+                                  >
+                                    <source
+                                      src={part.inlineData.data}
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                );
+                              }
                             }
-                            className="absolute -bottom-3 right-4 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
-                          >
-                            {copiedId === message.id ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 text-green-500" />
-                                Copied!
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5" />
-                                Copy Quote
-                              </>
-                            )}
-                          </button>
+
+                            if ('text' in part)
+                              return (
+                                <div
+                                  key={`${i}${message.id}`}
+                                  className={`relative rounded-2xl px-5 py-2 min-h-10 flex justify-center items-center ${
+                                    isUser
+                                      ? 'bg-[#0a1628] text-white'
+                                      : 'bg-white border border-border/80 shadow-lg'
+                                  }`}
+                                >
+                                  <div
+                                    className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
+                                  >
+                                    {part?.text}
+                                  </div>
+
+                                  {/* Copy button for assistant messages */}
+                                  {!isUser && part.text && (
+                                    <button
+                                      onClick={() =>
+                                        copyToClipboard(
+                                          part.text,
+                                          message?.id || '',
+                                        )
+                                      }
+                                      className="absolute -bottom-8 left-0 flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
+                                    >
+                                      {copiedId === message.id ? (
+                                        <>
+                                          <Check className="w-3.5 h-3.5 text-green-500" />
+                                          Copied!
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3.5 h-3.5" />
+                                          Copy Quote
+                                        </>
+                                      )}
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                          })}
+                        </div>
+
+                        {isUser && (
+                          <div className="shrink-0 w-10 h-10 rounded-xl bg-[#f57a0a] flex items-center justify-center shadow-lg">
+                            <User className="w-5 h-5 text-white" />
+                          </div>
                         )}
                       </div>
-
-                      {isUser && (
-                        <div className="shrink-0 w-10 h-10 rounded-xl bg-[#f57a0a] flex items-center justify-center shadow-lg">
-                          <User className="w-5 h-5 text-white" />
-                        </div>
-                      )}
                     </div>
                   );
                 })}
@@ -259,35 +385,48 @@ function ChatContent() {
               </h1>
             ) : null}
 
-            <form onSubmit={handleSubmit} className="relative">
-              <div className="flex items-end gap-3 bg-white border border-border/80 rounded-2xl shadow-lg p-2">
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Describe the job... (e.g., 'Leaking tap, need new fitting')"
-                  rows={1}
-                  disabled={isLoading}
-                  className="flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-12 max-h-32"
-                  style={{ height: 'auto' }}
-                  onInput={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    target.style.height = 'auto';
-                    target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
-                  }}
-                />
-                <button
-                  type="submit"
-                  disabled={!input.trim() || isLoading}
-                  className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <Send className="w-5 h-5" />
-                  )}
-                </button>
+            <form onSubmit={handleSubmit}>
+              {/* Preview Grid */}
+              <div className="flex flex-col p-2 gap-3 bg-white border border-border/80 rounded-2xl shadow-lg">
+                <ImagePreview files={files} removeFile={handleRemoveFile} />
+                <div className="flex items-end gap-3 w-full">
+                  <button
+                    onClick={open}
+                    disabled={isLoading}
+                    className="cursor-pointer shrink-0 w-12 h-12 rounded-full text-black flex items-center justify-center hover:opacity-90 transition-all"
+                  >
+                    <Plus />
+                  </button>
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Describe the job... (e.g., 'Leaking tap, need new fitting')"
+                    rows={1}
+                    disabled={isLoading}
+                    className="flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-12 max-h-32"
+                    style={{ height: 'auto' }}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={
+                      (!input.trim() && files.length === 0) || isLoading
+                    }
+                    className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
               <p className="text-center text-xs text-muted-foreground mt-3">
                 QuoteMatey provides rough estimates only. Always review before

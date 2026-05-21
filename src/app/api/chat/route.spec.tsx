@@ -17,14 +17,17 @@ vi.mock('@/constant/ai', () => ({
     { model: 'model-1', maxOutputTokens: 1000 },
     { model: 'model-2', maxOutputTokens: 1000 },
   ],
-  SYSTEM_PROMPT: 'test',
+  SYSTEM_PROMPTS: {
+    text: 'test prompt',
+    image: 'test image prompt',
+  },
 }));
 
 import { NextRequest } from 'next/server';
 
 import {
   buildPrompt,
-  extractUserMessage,
+  extractCurrectMessage,
   getApiKey,
   POST,
 } from '@/app/api/chat/route';
@@ -35,6 +38,14 @@ function createRequest<T>(body: T): NextRequest {
     json: async () => body,
   } as unknown as NextRequest;
 }
+
+function createTextMsg(msg: string) {
+  return [{ id: `1${msg}`, role: 'user', parts: [{ text: msg }] }];
+}
+
+const findTextpart = (parts: Message[]) => {
+  return parts.find((part) => 'text' in part) || { text: '' };
+};
 
 vi.mock('@/services/usage', () => ({
   updateUsage: vi.fn(),
@@ -48,6 +59,7 @@ vi.mock('@/services/access', () => ({
   canUserUseFeature: vi.fn(),
 }));
 
+import { MODELS } from '@/constant/ai';
 import { getUserId } from '@/lib/auth/user';
 import { canUserUseFeature } from '@/services/access';
 import { updateUsage } from '@/services/usage';
@@ -56,6 +68,7 @@ describe('Chat API', () => {
   const expectedErrorMessage = 'High demand';
   describe('Core Functionality', () => {
     beforeEach(() => {
+      vi.useFakeTimers();
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
 
@@ -68,12 +81,12 @@ describe('Chat API', () => {
 
     test('TC-01: Should extract user message.', () => {
       const mockMessages: Message[] = [
-        { role: 'user', content: 'leaking tap' },
+        { id: '1', role: 'user', parts: [{ text: 'leaking tap' }] },
       ];
 
-      const userMessage = extractUserMessage(mockMessages);
+      const userMessage = extractCurrectMessage(mockMessages);
 
-      expect(userMessage).toBe('leaking tap');
+      expect(userMessage.msg).toBe('leaking tap');
     });
 
     test('TC-02: Should fetch api key from environment variables.', () => {
@@ -85,7 +98,7 @@ describe('Chat API', () => {
     });
 
     test('TC-03: Should build prompt which contains user message.', () => {
-      const prompt = buildPrompt('Fix AC');
+      const prompt = buildPrompt('Fix AC', false);
 
       expect(prompt).toContain('Fix AC');
       expect(prompt).toContain('[SYSTEM]');
@@ -96,7 +109,7 @@ describe('Chat API', () => {
       mockGenerate.mockResolvedValue({ text: 'Quote generated' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'Need plumbing work' }],
+        messages: createTextMsg('Need plumbing work'),
       });
 
       await POST(req);
@@ -113,13 +126,139 @@ describe('Chat API', () => {
       mockGenerate.mockResolvedValue({ text: 'Final quote' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'Need electrician' }],
+        messages: createTextMsg('Need electrician'),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('Final quote');
+      expect(findTextpart(data.parts).text).toBe('Final quote');
+    });
+
+    test('TC-31: Should use backup api key if primary missing', () => {
+      process.env.GEMINI_API_KEY = '';
+      process.env.GEMINI_API_KEY_BACKUP = 'backup-key';
+
+      expect(getApiKey()).toBe('backup-key');
+    });
+
+    test('TC-32: Returns error if no api key available', async () => {
+      process.env.GEMINI_API_KEY = '';
+      process.env.GEMINI_API_KEY_BACKUP = '';
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(findTextpart(data.parts).text).toContain('Something went wrong');
+    });
+
+    test('TC-33: Returns upgrade notification when usage exceeded', async () => {
+      vi.mocked(canUserUseFeature).mockResolvedValue(false);
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.notification.link_text).toBe('Upgrade');
+      expect(data.notification.info_text).toContain('Usage limit exceed');
+    });
+
+    test('TC-34: Handles image-only input', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Image processed' });
+
+      const req = createRequest({
+        messages: [
+          {
+            role: 'user',
+            parts: [
+              {
+                inlineData: {
+                  mimeType: 'image/jpeg',
+                  data: 'base64-image',
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.parts[0].text).toBe('Image processed');
+    });
+
+    test('TC-35: Replaces user text with built prompt', async () => {
+      mockGenerate.mockResolvedValue({ text: 'ok' });
+
+      const req = createRequest({
+        messages: createTextMsg('Need plumber'),
+      });
+
+      await POST(req);
+
+      const args = mockGenerate.mock.calls[0][0];
+
+      expect(args.contents[0].parts[0].text).toContain('[SYSTEM]');
+    });
+
+    test('TC-36: Updates usage after successful response', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Success' });
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      await POST(req);
+
+      expect(updateUsage).toHaveBeenCalledWith(['text']);
+    });
+
+    test('TC-37: Does not update usage on failed generation', async () => {
+      mockGenerate.mockRejectedValue({ status: 503 });
+
+      const req = createRequest({
+        messages: createTextMsg('fail'),
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      await resPromise;
+
+      expect(updateUsage).not.toHaveBeenCalled();
+    });
+
+    test('TC-38: Handles image and text together', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Handled mixed input' });
+
+      const req = createRequest({
+        messages: [
+          {
+            role: 'user',
+            parts: [
+              { text: 'Fix this issue' },
+              {
+                inlineData: {
+                  mimeType: 'image/jpeg',
+                  data: 'abc',
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.parts[0].text).toBe('Handled mixed input');
     });
   });
 
@@ -141,7 +280,7 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-07: Returns error if messages is undefined', async () => {
@@ -150,7 +289,7 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain('Something went wrong. ');
     });
 
     test('TC-08: Returns error if no user message present', async () => {
@@ -161,7 +300,7 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-09: Returns error if user message is empty', async () => {
@@ -172,29 +311,32 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain('Something went wrong.');
     });
 
     test('TC-10: Handles null content safely', async () => {
       const req = createRequest({
-        messages: [{ role: 'user', content: null }],
+        messages: [{ role: 'user', parts: [{ text: null }] }],
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-11: Handles non-string user content', async () => {
+      mockGenerate.mockResolvedValue({
+        text: 'Handled numeric content',
+      });
       const req = createRequest({
-        messages: [{ role: 'user', content: 12345 }],
+        messages: [{ role: 'user', parts: [{ text: 12345 }] }],
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain('Something went wrong.');
+      expect(findTextpart(data.parts).text).toBe('Handled numeric content');
     });
 
     test('TC-12: Handles invalid messages type (not array)', async () => {
@@ -205,21 +347,25 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toContain('Something went wrong.');
+      expect(findTextpart(data.parts).text).toContain('Something went wrong.');
     });
 
     test('TC-13: Handles very long input safely', async () => {
       const longText = 'a'.repeat(10000);
 
+      mockGenerate.mockResolvedValue({
+        text: 'ok',
+      });
+
       const req = createRequest({
-        messages: [{ role: 'user', content: longText }],
+        messages: createTextMsg(longText),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      // Should not crash; response should exist
-      expect(data).toHaveProperty('content');
+      expect(data.parts.length).toBeGreaterThan(0);
+      expect(findTextpart(data.parts).text).toBe('ok');
     });
   });
 
@@ -245,7 +391,7 @@ describe('Chat API', () => {
       const req = createRequest({
         messages: [
           { role: 'user', content: 'first' },
-          { role: 'user', content: 'second' },
+          ...createTextMsg('second'),
         ],
       });
 
@@ -253,7 +399,16 @@ describe('Chat API', () => {
 
       expect(mockGenerate).toHaveBeenCalledWith(
         expect.objectContaining({
-          contents: expect.stringContaining('second'),
+          contents: expect.arrayContaining([
+            expect.objectContaining({
+              role: 'user',
+              parts: expect.arrayContaining([
+                expect.objectContaining({
+                  text: expect.stringContaining('second'),
+                }),
+              ]),
+            }),
+          ]),
         }),
       );
     });
@@ -264,13 +419,13 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Recovered' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'test' }],
+        messages: createTextMsg('test'),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('Recovered');
+      expect(findTextpart(data.parts).text).toBe('Recovered');
     });
 
     test('TC-16: handles undefined AI response safely', async () => {
@@ -279,13 +434,13 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Fallback works' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'test' }],
+        messages: createTextMsg('test'),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('Fallback works');
+      expect(findTextpart(data.parts).text).toBe('Fallback works');
     });
 
     test('TC-17: handles very large input', async () => {
@@ -294,26 +449,26 @@ describe('Chat API', () => {
       mockGenerate.mockResolvedValue({ text: 'Handled large input' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: largeInput }],
+        messages: createTextMsg(largeInput),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('Handled large input');
+      expect(findTextpart(data.parts).text).toBe('Handled large input');
     });
 
     test('TC-18: handles special characters safely', async () => {
       mockGenerate.mockResolvedValue({ text: 'ok' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: '!@#$%^&*()_+' }],
+        messages: createTextMsg('!@#$%^&*()_+'),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('ok');
+      expect(findTextpart(data.parts).text).toBe('ok');
     });
 
     test('TC-19: cleans markdown and emojis from output', async () => {
@@ -322,20 +477,20 @@ describe('Chat API', () => {
       });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'test' }],
+        messages: createTextMsg('test'),
       });
 
       const res = await POST(req);
       const data = await res.json();
 
-      expect(data.content).toBe('Hello  World');
+      expect(findTextpart(data.parts).text).toBe('Hello  World');
     });
 
     test('TC-20: stops retry after max attempts', async () => {
       mockGenerate.mockRejectedValue({ status: 429 });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'retry fail' }],
+        messages: createTextMsg('retry fail'),
       });
 
       const resPromise = POST(req);
@@ -345,7 +500,7 @@ describe('Chat API', () => {
       const res = await resPromise;
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-21: ignores assistant/system messages', async () => {
@@ -353,8 +508,8 @@ describe('Chat API', () => {
 
       const req = createRequest({
         messages: [
-          { role: 'assistant', content: 'ignore this' },
-          { role: 'user', content: 'real input' },
+          { role: 'assistant', parts: [{ text: 'ignore this' }] },
+          ...createTextMsg('real input'),
         ],
       });
 
@@ -362,7 +517,16 @@ describe('Chat API', () => {
 
       expect(mockGenerate).toHaveBeenCalledWith(
         expect.objectContaining({
-          contents: expect.stringContaining('real input'),
+          contents: expect.arrayContaining([
+            expect.objectContaining({
+              role: 'user',
+              parts: expect.arrayContaining([
+                expect.objectContaining({
+                  text: expect.stringContaining('real input'),
+                }),
+              ]),
+            }),
+          ]),
         }),
       );
     });
@@ -388,7 +552,7 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Recovered' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'retry test' }],
+        messages: createTextMsg('retry test'),
       });
 
       const resPromise = POST(req);
@@ -399,7 +563,7 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalledTimes(2);
-      expect(data.content).toBe('Recovered');
+      expect(findTextpart(data.parts).text).toBe('Recovered');
     });
 
     test('TC-23: retries on 503', async () => {
@@ -408,7 +572,7 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Recovered 503' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'test' }],
+        messages: createTextMsg('test'),
       });
 
       const resPromise = POST(req);
@@ -418,7 +582,7 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalledTimes(2);
-      expect(data.content).toBe('Recovered 503');
+      expect(findTextpart(data.parts).text).toBe('Recovered 503');
     });
 
     test('TC-24: retries on AbortError', async () => {
@@ -430,7 +594,7 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Recovered timeout' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'timeout test' }],
+        messages: createTextMsg('timeout test'),
       });
 
       const resPromise = POST(req);
@@ -440,14 +604,14 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalledTimes(2);
-      expect(data.content).toBe('Recovered timeout');
+      expect(findTextpart(data.parts).text).toBe('Recovered timeout');
     });
 
     test('TC-25: stops after max retries', async () => {
       mockGenerate.mockRejectedValue({ status: 429 });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'max retry' }],
+        messages: createTextMsg('max retry'),
       });
 
       const resPromise = POST(req);
@@ -457,7 +621,7 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(mockGenerate).toHaveBeenCalled(); // count depends on MAX_RETRIES
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-26: falls back to next model', async () => {
@@ -466,7 +630,7 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Second model works' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'fallback' }],
+        messages: createTextMsg('fallback'),
       });
 
       const resPromise = POST(req);
@@ -475,7 +639,7 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(data.content).toBe('Second model works');
+      expect(findTextpart(data.parts).text).toBe('Second model works');
     });
 
     test('TC-27: uses next model if response is empty', async () => {
@@ -484,7 +648,7 @@ describe('Chat API', () => {
         .mockResolvedValueOnce({ text: 'Fallback response' });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'empty test' }],
+        messages: createTextMsg('empty test'),
       });
 
       const resPromise = POST(req);
@@ -493,14 +657,14 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(data.content).toBe('Fallback response');
+      expect(findTextpart(data.parts).text).toBe('Fallback response');
     });
 
     test('TC-28: returns fallback if all models fail', async () => {
       mockGenerate.mockRejectedValue({ status: 503 });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'fail all' }],
+        messages: createTextMsg('fail all'),
       });
 
       const resPromise = POST(req);
@@ -509,14 +673,15 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-29: does not retry on non-retryable error', async () => {
+      vi.mocked(canUserUseFeature).mockResolvedValue(true);
       mockGenerate.mockRejectedValue({ status: 400 });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'bad request' }],
+        messages: createTextMsg('bad request'),
       });
 
       const resPromise = POST(req);
@@ -525,8 +690,9 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(mockGenerate).toHaveBeenCalledTimes(2);
-      expect(data.content).toContain(expectedErrorMessage);
+      expect(mockGenerate).toHaveBeenCalledTimes(MODELS.length);
+
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-30: handles unexpected error gracefully', async () => {
@@ -535,7 +701,7 @@ describe('Chat API', () => {
       });
 
       const req = createRequest({
-        messages: [{ role: 'user', content: 'crash' }],
+        messages: createTextMsg('crash'),
       });
 
       const resPromise = POST(req);
@@ -544,7 +710,7 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(data.content).toContain('High demand right now');
+      expect(findTextpart(data.parts).text).toContain('High demand right now.');
     });
   });
 });
