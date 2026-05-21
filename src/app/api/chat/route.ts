@@ -81,8 +81,9 @@ export function extractCurrectMessage(messages: Message[]) {
     (x) => 'inlineData' in x && x.inlineData.mimeType === 'video/mp4',
   );
 
-  const msgIndexInPart =
-    normalizedMessages[index].parts?.findIndex((x) => 'text' in x) || null;
+  const msgIndexInPart = normalizedMessages[index].parts?.findIndex(
+    (x) => 'text' in x,
+  );
 
   return {
     data: normalizedMessages,

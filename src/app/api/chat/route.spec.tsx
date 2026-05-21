@@ -68,6 +68,7 @@ describe('Chat API', () => {
   const expectedErrorMessage = 'High demand';
   describe('Core Functionality', () => {
     beforeEach(() => {
+      vi.useFakeTimers();
       vi.clearAllMocks();
       process.env.GEMINI_API_KEY = 'test-key';
 
@@ -132,6 +133,132 @@ describe('Chat API', () => {
       const data = await res.json();
 
       expect(findTextpart(data.parts).text).toBe('Final quote');
+    });
+
+    test('TC-31: Should use backup api key if primary missing', () => {
+      process.env.GEMINI_API_KEY = '';
+      process.env.GEMINI_API_KEY_BACKUP = 'backup-key';
+
+      expect(getApiKey()).toBe('backup-key');
+    });
+
+    test('TC-32: Returns error if no api key available', async () => {
+      process.env.GEMINI_API_KEY = '';
+      process.env.GEMINI_API_KEY_BACKUP = '';
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(findTextpart(data.parts).text).toContain('Something went wrong');
+    });
+
+    test('TC-33: Returns upgrade notification when usage exceeded', async () => {
+      vi.mocked(canUserUseFeature).mockResolvedValue(false);
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.notification.link_text).toBe('Upgrade');
+      expect(data.notification.info_text).toContain('Usage limit exceed');
+    });
+
+    test('TC-34: Handles image-only input', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Image processed' });
+
+      const req = createRequest({
+        messages: [
+          {
+            role: 'user',
+            parts: [
+              {
+                inlineData: {
+                  mimeType: 'image/jpeg',
+                  data: 'base64-image',
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.parts[0].text).toBe('Image processed');
+    });
+
+    test('TC-35: Replaces user text with built prompt', async () => {
+      mockGenerate.mockResolvedValue({ text: 'ok' });
+
+      const req = createRequest({
+        messages: createTextMsg('Need plumber'),
+      });
+
+      await POST(req);
+
+      const args = mockGenerate.mock.calls[0][0];
+
+      expect(args.contents[0].parts[0].text).toContain('[SYSTEM]');
+    });
+
+    test('TC-36: Updates usage after successful response', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Success' });
+
+      const req = createRequest({
+        messages: createTextMsg('test'),
+      });
+
+      await POST(req);
+
+      expect(updateUsage).toHaveBeenCalledWith(['text']);
+    });
+
+    test('TC-37: Does not update usage on failed generation', async () => {
+      mockGenerate.mockRejectedValue({ status: 503 });
+
+      const req = createRequest({
+        messages: createTextMsg('fail'),
+      });
+
+      const resPromise = POST(req);
+      await vi.runAllTimersAsync();
+      await resPromise;
+
+      expect(updateUsage).not.toHaveBeenCalled();
+    });
+
+    test('TC-38: Handles image and text together', async () => {
+      mockGenerate.mockResolvedValue({ text: 'Handled mixed input' });
+
+      const req = createRequest({
+        messages: [
+          {
+            role: 'user',
+            parts: [
+              { text: 'Fix this issue' },
+              {
+                inlineData: {
+                  mimeType: 'image/jpeg',
+                  data: 'abc',
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const res = await POST(req);
+      const data = await res.json();
+
+      expect(data.parts[0].text).toBe('Handled mixed input');
     });
   });
 
