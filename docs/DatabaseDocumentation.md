@@ -1,54 +1,78 @@
 # 📘 Database Documentation (SaaS Billing System)
 
----
-
-## 1. `Plan` — Subscription Plan Definition
-
-### Purpose
-
-Represents a **subscription offering** (e.g., Free, Pro Monthly, Pro Yearly).
-This is the **source of truth for pricing, PayPal mapping, and availability**.
+Updated according to the latest Prisma schema provided by the user.
+Source file:
 
 ---
 
-### Fields
+# 1. `Plan` — Subscription Plan Definition
 
-| Field               | Type     | Required | Description                                                                                     |
-| ------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------- |
-| `id`                | String   | true     | Unique identifier for the plan (e.g., `free_v1`, `pro_v2`). Used internally and for versioning. |
-| `name`              | String   | true     | Display name of the plan (e.g., “Free”, “Pro”).                                                 |
-| `description`       | String   | false    | Optional human-readable description used in UI/marketing.                                       |
-| `price`             | Int      | true     | Price of the plan in smallest currency unit (e.g., cents). Example: `499` = $4.99.              |
-| `currency`          | String   | true     | Currency code (ISO 4217), e.g., `AUD`, `USD`.                                                   |
-| `billing_interval`  | String   | false    | Billing frequency (`MONTH`, `YEAR`). Null for free plans.                                       |
-| `isFree`            | Boolean  | true     | Indicates if plan is free. Controls billing logic.                                              |
-| `paypal_plan_id`    | String   | false    | PayPal Plan ID (external reference). Must be unique.                                            |
-| `paypal_product_id` | String   | false    | PayPal Product ID associated with this plan.                                                    |
-| `environment`       | String   | true     | Environment where plan exists: `sandbox` or `live`.                                             |
-| `version`           | Int      | true     | Version of the plan (used for upgrades/migrations).                                             |
-| `isActive`          | Boolean  | true     | Whether the plan is currently available for new subscriptions.                                  |
-| `createdAt`         | DateTime | true     | Timestamp when record was created.                                                              |
-| `updatedAt`         | DateTime | true     | Timestamp of last update (auto-managed).                                                        |
+## Purpose
+
+Represents a subscription offering such as:
+
+- Free
+- Pro Monthly
+- Pro Yearly
+
+This table acts as the **source of truth for pricing, billing configuration, PayPal mapping, versioning, and plan availability**.
 
 ---
 
-### Relationships
+## Fields
 
-- `subscriptions` → All user subscriptions tied to this plan
-- `limits` → Usage limits associated with this plan
+| Field               | Type     | Required | Description                                                |
+| ------------------- | -------- | -------- | ---------------------------------------------------------- |
+| `id`                | String   | true     | Unique identifier for the plan (e.g. `free_v1`, `pro_v2`). |
+| `name`              | String   | true     | Human-readable plan name shown in UI.                      |
+| `description`       | String   | false    | Optional description used for marketing or plan details.   |
+| `price`             | Int      | true     | Price stored in smallest currency unit (e.g. cents).       |
+| `currency`          | String   | true     | ISO currency code (`USD`, `AUD`, `INR`).                   |
+| `billing_interval`  | String   | false    | Billing cycle (`MONTH`, `YEAR`). Null for free plans.      |
+| `isFree`            | Boolean  | true     | Indicates whether the plan is free.                        |
+| `paypal_plan_id`    | String   | false    | External PayPal Plan ID. Must be unique.                   |
+| `paypal_product_id` | String   | false    | External PayPal Product ID.                                |
+| `environment`       | String   | true     | Deployment environment (`sandbox`, `live`).                |
+| `version`           | Int      | true     | Plan version used for migrations and pricing evolution.    |
+| `isActive`          | Boolean  | true     | Whether the plan is available for purchase/subscription.   |
+| `createdAt`         | DateTime | true     | Record creation timestamp.                                 |
+| `updatedAt`         | DateTime | true     | Auto-updated modification timestamp.                       |
 
 ---
 
-### Constraints & Rules
+## Relationships
+
+| Relationship    | Description                                 |
+| --------------- | ------------------------------------------- |
+| `subscriptions` | All subscriptions associated with this plan |
+| `limits`        | Usage limits assigned to this plan          |
+
+---
+
+## Indexes
+
+```prisma
+@@index([environment, isActive])
+```
+
+Used for:
+
+- Fast retrieval of active plans
+- Filtering plans by environment
+
+---
+
+## Constraints & Rules
 
 - `paypal_plan_id` must be unique
-- Only **one active version per plan type per environment**
-- `isFree = true` → no PayPal IDs required
+- Free plans should not require PayPal IDs
 - `billing_interval` should be null for free plans
+- Multiple plan versions can exist simultaneously
+- Only active plans should be shown to users
 
 ---
 
-### Example
+## Example
 
 ```json
 {
@@ -69,42 +93,55 @@ This is the **source of truth for pricing, PayPal mapping, and availability**.
 
 ---
 
-## 2. `PlanLimit` — Usage Limits per Plan
+# 2. `PlanLimit` — Usage Limits per Plan
 
-### Purpose
+## Purpose
 
-Defines **rate limits or quotas** for a plan (e.g., 100 texts/month).
+Defines usage quotas and rate limits for a plan.
 
----
+Examples:
 
-### Fields
-
-| Field         | Type     | Required | Description                                 |
-| ------------- | -------- | -------- | ------------------------------------------- |
-| `id`          | String   | true     | Unique ID (auto-generated via cuid).        |
-| `plan_id`     | String   | true     | Foreign key referencing `Plan.id`.          |
-| `plan`        | Relation | true     | Associated plan.                            |
-| `text_limit`  | Int      | true     | Maximum number of text operations allowed.  |
-| `image_limit` | Int      | true     | Maximum number of image operations allowed. |
-| `interval`    | String   | true     | Reset interval (`WEEK`, `MONTH`).           |
-| `createdAt`   | DateTime | true     | Record creation timestamp.                  |
-| `updatedAt`   | DateTime | true     | Last update timestamp.                      |
+- 1000 text generations/month
+- 100 image generations/month
 
 ---
 
-### Constraints
+## Fields
 
-- Unique combination:
+| Field         | Type     | Required | Description                              |
+| ------------- | -------- | -------- | ---------------------------------------- |
+| `id`          | String   | true     | Auto-generated unique ID using `cuid()`. |
+| `plan_id`     | String   | true     | Foreign key referencing `Plan.id`.       |
+| `plan`        | Relation | true     | Associated plan relation.                |
+| `text_limit`  | Int      | true     | Maximum text operations allowed.         |
+| `image_limit` | Int      | true     | Maximum image operations allowed.        |
+| `interval`    | String   | true     | Reset cycle (`WEEK`, `MONTH`).           |
+| `createdAt`   | DateTime | true     | Record creation timestamp.               |
+| `updatedAt`   | DateTime | true     | Last updated timestamp.                  |
 
-```ts id="unique_limit"
-(plan_id, interval);
+---
+
+## Relationships
+
+| Relationship | Description                           |
+| ------------ | ------------------------------------- |
+| `plan`       | Belongs to a single subscription plan |
+
+---
+
+## Constraints
+
+### Unique Constraint
+
+```prisma
+@@unique([plan_id, interval])
 ```
 
-👉 Prevents duplicate limits for same interval
+Prevents duplicate limit definitions for the same plan and interval.
 
 ---
 
-### Example
+## Example
 
 ```json
 {
@@ -117,55 +154,114 @@ Defines **rate limits or quotas** for a plan (e.g., 100 texts/month).
 
 ---
 
-## 3. `Subscription` — User Subscription Record
+# 3. `Subscription` — User Subscription Lifecycle
 
-### Purpose
+## Purpose
 
-Tracks **which user is subscribed to which plan**, including billing lifecycle and status.
+Tracks the complete subscription lifecycle for a user, including:
 
----
-
-### Fields
-
-| Field                    | Type     | Required | Description                                        |
-| ------------------------ | -------- | -------- | -------------------------------------------------- |
-| `id`                     | String   | true     | Unique subscription ID.                            |
-| `firebase_uid`           | String   | true     | User identifier (from Firebase Auth).              |
-| `plan_id`                | String   | true     | Associated plan ID.                                |
-| `plan`                   | Relation | true     | Linked plan.                                       |
-| `paypal_subscription_id` | String   | false    | PayPal subscription ID (external reference).       |
-| `status`                 | String   | true     | Subscription status (`ACTIVE`, `CANCELLED`, etc.). |
-| `start_date`             | DateTime | false    | When subscription started.                         |
-| `next_billing_date`      | DateTime | false    | Next billing cycle date.                           |
-| `end_date`               | DateTime | false    | When subscription ended.                           |
-| `cancel_at_period_end`   | Boolean  | true     | Whether cancellation is scheduled.                 |
-| `last_payment_date`      | DateTime | false    | Last successful payment timestamp.                 |
-| `last_payment_amount`    | Int      | false    | Amount charged in last payment.                    |
-| `currency`               | String   | false    | Currency used for billing.                         |
-| `createdAt`              | DateTime | true     | Creation timestamp.                                |
-| `updatedAt`              | DateTime | true     | Last update timestamp.                             |
+- Active subscriptions
+- Billing state
+- Cancellation flow
+- Failed payments
+- Grace periods
+- Renewal dates
 
 ---
 
-### Relationships
+# `SubscriptionStatus` Enum
 
-- Many subscriptions → one plan
-- One user (`firebase_uid`) → many subscriptions over time
-
----
-
-### Constraints
-
-- `paypal_subscription_id` must be unique
-- Indexed:
-
-```ts
-(firebase_uid, status);
+```prisma
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+  SUSPENDED
+  APPROVAL_PENDING
+  INACTIVE
+}
 ```
 
 ---
 
-### Example
+## Status Definitions
+
+| Status             | Meaning                                                  |
+| ------------------ | -------------------------------------------------------- |
+| `ACTIVE`           | Subscription is active and usable                        |
+| `PAST_DUE`         | Payment failed but subscription may still be recoverable |
+| `CANCELLED`        | Subscription manually cancelled                          |
+| `EXPIRED`          | Subscription naturally expired                           |
+| `SUSPENDED`        | Suspended due to billing/platform issues                 |
+| `APPROVAL_PENDING` | Waiting for PayPal approval                              |
+| `INACTIVE`         | Subscription exists but is not active                    |
+
+---
+
+## Fields
+
+| Field                    | Type     | Required | Description                                              |
+| ------------------------ | -------- | -------- | -------------------------------------------------------- |
+| `id`                     | String   | true     | Unique subscription ID.                                  |
+| `firebase_uid`           | String   | true     | Firebase Authentication user ID.                         |
+| `plan_id`                | String   | true     | Linked plan ID.                                          |
+| `plan`                   | Relation | true     | Associated plan relation.                                |
+| `paypal_subscription_id` | String   | false    | External PayPal subscription ID.                         |
+| `status`                 | Enum     | true     | Current subscription status.                             |
+| `start_date`             | DateTime | false    | Subscription start timestamp.                            |
+| `next_billing_date`      | DateTime | false    | Next billing cycle date.                                 |
+| `end_date`               | DateTime | false    | Subscription end timestamp.                              |
+| `cancel_at_period_end`   | Boolean  | true     | Whether cancellation is scheduled after current cycle.   |
+| `grace_period_end`       | DateTime | false    | Grace period expiration timestamp after failed payments. |
+| `failed_payment_count`   | Int      | true     | Number of consecutive failed payments.                   |
+| `last_payment_date`      | DateTime | false    | Last successful payment timestamp.                       |
+| `last_payment_amount`    | Int      | false    | Last charged amount.                                     |
+| `currency`               | String   | false    | Currency used during billing.                            |
+| `createdAt`              | DateTime | true     | Record creation timestamp.                               |
+| `updatedAt`              | DateTime | true     | Auto-managed update timestamp.                           |
+
+---
+
+## Relationships
+
+| Relationship | Description                           |
+| ------------ | ------------------------------------- |
+| `plan`       | Many subscriptions belong to one plan |
+
+---
+
+## Indexes
+
+```prisma
+@@index([firebase_uid, status])
+@@index([firebase_uid, end_date])
+@@index([status])
+@@index([next_billing_date])
+```
+
+---
+
+## Index Purpose
+
+| Index                      | Usage                                         |
+| -------------------------- | --------------------------------------------- |
+| `(firebase_uid, status)`   | Quickly fetch active subscriptions for a user |
+| `(firebase_uid, end_date)` | Retrieve subscription history                 |
+| `(status)`                 | Billing reconciliation and admin filtering    |
+| `(next_billing_date)`      | Renewal cron jobs and billing automation      |
+
+---
+
+## Constraints
+
+- `paypal_subscription_id` must be unique
+- One user can have multiple historical subscriptions
+- Subscription status drives feature access
+
+---
+
+## Example
 
 ```json
 {
@@ -173,53 +269,73 @@ Tracks **which user is subscribed to which plan**, including billing lifecycle a
   "plan_id": "pro_v2",
   "status": "ACTIVE",
   "paypal_subscription_id": "I-XXXX",
-  "next_billing_date": "2026-06-01"
+  "start_date": "2026-05-01",
+  "next_billing_date": "2026-06-01",
+  "cancel_at_period_end": false,
+  "failed_payment_count": 0
 }
 ```
 
 ---
 
-## 4. `Usage` — User Consumption Tracking
+# 4. `Usage` — User Consumption Tracking
 
-### Purpose
+## Purpose
 
-Tracks **how much a user has used** within a billing period.
+Tracks how much usage a user has consumed during a billing cycle.
 
----
+Used for:
 
-### Fields
-
-| Field          | Type     | Required | Description                      |
-| -------------- | -------- | -------- | -------------------------------- |
-| `id`           | String   | true     | Unique record ID.                |
-| `firebase_uid` | String   | true     | User identifier.                 |
-| `plan_id`      | String   | true     | Associated plan.                 |
-| `text_count`   | Int      | true     | Number of text operations used.  |
-| `image_count`  | Int      | true     | Number of image operations used. |
-| `period_start` | DateTime | true     | Start of usage window.           |
-| `period_end`   | DateTime | true     | End of usage window.             |
-| `createdAt`    | DateTime | true     | Creation timestamp.              |
-| `updatedAt`    | DateTime | true     | Last update timestamp.           |
+- Rate limiting
+- Quota enforcement
+- Billing analytics
+- Usage dashboards
 
 ---
 
-### Constraints
+## Fields
 
-- Unique per billing cycle:
+| Field          | Type     | Required | Description                          |
+| -------------- | -------- | -------- | ------------------------------------ |
+| `id`           | String   | true     | Unique usage record ID.              |
+| `firebase_uid` | String   | true     | Firebase user ID.                    |
+| `plan_id`      | String   | true     | Associated plan ID.                  |
+| `text_count`   | Int      | true     | Number of text operations consumed.  |
+| `image_count`  | Int      | true     | Number of image operations consumed. |
+| `period_start` | DateTime | true     | Start of usage window.               |
+| `period_end`   | DateTime | true     | End of usage window.                 |
+| `createdAt`    | DateTime | true     | Record creation timestamp.           |
+| `updatedAt`    | DateTime | true     | Last modification timestamp.         |
 
-```ts
-(firebase_uid, plan_id, period_start);
+---
+
+## Constraints
+
+### Unique Constraint
+
+```prisma
+@@unique([firebase_uid, plan_id, period_start])
 ```
 
-- Indexed:
-
-```ts
-firebase_uid;
-```
+Ensures only one usage record exists per user, plan, and billing cycle.
 
 ---
 
-### Example
+## Indexes
+
+```prisma
+@@index([firebase_uid])
+```
+
+Used for:
+
+- Fetching user usage quickly
+- Dashboard analytics
+- Rate limit checks
+
+---
+
+## Example
 
 ```json
 {
@@ -234,22 +350,145 @@ firebase_uid;
 
 ---
 
-## System Flow (How Tables Work Together)
+# System Architecture Flow
 
-1. `Plan` defines pricing and availability
-2. `PlanLimit` defines allowed usage
-3. `Subscription` links user → plan
-4. `Usage` tracks consumption per cycle
+## Subscription Lifecycle
+
+```text
+Plan
+   ↓
+PlanLimit
+   ↓
+Subscription
+   ↓
+Usage
+```
 
 ---
 
-## Database ERD
+# System Flow Explanation
 
-![Database ERD](./ERD.svg)
+## 1. `Plan`
 
-## Key Design Decisions
+Defines:
 
-- **Versioning (`version`)** → allows safe pricing updates
-- **Environment separation (`sandbox/live`)** → avoids test/live conflicts
-- **External IDs (PayPal)** → keeps system decoupled
-- **Usage table** → supports rate limiting + billing enforcement
+- Pricing
+- Billing interval
+- Environment
+- Availability
+- PayPal mappings
+
+---
+
+## 2. `PlanLimit`
+
+Defines quotas such as:
+
+- Text generation limits
+- Image generation limits
+- Reset intervals
+
+---
+
+## 3. `Subscription`
+
+Tracks:
+
+- Which user owns which plan
+- Billing state
+- Renewal dates
+- Failed payments
+- Cancellation lifecycle
+
+---
+
+## 4. `Usage`
+
+Tracks actual consumption during a billing window.
+
+Used for:
+
+- Enforcing limits
+- Analytics
+- Feature gating
+
+---
+
+# Key Design Decisions
+
+| Decision               | Reason                                   |
+| ---------------------- | ---------------------------------------- |
+| Versioned plans        | Safe pricing migrations                  |
+| Environment separation | Prevent sandbox/live conflicts           |
+| External PayPal IDs    | Decouples internal billing logic         |
+| Dedicated Usage table  | Enables scalable quota enforcement       |
+| Status enum            | Centralized billing lifecycle management |
+| Grace period support   | Better failed-payment recovery           |
+| Indexed billing dates  | Efficient cron automation                |
+
+---
+
+# Recommended Future Improvements
+
+## Suggested Enhancements
+
+### Add Soft Deletes
+
+```prisma
+deletedAt DateTime?
+```
+
+Useful for archival without permanent deletion.
+
+---
+
+### Add Feature Flags per Plan
+
+Example:
+
+```prisma
+features Json?
+```
+
+Allows enabling/disabling premium capabilities.
+
+---
+
+### Add Audit Logs
+
+Track:
+
+- Subscription upgrades
+- Downgrades
+- Payment events
+- Refunds
+
+---
+
+### Normalize Billing Intervals
+
+Replace string intervals with enums:
+
+```prisma
+enum BillingInterval {
+  WEEK
+  MONTH
+  YEAR
+}
+```
+
+---
+
+### Add Usage Types
+
+Future-proof for additional AI features:
+
+- audio_count
+- video_count
+- storage_usage
+
+---
+
+# ERD Overview
+
+![Database ERD](./ERD.png)
