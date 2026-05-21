@@ -55,6 +55,19 @@ export function extractCurrectMessage(messages: Message[]) {
     role: x.role === 'assistant' ? 'model' : x.role,
   }));
 
+  if (index === -1) {
+    return {
+      data: null,
+      role: null,
+      parts: null,
+      msg: null,
+      msgIndexInPart: null,
+      hasVideo: null,
+      hasImage: null,
+      index: -1,
+    };
+  }
+
   const msg = normalizedMessages[index].parts
     .filter((x) => 'text' in x)
     .map((x) => x.text)
@@ -70,19 +83,6 @@ export function extractCurrectMessage(messages: Message[]) {
 
   const msgIndexInPart =
     normalizedMessages[index].parts?.findIndex((x) => 'text' in x) || null;
-
-  if (index === -1) {
-    return {
-      data: null,
-      role: null,
-      parts: null,
-      msg: null,
-      msgIndexInPart: null,
-      hasVideo: null,
-      hasImage: null,
-      index: -1,
-    };
-  }
 
   return {
     data: normalizedMessages,

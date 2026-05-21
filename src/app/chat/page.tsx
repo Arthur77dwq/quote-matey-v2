@@ -231,7 +231,12 @@ function ChatContent() {
           messages?.length > 0 ? 'justify-start' : 'justify-center',
         )}
       >
-        <input {...getInputProps()} />
+        <input
+          {...getInputProps({
+            accept: 'image/*',
+            capture: 'environment',
+          })}
+        />
         {/* Chat Container */}
         {messages?.length > 0 ? (
           <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full pt-20 lg:pt-24 pb-32">
