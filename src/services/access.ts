@@ -26,6 +26,8 @@ export async function canUserUseFeature({
     return false;
   }
 
+  if (limit.image_limit < 0 && limit.text_limit < 0) return true;
+
   const canUseImage = usage.image_count < limit.image_limit;
 
   const canUseText = usage.text_count < limit.text_limit;

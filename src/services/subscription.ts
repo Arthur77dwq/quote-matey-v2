@@ -77,7 +77,7 @@ export async function activateSubscriptionService(
     subscription?.firebase_uid || '',
     event.resource.id,
   );
-  return { status: true };
+  return { subscription, status: true };
 }
 
 export async function verify(subscriptionId: string | undefined) {
@@ -160,31 +160,36 @@ export async function createSubscriptionService(params: {
     paypal_subscription_id: id || '',
   });
 
-  const res = await verify(id);
+  return { approvalUrl };
+}
 
-  if (res.status) {
-    await activateSubscriptionService({
-      resource: {
-        id: id || '',
-        start_time: res.subscription?.start_time || '',
-        billing_info: {
-          next_billing_time:
-            res.subscription?.billing_info?.next_billing_time || '',
-        },
+export async function activateSubscription(subscription: PaypalVerifyResponse) {
+  const data = await activateSubscriptionService({
+    resource: {
+      id: subscription.id || '',
+      start_time: subscription?.start_time || '',
+      billing_info: {
+        next_billing_time: subscription?.billing_info?.next_billing_time || '',
       },
-    });
+    },
+  });
 
-    const now = new Date();
-    const nextMonth = new Date(now);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
+  if (data.subscription) {
+    const availableUsage = await getUserUsage(
+      data.subscription.firebase_uid,
+      data.subscription.plan_id,
+    );
 
-    const availableUsage = await getUserUsage(params.firebase_uid, plan.id);
-    if (availableUsage) {
-      const limit = await getPlanLimit(plan.id);
+    if (!availableUsage) {
+      const limit = await getPlanLimit(data.subscription.plan_id);
+
+      const now = new Date();
+      const nextMonth = new Date(now);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
       if (limit)
         await createUsage({
-          firebase_uid: params.firebase_uid,
-          plan_id: plan.id,
+          firebase_uid: data.subscription.firebase_uid,
+          plan_id: data.subscription.plan_id,
           period_start: now,
           period_end:
             limit.interval === 'WEEK'
@@ -193,8 +198,6 @@ export async function createSubscriptionService(params: {
         });
     }
   }
-
-  return { approvalUrl };
 }
 
 export async function requestCancelSubscriptionService(params: {

@@ -2,6 +2,7 @@ import { markPaymentFailedDB, markPaymentSuccessDB } from '@/db/subscription';
 import { verifyPaypalWebhook } from '@/lib/paypal';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
 import {
+  activateSubscription,
   activateSubscriptionService,
   cancelSubscriptionService,
 } from '@/services/subscription';
@@ -33,7 +34,10 @@ export async function handlePaypalWebhook(event: PaypalWebhookEvent) {
   switch (event.event_type) {
     //  ACTIVATED
     case 'BILLING.SUBSCRIPTION.ACTIVATED': {
-      await activateSubscriptionService(event);
+      const { subscription } = await activateSubscriptionService(event);
+      if (subscription) {
+        await activateSubscription(subscription);
+      }
       break;
     }
 
