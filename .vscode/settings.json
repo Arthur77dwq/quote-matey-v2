@@ -1,4 +1,33 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "red",
+    "background": "white",
+    "opacity": 50,
+    "iconColour": "blue"
+},
+"todo-tree.highlights.customHighlight": {
+    "TODO": {
+        "icon": "check",
+        "type": "line",
+        "foreground": "green",
+        "background": "black"
+        
+    },
+    "FIXME": {
+        "foreground": "black",
+        "background": "yellow",
+        "iconColour": "yellow",
+        "gutterIcon": true
+    },
+    "BUG": {
+        "foreground": "black",
+        "background": "red",
+        "iconColour": "yellow",
+        "gutterIcon": true
+    }
+}
 }

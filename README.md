@@ -9,7 +9,7 @@
 ## 🛠️ Tech Stack
 
 <!-- markdownlint-disable-next-line MD033 -->
-<img src="https://skillicons.dev/icons?i=react,typescript,nextjs,tailwind" alt="Tech stack: React, TypeScript, Next.js, Tailwind CSS" />
+<img src="https://skillicons.dev/icons?i=typescript,nextjs,tailwind,postgresql,prisma" alt="Tech stack:TypeScript, Next.js, Tailwind CSS, PostgreSQL, Prisma" />
 
 ---
 
@@ -138,9 +138,42 @@ e2e/
 Create `.env`:
 
 ```env
-GOOGLE_API_KEY=
-AZURE_API_KEY=
+# Gemini API Keys
+GEMINI_API_KEY=
+GEMINI_API_KEY_BACKUP=
+
+# Payment Environment
+PAYPAL_ENV=sandbox # -- Use this for development
+# PAYPAL_ENV=live #-- Use this for production
+
+# Sandbox Payment Credentials
+PAYPAL_SANDBOX_CLIENT_ID=
+PAYPAL_SANDBOX_CLIENT_SECRET=
+
+# Live Payment Credentials
+PAYPAL_LIVE_CLIENT_ID=
+PAYPAL_LIVE_CLIENT_SECRET=
+
+#  Local / Dev Database
+DEV_DATABASE_URL=
+
+#  Production Database
+PROD_DATABASE_URL=
+
+# GA4 ID/ firebase measurement id
 NEXT_PUBLIC_GA_ID=
+
+# Firebase Credentials
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+
+# Assets
+NEXT_PUBLIC_VIDEO_URL=
 ```
 
 ---
