@@ -1,4 +1,4 @@
-name: Reset Usage Cron
+name: Weekly Reset Usage Cron
 
 on:
   schedule:
@@ -19,4 +19,4 @@ jobs:
         run: |
           curl -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            https://quotematey.com//api/cron/reset-plan-usage
+            https://quotematey.com/api/cron/reset-plan-usage
