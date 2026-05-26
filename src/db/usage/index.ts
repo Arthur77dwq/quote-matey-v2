@@ -1,7 +1,8 @@
 export { createUsage } from './create';
 export { canUserGenerateText } from './read';
 export {
+  getFreePlanUsagePage,
   incrementImageUsage,
   incrementTextUsage,
-  resetUsageForNewCycle,
+  resetUsageCycle,
 } from './update';

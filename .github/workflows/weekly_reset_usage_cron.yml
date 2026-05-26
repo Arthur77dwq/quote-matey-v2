@@ -1,0 +1,22 @@
+name: Reset Usage Cron
+
+on:
+  schedule:
+    # 12:30 UTC (AEDT)
+    - cron: '30 12 * * *'
+
+    # 13:30 UTC (AEST)
+    - cron: '30 13 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  trigger-cron:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel Cron Route
+        run: |
+          curl -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://quotematey.com//api/cron/reset-plan-usage

@@ -1,4 +1,9 @@
-import { incrementImageUsage, incrementTextUsage } from '@/db/usage';
+import {
+  getFreePlanUsagePage,
+  incrementImageUsage,
+  incrementTextUsage,
+  resetUsageCycle,
+} from '@/db/usage';
 import { getUserId } from '@/lib/auth/user';
 
 import { getCurrentUserSubscription } from './subscription';
@@ -21,5 +26,25 @@ export async function updateUsage(types: string[]) {
           });
       }
     });
+  }
+}
+
+async function resetUsageRows(rows: { id: string }[]) {
+  await Promise.all(rows.map((row) => resetUsageCycle(row.id)));
+}
+
+export async function resetFreePlanUsage() {
+  let page = 1;
+
+  while (true) {
+    const rows = await getFreePlanUsagePage(page);
+
+    if (rows.length === 0) {
+      break;
+    }
+
+    await resetUsageRows(rows);
+
+    page++;
   }
 }
