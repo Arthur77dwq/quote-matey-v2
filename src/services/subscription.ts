@@ -1,5 +1,4 @@
 import { getPlanById } from '@/db/plan/read';
-import { getPlanLimit } from '@/db/planLimit/read';
 import {
   createPendingSubscription,
   getSubscriptionByUser,
@@ -16,14 +15,14 @@ import {
   deactivateOtherActiveSubscriptions,
   markCancelAtPeriodEnd,
 } from '@/db/subscription/update';
-import { createUsage } from '@/db/usage';
-import { getUserUsage } from '@/db/usage/read';
 import { withAuth } from '@/lib/auth/withAuth';
 import { cancelSubscription, createSubscription } from '@/lib/paypal';
 import { paypalHttp } from '@/lib/paypal/http';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
 import { toDate } from '@/lib/utils';
 import { PaypalVerifyResponse } from '@/types/paypal/subscription';
+
+import { ensureUsage } from './usage';
 
 export async function hasActivePlanByUid(uid: string) {
   const subscription = await getSubscriptionByUser(uid, false);
@@ -46,17 +45,21 @@ export async function activateSubscriptionService(
     | Extract<
         PaypalWebhookEvent,
         {
-          event_type: 'BILLING.SUBSCRIPTION.ACTIVATED';
+          event_type:
+            | 'BILLING.SUBSCRIPTION.ACTIVATED'
+            | 'BILLING.SUBSCRIPTION.RE-ACTIVATED';
         }
       >
     | {
-        resource: {
-          id: string;
-          start_time: string;
-          billing_info: {
-            next_billing_time: string;
-          };
-        };
+        resource:
+          | PaypalVerifyResponse
+          | {
+              id: string;
+              start_time: string;
+              billing_info: {
+                next_billing_time: string;
+              };
+            };
       },
 ) {
   await activateSubscriptionDB({
@@ -77,7 +80,12 @@ export async function activateSubscriptionService(
     subscription?.firebase_uid || '',
     event.resource.id,
   );
-  return { subscription, status: true };
+
+  if (subscription) {
+    await ensureUsage(subscription);
+    return { subscription, status: true };
+  }
+  return { subscription, status: false };
 }
 
 export async function verify(subscriptionId: string | undefined) {
@@ -161,43 +169,6 @@ export async function createSubscriptionService(params: {
   });
 
   return { approvalUrl };
-}
-
-export async function activateSubscription(subscription: PaypalVerifyResponse) {
-  const data = await activateSubscriptionService({
-    resource: {
-      id: subscription.id || '',
-      start_time: subscription?.start_time || '',
-      billing_info: {
-        next_billing_time: subscription?.billing_info?.next_billing_time || '',
-      },
-    },
-  });
-
-  if (data.subscription) {
-    const availableUsage = await getUserUsage(
-      data.subscription.firebase_uid,
-      data.subscription.plan_id,
-    );
-
-    if (!availableUsage) {
-      const limit = await getPlanLimit(data.subscription.plan_id);
-
-      const now = new Date();
-      const nextMonth = new Date(now);
-      nextMonth.setMonth(nextMonth.getMonth() + 1);
-      if (limit)
-        await createUsage({
-          firebase_uid: data.subscription.firebase_uid,
-          plan_id: data.subscription.plan_id,
-          period_start: now,
-          period_end:
-            limit.interval === 'WEEK'
-              ? new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
-              : nextMonth,
-        });
-    }
-  }
 }
 
 export async function requestCancelSubscriptionService(params: {

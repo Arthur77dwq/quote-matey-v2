@@ -2,6 +2,8 @@
 // PLAN
 // ============================================
 
+import { SubscriptionStatus } from '@prisma/client';
+
 export type BillingInterval = 'MONTH' | 'YEAR';
 
 export type Environment = 'sandbox' | 'live';
@@ -51,14 +53,6 @@ export interface Plan {
 // ============================================
 // SUBSCRIPTION
 // ============================================
-
-export type SubscriptionStatus =
-  | 'ACTIVE'
-  | 'CANCELLED'
-  | 'EXPIRED'
-  | 'APPROVAL_PENDING'
-  | 'SUSPENDED';
-
 export interface Subscription {
   id: string;
 
