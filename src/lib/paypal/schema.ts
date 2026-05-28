@@ -59,6 +59,11 @@ export const PaypalWebhookSchema = z.discriminatedUnion('event_type', [
   }),
 
   base.extend({
+    event_type: z.literal('BILLING.SUBSCRIPTION.SUSPENDED'),
+    resource: subscription,
+  }),
+
+  base.extend({
     event_type: z.literal('PAYMENT.SALE.COMPLETED'),
     resource: payment,
   }),

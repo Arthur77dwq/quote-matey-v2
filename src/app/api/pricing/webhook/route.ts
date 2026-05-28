@@ -1,4 +1,5 @@
 import { markPaymentFailedDB, markPaymentSuccessDB } from '@/db/subscription';
+import { suspendSubscriptionDB } from '@/db/subscription/update';
 import { verifyPaypalWebhook } from '@/lib/paypal';
 import { PaypalWebhookEvent } from '@/lib/paypal/schema';
 import {
@@ -46,19 +47,26 @@ export async function handlePaypalWebhook(event: PaypalWebhookEvent) {
 
     //  PAYMENT SUCCESS
     case 'PAYMENT.SALE.COMPLETED': {
-      await markPaymentSuccessDB({
-        paypal_subscription_id:
-          event.resource.billing_agreement_id ?? event.resource.id,
-        amount: Math.round(parseFloat(event.resource.amount.total) * 100),
-        currency: event.resource.amount.currency,
-        date: new Date(event.create_time),
-      });
+      if (event.resource.billing_agreement_id) {
+        await markPaymentSuccessDB({
+          paypal_subscription_id: event.resource.billing_agreement_id,
+          amount: Math.round(parseFloat(event.resource.amount.total) * 100),
+          currency: event.resource.amount.currency,
+          date: new Date(event.create_time),
+        });
+      }
       break;
     }
 
-    //  PAYMENT FAILED
+    //  PAYMENT FAILED /PAST_DUE
     case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED': {
       await markPaymentFailedDB(event.resource.id);
+      break;
+    }
+
+    //  SUSPENDED
+    case 'BILLING.SUBSCRIPTION.SUSPENDED': {
+      await suspendSubscriptionDB(event.resource.id);
       break;
     }
 

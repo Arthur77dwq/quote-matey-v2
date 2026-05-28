@@ -12,6 +12,10 @@ export async function canUserUseFeature({
   image?: boolean;
   text?: boolean;
 }) {
+  if (!image && !text) {
+    return false;
+  }
+
   const sub = await getCurrentUserSubscription(firebase_uid);
 
   if (!sub) {
@@ -26,11 +30,11 @@ export async function canUserUseFeature({
     return false;
   }
 
-  if (limit.image_limit < 0 && limit.text_limit < 0) return true;
+  const canUseImage =
+    limit.image_limit < 0 || usage.image_count < limit.image_limit;
 
-  const canUseImage = usage.image_count < limit.image_limit;
-
-  const canUseText = usage.text_count < limit.text_limit;
+  const canUseText =
+    limit.text_limit < 0 || usage.text_count < limit.text_limit;
 
   if (image && !canUseImage) {
     return false;

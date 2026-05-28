@@ -1,3 +1,5 @@
+import { SubscriptionStatus } from '@prisma/client';
+
 import { getPlanById } from '@/db/plan/read';
 import {
   createPendingSubscription,
@@ -133,11 +135,21 @@ export async function getCurrentUserSubscription(firebase_uid: string) {
   const paidSubscription = subscriptions.find((sub) => {
     if (sub.plan.isFree) return false;
 
-    if (!sub.next_billing_date) return false;
+    // ACTIVE
+    if (sub.status === SubscriptionStatus.ACTIVE) {
+      return true;
+    }
 
-    const isActive = sub.next_billing_date.getTime() >= now.getTime();
+    // PAST_DUE within grace period
+    if (
+      sub.status === SubscriptionStatus.PAST_DUE &&
+      sub.grace_period_end &&
+      sub.grace_period_end > now
+    ) {
+      return true;
+    }
 
-    return isActive;
+    return false;
   });
 
   if (paidSubscription) {

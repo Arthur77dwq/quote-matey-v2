@@ -16,6 +16,8 @@ export async function activateSubscriptionDB(data: {
       status: SubscriptionStatus.ACTIVE,
       start_date: data.start_date,
       next_billing_date: data.next_billing_date,
+      failed_payment_count: 0,
+      grace_period_end: null,
     },
   });
 }
@@ -93,10 +95,33 @@ export async function markPaymentSuccessDB(data: {
 }
 
 export async function markPaymentFailedDB(paypal_subscription_id: string) {
+  const now = new Date();
+
+  const gracePeriodEnd = new Date(now);
+  gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7);
+
+  return prisma.subscription.update({
+    where: {
+      paypal_subscription_id,
+    },
+    data: {
+      status: SubscriptionStatus.PAST_DUE,
+
+      failed_payment_count: {
+        increment: 1,
+      },
+
+      grace_period_end: gracePeriodEnd,
+    },
+  });
+}
+
+export async function suspendSubscriptionDB(paypal_subscription_id: string) {
   return prisma.subscription.update({
     where: { paypal_subscription_id },
     data: {
       status: SubscriptionStatus.SUSPENDED,
+      grace_period_end: null,
     },
   });
 }
