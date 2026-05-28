@@ -258,82 +258,83 @@ function ChatContent() {
                           </div>
                         )}
                         <div className="flex flex-col-reverse gap-1 items-end">
-                          {message?.notification && (
+                          {message?.notification ? (
                             <UsageLimitNotification
                               variant="compact"
                               info={message.notification.info_text}
                               link_text={message.notification.link_text}
                               href="/pricing"
                             />
-                          )}
-                          {message?.parts?.map((part: Part, i: number) => {
-                            if ('inlineData' in part) {
-                              if (part.inlineData.mimeType === 'image/jpeg') {
-                                return (
-                                  <img
-                                    key={`${i}${message.id}img`}
-                                    src={`data:image/jpeg;base64,${part.inlineData.data}`}
-                                    className="rounded-2xl size-30 object-cover"
-                                  />
-                                );
-                              } else {
-                                return (
-                                  <video
-                                    className="rounded-2xl size-30"
-                                    key={`${i}${message.id}`}
-                                  >
-                                    <source
-                                      src={part.inlineData.data}
-                                      type="video/mp4"
+                          ) : (
+                            message?.parts?.map((part: Part, i: number) => {
+                              if ('inlineData' in part) {
+                                if (part.inlineData.mimeType === 'image/jpeg') {
+                                  return (
+                                    <img
+                                      key={`${i}${message.id}img`}
+                                      src={`data:image/jpeg;base64,${part.inlineData.data}`}
+                                      className="rounded-2xl size-30 object-cover"
                                     />
-                                  </video>
-                                );
-                              }
-                            }
-
-                            if ('text' in part)
-                              return (
-                                <div
-                                  key={`${i}${message.id}`}
-                                  className={`relative rounded-2xl px-5 py-2 min-h-10 flex justify-center items-center ${
-                                    isUser
-                                      ? 'bg-[#0a1628] text-white'
-                                      : 'bg-white border border-border/80 shadow-lg'
-                                  }`}
-                                >
-                                  <div
-                                    className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
-                                  >
-                                    {part?.text}
-                                  </div>
-
-                                  {/* Copy button for assistant messages */}
-                                  {!isUser && part.text && (
-                                    <button
-                                      onClick={() =>
-                                        copyToClipboard(
-                                          part.text,
-                                          message?.id || '',
-                                        )
-                                      }
-                                      className="absolute -bottom-8 left-0 flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
+                                  );
+                                } else {
+                                  return (
+                                    <video
+                                      className="rounded-2xl size-30"
+                                      key={`${i}${message.id}`}
                                     >
-                                      {copiedId === message.id ? (
-                                        <>
-                                          <Check className="w-3.5 h-3.5 text-green-500" />
-                                          Copied!
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3.5 h-3.5" />
-                                          Copy Quote
-                                        </>
-                                      )}
-                                    </button>
-                                  )}
-                                </div>
-                              );
-                          })}
+                                      <source
+                                        src={part.inlineData.data}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                  );
+                                }
+                              }
+
+                              if ('text' in part)
+                                return (
+                                  <div
+                                    key={`${i}${message.id}`}
+                                    className={`relative rounded-2xl px-5 py-2 min-h-10 flex justify-center items-center ${
+                                      isUser
+                                        ? 'bg-[#0a1628] text-white'
+                                        : 'bg-white border border-border/80 shadow-lg'
+                                    }`}
+                                  >
+                                    <div
+                                      className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
+                                    >
+                                      {part?.text}
+                                    </div>
+
+                                    {/* Copy button for assistant messages */}
+                                    {!isUser && part.text && (
+                                      <button
+                                        onClick={() =>
+                                          copyToClipboard(
+                                            part.text,
+                                            message?.id || '',
+                                          )
+                                        }
+                                        className="absolute -bottom-8 left-0 flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
+                                      >
+                                        {copiedId === message.id ? (
+                                          <>
+                                            <Check className="w-3.5 h-3.5 text-green-500" />
+                                            Copied!
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Copy className="w-3.5 h-3.5" />
+                                            Copy Quote
+                                          </>
+                                        )}
+                                      </button>
+                                    )}
+                                  </div>
+                                );
+                            })
+                          )}
                         </div>
 
                         {isUser && (
