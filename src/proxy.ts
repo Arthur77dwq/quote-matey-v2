@@ -57,5 +57,13 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/chat', '/pricing/:path*', '/login', '/signup'],
+  matcher: [
+    '/api/subscription/:path',
+    '/api/user/:path',
+    '/api/chat',
+    '/chat',
+    '/pricing/:path*',
+    '/login',
+    '/signup',
+  ],
 };
