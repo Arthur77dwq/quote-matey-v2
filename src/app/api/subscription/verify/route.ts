@@ -1,4 +1,4 @@
-import { activateSubscription, verify } from '@/services/subscription';
+import { activateSubscriptionService, verify } from '@/services/subscription';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -6,7 +6,8 @@ export async function POST(req: Request) {
   const result = await verify(body.subscriptionId);
 
   if (result.status) {
-    if (result.subscription) await activateSubscription(result.subscription);
+    if (result.subscription)
+      await activateSubscriptionService({ resource: result.subscription });
   }
 
   return Response.json(result);

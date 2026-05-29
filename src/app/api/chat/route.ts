@@ -257,7 +257,11 @@ export async function POST(request: NextRequest) {
             link_text: 'Upgrade',
             info_text: 'Usage limit exceed.',
           },
-          parts: null,
+          parts: [
+            {
+              text: 'Usage limit exceeded.',
+            },
+          ],
         });
       }
 

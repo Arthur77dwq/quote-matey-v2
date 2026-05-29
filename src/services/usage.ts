@@ -1,10 +1,14 @@
+import { getPlanLimit } from '@/db/planLimit/read';
 import {
+  createUsage,
   getFreePlanUsagePage,
   incrementImageUsage,
   incrementTextUsage,
   resetUsageCycle,
 } from '@/db/usage';
+import { getUserUsage } from '@/db/usage/read';
 import { getUserId } from '@/lib/auth/user';
+import { Subscription } from '@/types/subscription';
 
 import { getCurrentUserSubscription } from './subscription';
 
@@ -46,5 +50,32 @@ export async function resetFreePlanUsage() {
     await resetUsageRows(rows);
 
     page++;
+  }
+}
+
+export async function ensureUsage(subscription: Subscription) {
+  if (subscription) {
+    const availableUsage = await getUserUsage(
+      subscription.firebase_uid,
+      subscription.plan_id,
+    );
+
+    if (!availableUsage) {
+      const limit = await getPlanLimit(subscription.plan_id);
+
+      const now = new Date();
+      const nextMonth = new Date(now);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      if (limit)
+        await createUsage({
+          firebase_uid: subscription.firebase_uid,
+          plan_id: subscription.plan_id,
+          period_start: now,
+          period_end:
+            limit.interval === 'WEEK'
+              ? new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+              : nextMonth,
+        });
+    }
   }
 }

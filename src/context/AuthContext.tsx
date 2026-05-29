@@ -29,7 +29,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<
-    (User & { subscription: Subscription | null }) | null
+    (User & { subscription: Subscription[] | null }) | null
   >(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await setAuthCookie(token);
 
       // Default user state
-      let subscription: Subscription | null = null;
+      let subscription: { result: Subscription[] } | null = null;
       try {
         subscription = await await apiJson('/api/user', {
           method: 'POST',
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           displayName: firebaseUser.displayName || '',
           photoURL: firebaseUser.photoURL || '',
           token,
-          subscription,
+          subscription: subscription?.result || null,
         });
       }
     } catch {

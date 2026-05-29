@@ -1,14 +1,17 @@
 'use client';
 
+import { SubscriptionStatus } from '@prisma/client';
 import { Bot, Check, Copy, Loader2, Plus, Send, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
 import ImagePreview from '@/components/ui/images-preview-grid';
 import UsageLimitNotification from '@/components/ui/usage-limit-notification';
+import { useAuth } from '@/context/AuthContext';
 import { Api } from '@/lib/api';
 import { compressImage } from '@/lib/utils/compress-image';
 import { fileToBase64 } from '@/lib/utils/image-to-base64';
@@ -27,6 +30,7 @@ function ChatContent() {
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
   const [files, setFiles] = useState<PreviewFile[]>([]);
+  const { user } = useAuth();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const compressedFiles = await Promise.all(
@@ -212,6 +216,19 @@ function ChatContent() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  useEffect(() => {
+    if (user?.subscription?.[0]?.status === SubscriptionStatus.PAST_DUE) {
+      toast.warning(
+        'Your subscription is past due. Please update your payment information.',
+        {
+          id: 'subscription-past-due',
+          duration: Infinity,
+          closeButton: true,
+        },
+      );
+    }
+  }, [user?.subscription]);
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       <ChatNavbar />
@@ -258,82 +275,83 @@ function ChatContent() {
                           </div>
                         )}
                         <div className="flex flex-col-reverse gap-1 items-end">
-                          {message?.notification && (
+                          {message?.notification ? (
                             <UsageLimitNotification
                               variant="compact"
                               info={message.notification.info_text}
                               link_text={message.notification.link_text}
                               href="/pricing"
                             />
-                          )}
-                          {message?.parts?.map((part: Part, i: number) => {
-                            if ('inlineData' in part) {
-                              if (part.inlineData.mimeType === 'image/jpeg') {
-                                return (
-                                  <img
-                                    key={`${i}${message.id}img`}
-                                    src={`data:image/jpeg;base64,${part.inlineData.data}`}
-                                    className="rounded-2xl size-30 object-cover"
-                                  />
-                                );
-                              } else {
-                                return (
-                                  <video
-                                    className="rounded-2xl size-30"
-                                    key={`${i}${message.id}`}
-                                  >
-                                    <source
-                                      src={part.inlineData.data}
-                                      type="video/mp4"
+                          ) : (
+                            message?.parts?.map((part: Part, i: number) => {
+                              if ('inlineData' in part) {
+                                if (part.inlineData.mimeType === 'image/jpeg') {
+                                  return (
+                                    <img
+                                      key={`${i}${message.id}img`}
+                                      src={`data:image/jpeg;base64,${part.inlineData.data}`}
+                                      className="rounded-2xl size-30 object-cover"
                                     />
-                                  </video>
-                                );
-                              }
-                            }
-
-                            if ('text' in part)
-                              return (
-                                <div
-                                  key={`${i}${message.id}`}
-                                  className={`relative rounded-2xl px-5 py-2 min-h-10 flex justify-center items-center ${
-                                    isUser
-                                      ? 'bg-[#0a1628] text-white'
-                                      : 'bg-white border border-border/80 shadow-lg'
-                                  }`}
-                                >
-                                  <div
-                                    className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
-                                  >
-                                    {part?.text}
-                                  </div>
-
-                                  {/* Copy button for assistant messages */}
-                                  {!isUser && part.text && (
-                                    <button
-                                      onClick={() =>
-                                        copyToClipboard(
-                                          part.text,
-                                          message?.id || '',
-                                        )
-                                      }
-                                      className="absolute -bottom-8 left-0 flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
+                                  );
+                                } else {
+                                  return (
+                                    <video
+                                      className="rounded-2xl size-30"
+                                      key={`${i}${message.id}`}
                                     >
-                                      {copiedId === message.id ? (
-                                        <>
-                                          <Check className="w-3.5 h-3.5 text-green-500" />
-                                          Copied!
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3.5 h-3.5" />
-                                          Copy Quote
-                                        </>
-                                      )}
-                                    </button>
-                                  )}
-                                </div>
-                              );
-                          })}
+                                      <source
+                                        src={part.inlineData.data}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                  );
+                                }
+                              }
+
+                              if ('text' in part)
+                                return (
+                                  <div
+                                    key={`${i}${message.id}`}
+                                    className={`relative rounded-2xl px-5 py-2 min-h-10 flex justify-center items-center ${
+                                      isUser
+                                        ? 'bg-[#0a1628] text-white'
+                                        : 'bg-white border border-border/80 shadow-lg'
+                                    }`}
+                                  >
+                                    <div
+                                      className={`whitespace-pre-wrap leading-relaxed ${isUser ? 'text-white' : 'text-foreground'}`}
+                                    >
+                                      {part?.text}
+                                    </div>
+
+                                    {/* Copy button for assistant messages */}
+                                    {!isUser && part.text && (
+                                      <button
+                                        onClick={() =>
+                                          copyToClipboard(
+                                            part.text,
+                                            message?.id || '',
+                                          )
+                                        }
+                                        className="absolute -bottom-8 left-0 flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:border-[#0a1628]/20 transition-all shadow-sm"
+                                      >
+                                        {copiedId === message.id ? (
+                                          <>
+                                            <Check className="w-3.5 h-3.5 text-green-500" />
+                                            Copied!
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Copy className="w-3.5 h-3.5" />
+                                            Copy Quote
+                                          </>
+                                        )}
+                                      </button>
+                                    )}
+                                  </div>
+                                );
+                            })
+                          )}
                         </div>
 
                         {isUser && (
