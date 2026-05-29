@@ -1,5 +1,6 @@
+import { SubscriptionStatus } from '@prisma/client';
+
 import { prisma } from '@/lib/prisma';
-import { SubscriptionStatus } from '@/types/subscription';
 
 export async function getSubscriptionByUser(
   firebase_uid: string,
@@ -12,7 +13,11 @@ export async function getSubscriptionByUser(
     where: {
       firebase_uid,
       status: {
-        notIn: ['EXPIRED', 'APPROVAL_PENDING', 'SUSPENDED'],
+        notIn: [
+          SubscriptionStatus.EXPIRED,
+          SubscriptionStatus.APPROVAL_PENDING,
+          SubscriptionStatus.SUSPENDED,
+        ],
       },
 
       ...(status && {

@@ -4,6 +4,7 @@ export type User = {
   displayName: string;
   photoURL: string;
   token: string;
+  subscription: Subscription[] | null;
 };
 
 export type AuthContextType = {

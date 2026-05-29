@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Suspense } from 'react';
+import { Toaster } from 'sonner';
 
 import GoogleAnalyticsTracker from '@/components/analytics';
 import { Navbar } from '@/components/navbar';
@@ -54,6 +55,11 @@ export default function RootLayout({
       <body
         className={`${_geist.variable} ${_geistMono.variable} font-sans antialiased`}
       >
+        <Toaster
+          closeButton
+          position="top-right"
+          offset={{ top: 80, right: 20 }}
+        />
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
           <AuthProvider>

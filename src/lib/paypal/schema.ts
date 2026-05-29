@@ -40,6 +40,10 @@ const payment = z.object({
 /* ---------- Discriminated Union ---------- */
 export const PaypalWebhookSchema = z.discriminatedUnion('event_type', [
   base.extend({
+    event_type: z.literal('BILLING.SUBSCRIPTION.RE-ACTIVATED'),
+    resource: subscription,
+  }),
+  base.extend({
     event_type: z.literal('BILLING.SUBSCRIPTION.ACTIVATED'),
     resource: subscription,
   }),
@@ -51,6 +55,11 @@ export const PaypalWebhookSchema = z.discriminatedUnion('event_type', [
 
   base.extend({
     event_type: z.literal('BILLING.SUBSCRIPTION.PAYMENT.FAILED'),
+    resource: subscription,
+  }),
+
+  base.extend({
+    event_type: z.literal('BILLING.SUBSCRIPTION.SUSPENDED'),
     resource: subscription,
   }),
 
