@@ -1,14 +1,17 @@
 'use client';
 
+import { SubscriptionStatus } from '@prisma/client';
 import { Bot, Check, Copy, Loader2, Plus, Send, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { ChatNavbar } from '@/components/chat-navbar';
 import ImagePreview from '@/components/ui/images-preview-grid';
 import UsageLimitNotification from '@/components/ui/usage-limit-notification';
+import { useAuth } from '@/context/AuthContext';
 import { Api } from '@/lib/api';
 import { compressImage } from '@/lib/utils/compress-image';
 import { fileToBase64 } from '@/lib/utils/image-to-base64';
@@ -27,6 +30,7 @@ function ChatContent() {
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
   const [files, setFiles] = useState<PreviewFile[]>([]);
+  const { user } = useAuth();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const compressedFiles = await Promise.all(
@@ -211,6 +215,19 @@ function ChatContent() {
     setCopiedId(messageId);
     setTimeout(() => setCopiedId(null), 2000);
   };
+
+  useEffect(() => {
+    if (user?.subscription?.[0]?.status === SubscriptionStatus.PAST_DUE) {
+      toast.warning(
+        'Your subscription is past due. Please update your payment information.',
+        {
+          id: 'subscription-past-due',
+          duration: Infinity,
+          closeButton: true,
+        },
+      );
+    }
+  }, [user?.subscription]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">

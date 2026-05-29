@@ -1,3 +1,5 @@
+import { SubscriptionStatus } from '@prisma/client';
+
 import { prisma } from '@/lib/prisma';
 
 export async function createPendingSubscription(data: {
@@ -14,7 +16,7 @@ export async function createPendingSubscription(data: {
       firebase_uid: data.firebase_uid,
       plan_id: data.plan_id,
       paypal_subscription_id: data.paypal_subscription_id,
-      status: 'APPROVAL_PENDING',
+      status: SubscriptionStatus.APPROVAL_PENDING,
     },
   });
 }
@@ -23,7 +25,9 @@ export async function createNewUserFreeSubscription(firebaseUid: string) {
   const existingSubscription = await prisma.subscription.findMany({
     where: {
       firebase_uid: firebaseUid,
-      status: 'ACTIVE',
+      status: {
+        in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.PAST_DUE],
+      },
     },
   });
 
@@ -57,7 +61,7 @@ export async function createNewUserFreeSubscription(firebaseUid: string) {
       data: {
         firebase_uid: firebaseUid,
         plan_id: freePlan.id,
-        status: 'ACTIVE',
+        status: SubscriptionStatus.ACTIVE,
         start_date: now,
       },
     });
