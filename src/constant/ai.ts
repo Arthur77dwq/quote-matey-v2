@@ -1,12 +1,32 @@
 // Ai Models
 export const MODELS = [
   {
+    priority: 1,
     id: 'gemini-3.1-flash-lite-preview',
+    compatibility: 'google',
     model: 'gemini-3.1-flash-lite-preview',
     maxOutputTokens: 10000,
+    temperature: 0.7,
+    abortTimeout: 30000,
   },
-  { id: 'gemini-2.5-flash', model: 'gemini-2.5-flash', maxOutputTokens: 3000 },
-  { id: 'nurric-gpt-5-mini', model: 'gpt-5-mini', maxOutputTokens: 3000 },
+  {
+    priority: 0,
+    id: 'nurric-gpt-5-mini',
+    compatibility: 'openai',
+    model: 'gpt-5-mini',
+    maxOutputTokens: 3000,
+    temperature: 0.7,
+    abortTimeout: 30000,
+  },
+  {
+    priority: 2,
+    id: 'gemini-2.5-flash',
+    compatibility: 'google',
+    model: 'gemini-2.5-flash',
+    maxOutputTokens: 3000,
+    temperature: 0.7,
+    abortTimeout: 30000,
+  },
 ];
 
 // -----------------------------

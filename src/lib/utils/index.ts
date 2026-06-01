@@ -24,3 +24,10 @@ export function formattedDate(date: string) {
     year: 'numeric',
   });
 }
+
+export function cleanOutput(text?: string) {
+  return text
+    ?.replace(/\*\*/g, '')
+    .replace(/#{2,}/g, '')
+    .replace(/🎯|✅|🔥/g, '');
+}

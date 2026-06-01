@@ -1,3 +1,4 @@
+import { GoogleGenAI } from '@google/genai';
 import { OpenAI } from 'openai';
 import type {
   ChatCompletionAssistantMessageParam,
@@ -8,6 +9,8 @@ import type {
 
 import { Message, TextPart } from '@/types/chat';
 
+import { cleanOutput } from '../utils';
+
 class ValueNotFound extends Error {
   constructor(message: string) {
     super(message);
@@ -17,22 +20,8 @@ class ValueNotFound extends Error {
 
 export class OpenAIGenAI {
   private client: OpenAI;
-  private model: string;
-  private maxTokens: number;
-  private stream: boolean = false;
 
-  constructor({
-    model,
-    stream,
-    max_tokens,
-  }: {
-    model: string;
-    stream: boolean;
-    max_tokens: number;
-  }) {
-    this.model = model;
-    this.stream = stream;
-    this.maxTokens = max_tokens;
+  constructor() {
     const apiKey = process.env.NURRIC_API_KEY?.trim();
     const baseURL = process.env.NURRIC_BASE_URL?.trim();
 
@@ -87,12 +76,25 @@ export class OpenAIGenAI {
     });
   }
 
-  public async *generate(messages: Message[]) {
-    const stream = await this.client.chat.completions.create({
-      model: this.model,
-      messages: await this.parseMessages(messages),
-      stream: true,
-    });
+  public async *generate(
+    model: string,
+    maxOutputTokens: number,
+    abortTimeout: number,
+    temperature: number,
+    messages: Message[],
+  ) {
+    const stream = await this.client.chat.completions.create(
+      {
+        model,
+        max_tokens: maxOutputTokens,
+        temperature,
+        messages: await this.parseMessages(messages),
+        stream: true,
+      },
+      {
+        signal: AbortSignal.timeout(abortTimeout),
+      },
+    );
 
     for await (const chunk of stream) {
       if (
@@ -101,9 +103,47 @@ export class OpenAIGenAI {
         chunk.choices[0].delta?.content
       ) {
         yield {
-          text: chunk.choices[0]?.delta?.content,
+          text: cleanOutput(chunk.choices[0]?.delta?.content),
         };
       }
+    }
+  }
+}
+
+export class GoogleAI {
+  private client: GoogleGenAI;
+
+  constructor() {
+    const apiKey = process.env.GEMINI_API_KEY?.trim() || '';
+
+    if (!apiKey || apiKey === 'false' || apiKey === 'undefined') {
+      throw new ValueNotFound(
+        'Gemini API key is not set in environment variables.',
+      );
+    }
+    this.client = new GoogleGenAI({ apiKey });
+  }
+
+  public async *generate(
+    model: string,
+    maxOutputTokens: number,
+    abortTimeout: number,
+    temperature: number,
+    messages: Message[],
+  ) {
+    const stream = await this.client.models.generateContentStream({
+      model,
+      contents: messages,
+      config: {
+        temperature,
+        maxOutputTokens,
+        abortSignal: AbortSignal.timeout(abortTimeout),
+      },
+    });
+
+    for await (const response of stream) {
+      const text = cleanOutput(response?.text);
+      if (text) yield { text };
     }
   }
 }

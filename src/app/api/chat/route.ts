@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SYSTEM_PROMPTS } from '@/constant/ai';
 import { withAuth } from '@/lib/auth/withAuth';
 import { canUserUseFeature } from '@/services/access';
-import { nurricAi } from '@/services/ai';
+import { QuoteAI } from '@/services/ai';
 import { updateUsage } from '@/services/usage';
 import { Message } from '@/types/chat';
 
@@ -121,8 +121,7 @@ export async function POST(request: NextRequest) {
             text: buildPrompt(null, hasImage),
           });
         }
-
-        const stream = nurricAi(data);
+        const stream = QuoteAI(data);
 
         await updateUsage([
           ...(hasImage ? ['image'] : []),
@@ -178,15 +177,6 @@ export async function POST(request: NextRequest) {
           ],
         });
       }
-
-      return NextResponse.json({
-        role: 'assistant',
-        parts: [
-          {
-            text: '⚠️ High demand right now. Try again in a few seconds.',
-          },
-        ],
-      });
     } catch {
       return NextResponse.json({
         role: 'assistant',
