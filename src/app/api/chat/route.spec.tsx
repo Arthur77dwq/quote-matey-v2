@@ -25,12 +25,8 @@ vi.mock('@/constant/ai', () => ({
 
 import { NextRequest } from 'next/server';
 
-import {
-  buildPrompt,
-  extractCurrectMessage,
-  getApiKey,
-  POST,
-} from '@/app/api/chat/route';
+import { buildPrompt, extractCurrectMessage, POST } from '@/app/api/chat/route';
+import { getApiKey } from '@/services/ai';
 import { Message } from '@/types/chat';
 
 function createRequest<T>(body: T): NextRequest {
