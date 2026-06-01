@@ -1,7 +1,12 @@
 // Ai Models
 export const MODELS = [
-  { model: 'gemini-3.1-flash-lite-preview', maxOutputTokens: 10000 },
-  { model: 'gemini-2.5-flash', maxOutputTokens: 3000 },
+  {
+    id: 'gemini-3.1-flash-lite-preview',
+    model: 'gemini-3.1-flash-lite-preview',
+    maxOutputTokens: 10000,
+  },
+  { id: 'gemini-2.5-flash', model: 'gemini-2.5-flash', maxOutputTokens: 3000 },
+  { id: 'nurric-gpt-5-mini', model: 'gpt-5-mini', maxOutputTokens: 3000 },
 ];
 
 // -----------------------------

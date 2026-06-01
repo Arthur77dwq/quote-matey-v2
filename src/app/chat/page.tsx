@@ -119,22 +119,71 @@ function ChatContent() {
           messages: currentMessages,
         }),
       });
-
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(
-          data?.error || data?.message || 'Failed to get response',
-        );
+        throw new Error('Failed to get response');
       }
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        ...data,
-        role: 'assistant',
-      };
+      if (!response.body) {
+        throw new Error('No response body');
+      }
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      const assistantId = (Date.now() + 1).toString();
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: assistantId,
+          role: 'assistant',
+          parts: [
+            {
+              text: '',
+            },
+          ],
+        },
+      ]);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      let buffer = '';
+      let accumulatedText = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, {
+          stream: true,
+        });
+
+        const lines = buffer.split('\n');
+
+        buffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+
+          const data = JSON.parse(line);
+          if (data) accumulatedText += data.parts[0].text;
+
+          if (accumulatedText)
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantId
+                  ? {
+                      ...msg,
+                      parts: [
+                        {
+                          text: accumulatedText,
+                        },
+                      ],
+                    }
+                  : msg,
+              ),
+            );
+        }
+      }
     } catch (error) {
       let errorContent =
         'Sorry mate, something went wrong. Give it another go!';
