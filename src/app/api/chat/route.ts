@@ -81,6 +81,49 @@ Rules:
 `;
 }
 
+type StreamChunk = {
+  text?: string;
+};
+
+function createReadableStream(
+  stream: AsyncGenerator<StreamChunk>,
+  updateData: string[],
+) {
+  const encoder = new TextEncoder();
+
+  const encode = (chunk: Message) =>
+    encoder.encode(JSON.stringify(chunk) + '\n');
+
+  return new ReadableStream({
+    async start(controller) {
+      let complete = false;
+      try {
+        for await (const chunk of stream) {
+          const data: Message = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            parts: [
+              {
+                text: chunk.text || '',
+              },
+            ],
+          };
+
+          controller.enqueue(encode(data));
+        }
+        complete = true;
+      } catch (error) {
+        controller.error(error);
+      } finally {
+        if (complete) {
+          await updateUsage(updateData);
+        }
+        controller.close();
+      }
+    },
+  });
+}
+
 // MAIN HANDLER
 export async function POST(request: NextRequest) {
   return withAuth(async (uid) => {
@@ -111,58 +154,34 @@ export async function POST(request: NextRequest) {
 
       if (isAvailable) {
         // Prepare System Instructions
+        const messageData = data[index];
+        const messagePart = messageData.parts[msgIndexInPart];
+
         if (msgIndexInPart != null && msgIndexInPart >= 0) {
-          if ('text' in data[index].parts[msgIndexInPart]) {
-            data[index].parts[msgIndexInPart].text = buildPrompt(msg, hasImage);
+          if ('text' in messagePart) {
+            messagePart.text = buildPrompt(msg, hasImage);
           }
         } else {
           // If user message doesn't have text part (e.g. only image), add a new part for system instructions
-          data[index].parts.push({
+          messageData.parts.push({
             text: buildPrompt(null, hasImage),
           });
         }
+
         const stream = QuoteAI(data);
 
-        await updateUsage([
+        const updateUsageData = [
           ...(hasImage ? ['image'] : []),
           ...(msg ? ['text'] : []),
-        ]);
+        ];
 
-        const encoder = new TextEncoder();
-
-        return new Response(
-          new ReadableStream({
-            async start(controller) {
-              try {
-                for await (const chunk of stream) {
-                  controller.enqueue(
-                    encoder.encode(
-                      JSON.stringify({
-                        role: 'assistant',
-                        parts: [
-                          {
-                            text: chunk.text,
-                          },
-                        ],
-                      }) + '\n',
-                    ),
-                  );
-                }
-
-                controller.close();
-              } catch (error) {
-                controller.error(error);
-              }
-            },
-          }),
-          {
-            headers: {
-              'Content-Type': 'application/x-ndjson',
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
-            },
+        return new Response(createReadableStream(stream, updateUsageData), {
+          headers: {
+            'Content-Type': 'application/x-ndjson',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
           },
-        );
+        });
       } else {
         return NextResponse.json({
           role: 'assistant',
