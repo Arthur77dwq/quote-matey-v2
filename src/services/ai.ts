@@ -117,7 +117,7 @@ async function* tryModels(messages: Message[]): AsyncGenerator<StreamChunk> {
   } of getModel()) {
     const ai = getAI(compatibility);
 
-    const result = generateWithRetry(
+    const stream = generateWithRetry(
       ai,
       model,
       maxOutputTokens,
@@ -125,8 +125,20 @@ async function* tryModels(messages: Message[]): AsyncGenerator<StreamChunk> {
       temperature,
       messages,
     );
-    if (result) {
-      yield* result;
+
+    const chunks: StreamChunk[] = [];
+    let hasText = false;
+
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+
+      if (chunk.text?.trim()) {
+        hasText = true;
+      }
+    }
+
+    if (hasText) {
+      yield* chunks;
       break;
     }
   }

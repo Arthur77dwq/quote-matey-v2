@@ -92,6 +92,7 @@ function ChatContent() {
   };
 
   const handleSendMessage = async (text: string) => {
+    // TODO: Implement notification handler in chat
     const trimmedText = text.trim() || null;
 
     // Prevent duplicate calls using ref (survives re-renders)
@@ -119,6 +120,7 @@ function ChatContent() {
           messages: currentMessages,
         }),
       });
+
       if (!response.ok) {
         throw new Error('Failed to get response');
       }

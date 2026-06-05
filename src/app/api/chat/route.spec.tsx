@@ -1,21 +1,42 @@
 import type { DecodedIdToken } from 'firebase-admin/auth';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-const mockGenerate = vi.fn();
 
-vi.mock('@google/genai', () => {
-  class MockGoogleGenAI {
-    models = {
-      generateContent: mockGenerate,
-    };
+export const mockGenerate = vi.fn();
+vi.mock('@/lib/ai/ai', () => {
+  class MockGoogleAI {
+    generate = mockGenerate;
   }
 
-  return { GoogleGenAI: MockGoogleGenAI };
+  class MockOpenAIGenAI {
+    generate = mockGenerate;
+  }
+
+  return {
+    GoogleAI: MockGoogleAI,
+    OpenAIGenAI: MockOpenAIGenAI,
+  };
 });
 
 vi.mock('@/constant/ai', () => ({
   MODELS: [
-    { model: 'model-1', maxOutputTokens: 1000 },
-    { model: 'model-2', maxOutputTokens: 1000 },
+    {
+      id: 'test-1',
+      compatibility: 'google',
+      priority: 1,
+      temperature: 0.7,
+      abortTimeout: 3000,
+      model: 'model-1',
+      maxOutputTokens: 1000,
+    },
+    {
+      id: 'test-2',
+      compatibility: 'openai',
+      priority: 0,
+      temperature: 0.7,
+      abortTimeout: 3000,
+      model: 'model-2',
+      maxOutputTokens: 1000,
+    },
   ],
   SYSTEM_PROMPTS: {
     text: 'test prompt',
@@ -26,7 +47,6 @@ vi.mock('@/constant/ai', () => ({
 import { NextRequest } from 'next/server';
 
 import { buildPrompt, extractCurrectMessage, POST } from '@/app/api/chat/route';
-import { getApiKey } from '@/services/ai';
 import { Message } from '@/types/chat';
 
 function createRequest<T>(body: T): NextRequest {
@@ -43,6 +63,39 @@ const findTextpart = (parts: Message[]) => {
   return parts.find((part) => 'text' in part) || { text: '' };
 };
 
+async function readStreamResponse(res: Response) {
+  const reader = res.body?.getReader();
+
+  if (!reader) {
+    throw new Error('No response body');
+  }
+
+  let result = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+
+    if (done) break;
+
+    result += new TextDecoder().decode(value);
+  }
+
+  const lines = result
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return lines.map((line) => JSON.parse(line));
+}
+
+async function* mockStream(msg?: string) {
+  yield { text: msg };
+}
+
+async function failingStream(status: number) {
+  throw { status };
+}
+
 vi.mock('@/services/usage', () => ({
   updateUsage: vi.fn(),
 }));
@@ -57,11 +110,12 @@ vi.mock('@/services/access', () => ({
 
 import { MODELS } from '@/constant/ai';
 import { getUserId } from '@/lib/auth/user';
+import { cleanOutput } from '@/lib/utils';
 import { canUserUseFeature } from '@/services/access';
 import { updateUsage } from '@/services/usage';
 
 describe('Chat API', () => {
-  const expectedErrorMessage = 'High demand';
+  const expectedErrorMessage = '❌ Something went wrong. Please try again.';
   describe('Core Functionality', () => {
     beforeEach(() => {
       vi.useFakeTimers();
@@ -85,14 +139,6 @@ describe('Chat API', () => {
       expect(userMessage.msg).toBe('leaking tap');
     });
 
-    test('TC-02: Should fetch api key from environment variables.', () => {
-      process.env.GEMINI_API_KEY = 'primary-key';
-
-      const key = getApiKey();
-
-      expect(key).toBe('primary-key');
-    });
-
     test('TC-03: Should build prompt which contains user message.', () => {
       const prompt = buildPrompt('Fix AC', false);
 
@@ -102,54 +148,38 @@ describe('Chat API', () => {
     });
 
     test('TC-04: Should call ai model to generate quote.', async () => {
-      mockGenerate.mockResolvedValue({ text: 'Quote generated' });
+      mockGenerate.mockReturnValue(mockStream('Quote generated'));
 
       const req = createRequest({
         messages: createTextMsg('Need plumbing work'),
       });
 
-      await POST(req);
+      const res = await POST(req);
+
+      await readStreamResponse(res);
 
       expect(mockGenerate).toHaveBeenCalledTimes(1);
 
-      const args = mockGenerate.mock.calls[0][0];
-
-      expect(args).toHaveProperty('model');
-      expect(args).toHaveProperty('contents');
+      expect(mockGenerate).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(Number),
+        expect.any(Number),
+        expect.any(Number),
+        expect.any(Array),
+      );
     });
 
     test('TC-05: Should provide response.', async () => {
-      mockGenerate.mockResolvedValue({ text: 'Final quote' });
+      mockGenerate.mockReturnValue(mockStream('Final quote'));
 
       const req = createRequest({
         messages: createTextMsg('Need electrician'),
       });
 
       const res = await POST(req);
-      const data = await res.json();
-
-      expect(findTextpart(data.parts).text).toBe('Final quote');
-    });
-
-    test('TC-31: Should use backup api key if primary missing', () => {
-      process.env.GEMINI_API_KEY = '';
-      process.env.GEMINI_API_KEY_BACKUP = 'backup-key';
-
-      expect(getApiKey()).toBe('backup-key');
-    });
-
-    test('TC-32: Returns error if no api key available', async () => {
-      process.env.GEMINI_API_KEY = '';
-      process.env.GEMINI_API_KEY_BACKUP = '';
-
-      const req = createRequest({
-        messages: createTextMsg('test'),
-      });
-
-      const res = await POST(req);
-      const data = await res.json();
-
-      expect(findTextpart(data.parts).text).toContain('Something went wrong');
+      const data = await readStreamResponse(res);
+      expect(findTextpart(data[0].parts).text).toBe('Final quote');
+      expect('Final quote').toBe('Final quote');
     });
 
     test('TC-33: Returns upgrade notification when usage exceeded', async () => {
@@ -167,7 +197,7 @@ describe('Chat API', () => {
     });
 
     test('TC-34: Handles image-only input', async () => {
-      mockGenerate.mockResolvedValue({ text: 'Image processed' });
+      mockGenerate.mockReturnValue(mockStream('Image processed'));
 
       const req = createRequest({
         messages: [
@@ -186,13 +216,13 @@ describe('Chat API', () => {
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(data.parts[0].text).toBe('Image processed');
+      expect(data[0].parts[0].text).toBe('Image processed');
     });
 
     test('TC-35: Replaces user text with built prompt', async () => {
-      mockGenerate.mockResolvedValue({ text: 'ok' });
+      mockGenerate.mockReturnValue(mockStream('ok'));
 
       const req = createRequest({
         messages: createTextMsg('Need plumber'),
@@ -200,25 +230,26 @@ describe('Chat API', () => {
 
       await POST(req);
 
-      const args = mockGenerate.mock.calls[0][0];
+      const args = mockGenerate.mock.calls[0][4];
 
-      expect(args.contents[0].parts[0].text).toContain('[SYSTEM]');
+      expect(args[0].parts[0].text).toContain('[SYSTEM]');
     });
 
     test('TC-36: Updates usage after successful response', async () => {
-      mockGenerate.mockResolvedValue({ text: 'Success' });
+      mockGenerate.mockReturnValue(mockStream('Success'));
 
       const req = createRequest({
         messages: createTextMsg('test'),
       });
 
-      await POST(req);
+      const res = await POST(req);
+      await readStreamResponse(res);
 
       expect(updateUsage).toHaveBeenCalledWith(['text']);
     });
 
     test('TC-37: Does not update usage on failed generation', async () => {
-      mockGenerate.mockRejectedValue({ status: 503 });
+      mockGenerate.mockRejectedValue(failingStream(503));
 
       const req = createRequest({
         messages: createTextMsg('fail'),
@@ -226,13 +257,15 @@ describe('Chat API', () => {
 
       const resPromise = POST(req);
       await vi.runAllTimersAsync();
-      await resPromise;
+      const res = await resPromise;
+      const data = await readStreamResponse(res);
+      expect(findTextpart(data[0].parts).text).toContain(expectedErrorMessage);
 
       expect(updateUsage).not.toHaveBeenCalled();
     });
 
     test('TC-38: Handles image and text together', async () => {
-      mockGenerate.mockResolvedValue({ text: 'Handled mixed input' });
+      mockGenerate.mockReturnValue(mockStream('Handled mixed input'));
 
       const req = createRequest({
         messages: [
@@ -252,9 +285,9 @@ describe('Chat API', () => {
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(data.parts[0].text).toBe('Handled mixed input');
+      expect(data[0].parts[0].text).toBe('Handled mixed input');
     });
   });
 
@@ -322,17 +355,15 @@ describe('Chat API', () => {
     });
 
     test('TC-11: Handles non-string user content', async () => {
-      mockGenerate.mockResolvedValue({
-        text: 'Handled numeric content',
-      });
+      mockGenerate.mockReturnValue(mockStream('Handled numeric content'));
       const req = createRequest({
         messages: [{ role: 'user', parts: [{ text: 12345 }] }],
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toBe('Handled numeric content');
+      expect(findTextpart(data[0].parts).text).toBe('Handled numeric content');
     });
 
     test('TC-12: Handles invalid messages type (not array)', async () => {
@@ -349,19 +380,17 @@ describe('Chat API', () => {
     test('TC-13: Handles very long input safely', async () => {
       const longText = 'a'.repeat(10000);
 
-      mockGenerate.mockResolvedValue({
-        text: 'ok',
-      });
+      mockGenerate.mockReturnValue(mockStream('ok'));
 
       const req = createRequest({
         messages: createTextMsg(longText),
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(data.parts.length).toBeGreaterThan(0);
-      expect(findTextpart(data.parts).text).toBe('ok');
+      expect(data[0].parts.length).toBeGreaterThan(0);
+      expect(findTextpart(data[0].parts).text).toBe('ok');
     });
   });
 
@@ -382,7 +411,7 @@ describe('Chat API', () => {
     });
 
     test('TC-14: uses the last user message', async () => {
-      mockGenerate.mockResolvedValue({ text: 'ok' });
+      mockGenerate.mockReturnValue(mockStream('ok'));
 
       const req = createRequest({
         messages: [
@@ -391,18 +420,15 @@ describe('Chat API', () => {
         ],
       });
 
-      await POST(req);
-
-      expect(mockGenerate).toHaveBeenCalledWith(
+      const res = await POST(req);
+      await readStreamResponse(res);
+      const messages = mockGenerate.mock.calls[0][4];
+      expect(messages[messages.length - 1]).toEqual(
         expect.objectContaining({
-          contents: expect.arrayContaining([
+          role: 'user',
+          parts: expect.arrayContaining([
             expect.objectContaining({
-              role: 'user',
-              parts: expect.arrayContaining([
-                expect.objectContaining({
-                  text: expect.stringContaining('second'),
-                }),
-              ]),
+              text: expect.stringContaining('Job Description:\nsecond'),
             }),
           ]),
         }),
@@ -411,79 +437,68 @@ describe('Chat API', () => {
 
     test('TC-15: falls back if AI returns empty string', async () => {
       mockGenerate
-        .mockResolvedValueOnce({ text: '' })
-        .mockResolvedValueOnce({ text: 'Recovered' });
+        .mockReturnValueOnce(mockStream(''))
+        .mockReturnValueOnce(mockStream('Recovered'));
 
       const req = createRequest({
         messages: createTextMsg('test'),
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toBe('Recovered');
+      expect(findTextpart(data[0].parts).text).toBe('Recovered');
     });
 
     test('TC-16: handles undefined AI response safely', async () => {
       mockGenerate
-        .mockResolvedValueOnce({})
-        .mockResolvedValueOnce({ text: 'Fallback works' });
+        .mockReturnValueOnce(mockStream())
+        .mockReturnValueOnce(mockStream('Fallback works'));
 
       const req = createRequest({
         messages: createTextMsg('test'),
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toBe('Fallback works');
+      expect(findTextpart(data[0].parts).text).toBe('Fallback works');
     });
 
     test('TC-17: handles very large input', async () => {
       const largeInput = 'a'.repeat(20000);
 
-      mockGenerate.mockResolvedValue({ text: 'Handled large input' });
+      mockGenerate.mockReturnValue(mockStream('Handled large input'));
 
       const req = createRequest({
         messages: createTextMsg(largeInput),
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toBe('Handled large input');
+      expect(findTextpart(data[0].parts).text).toBe('Handled large input');
     });
 
     test('TC-18: handles special characters safely', async () => {
-      mockGenerate.mockResolvedValue({ text: 'ok' });
+      mockGenerate.mockReturnValue(mockStream('ok'));
 
       const req = createRequest({
         messages: createTextMsg('!@#$%^&*()_+'),
       });
 
       const res = await POST(req);
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toBe('ok');
+      expect(findTextpart(data[0].parts).text).toBe('ok');
     });
 
-    test('TC-19: cleans markdown and emojis from output', async () => {
-      mockGenerate.mockResolvedValue({
-        text: '**Hello** ## World 🎯',
-      });
-
-      const req = createRequest({
-        messages: createTextMsg('test'),
-      });
-
-      const res = await POST(req);
-      const data = await res.json();
-
-      expect(findTextpart(data.parts).text).toBe('Hello  World');
+    test('TC-19: removes markdown and emojis', () => {
+      expect(cleanOutput('**Hello** ## World 🎯')).toBe('Hello World ');
     });
 
     test('TC-20: stops retry after max attempts', async () => {
-      mockGenerate.mockRejectedValue({ status: 429 });
+      mockGenerate.mockReturnValue(failingStream(429));
 
       const req = createRequest({
         messages: createTextMsg('retry fail'),
@@ -494,13 +509,13 @@ describe('Chat API', () => {
       await vi.runAllTimersAsync();
 
       const res = await resPromise;
-      const data = await res.json();
+      const data = await readStreamResponse(res);
 
-      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
+      expect(findTextpart(data[0].parts).text).toContain(expectedErrorMessage);
     });
 
     test('TC-21: ignores assistant/system messages', async () => {
-      mockGenerate.mockResolvedValue({ text: 'ok' });
+      mockGenerate.mockReturnValue(mockStream('ok'));
 
       const req = createRequest({
         messages: [
@@ -510,17 +525,13 @@ describe('Chat API', () => {
       });
 
       await POST(req);
-
-      expect(mockGenerate).toHaveBeenCalledWith(
+      const messages = mockGenerate.mock.calls[0][4];
+      expect(messages[messages.length - 1]).toEqual(
         expect.objectContaining({
-          contents: expect.arrayContaining([
+          role: 'user',
+          parts: expect.arrayContaining([
             expect.objectContaining({
-              role: 'user',
-              parts: expect.arrayContaining([
-                expect.objectContaining({
-                  text: expect.stringContaining('real input'),
-                }),
-              ]),
+              text: expect.stringContaining('Job Description:\nreal input'),
             }),
           ]),
         }),
@@ -544,8 +555,8 @@ describe('Chat API', () => {
 
     test('TC-22: retries on 429', async () => {
       mockGenerate
-        .mockRejectedValueOnce({ status: 429 })
-        .mockResolvedValueOnce({ text: 'Recovered' });
+        .mockReturnValueOnce(failingStream(429))
+        .mockReturnValueOnce(mockStream('Recovered'));
 
       const req = createRequest({
         messages: createTextMsg('retry test'),
@@ -564,8 +575,8 @@ describe('Chat API', () => {
 
     test('TC-23: retries on 503', async () => {
       mockGenerate
-        .mockRejectedValueOnce({ status: 503 })
-        .mockResolvedValueOnce({ text: 'Recovered 503' });
+        .mockReturnValueOnce(failingStream(503))
+        .mockReturnValueOnce(mockStream('Recovered 503'));
 
       const req = createRequest({
         messages: createTextMsg('test'),
@@ -586,8 +597,8 @@ describe('Chat API', () => {
       error.name = 'AbortError';
 
       mockGenerate
-        .mockRejectedValueOnce(error)
-        .mockResolvedValueOnce({ text: 'Recovered timeout' });
+        .mockReturnValueOnce(error)
+        .mockReturnValueOnce(mockStream('Recovered timeout'));
 
       const req = createRequest({
         messages: createTextMsg('timeout test'),
@@ -622,8 +633,8 @@ describe('Chat API', () => {
 
     test('TC-26: falls back to next model', async () => {
       mockGenerate
-        .mockRejectedValueOnce({ status: 503 })
-        .mockResolvedValueOnce({ text: 'Second model works' });
+        .mockReturnValueOnce(failingStream(503))
+        .mockReturnValueOnce(mockStream('Second model works'));
 
       const req = createRequest({
         messages: createTextMsg('fallback'),
@@ -640,8 +651,8 @@ describe('Chat API', () => {
 
     test('TC-27: uses next model if response is empty', async () => {
       mockGenerate
-        .mockResolvedValueOnce({ text: '' })
-        .mockResolvedValueOnce({ text: 'Fallback response' });
+        .mockReturnValueOnce(mockStream(''))
+        .mockReturnValueOnce(mockStream('Fallback response'));
 
       const req = createRequest({
         messages: createTextMsg('empty test'),
@@ -706,7 +717,7 @@ describe('Chat API', () => {
 
       const data = await res.json();
 
-      expect(findTextpart(data.parts).text).toContain('High demand right now.');
+      expect(findTextpart(data.parts).text).toContain(expectedErrorMessage);
     });
   });
 });

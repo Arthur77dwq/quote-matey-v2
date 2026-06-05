@@ -25,9 +25,10 @@ export function formattedDate(date: string) {
   });
 }
 
-export function cleanOutput(text?: string) {
+export function cleanOutput(text?: string): string | undefined {
   return text
     ?.replace(/\*\*/g, '')
-    .replace(/#{2,}/g, '')
-    .replace(/🎯|✅|🔥/g, '');
+    ?.replace(/#{2,}/g, '')
+    ?.replace(/[🎯✅🔥]/gu, '')
+    ?.replace(/\s+/g, ' ');
 }

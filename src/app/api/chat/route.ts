@@ -97,6 +97,7 @@ function createReadableStream(
   return new ReadableStream({
     async start(controller) {
       let complete = false;
+      let chunkCount = 0;
       try {
         for await (const chunk of stream) {
           const data: Message = {
@@ -108,6 +109,20 @@ function createReadableStream(
               },
             ],
           };
+          chunkCount++;
+
+          controller.enqueue(encode(data));
+        }
+        if (chunkCount <= 0) {
+          const data: Message = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            parts: [
+              {
+                text: '❌ Something went wrong. Please try again.',
+              },
+            ],
+          };
 
           controller.enqueue(encode(data));
         }
@@ -115,7 +130,7 @@ function createReadableStream(
       } catch (error) {
         controller.error(error);
       } finally {
-        if (complete) {
+        if (complete && chunkCount > 0) {
           await updateUsage(updateData);
         }
         controller.close();

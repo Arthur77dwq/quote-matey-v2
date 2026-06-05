@@ -11,7 +11,7 @@ import { Message, TextPart } from '@/types/chat';
 
 import { cleanOutput } from '../utils';
 
-class ValueNotFound extends Error {
+export class ValueNotFound extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'ValueNotFound';
