@@ -92,7 +92,8 @@ async function* mockStream(msg?: string) {
   yield { text: msg };
 }
 
-async function failingStream(status: number) {
+/* eslint-disable require-yield */
+async function* failingStream(status: number) {
   throw { status };
 }
 
