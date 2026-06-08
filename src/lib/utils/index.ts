@@ -29,6 +29,6 @@ export function cleanOutput(text?: string): string | undefined {
   return text
     ?.replace(/\*\*/g, '')
     ?.replace(/#{2,}/g, '')
-    ?.replace(/[🎯✅🔥]/gu, '')
-    ?.replace(/\s+/g, ' ');
+    ?.replace(/[🎯✅🔥]/gu, '');
+  // ?.replace(/\s+/g, ' ');
 }
