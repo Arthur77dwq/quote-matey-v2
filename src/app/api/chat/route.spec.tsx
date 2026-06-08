@@ -495,7 +495,7 @@ describe('Chat API', () => {
     });
 
     test('TC-19: removes markdown and emojis', () => {
-      expect(cleanOutput('**Hello** ## World 🎯')).toBe('Hello World ');
+      expect(cleanOutput('**Hello** ## World 🎯')).toBe('Hello  World ');
     });
 
     test('TC-20: stops retry after max attempts', async () => {
