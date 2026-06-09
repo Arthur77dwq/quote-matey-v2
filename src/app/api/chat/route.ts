@@ -198,28 +198,38 @@ export async function POST(request: NextRequest) {
           },
         });
       } else {
-        return NextResponse.json({
-          role: 'assistant',
-          notification: {
-            link_text: 'Upgrade',
-            info_text: 'Usage limit exceed.',
-          },
-          parts: [
-            {
-              text: 'Usage limit exceeded.',
+        return NextResponse.json(
+          {
+            role: 'assistant',
+            notification: {
+              link_text: 'Upgrade',
+              info_text: 'Usage limit exceed.',
             },
-          ],
-        });
+            parts: [
+              {
+                text: 'Usage limit exceeded.',
+              },
+            ],
+          },
+          {
+            status: 429,
+          },
+        );
       }
     } catch {
-      return NextResponse.json({
-        role: 'assistant',
-        parts: [
-          {
-            text: '❌ Something went wrong. Please try again.',
-          },
-        ],
-      });
+      return NextResponse.json(
+        {
+          role: 'assistant',
+          parts: [
+            {
+              text: '❌ Something went wrong. Please try again.',
+            },
+          ],
+        },
+        {
+          status: 500,
+        },
+      );
     }
   });
 }

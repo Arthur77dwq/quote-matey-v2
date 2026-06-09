@@ -131,87 +131,85 @@ function ChatContent() {
 
       const assistantId = (Date.now() + 1).toString();
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: assistantId,
-          role: 'assistant',
-          parts: [
-            {
-              text: '',
-            },
-          ],
-        },
-      ]);
+      if (response.status === 200) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantId,
+            role: 'assistant',
+            parts: [
+              {
+                text: '',
+              },
+            ],
+          },
+        ]);
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-      let buffer = '';
-      let accumulatedText = '';
+        let buffer = '';
+        let accumulatedText = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
+        while (true) {
+          const { done, value } = await reader.read();
 
-        if (done) break;
+          if (done) break;
 
-        buffer += decoder.decode(value, {
-          stream: true,
-        });
+          buffer += decoder.decode(value, {
+            stream: true,
+          });
 
-        const lines = buffer.split('\n');
+          const lines = buffer.split('\n');
 
-        buffer = lines.pop() ?? '';
+          buffer = lines.pop() ?? '';
 
-        for (const line of lines) {
-          if (!line.trim()) continue;
+          for (const line of lines) {
+            if (!line.trim()) continue;
 
-          const data = JSON.parse(line);
-          if (data) accumulatedText += data.parts[0].text;
+            const data = JSON.parse(line);
+            if (data) accumulatedText += data.parts[0].text;
 
-          if (accumulatedText)
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === assistantId
-                  ? {
-                      ...msg,
-                      parts: [
-                        {
-                          text: accumulatedText,
-                        },
-                      ],
-                    }
-                  : msg,
-              ),
-            );
+            if (accumulatedText)
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === assistantId
+                    ? {
+                        ...msg,
+                        parts: [
+                          {
+                            text: accumulatedText,
+                          },
+                        ],
+                      }
+                    : msg,
+                ),
+              );
+          }
         }
       }
     } catch (error) {
-      let errorContent =
-        'Sorry mate, something went wrong. Give it another go!';
+      let errorMessage: Message | null = null;
       if (error instanceof Error) {
-        if (
-          error.message.includes('rate limit') ||
-          error.message.includes('quota')
-        ) {
-          errorContent =
-            'API rate limit reached. Please wait a moment and try again.';
-        } else if (error.message.includes('Failed to fetch')) {
-          errorContent =
-            'Network error. Please check your connection and try again.';
-        } else if (
-          error.message.includes('Failed to get response') ||
-          error.message.includes('All Gemini API keys failed')
-        ) {
-          errorContent = 'API error. Please try again in a moment.';
+        if (error.message.includes('Failed to fetch')) {
+          errorMessage = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            parts: [
+              {
+                text: 'Network error. Please check your connection and try again.',
+              },
+            ],
+          };
+        } else {
+          errorMessage = {
+            id: (Date.now() + 1).toString(),
+            ...JSON.parse(error.message),
+          };
         }
       }
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        parts: [{ text: errorContent }],
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+
+      if (errorMessage !== null) setMessages((prev) => [...prev, errorMessage]);
     } finally {
       isLoadingRef.current = false;
       setIsLoading(false);
