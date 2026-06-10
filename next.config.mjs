@@ -33,10 +33,10 @@ const nextConfig = {
         has: [
           {
             type: 'host',
-            value: 'quotematey.com',
+            value: 'www.quotematey.com',
           },
         ],
-        destination: 'https://www.quotematey.com/:path*',
+        destination: 'https://quotematey.com/:path*',
         permanent: true, // 308 redirect
       },
     ];
