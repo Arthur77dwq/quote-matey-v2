@@ -26,6 +26,21 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'quotematey.com',
+          },
+        ],
+        destination: 'https://www.quotematey.com/:path*',
+        permanent: true, // 308 redirect
+      },
+    ];
+  },
 };
 
 export default nextConfig;
