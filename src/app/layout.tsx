@@ -42,10 +42,6 @@ export const metadata: Metadata = {
     follow: isProd ? SEO_CONFIG.robots.follow : false,
   },
 
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  },
-
   openGraph: {
     title: SEO_CONFIG.defaultTitle,
     description: SEO_CONFIG.defaultDescription,
