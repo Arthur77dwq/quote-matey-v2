@@ -32,3 +32,5 @@ export function cleanOutput(text?: string): string | undefined {
     ?.replace(/[🎯✅🔥]/gu, '');
   // ?.replace(/\s+/g, ' ');
 }
+
+export const isProd = process.env.PAYPAL_ENV === 'live';
