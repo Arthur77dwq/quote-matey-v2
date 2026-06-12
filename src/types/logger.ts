@@ -6,3 +6,4 @@ export interface LogEntry {
   timestamp: string;
   metadata?: Record<string, unknown>;
 }
+export type Runtime = 'client' | 'server';

@@ -1,4 +1,5 @@
-import { Logger } from './logger';
-import { PinoTransport } from './transports/pino.transport';
+import { createClientLogger } from './client/create-logger';
+import { createServerLogger } from './server/create-logger';
 
-export const logger = new Logger([new PinoTransport()]);
+export const serverLogger = createServerLogger();
+export const clientLogger = createClientLogger();

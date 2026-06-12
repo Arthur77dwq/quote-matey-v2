@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { SYSTEM_PROMPTS } from '@/constant/ai';
 import { withAuth } from '@/lib/auth/withAuth';
+import { serverLogger } from '@/lib/logger';
 import { canUserUseFeature } from '@/services/access';
 import { QuoteAI } from '@/services/ai';
 import { updateUsage } from '@/services/usage';
@@ -114,6 +115,7 @@ function createReadableStream(
           controller.enqueue(encode(data));
         }
         if (chunkCount <= 0) {
+          serverLogger.error('Zero data chunk count.');
           const data: Message = {
             id: crypto.randomUUID(),
             role: 'assistant',
@@ -198,6 +200,7 @@ export async function POST(request: NextRequest) {
           },
         });
       } else {
+        serverLogger.warn('Usage Limit exceed');
         return NextResponse.json(
           {
             role: 'assistant',
@@ -217,6 +220,7 @@ export async function POST(request: NextRequest) {
         );
       }
     } catch {
+      serverLogger.error('Something went wrong. Please try again.');
       return NextResponse.json(
         {
           role: 'assistant',
