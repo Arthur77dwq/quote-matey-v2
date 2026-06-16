@@ -1,5 +1,6 @@
 import { MODELS } from '@/constant/ai';
 import { GoogleAI, OpenAIGenAI } from '@/lib/ai/ai';
+import { serverLogger } from '@/lib/logger';
 import { ApiError, Message } from '@/types/chat';
 
 export const maxDuration = 60;
@@ -96,6 +97,7 @@ function getAI(compatibility: string) {
       break;
 
     default:
+      serverLogger.error('No compatible AI model found.');
       throw new Error('No compatible AI model found.');
   }
 

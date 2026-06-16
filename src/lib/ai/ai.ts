@@ -9,6 +9,7 @@ import type {
 
 import { Message, TextPart } from '@/types/chat';
 
+import { serverLogger } from '../logger';
 import { cleanOutput } from '../utils';
 
 export class ValueNotFound extends Error {
@@ -26,12 +27,16 @@ export class OpenAIGenAI {
     const baseURL = process.env.NURRIC_BASE_URL?.trim();
 
     if (!apiKey || apiKey === 'false' || apiKey === 'undefined') {
+      serverLogger.error('Nurric API key is not set in environment variables.');
       throw new ValueNotFound(
         'Nurric API key is not set in environment variables.',
       );
     }
 
     if (!baseURL || baseURL === 'false' || baseURL === 'undefined') {
+      serverLogger.error(
+        'Nurric base URL is not set in environment variables.',
+      );
       throw new ValueNotFound(
         'Nurric base URL is not set in environment variables.',
       );
@@ -117,6 +122,7 @@ export class GoogleAI {
     const apiKey = process.env.GEMINI_API_KEY?.trim() || '';
 
     if (!apiKey || apiKey === 'false' || apiKey === 'undefined') {
+      serverLogger.error('Gemini API key is not set in environment variables.');
       throw new ValueNotFound(
         'Gemini API key is not set in environment variables.',
       );
