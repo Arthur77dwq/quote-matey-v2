@@ -4,6 +4,37 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Neutral */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #edf1f4;
+  --color-neutral-100: #dde5ed;
+  --color-neutral-300: #bababa;
+  --color-neutral-600: #4d585f;
+  --color-neutral-800: #323232;
+  --color-neutral-900: #1d1d1d;
+  --color-neutral-950: #000000;
+
+  /* Primary */
+  --color-primary-400: #5290f4;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #406ae4;
+
+  /* Success */
+  --color-success-100: #8ae389;
+  --color-success-500: #10b981;
+
+  /* Danger */
+  --color-danger-500: #f51c23;
+
+  /* Warning */
+  --color-warning-400: #fdbb6e;
+  --color-warning-500: #ff8b06;
+  --color-warning-600: #ff530a;
+
+  /* Info */
+  --color-info-100: #e2f5ff;
+  --color-info-900: #102e60;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -113,6 +144,37 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Neutral */
+  --color-neutral-0: var(--color-neutral-0);
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+
+  /* Primary */
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+
+  /* Success */
+  --color-success-100: var(--color-success-100);
+  --color-success-500: var(--color-success-500);
+
+  /* Danger */
+  --color-danger-500: var(--color-danger-500);
+
+  /* Warning */
+  --color-warning-400: var(--color-warning-400);
+  --color-warning-500: var(--color-warning-500);
+  --color-warning-600: var(--color-warning-600);
+
+  /* Info */
+  --color-info-100: var(--color-info-100);
+  --color-info-900: var(--color-info-900);
 }
 
 @layer base {

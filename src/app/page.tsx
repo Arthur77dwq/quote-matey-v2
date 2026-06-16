@@ -13,10 +13,10 @@ import { SocialProofBar } from '@/components/social-proof-bar';
 import { Testimonials } from '@/components/testimonials';
 import { VideoSection } from '@/components/video-section';
 import { plans } from '@/constant/paypal/plan';
-import { HOME_SEO } from '@/constant/seo/metadata';
+import SEO_METADATA from '@/constant/seo/metadata';
 import { generateMetadata } from '@/lib/seo';
 
-export const metadata = generateMetadata(HOME_SEO);
+export const metadata = generateMetadata(SEO_METADATA['/']);
 
 export default async function Home() {
   return (
