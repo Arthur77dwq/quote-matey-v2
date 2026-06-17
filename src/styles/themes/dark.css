@@ -1,0 +1,46 @@
+/* ==========================================================================
+   DARK THEME
+   ========================================================================== */
+
+.dark {
+  /* Text */
+
+  --text-primary: var(--neutral-0);
+  --text-secondary: var(--neutral-300);
+  --text-muted: var(--neutral-300);
+  --text-disabled: var(--neutral-600);
+  --text-inverse: var(--neutral-900);
+
+  /* Surfaces */
+
+  --surface-primary: var(--neutral-900);
+  --surface-secondary: var(--neutral-800);
+  --surface-tertiary: var(--neutral-600);
+  --surface-inverse: var(--neutral-0);
+
+  /* Borders */
+
+  --border-subtle: var(--neutral-800);
+  --border-default: var(--neutral-600);
+  --border-strong: var(--neutral-300);
+
+  /* Actions */
+
+  --action-primary: var(--primary-400);
+  --action-primary-hover: var(--primary-500);
+  --action-primary-active: var(--primary-600);
+
+  /* Status */
+
+  --status-success: var(--success-500);
+  --status-warning: var(--warning-500);
+  --status-danger: var(--danger-500);
+  --status-info: var(--info-100);
+
+  /* Status Backgrounds */
+
+  --status-success-bg: rgb(16 185 129 / 0.15);
+  --status-warning-bg: rgb(255 139 6 / 0.15);
+  --status-danger-bg: rgb(245 28 35 / 0.15);
+  --status-info-bg: rgb(226 245 255 / 0.15);
+}

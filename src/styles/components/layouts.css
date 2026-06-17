@@ -1,0 +1,45 @@
+@layer components {
+  .page {
+    padding-inline: var(--page-padding-desktop);
+  }
+
+  .section {
+    margin-bottom: var(--section-gap-lg);
+  }
+
+  .stack-xs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .stack-sm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .stack-md {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .stack-lg {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+  }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

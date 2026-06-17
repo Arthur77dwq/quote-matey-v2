@@ -1,0 +1,17 @@
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-dropdown {
+    box-shadow: var(--shadow-dropdown);
+  }
+
+  .shadow-modal {
+    box-shadow: var(--shadow-modal);
+  }
+
+  .shadow-focus {
+    box-shadow: var(--shadow-focus);
+  }
+}
