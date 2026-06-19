@@ -8,8 +8,8 @@ import { Suspense } from 'react';
 import { Toaster } from 'sonner';
 
 import GoogleAnalyticsTracker from '@/components/analytics';
-import { Navbar } from '@/components/navbar';
-import { SEO_CONFIG } from '@/config/seo';
+import { Header } from '@/components/header';
+import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
 import { isProd } from '@/lib/utils';
 
@@ -17,64 +17,63 @@ const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const ICON = '/images/QuoteMateyAppIcon.png';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SEO_CONFIG.siteUrl),
+  metadataBase: new URL(GLOBAL_DATA.metadata?.siteUrl || ''),
 
   title: {
-    default: SEO_CONFIG.defaultTitle,
-    template: SEO_CONFIG.titleTemplate,
+    default: GLOBAL_DATA.metadata?.defaultTitle || '',
+    template: GLOBAL_DATA.metadata?.titleTemplate || '',
   },
-  category: SEO_CONFIG.category,
-  description: SEO_CONFIG.defaultDescription,
+  category: GLOBAL_DATA.metadata?.category,
+  description: GLOBAL_DATA.metadata?.defaultDescription,
   referrer: 'origin-when-cross-origin',
-  keywords: SEO_CONFIG.defaultKeywords,
+  keywords: GLOBAL_DATA.metadata?.defaultKeywords,
 
   authors: [
     {
-      name: SEO_CONFIG.author,
+      name: GLOBAL_DATA.metadata?.author,
     },
   ],
 
   robots: {
-    index: isProd ? SEO_CONFIG.robots.index : false,
-    follow: isProd ? SEO_CONFIG.robots.follow : false,
+    index: isProd ? GLOBAL_DATA.metadata?.robots.index : false,
+    follow: isProd ? GLOBAL_DATA.metadata?.robots.follow : false,
   },
 
   openGraph: {
-    title: SEO_CONFIG.defaultTitle,
-    description: SEO_CONFIG.defaultDescription,
-    siteName: SEO_CONFIG.siteName,
-    url: SEO_CONFIG.siteUrl,
+    title: GLOBAL_DATA.metadata?.defaultTitle,
+    description: GLOBAL_DATA.metadata?.defaultDescription,
+    siteName: GLOBAL_DATA.metadata?.siteName,
+    url: GLOBAL_DATA.metadata?.siteUrl,
     locale: 'en_US',
     type: 'website',
 
     images: [
       {
-        url: SEO_CONFIG.defaultOgImage,
+        url: GLOBAL_DATA.metadata?.defaultOgImage || '',
         width: 1200,
         height: 630,
-        alt: SEO_CONFIG.siteName,
+        alt: GLOBAL_DATA.metadata?.siteName,
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: SEO_CONFIG.defaultTitle,
-    description: SEO_CONFIG.defaultDescription,
+    title: GLOBAL_DATA.metadata?.defaultTitle,
+    description: GLOBAL_DATA.metadata?.defaultDescription,
 
-    images: [SEO_CONFIG.defaultOgImage],
+    images: [GLOBAL_DATA.metadata?.defaultOgImage || ''],
   },
 
   alternates: {
-    canonical: SEO_CONFIG.siteUrl,
+    canonical: GLOBAL_DATA.metadata?.siteUrl,
   },
   icons: {
-    icon: ICON,
-    shortcut: ICON,
-    apple: ICON,
+    icon: GLOBAL_DATA.brand.logo.normal,
+    shortcut: GLOBAL_DATA.brand.logo.normal,
+    apple: GLOBAL_DATA.brand.logo.normal,
   },
 };
 
@@ -121,7 +120,8 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
           <AuthProvider>
-            <Navbar />
+            <Header />
+            {/* <Navbar /> */}
             {children}
           </AuthProvider>
         </Suspense>

@@ -1,18 +1,9 @@
-// src/lib/seo.ts
-
 import type { Metadata } from 'next';
 
-import { SEO_CONFIG } from '@/config/seo';
+import { GLOBAL_DATA } from '@/constant/data/global';
+import { MetadataProps } from '@/types/global';
 
 import { isProd } from './utils';
-
-type GenerateMetadataProps = {
-  title?: string;
-  description?: string;
-  image?: string;
-  path?: string;
-  noIndex?: boolean;
-};
 
 export function generateMetadata({
   title,
@@ -20,23 +11,25 @@ export function generateMetadata({
   image,
   path = '',
   noIndex = false,
-}: GenerateMetadataProps): Metadata {
+}: MetadataProps): Metadata {
   const pageTitle = title
-    ? SEO_CONFIG.titleTemplate.replace('%s', title)
-    : SEO_CONFIG.defaultTitle;
+    ? GLOBAL_DATA.metadata?.titleTemplate.replace('%s', title)
+    : GLOBAL_DATA.metadata?.defaultTitle;
 
-  const pageDescription = description || SEO_CONFIG.defaultDescription;
+  const pageDescription =
+    description || GLOBAL_DATA.metadata?.defaultDescription;
 
   const pageImage =
-    image || `${SEO_CONFIG.siteUrl}${SEO_CONFIG.defaultOgImage}`;
+    image ||
+    `${GLOBAL_DATA.metadata?.siteUrl}${GLOBAL_DATA.metadata?.defaultOgImage}`;
 
-  const canonicalUrl = `${SEO_CONFIG.siteUrl}${path}`;
+  const canonicalUrl = `${GLOBAL_DATA.metadata?.siteUrl}${path}`;
 
   return {
     title: pageTitle,
     description: pageDescription,
-    keywords: SEO_CONFIG.defaultKeywords,
-    category: SEO_CONFIG.category,
+    keywords: GLOBAL_DATA.metadata?.defaultKeywords,
+    category: GLOBAL_DATA.metadata?.category,
 
     alternates: {
       canonical: canonicalUrl,
@@ -46,7 +39,7 @@ export function generateMetadata({
       title: pageTitle,
       description: pageDescription,
       url: canonicalUrl,
-      siteName: SEO_CONFIG.siteName,
+      siteName: GLOBAL_DATA.metadata?.siteName,
       images: [
         {
           url: pageImage,
