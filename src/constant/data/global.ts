@@ -74,18 +74,19 @@ export const GLOBAL_DATA: GlobalData = {
       {
         id: 0,
         type: 'btn',
-        theme: 'light',
         text: 'Login',
         icon: {
+          position: 'left',
           active: false,
+          icon: null,
         },
       },
       {
         id: 1,
-        type: 'icon_btn',
-        theme: 'light',
+        type: 'btn_icon',
         text: 'Start Free',
         icon: {
+          position: 'left',
           active: true,
           icon: 'right_arrow',
         },

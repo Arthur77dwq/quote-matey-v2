@@ -26,21 +26,14 @@
 
   /* Actions */
 
-  --action-primary: var(--primary-400);
+  --action-primary: var(--primary-600);
   --action-primary-hover: var(--primary-500);
-  --action-primary-active: var(--primary-600);
+  --action-primary-active: var(--primary-700);
 
   /* Status */
 
   --status-success: var(--success-500);
   --status-warning: var(--warning-500);
   --status-danger: var(--danger-500);
-  --status-info: var(--info-100);
-
-  /* Status Backgrounds */
-
-  --status-success-bg: rgb(16 185 129 / 0.15);
-  --status-warning-bg: rgb(255 139 6 / 0.15);
-  --status-danger-bg: rgb(245 28 35 / 0.15);
-  --status-info-bg: rgb(226 245 255 / 0.15);
+  --status-info: var(--info-50);
 }

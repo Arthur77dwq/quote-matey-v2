@@ -27,20 +27,13 @@
   /* Actions */
 
   --action-primary: var(--primary-500);
-  --action-primary-hover: var(--primary-600);
-  --action-primary-active: var(--primary-600);
+  --action-primary-hover: var(--primary-700);
+  --action-primary-active: var(--primary-700);
 
   /* Status */
 
   --status-success: var(--success-500);
   --status-warning: var(--warning-500);
   --status-danger: var(--danger-500);
-  --status-info: var(--info-900);
-
-  /* Status Backgrounds */
-
-  --status-success-bg: rgb(16 185 129 / 0.1);
-  --status-warning-bg: rgb(255 139 6 / 0.1);
-  --status-danger-bg: rgb(245 28 35 / 0.1);
-  --status-info-bg: var(--info-100);
+  --status-info: var(--primary-900);
 }

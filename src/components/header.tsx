@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { DesktopNavBar } from './navBar/desktop';
+import { Button } from './ui/button';
 
 export const getGlobalData = async () => {
   const global = await import('@/constant/data/global');
@@ -26,6 +27,22 @@ export async function Header() {
             {Header?.navBar.active && (
               <DesktopNavBar navLinks={Header?.navBar.links || []} />
             )}
+
+            <div>
+              {/* {Header?.buttons &&
+                Header?.buttons?.length > 0 &&
+                Header?.buttons?.map((btn, index) => {
+                  return ( */}
+              <Button
+                variant="outline"
+                className="bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer"
+              >
+                Login
+              </Button>
+              <Button variant="secondary">Start Free</Button>
+              {/* );
+                })} */}
+            </div>
           </div>
         </div>
       )}

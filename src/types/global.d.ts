@@ -1,3 +1,5 @@
+import { buttonVariants } from '@/components/ui/button';
+
 export type User = {
   uid: string;
   email: string;
@@ -89,23 +91,15 @@ export type HeaderType = 'GLOBAL_HEADER';
 
 export type IconType = {
   active: boolean;
+  position: 'left' | 'center' | 'right';
   icon?: string | null;
 };
-
-export type ButtonsType =
-  | 'btn'
-  | 'icon_btn'
-  | 'form_btn'
-  | 'load_btn'
-  | 'demo_btn'
-  | 'wait_btn';
 
 export type Theme = 'dark' | 'light';
 
 export type Button = {
   id: number;
-  type: ButtonsType;
-  theme: Theme;
+  type: buttonVariants;
   text: string;
   icon: IconType;
 };
