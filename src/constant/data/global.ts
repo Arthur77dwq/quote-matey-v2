@@ -3,7 +3,7 @@ import { GlobalData } from '@/types/global';
 export const GLOBAL_DATA: GlobalData = {
   brand: {
     logo: {
-      normal: '/favicon.png',
+      normal: '/favicon.svg',
       big: '/favicon-big.png',
       with_bg: '/favicon-with-bg.png',
       social: '/images/og-image.png',

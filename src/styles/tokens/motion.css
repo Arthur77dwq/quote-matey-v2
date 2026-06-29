@@ -13,6 +13,7 @@
   --duration-normal: 250ms;
   --duration-slow: 400ms;
   --duration-slower: 600ms;
+  --duration-slowest: 800ms;
 
   /* ======================================================================== */
   /* EASING                                                                   */

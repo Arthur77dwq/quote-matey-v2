@@ -11,7 +11,7 @@ export default function AboutPage() {
     <>
       <div>
         <Image
-          src="/images/scene.avif"
+          src="/images/scene.png"
           className="w-full h-full"
           width={100}
           height={100}

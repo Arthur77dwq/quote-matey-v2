@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 import { DesktopNavBar } from './navBar/desktop';
@@ -16,7 +17,7 @@ export async function Header() {
       {Header?.type === 'GLOBAL_HEADER' && (
         <div className="fixed z-header top-0 w-full flex flex-col justify-center items-center p-5 ">
           <div className="absolute inset-0 bg-black/30 blur-2xl w-full h-7"></div>
-          <div className="relative z-header min-w-40 h-14.5 bg-white w-3xl flex justify-between items-center p-2.5">
+          <div className="rounded-md shadow-[0_0_0_4px_#DDE5ED] overflow-hidden relative z-header min-w-40 h-14.5 bg-white w-3xl flex justify-between items-center p-2.5">
             <Image
               src={Header?.logo.src}
               alt={Header?.logo.alt}
@@ -28,7 +29,7 @@ export async function Header() {
               <DesktopNavBar navLinks={Header?.navBar.links || []} />
             )}
 
-            <div>
+            <div className="flex items-center justify-between gap-2">
               {/* {Header?.buttons &&
                 Header?.buttons?.length > 0 &&
                 Header?.buttons?.map((btn, index) => {
@@ -39,7 +40,13 @@ export async function Header() {
               >
                 Login
               </Button>
-              <Button variant="secondary">Start Free</Button>
+
+              <Button className="group overflow-hidden cursor-pointer flex items-center justify-center w-fit h-fit rounded-full text-white bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]">
+                Start Free
+                <div className="transition-transform group-hover:animate-roll-right bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5">
+                  <ArrowRight />
+                </div>
+              </Button>
               {/* );
                 })} */}
             </div>

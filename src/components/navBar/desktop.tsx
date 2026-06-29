@@ -11,6 +11,7 @@ export function DesktopNavBar({ navLinks }: { navLinks: LINK[] }) {
             key={`${index}-${link.href}`}
             href={link.href}
             target={link.target}
+            className="font-semibold text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 rounded-full px-3 py-1"
           >
             {link.text}
           </Link>
