@@ -22,7 +22,7 @@ export async function FounderLetter() {
         </div>
         <div className="font-medium font-inter text-neutral-600 text-[1.15rem] w-full rounded-2xl border border-t-0 border-neutral-100 p-1.5">
           <Card className="overflow-hidden border-none relative bg-neutral-50 gap-12.5 p-12.5">
-            <CardHeader className="flex flex-col justify-center gap-5">
+            <CardHeader className="h-fit flex flex-col justify-center gap-0">
               <CardTitle className="text-neutral-900 text-[1.8rem]">
                 <h3>Our journey</h3>
               </CardTitle>
@@ -30,7 +30,7 @@ export async function FounderLetter() {
                 A note from the founder
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-6">
               <p>Dear tradies,</p>
               <p>
                 When we started QuoteMatey, the goal was simple: make quoting
