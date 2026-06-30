@@ -2,7 +2,6 @@ import '@/styles/globals.css';
 
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import { Toaster } from 'sonner';
@@ -11,10 +10,8 @@ import GoogleAnalyticsTracker from '@/components/analytics';
 import { Header } from '@/components/header';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
+import { geist, geistMono, inter, plusJakarta } from '@/fonts';
 import { isProd } from '@/lib/utils';
-
-const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
-const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
@@ -110,7 +107,11 @@ export default function RootLayout({
         )}
       </head>
       <body
-        className={`${_geist.variable} ${_geistMono.variable} font-sans antialiased`}
+        className={`${plusJakarta.variable}
+          ${inter.variable}
+          ${geist.variable}
+          ${geistMono.variable}
+           font-sans antialiased`}
       >
         <Toaster
           closeButton

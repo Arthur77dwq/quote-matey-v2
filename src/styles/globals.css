@@ -27,3 +27,10 @@
 @import './components/cards.css';
 @import './components/layouts.css';
 @import './components/animations.css';
+
+/* FONTS */
+@theme {
+  --font-sans: var(--font-plus-jakarta);
+  --font-inter: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}

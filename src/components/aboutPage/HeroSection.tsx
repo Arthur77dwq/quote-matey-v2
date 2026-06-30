@@ -37,7 +37,9 @@ export default function HeroSection() {
             <span className="text-nowrap">AI-Powered Quoting </span>
             <span className="text-nowrap">
               Software{' '}
-              <strong className="text-warning-600">Built for Tradies</strong>
+              <strong className="font-sans font-bold text-warning-600">
+                Built for Tradies
+              </strong>
             </span>
           </h1>
         </div>
