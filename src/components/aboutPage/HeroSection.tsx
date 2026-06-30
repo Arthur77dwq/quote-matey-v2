@@ -4,11 +4,11 @@ import { Badge } from '@/components/ui/badge';
 
 export default function HeroSection() {
   return (
-    <section className="relative flex justify-center items-center gap-2.5 w-full h-fit">
+    <section className="overflow-hidden relative flex justify-center items-center gap-2.5 w-full h-fit">
       <div className="relative z-0 flex items-center justify-center w-full h-fit">
         <Image
           src="/images/about/BackgroundSKYUNDERLAY.jpg"
-          className="w-auto h-100 sm:h-120 sm:w-auto lg:w-full lg:h-full lg:max-h-130.5"
+          className="w-auto h-80 sm:h-120 sm:w-auto lg:w-full lg:h-full lg:max-h-130.5"
           width={0}
           height={0}
           alt="background image"

@@ -15,9 +15,11 @@
 
   --shadow-lg: 0 10px 15px rgb(0 0 0 / 0.1), 0 4px 6px rgb(0 0 0 / 0.05);
 
-  --shadow-xl: 0 20px 25px rgb(0 0 0 / 0.12), 0 8px 10px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 8px 16px rgba(17, 24, 39, 0.5);
 
-  --shadow-2xl: 0 25px 50px rgb(0 0 0 / 0.25);
+  --shadow-2xl: -4px -4px 8px rgba(255, 255, 255, 0.3);
+
+  --shadow-3xl: 4px 4px 8px rgba(255, 255, 255, 0.3);
 
   /* ======================================================================== */
   /* COMPONENT SHADOWS                                                       */

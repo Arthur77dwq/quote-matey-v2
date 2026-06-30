@@ -14,4 +14,8 @@
   .shadow-focus {
     box-shadow: var(--shadow-focus);
   }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-3xl), var(--shadow-2xl), var(--shadow-xl);
+  }
 }
