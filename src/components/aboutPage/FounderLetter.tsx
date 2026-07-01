@@ -11,7 +11,7 @@ import {
 
 export async function FounderLetter() {
   return (
-    <section className="flex justify-center items-center pt-25">
+    <section className="flex justify-center items-center py-25">
       <div className="w-full lg:w-200 flex flex-col justify-center items-center">
         <div className="overflow-hidden w-90 md:w-full flex justify-between items-end">
           <span className="h-18 w-6 lg:w-10 rounded-r-3xl rounded-tr-none rounded-br-3xl border border-t-0 border-l-0 border-neutral-100" />
