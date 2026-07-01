@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
 
-export default function HeroSection() {
+export async function HeroSection() {
   return (
     <section className="relative flex justify-center items-center gap-2.5 w-full h-fit">
       <div className="relative flex items-center justify-center w-full h-100 lg:h-120">

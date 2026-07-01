@@ -3,7 +3,7 @@ import { Badge } from '../ui/badge';
 
 export async function OurTeam() {
   return (
-    <section className="w-full flex flex-col gap-12.5 items-center justify-between">
+    <section className="pb-25 w-full flex flex-col gap-12.5 items-center justify-between">
       <div className="w-full flex flex-col items-center justify-between">
         <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 font-inter font-medium text-body-xs text-neutral-900 flex items-center justify center border border-neutral-100">
           Our experts
