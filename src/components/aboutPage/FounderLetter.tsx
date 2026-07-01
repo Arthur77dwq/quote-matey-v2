@@ -63,7 +63,7 @@ export async function FounderLetter() {
                 <p>Founder, QuoteMatey</p>
               </CardFooter>
               <Image
-                className="absolute -bottom-42 -right-55 md:-bottom-45 md:-right-60 lg:-bottom-30 lg:-right-40 rounded-tl-[160]"
+                className="absolute -bottom-42 -right-55 lg:-bottom-30 lg:-right-40 rounded-tl-[160]"
                 src="/images/about/LawnIMAGE.avif"
                 alt="garden"
                 width={400}
