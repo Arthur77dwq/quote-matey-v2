@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 export async function HeroSection() {
   return (
     <section className="relative flex justify-center items-center gap-2.5 w-full h-fit">
-      <div className="relative flex items-center justify-center w-full h-100 lg:h-120">
-        <div className="w-full h-80 sm:h-120 lg:h-full">
+      <div className="relative flex items-center justify-center w-full h-100 lg:h-150">
+        <div className="w-full h-80 sm:h-120 lg:h-150">
           <Image
             src="/images/about/BackgroundSKYUNDERLAY.jpg"
             alt="Background"
@@ -30,7 +30,7 @@ export async function HeroSection() {
           alt="cloud2"
         />
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-linear-to-b from-white/30 via-white via-50% to-white overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden">
         <div className="flex flex-col items-center justify-center gap-2.5 w-full h-fit">
           <Badge className="rounded-full py-2.5 px-5 bg-white text-body-xs text-neutral-900 flex items-center justify center border border-neutral-100">
             About QuoteMatey
