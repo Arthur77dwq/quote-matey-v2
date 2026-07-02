@@ -5,7 +5,6 @@ import { BeforeAfter } from '@/components/before-after';
 import { Benefits } from '@/components/benefits';
 import { CTASection } from '@/components/cta-section';
 import { FAQ } from '@/components/faq';
-import { Footer } from '@/components/footer';
 import { HeroSection } from '@/components/hero-section';
 import { HowItWorks } from '@/components/how-it-works';
 import { Pricing } from '@/components/pricing';
@@ -35,7 +34,6 @@ export default async function Home() {
       <Pricing data={plans} />
       <FAQ />
       <CTASection />
-      <Footer />
     </main>
   );
 }

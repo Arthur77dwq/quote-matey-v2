@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { Toaster } from 'sonner';
 
 import GoogleAnalyticsTracker from '@/components/analytics';
+import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
@@ -122,8 +123,8 @@ export default function RootLayout({
           <GoogleAnalyticsTracker />
           <AuthProvider>
             <Header />
-            {/* <Navbar /> */}
             {children}
+            <Footer />
           </AuthProvider>
         </Suspense>
         <Analytics />

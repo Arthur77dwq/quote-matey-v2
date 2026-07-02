@@ -16,6 +16,6 @@
   }
 
   .shadow-elevated {
-    box-shadow: var(--shadow-3xl), var(--shadow-2xl), var(--shadow-xl);
+    box-shadow: var(--shadow-neomorphic);
   }
 }

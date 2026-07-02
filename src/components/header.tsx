@@ -24,14 +24,25 @@ export function Header() {
       {headers?.type === 'GLOBAL_HEADER' && (
         <>
           <div className="fixed z-200 top-0 w-full flex flex-col justify-center items-center p-5">
-            <div className="absolute inset-0 bg-black/30 blur-2xl w-full h-7"></div>
+            <div
+              className="
+              absolute
+              top-0
+              inset-0
+              h-10
+              bg-neutral-950/2
+              backdrop-blur-[5px]
+              [mask-:linear-gradient(to_bottom,black_70%,transparent)]
+              [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent)]
+              "
+            />
             <div
               className={twMerge(
-                'relative w-full lg:w-auto lg:h-fit',
+                'z-200 relative w-full lg:w-auto lg:h-fit',
                 open && 'h-screen',
               )}
             >
-              <div className="rounded-md shadow-[0_0_0_4px_#DDE5ED] lg:min-w-40 h-14.5 bg-white w-full lg:w-3xl flex justify-between items-center p-2.5">
+              <div className="rounded-md shadow-[0_0_0_4px_#DDE5EDB3] lg:min-w-40 h-14.5 bg-white w-full lg:w-3xl flex justify-between items-center p-2.5">
                 <Image
                   className="w-35 sm:w-42.5 sm:h-8.7"
                   src={headers?.logo.src}

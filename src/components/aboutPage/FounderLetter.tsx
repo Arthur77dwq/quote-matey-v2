@@ -12,26 +12,30 @@ import {
 export async function FounderLetter() {
   return (
     <section className="flex justify-center items-center py-25">
-      <div className="w-full lg:w-200 flex flex-col justify-center items-center">
-        <div className="overflow-hidden w-90 md:w-full flex justify-between items-end">
-          <span className="h-18 w-6 lg:w-10 rounded-r-3xl rounded-tr-none rounded-br-3xl border border-t-0 border-l-0 border-neutral-100" />
-          <h2 className="w-full text-center text-wrap md:text-nowrap px-2 text-[2.13rem] md:text-6xl font-bold font-sans pb-5">
+      <div className="max-w-215 w-full flex flex-col justify-center items-center p-0 lg:px-7.5 gap-2.5">
+        <div className="w-90 md:w-full h-fit flex justify-between items-stretch">
+          <span className="self-stretch hidden sm:flex w-6 lg:w-20 lg:px-4 rounded-r-[1.25rem] rounded-tr-none rounded-br-3xl border border-t-0 border-l-0 border-neutral-100">
+            {' '}
+          </span>
+          <h2 className="w-full text-center text-wrap md:text-nowrap px-2 tracking-[-1px] leading-[1.2em] text-[2.13rem] md:text-6xl font-bold font-sans p-4 pb-12.5">
             How QuoteMatey <strong className="text-warning-600">started</strong>
           </h2>
-          <span className="h-18 w-6 lg:w-10 rounded-l-3xl rounded-tl-none rounded-bl-3xl border border-t-0 border-r-0 border-neutral-100" />
+          <span className="self-stretch hidden sm:flex w-6 lg:w-20 lg:px-4 rounded-l-[1.25rem] rounded-tl-none rounded-bl-3xl border border-t-0 border-r-0 border-neutral-100">
+            {' '}
+          </span>
         </div>
-        <div className="w-full px-5 lg:p-0">
-          <div className="font-medium font-inter text-neutral-600 text-[1.15rem] w-full rounded-2xl border border-t-0 border-neutral-100 p-1.5">
-            <Card className="overflow-hidden border-none relative bg-neutral-50 gap-12.5 p-7.5">
-              <CardHeader className="h-fit flex flex-col justify-center gap-0">
-                <CardTitle className="text-neutral-900 text-[1.8rem]">
+        <div className="w-full px-4 sm:px-5 lg:p-4">
+          <div className="font-medium font-inter text-neutral-600 text-body-md w-full rounded-2xl border sm:border-t-0 border-neutral-100 p-1.5">
+            <Card className="overflow-hidden border-none relative bg-neutral-50 gap-5 sm:gap-12.5 p-5 sm:p-7.5">
+              <CardHeader className="h-fit flex flex-col justify-center gap-0 p-0">
+                <CardTitle className="text-neutral-900 text-heading-5">
                   <h3>Our journey</h3>
                 </CardTitle>
-                <CardDescription className="text-neutral-600 text-[1.15rem] font font-medium font-inter">
+                <CardDescription className="text-neutral-600 text-body-md font font-medium font-inter">
                   A note from the founder
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col gap-6">
+              <CardContent className="flex flex-col gap-2.5 sm:gap-6 p-0 sm:w-8/10">
                 <p>Dear tradies,</p>
                 <p>
                   When we started QuoteMatey, the goal was simple: make quoting
@@ -56,7 +60,7 @@ export async function FounderLetter() {
                   minutes.
                 </p>
               </CardContent>
-              <CardFooter className="flex flex-col items-start h-fit pr-0 gap-1">
+              <CardFooter className="flex flex-col items-start h-fit p-0 gap-1">
                 <p className="font-semibold text-2xl text-neutral-900">
                   Arthur
                 </p>
