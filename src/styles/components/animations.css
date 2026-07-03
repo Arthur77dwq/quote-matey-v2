@@ -1,12 +1,3 @@
-@keyframes roll-right {
-  from {
-    transform: translateX(0rem) rotate(0deg);
-  }
-  to {
-    transform: translateX(3rem) rotate(360deg);
-  }
-}
-
 @layer utilities {
   .animate-fade-in {
     animation: fade-in var(--duration-normal) var(--ease-standard);
@@ -42,9 +33,5 @@
 
   .animate-drop {
     animation: drop var(--duration-normal) var(--ease-bounce);
-  }
-
-  .animate-roll-right {
-    animation: roll-right var(--duration-slower) var(--ease-standard) forwards;
   }
 }

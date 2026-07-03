@@ -1,9 +1,11 @@
 'use client';
+import { useGSAP } from '@gsap/react';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef,useState  } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+import { gsap } from '@/animations/plugins';
 import { GLOBAL_DATA } from '@/constant/data/global';
 
 import { HamBurgerMenu } from './hamburgerMenu';
@@ -15,10 +17,60 @@ export const getGlobalData = () => {
   return GLOBAL_DATA;
 };
 
+const useRollMove = ({
+  leftArrowRef,
+  rightArrowRef,
+  textRef,
+}: {
+  leftArrowRef: React.RefObject<HTMLButtonElement | null>;
+  rightArrowRef: React.RefObject<HTMLButtonElement | null>;
+  textRef: React.RefObject<HTMLButtonElement | null>;
+}) => {
+  const rollMove = useRef<gsap.core.Timeline | null>(null);
+
+  useGSAP(() => {
+    gsap.set(leftArrowRef.current, {
+      rotate: -45,
+    });
+    rollMove.current = gsap.timeline({ paused: true });
+    rollMove.current.to(leftArrowRef.current, {
+      x: -13,
+      rotate: 0,
+      duration: 0.5,
+      ease: 'power2.inOut',
+    });
+    rollMove.current.to(
+      rightArrowRef.current,
+      {
+        xPercent: 150,
+        rotate: 45,
+        duration: 0.5,
+        ease: 'power2.inOut',
+      },
+      '<',
+    );
+    rollMove.current.to(
+      textRef.current,
+      {
+        xPercent: 27,
+        duration: 0.5,
+        ease: 'power2.inOut',
+      },
+      '<',
+    );
+  });
+  return rollMove;
+};
+
 export function Header() {
   const { headers } = getGlobalData();
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((prev) => !prev);
+  const leftArrowRef = useRef<HTMLButtonElement | null>(null);
+  const textRef = useRef<HTMLButtonElement | null>(null);
+  const rightArrowRef = useRef<HTMLButtonElement | null>(null);
+  const rollMove = useRollMove({ leftArrowRef, rightArrowRef, textRef });
+
   return (
     <>
       {headers?.type === 'GLOBAL_HEADER' && (
@@ -66,11 +118,26 @@ export function Header() {
                     Login
                   </Button>
 
-                  <Button className="group overflow-hidden cursor-pointer flex items-center justify-center w-fit h-fit rounded-full text-white bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]">
-                    Start Free
-                    <div className="transition-transform group-hover:animate-roll-right bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5">
+                  <Button
+                    onMouseEnter={() => rollMove.current?.play()}
+                    onMouseLeave={() => rollMove.current?.reverse()}
+                    className="p-2.5 pl-6 relative overflow-hidden cursor-pointer flex items-center justify-between gap-1.25 w-fit h-fit rounded-full text-white bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]"
+                  >
+                    <span
+                      ref={leftArrowRef}
+                      key="left"
+                      className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+                    >
                       <ArrowRight />
-                    </div>
+                    </span>
+                    <span ref={textRef}>Start Free</span>
+                    <span
+                      ref={rightArrowRef}
+                      key="right"
+                      className=" bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+                    >
+                      <ArrowRight />
+                    </span>
                   </Button>
 
                   {/* );
