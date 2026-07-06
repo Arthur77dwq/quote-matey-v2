@@ -42,7 +42,7 @@ export const FounderLetter = () => {
       ref={sectionRef}
       className="flex justify-center items-center py-25"
     >
-      <div className="max-w-215 w-full flex flex-col justify-center items-center p-0 lg:px-7.5 gap-2.5">
+      <div className="max-w-215 w-full flex flex-col justify-center items-center p-0 lg:px-7.5">
         <div className="w-90 md:w-full h-fit flex justify-between items-stretch">
           <span className="self-stretch hidden sm:flex w-6 lg:w-20 lg:px-4 rounded-r-[1.25rem] rounded-tr-none rounded-br-3xl border border-t-0 border-l-0 border-neutral-100">
             {' '}
@@ -54,7 +54,7 @@ export const FounderLetter = () => {
             {' '}
           </span>
         </div>
-        <div className="w-full px-4 sm:px-5 lg:p-4">
+        <div className="w-full px-4 sm:px-5 lg:px-4 lg:pb-4">
           <div className="font-medium font-inter text-neutral-600 text-body-md w-full rounded-2xl border sm:border-t-0 border-neutral-100 p-1.5">
             <Card className="overflow-hidden border-none relative bg-neutral-50 gap-5 sm:gap-12.5 p-5 sm:p-7.5">
               <CardHeader className="h-fit flex flex-col justify-center gap-0 p-0">

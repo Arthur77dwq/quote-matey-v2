@@ -21,7 +21,7 @@ export function ProfileShow({
     <div
       ref={ref}
       className={cn(
-        'flex flex-col justify-between items-center gap-5 h-full w-1/2',
+        'flex flex-col justify-between items-center gap-5 h-full w-50',
         className && className,
       )}
     >
@@ -39,7 +39,7 @@ export function ProfileShow({
         <h3 className="text-[1.13rem] md:text-2xl text-neutral-900 font-semibold">
           {name}
         </h3>
-        <h4 className="text-[0.75rem] md:text-[1.13rem] text-neutral-600 text-center font-medium text-wrap md:text-nowrap">
+        <h4 className="text-[0.75rem] md:text-[0.88rem] text-neutral-600 text-center font-medium text-wrap md:text-nowrap">
           {desc}
         </h4>
       </div>
