@@ -4,7 +4,7 @@ import { LINK } from '@/types/pages';
 
 export function NavBar({ navLinks }: { navLinks: LINK[] }) {
   return (
-    <div className="hidden lg:flex items-center justify-around gap-10 w-auto h-full bg-white">
+    <div className="hidden lg:flex items-center justify-around gap-1 w-auto h-full bg-white">
       {navLinks.map((link, index) => {
         return (
           <Link
