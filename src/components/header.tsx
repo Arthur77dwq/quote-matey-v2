@@ -2,11 +2,14 @@
 import { useGSAP } from '@gsap/react';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+import { AUTH_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { gsap } from '@/lib/animations/plugins';
+import { matchRoute } from '@/lib/utils';
 
 import { HamBurgerMenu } from './hamburgerMenu';
 import { NavBar } from './navBar/navBar';
@@ -64,6 +67,7 @@ const useRollMove = ({
 
 export function Header() {
   const { headers } = getGlobalData();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((prev) => !prev);
   const leftArrowRef = useRef<HTMLButtonElement | null>(null);
@@ -71,9 +75,12 @@ export function Header() {
   const rightArrowRef = useRef<HTMLButtonElement | null>(null);
   const rollMove = useRollMove({ leftArrowRef, rightArrowRef, textRef });
 
+  const pathname = usePathname();
+  const shouldHide = matchRoute(pathname, AUTH_ROUTES);
+
   return (
     <>
-      {headers?.type === 'GLOBAL_HEADER' && (
+      {!shouldHide && headers?.type === 'GLOBAL_HEADER' && (
         <>
           <div className="fixed z-200 top-0 w-full flex flex-col justify-center items-center p-5">
             <div
@@ -112,6 +119,7 @@ export function Header() {
                 headers?.buttons?.map((btn, index) => {
                   return ( */}
                   <Button
+                    onClick={() => router.push('/login')}
                     variant="outline"
                     className="hidden md:flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer"
                   >
@@ -119,6 +127,7 @@ export function Header() {
                   </Button>
 
                   <Button
+                    onClick={() => router.push('/chat')}
                     onMouseEnter={() => rollMove.current?.play()}
                     onMouseLeave={() => rollMove.current?.reverse()}
                     className="p-2.5 pl-6 relative overflow-hidden cursor-pointer flex items-center justify-between gap-1.25 w-fit h-fit rounded-full text-white bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]"
