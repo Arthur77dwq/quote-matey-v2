@@ -2,11 +2,11 @@
 import { useGSAP } from '@gsap/react';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { useRef,useState  } from 'react';
+import { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { gsap } from '@/animations/plugins';
 import { GLOBAL_DATA } from '@/constant/data/global';
+import { gsap } from '@/lib/animations/plugins';
 
 import { HamBurgerMenu } from './hamburgerMenu';
 import { NavBar } from './navBar/navBar';

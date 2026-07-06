@@ -17,3 +17,8 @@ export type DataType = {
   metadata?: MetaDateProps | null;
   sections?: Sections[] | null;
 };
+
+export interface AboutRefs {
+  hero: RefObject<AnimatedRef | null>;
+  split: RefObject<AnimatedRef | null>;
+}

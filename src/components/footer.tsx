@@ -1,9 +1,34 @@
 'use client';
 
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRef } from 'react';
+
+import { gsap } from '@/lib/animations/plugins';
+
+const useSectionAnimation = ({
+  cardRef,
+}: {
+  cardRef: React.RefObject<HTMLDivElement | null>;
+}) => {
+  useGSAP(() => {
+    // Animation Here
+    gsap.from(cardRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 0.4,
+      scrollTrigger: {
+        trigger: cardRef.current,
+        start: 'top bottom',
+      },
+    });
+  });
+};
 
 export function Footer() {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  useSectionAnimation({ cardRef });
   return (
     <footer className="relative w-full h-[120vh] sm:h-screen overflow-hidden flex justify-center items-center">
       <div className="absolute inset-0">
@@ -16,7 +41,10 @@ export function Footer() {
         <div className="absolute inset-0 z-2 bg-linear-to-b from-neutral-0 via-neutral-0/30 via-20% to-transparent" />
       </div>
       <div className="z-3 w-full max-w-315 h-full md:h-fit lg:h-104.25 flex justify-center items-center px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
-        <div className="w-full h-fit md:h-full bg-neutral-0 flex flex-col lg:flex-row flex-start gap-12.5 md:gap-15 p-5 sm:p-7.5 lg:p-25 rounded-[1rem] md:rounded-4xl">
+        <div
+          ref={cardRef}
+          className="w-full h-fit md:h-full bg-neutral-0 flex flex-col lg:flex-row flex-start gap-12.5 md:gap-15 p-5 sm:p-7.5 lg:p-25 rounded-[1rem] md:rounded-4xl"
+        >
           <div className="h-fit md:h-full w-full sm:w-7/10 lg:w-4/10 gap-5 sm:gap-10 flex flex-col justify-between">
             {/* Left */}
             <div className="flex flex-col gap-2 md:gap-5 w-full">

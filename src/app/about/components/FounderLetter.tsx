@@ -1,4 +1,6 @@
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
+import { useRef } from 'react';
 
 import {
   Card,
@@ -7,11 +9,39 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from '@/components/ui/card';
+import { gsap } from '@/lib/animations/plugins';
 
-export async function FounderLetter() {
+const useSectionAnimation = ({
+  sectionRef,
+}: {
+  sectionRef: React.RefObject<HTMLElement | null>;
+}) => {
+  useGSAP(() => {
+    // Animation Here
+    gsap.from(sectionRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 80%',
+      },
+    });
+  });
+};
+
+export const FounderLetter = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  useSectionAnimation({
+    sectionRef: sectionRef,
+  });
+
   return (
-    <section className="flex justify-center items-center py-25">
+    <section
+      ref={sectionRef}
+      className="flex justify-center items-center py-25"
+    >
       <div className="max-w-215 w-full flex flex-col justify-center items-center p-0 lg:px-7.5 gap-2.5">
         <div className="w-90 md:w-full h-fit flex justify-between items-stretch">
           <span className="self-stretch hidden sm:flex w-6 lg:w-20 lg:px-4 rounded-r-[1.25rem] rounded-tr-none rounded-br-3xl border border-t-0 border-l-0 border-neutral-100">
@@ -79,4 +109,4 @@ export async function FounderLetter() {
       </div>
     </section>
   );
-}
+};

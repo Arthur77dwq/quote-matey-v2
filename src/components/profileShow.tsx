@@ -4,12 +4,14 @@ import { cn, nameAcronoym } from '@/lib/utils';
 
 import { Avatar } from './ui/avatar';
 
-export async function ProfileShow({
+export function ProfileShow({
+  ref,
   name,
   desc,
   image,
   className,
 }: {
+  ref?: React.RefObject<HTMLDivElement | null>;
   name: string;
   desc: string;
   image: string;
@@ -17,6 +19,7 @@ export async function ProfileShow({
 }) {
   return (
     <div
+      ref={ref}
       className={cn(
         'flex flex-col justify-between items-center gap-5 h-full w-1/2',
         className && className,

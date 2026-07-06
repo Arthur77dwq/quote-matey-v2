@@ -119,3 +119,7 @@ export type GlobalData = {
   metadata?: GlobalMetaDataType | null;
   headers?: headers | null;
 };
+
+export interface AnimatedRef {
+  timeline: GSAPTimeline;
+}

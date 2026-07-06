@@ -1,8 +1,42 @@
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { Badge } from '@/components/ui/badge';
+import { gsap } from '@/lib/animations/plugins';
+import { AnimatedRef } from '@/types/global';
 
-export async function HeroSection() {
+const useSectionAnimation = ({
+  sectionRef,
+  ref,
+}: {
+  sectionRef: React.RefObject<HTMLDivElement | null>;
+  ref: React.ForwardedRef<AnimatedRef>;
+}) => {
+  const tl = useRef(gsap.timeline());
+
+  useImperativeHandle(ref, () => ({
+    timeline: tl.current,
+  }));
+
+  useGSAP(() => {
+    // Animation Here
+    tl.current.fromTo(
+      sectionRef.current,
+      {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+      },
+      { opacity: 1, y: 0, duration: 1 },
+    );
+  });
+};
+
+export const HeroSection = forwardRef<AnimatedRef>((props, ref) => {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  useSectionAnimation({ sectionRef, ref });
+
   return (
     <section className="relative flex justify-center items-center gap-2.5 w-full h-fit">
       <div className="relative flex items-center justify-center w-full h-100 lg:h-150">
@@ -31,7 +65,10 @@ export async function HeroSection() {
         />
       </div>
       <div className="absolute inset-0 flex items-center justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden">
-        <div className="flex flex-col items-center justify-center gap-2.5 w-full h-fit">
+        <div
+          ref={sectionRef}
+          className="opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
+        >
           <Badge className="rounded-full py-2.5 px-5 bg-white text-body-xs text-neutral-900 flex items-center justify center border border-neutral-100">
             About QuoteMatey
           </Badge>
@@ -48,4 +85,4 @@ export async function HeroSection() {
       </div>
     </section>
   );
-}
+});

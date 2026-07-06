@@ -1,13 +1,48 @@
+import { useGSAP } from '@gsap/react';
 import { ArrowRight, Target } from 'lucide-react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { Boost, GraphWithSupport } from '@/constant/icons';
+import { gsap } from '@/lib/animations/plugins';
+import { AnimatedRef } from '@/types/global';
 
-import { Button } from '../ui/button';
+const useSectionAnimation = ({
+  sectionsRef,
+  ref,
+}: {
+  sectionsRef: React.RefObject<HTMLDivElement | null>[];
+  ref: React.ForwardedRef<AnimatedRef>;
+}) => {
+  const tl = useRef(gsap.timeline());
+  useGSAP(() => {
+    // Animation Here
+    tl.current.fromTo(
+      sectionsRef.map((ref) => ref.current),
+      {
+        opacity: 0,
+        y: 50,
+      },
+      { opacity: 1, y: 0, stagger: 0.2 },
+    );
+  });
 
-export async function SplitSection() {
+  useImperativeHandle(ref, () => ({
+    timeline: tl.current,
+  }));
+};
+
+export const SplitSection = forwardRef<AnimatedRef>((props, ref) => {
+  const sectionLeftRef = useRef<HTMLDivElement | null>(null);
+  const sectionRightRef = useRef<HTMLDivElement | null>(null);
+  useSectionAnimation({ sectionsRef: [sectionLeftRef, sectionRightRef], ref });
+
   return (
     <section className="grid grid-row-2 sm:grid-cols-2 gap-12.5 p-4 sm:px-7.5">
-      <div className="flex flex-col gap-2.5 sm:gap-5">
+      <div
+        ref={sectionLeftRef}
+        className="opacity-0 flex flex-col gap-2.5 sm:gap-5"
+      >
         <h2 className="font-sans font-semibold text-[2rem] text-neutral-900">
           Our mission
         </h2>
@@ -28,7 +63,10 @@ export async function SplitSection() {
           </div>
         </Button>
       </div>
-      <div className="flex flex-col gap-2.5 sm:gap-5">
+      <div
+        ref={sectionRightRef}
+        className="opacity-0 flex flex-col gap-2.5 sm:gap-5"
+      >
         <h2 className="font-sans font-semibold text-[2rem] text-neutral-900">
           Our values
         </h2>
@@ -57,4 +95,4 @@ export async function SplitSection() {
       </div>
     </section>
   );
-}
+});

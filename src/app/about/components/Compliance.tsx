@@ -1,8 +1,37 @@
-import { Avatar, AvatarFallback,AvatarImage } from '../ui/avatar';
+import { useGSAP } from '@gsap/react';
+import { useRef } from 'react';
 
-export async function Compliance() {
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { gsap } from '@/lib/animations/plugins';
+
+const useSectionAnimation = ({
+  sectionRef,
+}: {
+  sectionRef: React.RefObject<HTMLElement | null>;
+}) => {
+  useGSAP(() => {
+    // Animation Here
+    gsap.from(sectionRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 80%',
+      },
+    });
+  });
+};
+
+export const Compliance = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  useSectionAnimation({ sectionRef });
+
   return (
-    <section className="pb-25 px-4 md:px-0 w-full flex items-start justify-center">
+    <section
+      ref={sectionRef}
+      className="pb-25 px-4 md:px-0 w-full flex items-start justify-center"
+    >
       <div className="w-full md:w-3xl p-5 md:p-10 flex flex-col md:flex-row items-center justify-between gap-5 bg-neutral-50 rounded-3xl">
         <h2 className="text-center md:text-left font-semibold text-neutral-900 text-heading-5 w-full">
           Your data is protected at every level
@@ -31,4 +60,4 @@ export async function Compliance() {
       </div>
     </section>
   );
-}
+};
