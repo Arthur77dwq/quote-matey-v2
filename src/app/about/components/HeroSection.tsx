@@ -50,18 +50,18 @@ export const HeroSection = forwardRef<AnimatedRef>((props, ref) => {
           />
         </div>
         <Image
-          src="/images/about/cloud1.png"
+          src="/images/about/cloudRight.png"
           className="w-140 h-87 absolute -top-20 right-0"
           width={0}
           height={0}
-          alt="cloud1"
+          alt=""
         />
         <Image
-          src="/images/about/cloud2.png"
+          src="/images/about/cloudLeft.png"
           className="w-140 h-87 absolute top-10 left-0"
           width={0}
           height={0}
-          alt="cloud2"
+          alt=""
         />
       </div>
       <div className="absolute inset-0 flex items-center justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden">
