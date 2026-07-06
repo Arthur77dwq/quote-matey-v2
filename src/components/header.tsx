@@ -76,7 +76,7 @@ export function Header() {
   const rollMove = useRollMove({ leftArrowRef, rightArrowRef, textRef });
 
   const pathname = usePathname();
-  const shouldHide = matchRoute(pathname, AUTH_ROUTES);
+  const shouldHide = matchRoute(pathname, [...AUTH_ROUTES, '/chat']);
 
   return (
     <>
