@@ -12,7 +12,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  allowedDevOrigins: ['*.ngrok-free.dev'],
+  allowedDevOrigins: ['*.ngrok-free.dev', '*.ngrok-free.app'],
   async headers() {
     return [
       {
