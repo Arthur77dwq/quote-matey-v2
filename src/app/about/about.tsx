@@ -2,6 +2,7 @@
 import { useRef } from 'react';
 
 import { AnimatedRef } from '@/types/global';
+import { HeroSectionProps } from '@/types/pages';
 
 import { Compliance } from './components/Compliance';
 import { FounderLetter } from './components/FounderLetter';
@@ -15,9 +16,25 @@ export default function About() {
   const split = useRef<AnimatedRef>(null);
   useAboutAnimation({ hero, split });
 
+  const heroData: HeroSectionProps = {
+    tag: 'About QuoteMatey',
+    title: [
+      { bold: true, weight: 'bold', type: 'text', text: 'AI-Powered Quoting' },
+      { type: 'lineBreak', text: '' },
+      { bold: true, weight: 'bold', type: 'text', text: 'Software' },
+      {
+        bold: true,
+        weight: 'bold',
+        type: 'text',
+        text: ' Built for Tradies',
+        strong: true,
+      },
+    ],
+  };
+
   return (
     <>
-      <HeroSection ref={hero} />
+      <HeroSection {...heroData} ref={hero} />
       <SplitSection ref={split} />
       <FounderLetter />
       {/* <OurTeam /> */}

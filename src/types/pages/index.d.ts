@@ -22,3 +22,39 @@ export interface AboutRefs {
   hero: RefObject<AnimatedRef | null>;
   split: RefObject<AnimatedRef | null>;
 }
+
+export type fontWeight =
+  | 'thin'
+  | 'extralight'
+  | 'light'
+  | 'normal'
+  | 'medium'
+  | 'semibold'
+  | 'bold'
+  | 'extrabold'
+  | 'black';
+
+export type TextNodeType = 'lineBreak' | 'text';
+
+export type RichTextNode =
+  | {
+      text: string;
+      type: TextNodeType;
+      bold?: boolean;
+      weight?: fontWeight;
+      italic?: boolean;
+      strong?: boolean;
+      underline?: boolean;
+      strike?: boolean;
+      code?: boolean;
+      href?: string;
+    }
+  | {
+      type: 'lineBreak';
+    };
+
+export interface HeroSectionProps {
+  tag?: string;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
+}
