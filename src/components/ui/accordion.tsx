@@ -1,7 +1,7 @@
 'use client';
 
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -35,13 +35,62 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
+          'group [&[data-state=open]_.plus]:rotate-90 [&[data-state=open]_.plus]:opacity-0 [&[data-state=open]_.minus]:rotate-0 [&[data-state=open]_.minus]:opacity-100 focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
           className,
         )}
         {...props}
       >
         {children}
-        <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+        <div
+          className="
+          relative
+          flex
+          h-8
+          w-8
+          shrink-0
+          items-center
+          justify-center
+          rounded-full
+          bg-white
+          transition-colors
+          duration-300
+          group-data-[state=open]:bg-neutral-900
+          "
+        >
+          <Plus
+            className="
+            plus
+            absolute
+            size-4
+            rotate-0
+            transform-gpu
+            will-change-transform
+            transition-all
+            duration-300
+            ease-in-out
+            group-data-[state=open]:rotate-90
+            group-data-[state=open]:opacity-0
+            "
+          />
+
+          <Minus
+            className="
+            minus
+            absolute
+            size-4
+            -rotate-90
+            opacity-0
+            transform-gpu
+            will-change-transform
+            text-white
+            transition-all
+            duration-300
+            ease-in-out
+            group-data-[state=open]:rotate-0
+            group-data-[state=open]:opacity-100
+            "
+          />
+        </div>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

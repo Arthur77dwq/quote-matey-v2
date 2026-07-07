@@ -1,48 +1,37 @@
 'use client';
 import { useRef } from 'react';
 
+import { HeroSection } from '@/components/HeroSection';
 import { AnimatedRef } from '@/types/global';
-import { HeroSectionProps } from '@/types/pages';
+import { Section } from '@/types/pages';
 
-import { HeroSection } from '../about/components/HeroSection';
+import { QNASection } from './components/QNASection';
 
-export default function Faqs() {
-  const hero = useRef<AnimatedRef>(null);
-  const heroData: HeroSectionProps = {
-    title: [
-      { bold: true, weight: 'bold', type: 'text', text: 'Frequently' },
-      { type: 'lineBreak', text: '' },
-      { bold: true, weight: 'bold', type: 'text', text: 'asked' },
-      {
-        bold: true,
-        weight: 'bold',
-        type: 'text',
-        text: ' questions',
-        strong: true,
-      },
-    ],
-    description: [
-      {
-        bold: true,
-        weight: 'medium',
-        type: 'text',
-        text: 'Find quick answers to common questions about QuoteMatey,',
-      },
-      {
-        type: 'lineBreak',
-        text: '',
-      },
-      {
-        bold: true,
-        weight: 'medium',
-        type: 'text',
-        text: ' pricing, features, payments, and account support.',
-      },
-    ],
+export default function Faqs({ sections }: { sections: Section[] }) {
+  const heroRef = useRef<AnimatedRef>(null);
+
+  const renderComponents = (sections: Section[]) => {
+    return sections.map((section, i) => {
+      switch (section?.type) {
+        case 'HERO':
+          return (
+            <HeroSection
+              key={`${i}-${section?.type}-${section?.visible}`}
+              ref={heroRef}
+              {...section}
+            />
+          );
+
+        case 'QNA':
+          return (
+            <QNASection
+              key={`${i}-${section?.type}-${section?.visible}`}
+              {...section}
+            />
+          );
+      }
+    });
   };
-  return (
-    <>
-      <HeroSection {...heroData} ref={hero} />
-    </>
-  );
+
+  return sections && renderComponents(sections);
 }
