@@ -5,17 +5,52 @@ export type LINK = {
   active: boolean;
 };
 
-export type MetaDateProps = {
+export type MetaDataProps = {
   title: string;
   description: string;
   path: string;
 };
 
-export type Sections = null;
+export interface SectionType {
+  HERO: 'HERO';
+  QNA: 'QNA';
+}
+
+export type HERO = {
+  type: SectionType.HERO;
+  visible: boolean;
+  tag?: string;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
+};
+
+export type QuestionCategoryType =
+  | 'General'
+  | 'Platform & features'
+  | 'Pricing & plans'
+  | 'Account & support';
+
+export type Question = {
+  question: string;
+  answer: string;
+};
+
+export type QuestionCategory = {
+  category?: QuestionCategoryType;
+  questions: Question[];
+};
+
+export type QNA = {
+  type: SectionType.QNA;
+  visible: boolean;
+  categories?: QuestionCategory[];
+};
+
+export type Section = HERO | QNA | null;
 
 export type DataType = {
-  metadata?: MetaDateProps | null;
-  sections?: Sections[] | null;
+  metadata?: MetaDataProps | null;
+  sections?: Section[] | null;
 };
 
 export interface AboutRefs {
@@ -52,9 +87,3 @@ export type RichTextNode =
   | {
       type: 'lineBreak';
     };
-
-export interface HeroSectionProps {
-  tag?: string;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
-}
