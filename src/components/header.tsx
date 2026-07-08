@@ -62,23 +62,21 @@ export function Header() {
                   <NavBar navLinks={headers?.navBar.links || []} />
                 )}
                 <div className="h-full flex items-center justify-between gap-2">
-                  {/* {headers?.buttons &&
-                headers?.buttons?.length > 0 &&
-                headers?.buttons?.map((btn, index) => {
-                  return ( */}
-                  <Button
-                    onClick={() => router.push('/login')}
-                    variant="outline"
-                  >
-                    Login
-                  </Button>
-
-                  <Button onClick={() => router.push('/chat')}>
-                    Start Free
-                  </Button>
-
-                  {/* );
-                })} */}
+                  {headers?.buttons &&
+                    headers?.buttons?.length > 0 &&
+                    headers?.buttons?.map((btn, i) => {
+                      return (
+                        <Button
+                          key={`${i}-${btn.text}`}
+                          variant={btn.variant}
+                          onClick={() =>
+                            btn.link ? router.push(btn.link.href) : null
+                          }
+                        >
+                          Start Free
+                        </Button>
+                      );
+                    })}
                   <HamBurgerMenu onClick={toggle} />
                 </div>
               </div>

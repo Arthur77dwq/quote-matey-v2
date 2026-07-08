@@ -69,6 +69,10 @@ export interface AboutRefs {
   split: RefObject<AnimatedRef | null>;
 }
 
+export interface FAQRefs {
+  hero: RefObject<AnimatedRef | null>;
+}
+
 export type fontWeight =
   | 'thin'
   | 'extralight'

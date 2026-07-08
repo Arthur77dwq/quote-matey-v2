@@ -104,8 +104,9 @@ export type buttonVarient =
 export type Button = {
   id: number;
   variant: buttonVariants;
+  link: LINK | null;
   text: string;
-  icon: IconType;
+  icon: IconType | null;
 };
 
 export type headers = {
