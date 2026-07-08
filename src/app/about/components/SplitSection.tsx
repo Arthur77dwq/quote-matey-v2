@@ -1,8 +1,8 @@
 import { useGSAP } from '@gsap/react';
-import { ArrowRight, Target } from 'lucide-react';
+import { Target } from 'lucide-react';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/button';
 import { Boost, GraphWithSupport } from '@/constant/icons';
 import { gsap } from '@/lib/animations/plugins';
 import { AnimatedRef } from '@/types/global';
@@ -54,14 +54,9 @@ export const SplitSection = forwardRef<AnimatedRef>((props, ref) => {
             tools that give tradies the confidence to quote, manage, and grow
             their business efficiently.
           </p>
-          <Button className="p-1.5 relative overflow-hidden cursor-pointer flex items-center justify-center w-fit h-fit text-body-md font-inter font-semibold text-white">
-            <div className="z-1 absolute inset-0 bg-white/10 border border-white backdrop-blur-sm rounded-full"></div>
-            <div className="shadow-elevated z-2 flex justify-between items-center gap-2.5 py-3 pl-8 pr-2 border border-neutral-900 rounded-full text-neutral-0 bg-linear-to-br from-neutral-800 to-neutral-950 w-full h-full">
-              <span>Explore QuoteMatey</span>
-              <div className="font-inter bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full h-8 w-8">
-                <ArrowRight />
-              </div>
-            </div>
+
+          <Button variant="secondary-dark" className="w-fit">
+            Explore QuoteMatey
           </Button>
         </div>
         <div

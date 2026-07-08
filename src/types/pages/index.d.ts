@@ -1,3 +1,5 @@
+import { Button } from '../global';
+
 export type LINK = {
   href: string;
   target: '_blank' | '_self' | '_parent' | '_top';
@@ -14,6 +16,7 @@ export type MetaDataProps = {
 export interface SectionType {
   HERO: 'HERO';
   QNA: 'QNA';
+  CTA: 'CTA';
 }
 
 export type HERO = {
@@ -46,7 +49,15 @@ export type QNA = {
   categories?: QuestionCategory[];
 };
 
-export type Section = HERO | QNA | null;
+export type CTA = {
+  type: SectionType.CTA;
+  visible: boolean;
+  title: string;
+  description: string;
+  buttons: Button[];
+};
+
+export type Section = HERO | QNA | CTA | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;
