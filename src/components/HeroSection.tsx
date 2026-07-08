@@ -57,7 +57,7 @@ const styleParse = (node: RichTextNode) => {
 };
 
 export const HeroSection = forwardRef<AnimatedRef, HERO>(
-  ({ visible, tag, title, description }, ref) => {
+  ({ visible, tag, title, description, children }, ref) => {
     const sectionRef = useRef<HTMLDivElement | null>(null);
     useSectionAnimation({ sectionRef, ref });
 
@@ -122,9 +122,7 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
                 <p className="text-wrap max-w-150 text-body-md text-center tracking-normal font-inter text-neutral-600 leading-[1.3em]">
                   {description?.map((node, i) => {
                     if (node.type === 'lineBreak') {
-                      return (
-                        <br className="hidden" key={`${i}-${node.type}`} />
-                      );
+                      return <br key={`${i}-${node.type}`} />;
                     }
                     return (
                       <span
@@ -137,6 +135,7 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
                   })}
                 </p>
               )}
+              {children}
             </div>
           </div>
         </section>
