@@ -7,9 +7,11 @@ import { CTA, HERO, QNA, Section } from '@/types/pages';
 
 import { CTASection } from './components/CTASection';
 import { QNASection } from './components/QNASection';
+import { useFAQAnimation } from './useFAQAnimation';
 
 export default function Faqs({ sections }: { sections: Section[] }) {
-  const heroRef = useRef<AnimatedRef>(null);
+  const hero = useRef<AnimatedRef>(null);
+  useFAQAnimation({ hero });
 
   const renderComponents = (sections: Section[]) => {
     return sections.map((section, i) => {
@@ -18,7 +20,7 @@ export default function Faqs({ sections }: { sections: Section[] }) {
           return (
             <HeroSection
               key={`${i}-${section?.type}-${section?.visible}`}
-              ref={heroRef}
+              ref={hero}
               {...(section as HERO)}
             />
           );

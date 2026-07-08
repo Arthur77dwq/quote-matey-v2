@@ -147,6 +147,7 @@ export const DATA: DataType = {
         {
           id: 0,
           variant: 'secondary-dark',
+          link: null,
           text: 'Talk to our team',
           icon: { active: true, position: 'right', icon: 'ArrowRight' },
         },
