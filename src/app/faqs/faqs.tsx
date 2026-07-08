@@ -3,8 +3,9 @@ import { useRef } from 'react';
 
 import { HeroSection } from '@/components/HeroSection';
 import { AnimatedRef } from '@/types/global';
-import { Section } from '@/types/pages';
+import { CTA, HERO, QNA, Section } from '@/types/pages';
 
+import { CTASection } from './components/CTASection';
 import { QNASection } from './components/QNASection';
 
 export default function Faqs({ sections }: { sections: Section[] }) {
@@ -18,7 +19,7 @@ export default function Faqs({ sections }: { sections: Section[] }) {
             <HeroSection
               key={`${i}-${section?.type}-${section?.visible}`}
               ref={heroRef}
-              {...section}
+              {...(section as HERO)}
             />
           );
 
@@ -26,12 +27,26 @@ export default function Faqs({ sections }: { sections: Section[] }) {
           return (
             <QNASection
               key={`${i}-${section?.type}-${section?.visible}`}
-              {...section}
+              {...(section as QNA)}
+            />
+          );
+
+        case 'CTA':
+          return (
+            <CTASection
+              key={`${i}-${section?.type}-${section?.visible}`}
+              {...(section as CTA)}
             />
           );
       }
     });
   };
 
-  return sections && renderComponents(sections);
+  return (
+    sections && (
+      <main className="pb-12.5 sm:pb-20 md:pb-25 h-fit">
+        {renderComponents(sections)}
+      </main>
+    )
+  );
 }

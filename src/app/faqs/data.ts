@@ -138,5 +138,19 @@ export const DATA: DataType = {
         },
       ],
     },
+    {
+      type: 'CTA',
+      visible: true,
+      title: 'Still have questions?',
+      description: 'Reach out and our team will guide you.',
+      buttons: [
+        {
+          id: 0,
+          variant: 'secondary-dark',
+          text: 'Talk to our team',
+          icon: { active: true, position: 'right', icon: 'ArrowRight' },
+        },
+      ],
+    },
   ],
 };
