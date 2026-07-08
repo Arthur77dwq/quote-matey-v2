@@ -147,7 +147,12 @@ export const DATA: DataType = {
         {
           id: 0,
           variant: 'secondary-dark',
-          link: null,
+          link: {
+            href: '/contact',
+            target: '_self',
+            text: null,
+            active: true,
+          },
           text: 'Talk to our team',
           icon: { active: true, position: 'right', icon: 'ArrowRight' },
         },

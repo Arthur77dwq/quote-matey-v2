@@ -122,7 +122,7 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="shrink-0 p-1.5 bg-white/10 rounded-full border border-white flex justify-center items-center">
+    <div className="shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
       <PrimaryButton
         {...props}
         className={cn(

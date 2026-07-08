@@ -1,4 +1,5 @@
 import { useGSAP } from '@gsap/react';
+import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
 import { Button } from '@/components/button';
@@ -27,13 +28,14 @@ const useSectionAnimation = ({
 export function CTASection({ visible, title, description, buttons }: CTA) {
   const sectionRef = useRef<HTMLElement | null>(null);
   useSectionAnimation({ sectionRef });
+  const router = useRouter();
   return (
     visible && (
       <section
         ref={sectionRef}
         className="w-full flex justify-center items-center"
       >
-        <div className="h-26.5 flex flex-col justify-start items-center gap-2.5">
+        <div className="flex flex-col justify-start items-center gap-2.5">
           <h3 className="text-2xl font-semibold text-neutral-900 leading-[1.2em]">
             {title}
           </h3>
@@ -46,6 +48,11 @@ export function CTASection({ visible, title, description, buttons }: CTA) {
                 key={`${button.id}-${button.variant}-${i}`}
                 variant={button.variant}
                 className="w-fit"
+                onClick={() =>
+                  button.link && button.link.active
+                    ? router.push(button.link.href)
+                    : null
+                }
               >
                 {button.text}
               </Button>
