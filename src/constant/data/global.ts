@@ -79,7 +79,7 @@ export const GLOBAL_DATA: GlobalData = {
           href: '/login',
           target: '_self',
           text: null,
-          active: false,
+          active: true,
         },
         icon: null,
       },
@@ -91,7 +91,7 @@ export const GLOBAL_DATA: GlobalData = {
           href: '/chat',
           target: '_self',
           text: null,
-          active: false,
+          active: true,
         },
         icon: {
           position: 'right',

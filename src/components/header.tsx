@@ -64,13 +64,15 @@ export function Header() {
                 <div className="h-full flex items-center justify-between gap-2">
                   {headers?.buttons &&
                     headers?.buttons?.length > 0 &&
-                    headers?.buttons?.map((btn, i) => {
+                    headers?.buttons?.map((button, i) => {
                       return (
                         <Button
-                          key={`${i}-${btn.text}`}
-                          variant={btn.variant}
+                          key={`${i}-${button.text}`}
+                          variant={button.variant}
                           onClick={() =>
-                            btn.link ? router.push(btn.link.href) : null
+                            button.link && button.link.active
+                              ? router.push(button.link.href)
+                              : null
                           }
                         >
                           Start Free
