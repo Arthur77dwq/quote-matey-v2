@@ -1,5 +1,3 @@
-import { buttonVariants } from '@/components/ui/button';
-
 export type User = {
   uid: string;
   email: string;
@@ -97,11 +95,18 @@ export type IconType = {
 
 export type Theme = 'dark' | 'light';
 
+export type buttonVarient =
+  | 'default'
+  | 'secondary'
+  | 'secondary-dark'
+  | 'outline';
+
 export type Button = {
   id: number;
-  type: buttonVariants;
+  variant: buttonVariants;
+  link: LINK | null;
   text: string;
-  icon: IconType;
+  icon: IconType | null;
 };
 
 export type headers = {

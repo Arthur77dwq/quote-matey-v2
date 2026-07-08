@@ -67,7 +67,7 @@ function PrimaryButton({
     <Comp
       {...props}
       className={cn(
-        'shadow-[inset_4px_4px_8px_#102B59,inset_-4px_-4px_8px_#102E60,0_4px_16px_rgba(16,46,96,0.4)] p-2.5 pl-6 relative overflow-clip cursor-pointer flex items-center justify-between gap-1.25 w-fit h-full rounded-full text-white bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]',
+        'p-2.5 pl-6 relative overflow-clip cursor-pointer flex items-center justify-between gap-1.25 w-fit h-full rounded-full text-white',
         className,
       )}
       onMouseEnter={() => rollMove.current?.play()}
@@ -84,7 +84,7 @@ function PrimaryButton({
       <span
         ref={rightArrowRef}
         key="right"
-        className=" bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+        className="bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
       >
         <ArrowRight />
       </span>
@@ -122,15 +122,32 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <PrimaryButton
-      {...props}
-      className={cn(
-        'hidden md:flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer',
-        className,
-      )}
-    >
+    <div className="shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
+      <PrimaryButton
+        {...props}
+        className={cn(
+          'inline-flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer',
+          className,
+        )}
+      >
+        {children}
+      </PrimaryButton>
+    </div>
+  );
+}
+
+function SecondaryDarkButton({
+  className,
+  children,
+  ...props
+}: {
+  className: string;
+  children: React.ReactNode;
+} & React.ComponentProps<'button'>) {
+  return (
+    <SecondaryButton {...props} className={className}>
       {children}
-    </PrimaryButton>
+    </SecondaryButton>
   );
 }
 
@@ -157,10 +174,28 @@ function Button({
           {children}
         </SecondaryButton>
       );
+    case 'secondary-dark':
+      return (
+        <SecondaryDarkButton
+          {...props}
+          className={cn(
+            'shadow-[inset_4px_4px_8px_rgba(255,255,255,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.3),0_4px_16px_rgba(29,29,29,0.5)] bg-neutral-950 bg-linear-to-br from-bg-neutral-800 to-black border border-neutral-900',
+            className,
+          )}
+        >
+          {children}
+        </SecondaryDarkButton>
+      );
     case 'default':
     default:
       return (
-        <PrimaryButton {...props} className={className || ''}>
+        <PrimaryButton
+          {...props}
+          className={cn(
+            'shadow-[inset_4px_4px_8px_#102B59,inset_-4px_-4px_8px_#102E60,0_4px_16px_rgba(16,46,96,0.4)] bg-linear-to-br from-[#637696] via-[#5A7AAD] via-20% to-[#2D4A7A]',
+            className,
+          )}
+        >
           {children}
         </PrimaryButton>
       );

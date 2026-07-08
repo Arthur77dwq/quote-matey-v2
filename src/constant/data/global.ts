@@ -73,22 +73,30 @@ export const GLOBAL_DATA: GlobalData = {
     buttons: [
       {
         id: 0,
-        type: 'btn',
+        variant: 'outline',
         text: 'Login',
-        icon: {
-          position: 'left',
-          active: false,
-          icon: null,
+        link: {
+          href: '/login',
+          target: '_self',
+          text: null,
+          active: true,
         },
+        icon: null,
       },
       {
         id: 1,
-        type: 'btn_icon',
+        variant: 'default',
         text: 'Start Free',
-        icon: {
-          position: 'left',
+        link: {
+          href: '/chat',
+          target: '_self',
+          text: null,
           active: true,
-          icon: 'right_arrow',
+        },
+        icon: {
+          position: 'right',
+          active: true,
+          icon: 'ArrowRight',
         },
       },
     ],
