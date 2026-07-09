@@ -29,5 +29,6 @@
         "iconColour": "yellow",
         "gutterIcon": true
     }
-}
+},
+"editor.mouseWheelZoom": true
 }
