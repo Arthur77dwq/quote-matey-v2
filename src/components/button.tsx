@@ -54,10 +54,14 @@ const useRollMove = ({
 function PrimaryButton({
   className,
   children,
+  animation = true,
+  arrow = true,
   ...props
 }: {
   className: string;
   children: React.ReactNode;
+  animation?: boolean;
+  arrow?: boolean;
 } & React.ComponentProps<'button'>) {
   const leftArrowRef = useRef<HTMLButtonElement | null>(null);
   const textRef = useRef<HTMLButtonElement | null>(null);
@@ -70,24 +74,28 @@ function PrimaryButton({
         'p-2.5 pl-6 relative overflow-clip cursor-pointer flex items-center justify-between gap-1.25 w-fit h-full rounded-full text-white',
         className,
       )}
-      onMouseEnter={() => rollMove.current?.play()}
-      onMouseLeave={() => rollMove.current?.reverse()}
+      onMouseEnter={() => animation && rollMove.current?.play()}
+      onMouseLeave={() => animation && rollMove.current?.reverse()}
     >
-      <span
-        ref={leftArrowRef}
-        key="left"
-        className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
-      >
-        <ArrowRight />
-      </span>
+      {arrow && (
+        <span
+          ref={leftArrowRef}
+          key="left"
+          className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+        >
+          <ArrowRight />
+        </span>
+      )}
       <span ref={textRef}>{children}</span>
-      <span
-        ref={rightArrowRef}
-        key="right"
-        className="bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
-      >
-        <ArrowRight />
-      </span>
+      {arrow && (
+        <span
+          ref={rightArrowRef}
+          key="right"
+          className="bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+        >
+          <ArrowRight />
+        </span>
+      )}
     </Comp>
   );
 }
@@ -122,7 +130,7 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
+    <div className="w-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
       <PrimaryButton
         {...props}
         className={cn(
@@ -185,6 +193,20 @@ function Button({
         >
           {children}
         </SecondaryDarkButton>
+      );
+    case 'dark':
+      return (
+        <PrimaryButton
+          {...props}
+          arrow={false}
+          animation={false}
+          className={cn(
+            'px-11 py-4.5 transition-colors ease-in-out hover:bg-neutral-100 bg-neutral-900 hover:text-neutral-900! text-neutral-0! w-fit rounded-4xl font-inter font-semibold text-body-md',
+            className,
+          )}
+        >
+          {children}
+        </PrimaryButton>
       );
     case 'default':
     default:
