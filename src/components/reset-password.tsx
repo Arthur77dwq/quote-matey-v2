@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form';
 import { OverlayBg } from '@/components/overlay-bg';
 import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/context/AuthContext';
-import { resetFormData, resetSchema } from '@/lib/schemas/auth.schema';
+import { resetSchema } from '@/lib/schemas/auth.schema';
 import { cn } from '@/lib/utils';
+import { resetFormData } from '@/types/global';
 
 import { ResetPasswordSuccess } from './reset-password-success';
 import { Button } from './ui/button';

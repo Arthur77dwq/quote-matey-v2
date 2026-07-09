@@ -16,7 +16,8 @@ import {
 } from '@/components/ui/input-group';
 import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/context/AuthContext';
-import { resetFormData, resetSchema } from '@/lib/schemas/auth.schema';
+import { resetSchema } from '@/lib/schemas/auth.schema';
+import { resetFormData } from '@/types/global';
 
 export default function ResetPasswordPage() {
   const { loading, error, resetPassword } = useAuth();
