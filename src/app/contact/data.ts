@@ -58,7 +58,7 @@ export const DATA: DataType = {
           {
             name: 'name',
             field: 'Full Name',
-            placeholder: 'Albert Einstein',
+            placeholder: 'Enter your full name',
             required: true,
             type: 'text',
             autoFocus: true,
@@ -67,7 +67,7 @@ export const DATA: DataType = {
           {
             name: 'email',
             field: 'Email',
-            placeholder: 'albert@domain.com',
+            placeholder: 'hello@yourbrand.com',
             required: true,
             type: 'email',
             autoFocus: false,
@@ -78,7 +78,7 @@ export const DATA: DataType = {
           {
             name: 'phone',
             field: 'Phone Number',
-            placeholder: '+61 88-8844-4422',
+            placeholder: 'Your contact number',
             required: false,
             type: 'tel',
             minLength: 10,
@@ -89,8 +89,8 @@ export const DATA: DataType = {
           {
             name: 'subject',
             field: 'Subject',
-            placeholder: 'Enterprise Quotation Needed, etc',
-            required: true,
+            placeholder: 'How can we help you?',
+            required: false,
             type: 'text',
             autoFocus: false,
             autoComplete: 'off',
@@ -100,9 +100,9 @@ export const DATA: DataType = {
           {
             name: 'message',
             field: 'Message',
-            placeholder: 'Type Message...',
-            required: true,
-            type: 'text',
+            placeholder: 'Write your message here...',
+            required: false,
+            type: 'textarea',
             autoFocus: false,
             autoComplete: 'off',
           },
