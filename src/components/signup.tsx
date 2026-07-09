@@ -25,8 +25,9 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { GoogleIcon } from '@/constant/icons';
 import { useAuth } from '@/context/AuthContext';
-import { signUpFormData, signUpSchema } from '@/lib/schemas/auth.schema';
+import { signUpSchema } from '@/lib/schemas/auth.schema';
 import { cn } from '@/lib/utils';
+import { signUpFormData } from '@/types/global';
 
 type Props = {
   resetPassword: () => void;

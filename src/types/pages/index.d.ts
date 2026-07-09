@@ -1,3 +1,7 @@
+import { z } from 'zod';
+
+import { contactSchema } from '@/lib/schemas/contact.schema';
+
 import { Button } from '../global';
 
 export type LINK = {
@@ -17,6 +21,7 @@ export interface SectionType {
   HERO: 'HERO';
   QNA: 'QNA';
   CTA: 'CTA';
+  CONTACTFORM: 'CONTACTFORM';
 }
 
 export type HERO = {
@@ -58,7 +63,31 @@ export type CTA = {
   buttons: Button[];
 };
 
-export type Section = HERO | QNA | CTA | null;
+export type InputType = 'text' | 'email' | 'tel' | 'textarea';
+
+export type Input = {
+  field: string;
+  name: 'email' | 'name' | 'phone' | 'subject' | 'message';
+  required: boolean;
+  type: InputType;
+  min?: number;
+  max?: number;
+  placeholder: string;
+  autoFocus: boolean;
+  autoComplete: string;
+  minLength?: number;
+  maxLength?: number;
+};
+
+export type InputView = Input[];
+
+export type CONTACTFORM = {
+  type: SectionType.CONTACTFORM;
+  visible: boolean;
+  Inputs: InputView[];
+};
+
+export type Section = HERO | QNA | CTA | CONTACTFORM | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;
@@ -106,3 +135,5 @@ export type RichTextNode =
   | {
       type: 'lineBreak';
     };
+
+export type contactFormData = z.infer<typeof contactSchema>;
