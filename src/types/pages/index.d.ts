@@ -31,6 +31,7 @@ export type HERO = {
   title?: RichTextNode[];
   description?: RichTextNode[];
   children?: React.ReactNode;
+  className?: string;
 };
 
 export type QuestionCategoryType =
@@ -100,6 +101,7 @@ export interface AboutRefs {
 }
 export interface ContactRefs {
   hero: RefObject<AnimatedRef | null>;
+  contact: RefObject<AnimatedRef | null>;
 }
 
 export interface FAQRefs {
