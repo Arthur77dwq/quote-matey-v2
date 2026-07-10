@@ -57,15 +57,20 @@ const styleParse = (node: RichTextNode) => {
 };
 
 export const HeroSection = forwardRef<AnimatedRef, HERO>(
-  ({ visible, tag, title, description }, ref) => {
+  ({ visible, tag, title, description, children, className }, ref) => {
     const sectionRef = useRef<HTMLDivElement | null>(null);
     useSectionAnimation({ sectionRef, ref });
 
     return (
       visible && (
-        <section className="relative flex justify-center items-center gap-2.5 w-full h-fit">
-          <div className="relative flex items-center justify-center w-full h-115 sm:h-110 lg:h-130">
-            <div className="w-full h-80 sm:h-120 lg:h-150">
+        <section
+          className={cn(
+            'relative flex flex-col justify-center items-center gap-2.5 w-full pb-15 pt-32 sm:pb-20 sm:pt-39.5 lg:pb-25 lg:pt-48.5',
+            className,
+          )}
+        >
+          <div className={'absolute inset-0 flex items-center justify-center'}>
+            <div className="w-full h-full">
               <Image
                 src="/images/about/BackgroundSKYUNDERLAY.jpg"
                 alt="Background"
@@ -89,56 +94,56 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
               alt=""
             />
           </div>
-          <div className="pb-15 pt-32 sm:pb-20 sm:pt-39.5 lg:pb-25 lg:pt-48.5 absolute inset-0 flex items-end justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden">
-            <div
-              ref={sectionRef}
-              className="opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
-            >
-              {tag && (
-                <Badge className="rounded-full py-2.5 px-5 bg-white text-body-xs font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
-                  {tag}
-                </Badge>
-              )}
-              <h1 className="text-wrap max-w-240 text-center text-[2.75rem] tracking-[-1.4px] leading-[1.2em] text-neutral-900 sm:text-[3.38rem] lg:text-[4.69rem]">
-                {title?.map((node, i) => {
+          <div
+            className={
+              'absolute inset-0 h-full w-full flex items-end justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden'
+            }
+          />
+          <div
+            ref={sectionRef}
+            className="px-4 sm:p-0 opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
+          >
+            {tag && (
+              <Badge className="rounded-full py-2.5 px-5 bg-white text-body-xs font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
+                {tag}
+              </Badge>
+            )}
+            <h1 className="text-nowrap sm:text-wrap max-w-240 text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
+              {title?.map((node, i) => {
+                if (node.type === 'lineBreak') {
+                  return <br key={i} />;
+                }
+
+                const Component = node.strong ? 'strong' : 'span';
+
+                return (
+                  <Component
+                    key={`${i}-${node.text}`}
+                    className={cn(styleParse(node))}
+                  >
+                    {node.text}
+                  </Component>
+                );
+              })}
+            </h1>
+
+            {description && (
+              <p className="max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter font-medium text-neutral-600 leading-[1.3em]">
+                {description?.map((node, i) => {
                   if (node.type === 'lineBreak') {
-                    return <br key={i} />;
+                    return <br className="hidden sm:static" key={i} />;
                   }
 
-                  const Component = node.strong ? 'strong' : 'span';
-
                   return (
-                    <Component
-                      key={`${i}-${node.text}`}
-                      className={cn(styleParse(node))}
-                    >
-                      {node.text}
-                    </Component>
+                    <span key={i} className={cn('inline', styleParse(node))}>
+                      {node.text}{' '}
+                    </span>
                   );
                 })}
-              </h1>
-
-              {description && (
-                <p className="text-wrap max-w-150 text-body-md text-center tracking-normal font-inter text-neutral-600 leading-[1.3em]">
-                  {description?.map((node, i) => {
-                    if (node.type === 'lineBreak') {
-                      return (
-                        <br className="hidden" key={`${i}-${node.type}`} />
-                      );
-                    }
-                    return (
-                      <span
-                        key={`${i}-${node.type}`}
-                        className={styleParse(node)}
-                      >
-                        {node.text}
-                      </span>
-                    );
-                  })}
-                </p>
-              )}
-            </div>
+              </p>
+            )}
           </div>
+          {children}
         </section>
       )
     );

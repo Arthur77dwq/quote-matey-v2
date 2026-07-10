@@ -1,3 +1,11 @@
+import { z } from 'zod';
+
+import {
+  loginSchema,
+  resetSchema,
+  signUpSchema,
+} from '@/lib/schemas/auth.schema';
+
 export type User = {
   uid: string;
   email: string;
@@ -118,6 +126,10 @@ export type headers = {
   };
   buttons?: Button[];
 };
+
+export type loginFormData = z.infer<typeof loginSchema>;
+export type signUpFormData = z.infer<typeof signUpSchema>;
+export type resetFormData = z.infer<typeof resetSchema>;
 
 export type GlobalData = {
   brand: BrandType;

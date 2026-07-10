@@ -19,7 +19,8 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { GoogleIcon } from '@/constant/icons';
 import { useAuth } from '@/context/AuthContext';
-import { loginFormData, loginSchema } from '@/lib/schemas/auth.schema';
+import { loginSchema } from '@/lib/schemas/auth.schema';
+import { loginFormData } from '@/types/global';
 
 export default function LoginPage() {
   const { loading, error, user, signIn, withPopUp } = useAuth();

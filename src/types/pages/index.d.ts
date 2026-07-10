@@ -1,3 +1,7 @@
+import { z } from 'zod';
+
+import { contactSchema } from '@/lib/schemas/contact.schema';
+
 import { Button } from '../global';
 
 export type LINK = {
@@ -17,6 +21,7 @@ export interface SectionType {
   HERO: 'HERO';
   QNA: 'QNA';
   CTA: 'CTA';
+  CONTACTFORM: 'CONTACTFORM';
 }
 
 export type HERO = {
@@ -25,6 +30,8 @@ export type HERO = {
   tag?: string;
   title?: RichTextNode[];
   description?: RichTextNode[];
+  children?: React.ReactNode;
+  className?: string;
 };
 
 export type QuestionCategoryType =
@@ -57,7 +64,31 @@ export type CTA = {
   buttons: Button[];
 };
 
-export type Section = HERO | QNA | CTA | null;
+export type InputType = 'text' | 'email' | 'tel' | 'textarea';
+
+export type Input = {
+  field: string;
+  name: 'email' | 'name' | 'phone' | 'subject' | 'message';
+  required: boolean;
+  type: InputType;
+  min?: number;
+  max?: number;
+  placeholder: string;
+  autoFocus: boolean;
+  autoComplete: string;
+  minLength?: number;
+  maxLength?: number;
+};
+
+export type InputView = Input[];
+
+export type CONTACTFORM = {
+  type: SectionType.CONTACTFORM;
+  visible: boolean;
+  Inputs: InputView[];
+};
+
+export type Section = HERO | QNA | CTA | CONTACTFORM | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;
@@ -67,6 +98,10 @@ export type DataType = {
 export interface AboutRefs {
   hero: RefObject<AnimatedRef | null>;
   split: RefObject<AnimatedRef | null>;
+}
+export interface ContactRefs {
+  hero: RefObject<AnimatedRef | null>;
+  contact: RefObject<AnimatedRef | null>;
 }
 
 export interface FAQRefs {
@@ -102,3 +137,5 @@ export type RichTextNode =
   | {
       type: 'lineBreak';
     };
+
+export type contactFormData = z.infer<typeof contactSchema>;
