@@ -8,7 +8,9 @@ export const useContactAnimation = (refs: ContactRefs) => {
   const master = useRef(gsap.timeline({ paused: true }));
 
   useGSAP(() => {
-    master.current.add(refs.hero.current!.timeline);
+    master.current
+      .add(refs.hero.current!.timeline)
+      .add(refs.contact.current!.timeline, '<');
 
     master.current.play();
   });
