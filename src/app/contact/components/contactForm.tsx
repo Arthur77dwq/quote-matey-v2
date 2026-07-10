@@ -65,19 +65,19 @@ export const ContactForm = forwardRef<AnimatedRef, CONTACTFORM>(
       visible && (
         <section
           ref={sectionRef}
-          className="opacity-0 px-4 sm:px-0 sm:pt-0 flex justify-center items-start pb-50"
+          className="opacity-0 w-full sm:w-155 lg:w-4xl px-4 sm:px-0 sm:pt-0 flex justify-center items-start"
         >
-          <Card className="p-0  w-full sm:w-8/10 bg-neutral-50 border-0">
-            <CardContent className="flex justify-center items-center p-10">
+          <Card className="p-0 w-full bg-neutral-50 border-0">
+            <CardContent className="flex justify-center items-center p-5 pb-20 sm:pb-17.5 lg:p-10">
               <form
                 // onSubmit={handleSubmit(onSubmit)}
-                className="w-full flex flex-col justify-between items-center gap-7.5"
+                className="w-full flex flex-col justify-between items-center gap-5 sm:gap-7.5"
               >
                 {Inputs.map((input, i) => {
                   return (
                     <div
                       key={i}
-                      className="w-full flex flex-col lg:flex-row items-center justify-between gap-7.5"
+                      className="w-full flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-7.5"
                     >
                       {input.map((each, z) => (
                         <Field
