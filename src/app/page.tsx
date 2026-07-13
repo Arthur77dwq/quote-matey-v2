@@ -7,11 +7,9 @@ import { CTASection } from '@/components/cta-section';
 import { FAQ } from '@/components/faq';
 import { HeroSection } from '@/components/hero-section';
 import { HowItWorks } from '@/components/how-it-works';
-import { Pricing } from '@/components/pricing';
 import { SocialProofBar } from '@/components/social-proof-bar';
 import { Testimonials } from '@/components/testimonials';
 import { VideoSection } from '@/components/video-section';
-import { plans } from '@/constant/paypal/plan';
 import { generateMetadata } from '@/lib/seo';
 
 import { DATA } from './data';
@@ -31,7 +29,6 @@ export default async function Home() {
       <BeforeAfter />
       <Benefits />
       <Testimonials />
-      <Pricing data={plans} />
       <FAQ />
       <CTASection />
     </main>
