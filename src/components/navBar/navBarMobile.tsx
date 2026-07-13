@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
-import { LINK } from '@/types/pages';
+import { LINK } from '@/types/global';
 
 export function NavBarMobile({
   open,
