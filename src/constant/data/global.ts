@@ -44,6 +44,10 @@ export const GLOBAL_DATA: GlobalData = {
   headers: {
     type: 'GLOBAL_HEADER',
     logo: {
+      href: '/',
+      target: '_self',
+      text: null,
+      active: true,
       alt: 'Quote Matey',
       src: '/quotematey-hor-with-out-subtitle.png',
     },

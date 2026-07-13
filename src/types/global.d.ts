@@ -109,6 +109,13 @@ export type buttonVarient =
   | 'secondary-dark'
   | 'outline';
 
+export type LINK = {
+  href: string;
+  target: '_self' | '_blank' | '_parent' | '_top' | string;
+  text: string | null;
+  active: boolean;
+};
+
 export type Button = {
   id: number;
   variant: buttonVariants;
@@ -118,7 +125,7 @@ export type Button = {
 };
 
 export type headers = {
-  logo: ImageType;
+  logo: ImageType & Link;
   type: HeaderType;
   navBar: {
     active: boolean;

@@ -4,13 +4,6 @@ import { contactSchema } from '@/lib/schemas/contact.schema';
 
 import { Button } from '../global';
 
-export type LINK = {
-  href: string;
-  target: '_blank' | '_self' | '_parent' | '_top';
-  text: string;
-  active: boolean;
-};
-
 export type MetaDataProps = {
   title: string;
   description: string;

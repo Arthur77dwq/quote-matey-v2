@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { LINK } from '@/types/pages';
+import { LINK } from '@/types/global';
 
 export function NavBar({ navLinks }: { navLinks: LINK[] }) {
   return (
