@@ -29,10 +29,7 @@ export function Pricing({
     return showCTA && !plan?.db?.isFree;
   };
   return (
-    <section
-      id="pricing"
-      className="pt-24 bg-linear-to-b from-white to-slate-50"
-    >
+    <section className="pt-24 bg-linear-to-b from-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <span className="inline-block text-sm font-semibold text-[#f57a0a] bg-[#f57a0a]/10 px-4 py-1.5 rounded-full mb-4">

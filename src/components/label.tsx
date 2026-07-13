@@ -1,4 +1,3 @@
-import { Trend } from '@/constant/icons';
 import { cn } from '@/lib/utils';
 
 import { Badge } from './ui/badge';
@@ -6,19 +5,16 @@ import { Badge } from './ui/badge';
 export function Label({
   text,
   className,
+  children,
 }: {
   text: string;
   className?: string;
+  children?: React.ReactNode;
 }) {
   return (
-    <Badge
-      className={cn(
-        'gap-2 bg-[#f57a0a] text-white text-[10px] font-semibold',
-        className,
-      )}
-    >
-      <Trend />
-      <span className="">{text || 'Most Popular'}</span>
+    <Badge className={cn('gap-2 font-semibold rounded-full', className)}>
+      {children}
+      <span>{text}</span>
     </Badge>
   );
 }

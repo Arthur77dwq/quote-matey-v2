@@ -104,11 +104,11 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
             className="px-4 sm:p-0 opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
           >
             {tag && (
-              <Badge className="rounded-full py-2.5 px-5 bg-white text-body-xs font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
+              <Badge className="rounded-full py-2.5 px-5 bg-white text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
                 {tag}
               </Badge>
             )}
-            <h1 className="text-nowrap sm:text-wrap max-w-240 text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
+            <h1 className="text-nowrap sm:text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
               {title?.map((node, i) => {
                 if (node.type === 'lineBreak') {
                   return <br key={i} />;

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button } from '../global';
+import { Button, LINK } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -15,6 +15,7 @@ export interface SectionType {
   QNA: 'QNA';
   CTA: 'CTA';
   CONTACTFORM: 'CONTACTFORM';
+  PRICING: 'PRICING';
 }
 
 export type HERO = {
@@ -81,7 +82,33 @@ export type CONTACTFORM = {
   Inputs: InputView[];
 };
 
-export type Section = HERO | QNA | CTA | CONTACTFORM | null;
+export type Feature = { text: string; included: boolean };
+
+export type PricingPlan = {
+  id: string;
+  variant: 'neutral' | 'primary' | 'secondary';
+  version: number;
+  name: string;
+  trend: {
+    text: string;
+    tranding: boolean;
+  };
+  pricing: { price: string; currency: string };
+  period: string;
+  description: string;
+  features: Feature[];
+  cta: LINK;
+};
+
+export type PRICING = {
+  type: SectionType.PRICING;
+  visible: boolean;
+  plans: PricingPlan[];
+  footer?: string;
+  className?: string;
+};
+
+export type Section = HERO | QNA | CTA | CONTACTFORM | PRICING | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;
