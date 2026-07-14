@@ -24,20 +24,3 @@ export function formattedDate(date: string) {
     year: 'numeric',
   });
 }
-
-export function cleanOutput(text?: string): string | undefined {
-  return text
-    ?.replace(/\*\*/g, '')
-    ?.replace(/#{2,}/g, '')
-    ?.replace(/[🎯✅🔥]/gu, '');
-  // ?.replace(/\s+/g, ' ');
-}
-
-export const isProd = process.env.PAYPAL_ENV === 'live';
-
-export const nameAcronoym = (name: string) => {
-  const parts = name?.trim().split(/\s+/) ?? [];
-  const acronymArray = parts.map((part) => part[0]);
-  const acronym = acronymArray.join('');
-  return acronym || null;
-};

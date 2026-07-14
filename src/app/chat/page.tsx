@@ -92,7 +92,6 @@ function ChatContent() {
   };
 
   const handleSendMessage = async (text: string) => {
-    // TODO: Implement notification handler in chat
     const trimmedText = text.trim() || null;
 
     // Prevent duplicate calls using ref (survives re-renders)
@@ -121,95 +120,47 @@ function ChatContent() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        throw new Error(
+          data?.error || data?.message || 'Failed to get response',
+        );
       }
 
-      if (!response.body) {
-        throw new Error('No response body');
-      }
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        ...data,
+        role: 'assistant',
+      };
 
-      const assistantId = (Date.now() + 1).toString();
-
-      if (response.status === 200) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: assistantId,
-            role: 'assistant',
-            parts: [
-              {
-                text: '',
-              },
-            ],
-          },
-        ]);
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        let buffer = '';
-        let accumulatedText = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-
-          if (done) break;
-
-          buffer += decoder.decode(value, {
-            stream: true,
-          });
-
-          const lines = buffer.split('\n');
-
-          buffer = lines.pop() ?? '';
-
-          for (const line of lines) {
-            if (!line.trim()) continue;
-
-            const data = JSON.parse(line);
-            if (data) accumulatedText += data.parts[0].text;
-
-            if (accumulatedText)
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantId
-                    ? {
-                        ...msg,
-                        parts: [
-                          {
-                            text: accumulatedText,
-                          },
-                        ],
-                      }
-                    : msg,
-                ),
-              );
-          }
-        }
-      }
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      let errorMessage: Message | null = null;
+      let errorContent =
+        'Sorry mate, something went wrong. Give it another go!';
       if (error instanceof Error) {
-        if (error.message.includes('Failed to fetch')) {
-          errorMessage = {
-            id: (Date.now() + 1).toString(),
-            role: 'assistant',
-            parts: [
-              {
-                text: 'Network error. Please check your connection and try again.',
-              },
-            ],
-          };
-        } else {
-          errorMessage = {
-            id: (Date.now() + 1).toString(),
-            ...JSON.parse(error.message),
-          };
+        if (
+          error.message.includes('rate limit') ||
+          error.message.includes('quota')
+        ) {
+          errorContent =
+            'API rate limit reached. Please wait a moment and try again.';
+        } else if (error.message.includes('Failed to fetch')) {
+          errorContent =
+            'Network error. Please check your connection and try again.';
+        } else if (
+          error.message.includes('Failed to get response') ||
+          error.message.includes('All Gemini API keys failed')
+        ) {
+          errorContent = 'API error. Please try again in a moment.';
         }
       }
-
-      if (errorMessage !== null) setMessages((prev) => [...prev, errorMessage]);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        parts: [{ text: errorContent }],
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       isLoadingRef.current = false;
       setIsLoading(false);
