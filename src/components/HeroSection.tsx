@@ -108,7 +108,7 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
                 {tag}
               </Badge>
             )}
-            <h1 className="text-nowrap sm:text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
+            <h1 className="text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
               {title?.map((node, i) => {
                 if (node.type === 'lineBreak') {
                   return <br key={i} />;
