@@ -76,7 +76,7 @@ export const OurTeam = () => {
               image: '/images/about/arthur.avif',
             },
             {
-              name: 'Ankesh Sharma',
+              name: 'Ankesh',
               desc: 'Founding Software Engineer',
               image: '/images/about/ankesh.webp',
             },
