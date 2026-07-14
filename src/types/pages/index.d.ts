@@ -35,19 +35,25 @@ export type QuestionCategoryType =
   | 'Account & support';
 
 export type Question = {
+  variant?: 'primary' | 'secondary';
   question: string;
   answer: string;
 };
 
 export type QuestionCategory = {
   category?: QuestionCategoryType;
+  variant?: 'primary' | 'secondary';
   questions: Question[];
 };
 
 export type QNA = {
   type: SectionType.QNA;
   visible: boolean;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
   categories?: QuestionCategory[];
+  variant?: 'primary' | 'secondary';
+  className?: string;
 };
 
 export type CTA = {

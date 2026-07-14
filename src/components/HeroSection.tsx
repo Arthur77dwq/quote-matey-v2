@@ -6,7 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { AnimatedRef } from '@/types/global';
-import { HERO, RichTextNode } from '@/types/pages';
+import { HERO } from '@/types/pages';
+
+import { SectionHeader } from './section-header';
 
 const useSectionAnimation = ({
   sectionRef,
@@ -33,27 +35,6 @@ const useSectionAnimation = ({
       { opacity: 1, y: 0, duration: 1 },
     );
   });
-};
-
-const styleParse = (node: RichTextNode) => {
-  const weightClass = {
-    thin: 'font-thin',
-    extralight: 'font-extralight',
-    light: 'font-light',
-    normal: 'font-normal',
-    medium: 'font-medium',
-    semibold: 'font-semibold',
-    bold: 'font-bold',
-    extrabold: 'font-extrabold',
-    black: 'font-black',
-  } as const;
-
-  if (node.type !== 'lineBreak')
-    return cn(
-      node?.bold && weightClass[node.weight ?? 'normal'],
-      node?.strong && 'text-warning-600',
-      node?.italic && 'italic',
-    );
 };
 
 export const HeroSection = forwardRef<AnimatedRef, HERO>(
@@ -108,39 +89,8 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
                 {tag}
               </Badge>
             )}
-            <h1 className="text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]">
-              {title?.map((node, i) => {
-                if (node.type === 'lineBreak') {
-                  return <br key={i} />;
-                }
-
-                const Component = node.strong ? 'strong' : 'span';
-
-                return (
-                  <Component
-                    key={`${i}-${node.text}`}
-                    className={cn(styleParse(node))}
-                  >
-                    {node.text}
-                  </Component>
-                );
-              })}
-            </h1>
-
-            {description && (
-              <p className="max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter font-medium text-neutral-600 leading-[1.3em]">
-                {description?.map((node, i) => {
-                  if (node.type === 'lineBreak') {
-                    return <br className="hidden sm:static" key={i} />;
-                  }
-
-                  return (
-                    <span key={i} className={cn('inline', styleParse(node))}>
-                      {node.text}{' '}
-                    </span>
-                  );
-                })}
-              </p>
+            {(title || description) && (
+              <SectionHeader {...{ title, description }} />
             )}
           </div>
           {children}

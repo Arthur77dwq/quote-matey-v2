@@ -7,7 +7,16 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { gsap } from '@/lib/animations/plugins';
+import { cn } from '@/lib/utils';
 import { Question } from '@/types/pages';
+
+const variants = {
+  primary: {
+    container: '',
+    child: 'transition-colors data-[state=open]:bg-white',
+  },
+  secondary: { container: '', child: 'data-[state=open]:bg-neutral-50' },
+};
 
 export function QAAccordian({
   query,
@@ -37,9 +46,14 @@ export function QAAccordian({
       },
     });
   };
+
+  const style = variants[query.variant || 'primary'];
   return (
     <Accordion
-      className="cursor-pointer w-full rounded-[1.25rem] border border-neutral-900/20 overflow-hidden"
+      className={cn(
+        'cursor-pointer w-full overflow-hidden rounded-[1.25rem] border border-neutral-900/20',
+        style.container,
+      )}
       type="single"
       collapsible
       defaultValue={
@@ -49,12 +63,20 @@ export function QAAccordian({
     >
       <AccordionItem
         value={`${index}-${query.question}`}
-        className="text-balance cursor-pointer transition-colors data-[state=open]:bg-white p-5 gap-2.5 text-[1.38rem] font-inter font-medium"
+        variant={query.variant}
+        className={cn(
+          'cursor-pointer gap-2.5 text-balance text-[1.38rem] font-inter font-medium p-5',
+          style.child,
+        )}
       >
-        <AccordionTrigger className="p-0 cursor-pointer hover:no-underline text-neutral-900 text-[1.38rem] font-inter font-medium">
+        <AccordionTrigger
+          variant={query.variant}
+          className="p-0 cursor-pointer hover:no-underline text-neutral-900 text-[1.38rem] font-inter font-medium"
+        >
           {query.question}
         </AccordionTrigger>
         <AccordionContent
+          variant={query.variant}
           ref={answerRef}
           className="cursor-pointer text-[1rem] font-inter font-medium text-neutral-600"
         >

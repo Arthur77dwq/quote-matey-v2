@@ -45,8 +45,10 @@ export const DATA: DataType = {
     {
       type: 'QNA',
       visible: true,
+      variant: 'primary',
       categories: [
         {
+          variant: 'primary',
           category: 'General',
           questions: [
             {
@@ -72,6 +74,7 @@ export const DATA: DataType = {
           ],
         },
         {
+          variant: 'primary',
           category: 'Platform & features',
           questions: [
             {
@@ -97,6 +100,7 @@ export const DATA: DataType = {
           ],
         },
         {
+          variant: 'primary',
           category: 'Pricing & plans',
           questions: [
             {
@@ -112,6 +116,7 @@ export const DATA: DataType = {
           ],
         },
         {
+          variant: 'primary',
           category: 'Account & support',
           questions: [
             {

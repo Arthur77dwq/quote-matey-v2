@@ -110,5 +110,65 @@ export const DATA: DataType = {
       ],
       footer: 'No credit card required • Cancel anytime',
     },
+    {
+      type: 'QNA',
+      visible: true,
+      variant: 'secondary',
+      title: [
+        { bold: true, weight: 'bold', type: 'text', text: 'Frequently asked ' },
+        {
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: ' questions',
+          strong: true,
+        },
+      ],
+      description: [
+        {
+          bold: true,
+          weight: 'medium',
+          type: 'text',
+          text: 'Find quick answers to common questions about the platform, pricing, and security.',
+        },
+      ],
+      categories: [
+        {
+          variant: 'secondary',
+          questions: [
+            {
+              variant: 'secondary',
+              question: "What if I'm not tech-savvy?",
+              answer:
+                'Perfect. Neither are most of our users. If you can take a photo with your phone and tap a button, you can use QuoteMatey. We designed it for tradies, not tech nerds. No training needed. Our average user sends their first quote within 3 minutes of signing up.',
+            },
+            {
+              variant: 'secondary',
+              question: 'Will this work for my specific trade?',
+              answer:
+                'QuoteMatey works for electricians, plumbers, carpenters, painters, HVAC techs, landscapers, roofers, tilers, plasterers, and pretty much any trade or service business. The AI adapts to your specific trade and learns from your adjustments over time.',
+            },
+            {
+              variant: 'secondary',
+              question: 'Is there really no credit card required?',
+              answer:
+                "Really. Start your free trial with no payment info. You get free quotes to test everything. Only pay if you decide it's worth it (spoiler: after winning their first extra job, most tradies sign up immediately).",
+            },
+            {
+              variant: 'secondary',
+              question: 'How is this different from other quoting software?',
+              answer:
+                "Other tools make you fill in forms and templates manually. QuoteMatey uses AI to generate the entire quote from a photo or description. It's like having a quoting assistant who's seen 100,000 jobs. Also, we're built specifically for tradies, not generic business software with a trade skin.",
+            },
+            {
+              variant: 'secondary',
+              question: 'How fast can I start using this?',
+              answer:
+                "About 2 minutes. Sign up, add your business details, and you're ready to quote. Most tradies send their first AI-generated quote within 5 minutes of creating an account. No complex setup, no importing data, no training required.",
+            },
+          ],
+        },
+      ],
+    },
   ],
 };

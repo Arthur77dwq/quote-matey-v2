@@ -2,8 +2,9 @@
 import { useRef } from 'react';
 
 import { HeroSection } from '@/components/HeroSection';
+import { QNASection } from '@/components/QNASection';
 import { AnimatedRef } from '@/types/global';
-import { HERO, PRICING, Section } from '@/types/pages';
+import { HERO, PRICING, QNA, Section } from '@/types/pages';
 
 import { PricingSection } from './components/pricingSection';
 import { usePricingAnimation } from './usePricingAnimation';
@@ -24,6 +25,7 @@ export function Pricing({ sections }: { sections: Section[] }) {
           )}
         </HeroSection>
       )}
+      {sections[2]?.visible && <QNASection {...(sections[2] as QNA)} />}
     </main>
   );
 }
