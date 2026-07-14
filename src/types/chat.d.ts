@@ -14,6 +14,7 @@ export type InlineDataPart = {
 };
 
 export type Part = TextPart | InlineDataPart;
+
 interface Message {
   id: string;
   role: 'user' | 'assistant' | 'model';
