@@ -1,32 +1,85 @@
 import '@/styles/globals.css';
 
 import { Analytics } from '@vercel/analytics/next';
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import { Toaster } from 'sonner';
 
 import GoogleAnalyticsTracker from '@/components/analytics';
-import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
+import { Header } from '@/components/header';
+import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
-
-const _geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
-const _geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' });
+import { geist, geistMono, inter, plusJakarta } from '@/fonts';
+import { isProd } from '@/lib/utils';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const ICON = '/images/QuoteMateyAppIcon.png';
+
 export const metadata: Metadata = {
-  title: 'QuoteMatey - Quote Faster, Win More Jobs | AI Quoting for Tradies',
-  description:
-    'Stop losing jobs to faster tradies. QuoteMatey turns any photo into a professional quote in 60 seconds. Join 2,847+ tradies winning more work.',
-  generator: 'v0.app',
+  metadataBase: new URL(GLOBAL_DATA.metadata?.siteUrl || ''),
+
+  title: {
+    default: GLOBAL_DATA.metadata?.defaultTitle || '',
+    template: GLOBAL_DATA.metadata?.titleTemplate || '',
+  },
+  category: GLOBAL_DATA.metadata?.category,
+  description: GLOBAL_DATA.metadata?.defaultDescription,
+  referrer: 'origin-when-cross-origin',
+  keywords: GLOBAL_DATA.metadata?.defaultKeywords,
+
+  authors: [
+    {
+      name: GLOBAL_DATA.metadata?.author,
+    },
+  ],
+
+  robots: {
+    index: isProd ? GLOBAL_DATA.metadata?.robots.index : false,
+    follow: isProd ? GLOBAL_DATA.metadata?.robots.follow : false,
+  },
+
+  openGraph: {
+    title: GLOBAL_DATA.metadata?.defaultTitle,
+    description: GLOBAL_DATA.metadata?.defaultDescription,
+    siteName: GLOBAL_DATA.metadata?.siteName,
+    url: GLOBAL_DATA.metadata?.siteUrl,
+    locale: 'en_US',
+    type: 'website',
+
+    images: [
+      {
+        url: GLOBAL_DATA.metadata?.defaultOgImage || '',
+        width: 1200,
+        height: 630,
+        alt: GLOBAL_DATA.metadata?.siteName,
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: GLOBAL_DATA.metadata?.defaultTitle,
+    description: GLOBAL_DATA.metadata?.defaultDescription,
+
+    images: [GLOBAL_DATA.metadata?.defaultOgImage || ''],
+  },
+
+  alternates: {
+    canonical: GLOBAL_DATA.metadata?.siteUrl,
+  },
   icons: {
-    icon: ICON,
-    shortcut: ICON,
-    apple: ICON,
+    icon: GLOBAL_DATA.brand.logo.normal,
+    shortcut: GLOBAL_DATA.brand.logo.normal,
+    apple: GLOBAL_DATA.brand.logo.normal,
   },
 };
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,25 +88,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/images/QuoteMateyAppIcon.png" />
-        <link rel="apple-touch-icon" href="/images/QuoteMateyAppIcon.png" />
-        {/* Google Analytics */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
+        {GA_ID && (
+          <>
+            {/* Google Analytics */}
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             window.gtag = gtag;
             gtag('js', new Date());
             gtag('config', '${GA_ID}');
           `}
-        </Script>
+            </Script>
+          </>
+        )}
       </head>
       <body
-        className={`${_geist.variable} ${_geistMono.variable} font-sans antialiased`}
+        className={`${plusJakarta.variable}
+          ${inter.variable}
+          ${geist.variable}
+          ${geistMono.variable}
+           font-sans antialiased`}
       >
         <Toaster
           closeButton
@@ -63,8 +122,9 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalyticsTracker />
           <AuthProvider>
-            <Navbar />
+            <Header />
             {children}
+            <Footer />
           </AuthProvider>
         </Suspense>
         <Analytics />
