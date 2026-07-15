@@ -6,14 +6,14 @@ import { Description, Title } from './section-header';
 
 const variants = {
   primary: {
-    container: 'justify-center px-4 pb-12.5',
+    container: 'gap-12.5 justify-center px-4 pb-12.5',
     left: ' w-100',
-    right: ' w-full sm:w-3xl h-auto',
+    right: 'w-full sm:w-3xl h-auto',
   },
   secondary: {
-    container: 'justify-between px-15 py-15.75',
-    left: 'w-95',
-    right: 'w-155',
+    container: 'gap-7.5 lg:gap-17.5 justify-center px-8 sm:px-15 py-15.75',
+    left: 'w-full sm:w-95',
+    right: 'w-full lg:w-155',
   },
 };
 
@@ -30,7 +30,7 @@ export function QNASection({
     visible && (
       <section
         className={cn(
-          'flex items-start gap-12.5 w-full h-auto',
+          'flex flex-col lg:flex-row items-start w-full h-auto',
           style.container,
           className,
         )}

@@ -59,7 +59,7 @@ export function PricingSection({ plans, footer, className }: PRICING) {
     <section
       ref={sectionRef}
       className={cn(
-        'opacity-0 flex justify-center w-full lg:w-6xl h-full',
+        'opacity-0 flex justify-center w-full lg:w-6xl h-full p-0 sm:p-7.5',
         className,
       )}
     >

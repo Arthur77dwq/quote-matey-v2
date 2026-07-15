@@ -95,11 +95,12 @@ export function Header() {
                         </Button>
                       );
                     })}
-                  <HamBurgerMenu onClick={toggle} />
+                  <HamBurgerMenu onClick={toggle} open={open} />
                 </div>
               </div>
               {headers?.navBar.active && (
                 <NavBarMobile
+                  onClick={toggle}
                   open={open}
                   navLinks={headers?.navBar.links || []}
                 />

@@ -117,6 +117,10 @@ export const DATA: DataType = {
       title: [
         { bold: true, weight: 'bold', type: 'text', text: 'Frequently asked ' },
         {
+          type: 'lineBreak',
+          text: '',
+        },
+        {
           bold: true,
           weight: 'bold',
           type: 'text',
