@@ -6,10 +6,10 @@ import { HERO } from '@/types/pages';
 
 import { Compliance } from './components/Compliance';
 import { FounderLetter } from './components/FounderLetter';
-import { HeroSection } from './components/HeroSection';
 // import { OurTeam } from './components/OurTeam';
 import { SplitSection } from './components/SplitSection';
 import { useAboutAnimation } from './useAboutAnimation';
+import { HeroSection } from '@/components/HeroSection';
 
 export default function About() {
   const hero = useRef<AnimatedRef>(null);
