@@ -6,7 +6,7 @@ import { AnimatedRef } from '@/types/global';
 import { Compliance } from './components/Compliance';
 import { FounderLetter } from './components/FounderLetter';
 import { HeroSection } from './components/HeroSection';
-import { OurTeam } from './components/OurTeam';
+// import { OurTeam } from './components/OurTeam';
 import { SplitSection } from './components/SplitSection';
 import { useAboutAnimation } from './useAboutAnimation';
 
@@ -20,7 +20,7 @@ export default function About() {
       <HeroSection ref={hero} />
       <SplitSection ref={split} />
       <FounderLetter />
-      <OurTeam />
+      {/* <OurTeam /> */}
       <Compliance />
     </>
   );
