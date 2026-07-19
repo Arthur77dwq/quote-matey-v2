@@ -7,8 +7,10 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 
 import { AUTH_ROUTES } from '@/constant/config/route';
+import { GLOBAL_DATA } from '@/constant/data/global';
 import { gsap } from '@/lib/animations/plugins';
 import { matchRoute } from '@/lib/utils';
+import { FOOTERLINKS, LINK } from '@/types/global';
 
 const useSectionAnimation = ({
   cardRef,
@@ -29,7 +31,12 @@ const useSectionAnimation = ({
   });
 };
 
+export const getGlobalData = () => {
+  return GLOBAL_DATA;
+};
+
 export function Footer() {
+  const { footer } = getGlobalData();
   const cardRef = useRef<HTMLDivElement | null>(null);
   useSectionAnimation({ cardRef });
   const pathname = usePathname();
@@ -39,7 +46,7 @@ export function Footer() {
       <footer className="relative w-full h-[120vh] sm:h-screen overflow-hidden flex justify-center items-center">
         <div className="absolute inset-0">
           <Image
-            src="/images/FooterIMG.png"
+            src={footer?.BgImage.src || ''}
             className="object-cover object-top-center"
             fill
             alt=""
@@ -61,66 +68,47 @@ export function Footer() {
                   width={195}
                 />
                 <p className="text-[#595269] font-medium w-8/10 sm:w-full">
-                  The AI-powered quoting tool that helps tradies win more jobs
-                  by quoting faster and looking more professional.
+                  {footer?.title}
                 </p>
               </div>
 
-              <Link
-                href="mailto:support@quotematey.com"
-                className="transition-colors ease-in-out hover:bg-neutral-100 bg-neutral-900 hover:text-neutral-900 text-neutral-0 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-body-md"
-              >
-                support@quotematey.com
-              </Link>
+              {footer?.cta.active && (
+                <Link
+                  href={footer?.cta.href || ''}
+                  target={footer.cta.target}
+                  className="transition-colors ease-in-out hover:bg-neutral-100 bg-neutral-900 hover:text-neutral-900 text-neutral-0 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-body-md"
+                >
+                  {footer?.cta.text}
+                </Link>
+              )}
             </div>
             <div className="w-full lg:w-auto h-fit md:h-full flex flex-col md:flex-row gap-10 md:gap-45 lg:gap-7.5">
               {/* Right */}
-              <div className="flex flex-col items-start gap-4 sm:gap-5">
-                <p className="font-inter font-medium text-neutral-900 text-heading-sm-4">
-                  Pages
-                </p>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/about"
-                >
-                  About
-                </Link>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/blog"
-                >
-                  Blog
-                </Link>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/pricing"
-                >
-                  Pricing
-                </Link>
-              </div>
-              <div className="flex flex-col gap-4 sm:gap-5">
-                <p className="font-inter font-medium text-neutral-900 text-heading-sm-4">
-                  Support
-                </p>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/faqs"
-                >
-                  FAQs
-                </Link>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/contact"
-                >
-                  Contact
-                </Link>
-                <Link
-                  className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
-                  href="/privacy-policy"
-                >
-                  Privacy Policy
-                </Link>
-              </div>
+
+              {footer?.linkCategory.length &&
+                footer?.linkCategory.map((x: FOOTERLINKS, i: number) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-start gap-4 sm:gap-5"
+                  >
+                    <p className="font-inter font-medium text-neutral-900 text-heading-sm-4">
+                      {x.category}
+                    </p>
+                    {x.links.map(
+                      (link: LINK, index: number) =>
+                        link.active && (
+                          <Link
+                            key={`${index}${i}`}
+                            className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
+                            href={link.href}
+                            target={link.target}
+                          >
+                            {link.text}
+                          </Link>
+                        ),
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
