@@ -52,13 +52,15 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
         >
           <div className={'absolute inset-0 flex items-center justify-center'}>
             <div className="w-full h-full">
-              <Image
-                src={BGImage?.src || ''}
-                alt="Background"
-                fill
-                className="object-crop"
-                priority
-              />
+              {BGImage?.src && (
+                <Image
+                  src={BGImage?.src}
+                  alt="Background"
+                  fill
+                  className="object-crop"
+                  priority
+                />
+              )}
             </div>
             <Image
               src="/images/about/cloudRight.png"

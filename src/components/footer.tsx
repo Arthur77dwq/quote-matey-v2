@@ -45,12 +45,14 @@ export function Footer() {
     !shouldHide && (
       <footer className="relative w-full h-[120vh] sm:h-screen overflow-hidden flex justify-center items-center">
         <div className="absolute inset-0">
-          <Image
-            src={footer?.BgImage.src || ''}
-            className="object-cover object-top-center"
-            fill
-            alt=""
-          />
+          {footer?.BgImage.src && (
+            <Image
+              src={footer?.BgImage.src}
+              className="object-cover object-top-center"
+              fill
+              alt=""
+            />
+          )}
           <div className="absolute inset-0 z-2 bg-linear-to-b from-neutral-0 via-neutral-0/30 via-20% to-transparent" />
         </div>
         <div className="z-3 w-full max-w-315 h-full md:h-fit lg:h-104.25 flex justify-center items-center px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
