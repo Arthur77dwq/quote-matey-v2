@@ -16,7 +16,7 @@ export const GLOBAL_DATA: GlobalData = {
     siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
     category: 'Business Software',
 
-    defaultTitle: 'Quote Matey | AI Quote Generator for Tradies',
+    defaultTitle: 'AI Quote Generator for Tradies | Quote Matey',
 
     titleTemplate: '%s | Quote Matey',
 

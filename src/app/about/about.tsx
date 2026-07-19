@@ -1,13 +1,13 @@
 'use client';
 import { useRef } from 'react';
 
+import { HeroSection } from '@/components/HeroSection';
 import { AnimatedRef } from '@/types/global';
 import { HERO } from '@/types/pages';
 
-import { HeroSection } from '../../components/HeroSection';
 import { Compliance } from './components/Compliance';
 import { FounderLetter } from './components/FounderLetter';
-import { OurTeam } from './components/OurTeam';
+// import { OurTeam } from './components/OurTeam';
 import { SplitSection } from './components/SplitSection';
 import { useAboutAnimation } from './useAboutAnimation';
 
@@ -39,7 +39,7 @@ export default function About() {
       <HeroSection {...heroData} ref={hero} />
       <SplitSection ref={split} />
       <FounderLetter />
-      <OurTeam />
+      {/* <OurTeam /> */}
       <Compliance />
     </>
   );
