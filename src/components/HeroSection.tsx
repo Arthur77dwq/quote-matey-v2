@@ -38,7 +38,7 @@ const useSectionAnimation = ({
 };
 
 export const HeroSection = forwardRef<AnimatedRef, HERO>(
-  ({ visible, tag, title, description, children, className }, ref) => {
+  ({ visible, tag, title, description, BGImage, children, className }, ref) => {
     const sectionRef = useRef<HTMLDivElement | null>(null);
     useSectionAnimation({ sectionRef, ref });
 
@@ -53,7 +53,7 @@ export const HeroSection = forwardRef<AnimatedRef, HERO>(
           <div className={'absolute inset-0 flex items-center justify-center'}>
             <div className="w-full h-full">
               <Image
-                src="/images/about/BackgroundSKYUNDERLAY.jpg"
+                src={BGImage?.src || ''}
                 alt="Background"
                 fill
                 className="object-crop"

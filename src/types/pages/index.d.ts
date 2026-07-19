@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button, LINK } from '../global';
+import { Button, ImageType, LINK } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -16,12 +16,14 @@ export interface SectionType {
   CTA: 'CTA';
   CONTACTFORM: 'CONTACTFORM';
   PRICING: 'PRICING';
+  TESTIMONIAL: 'TESTIMONIAL';
 }
 
 export type HERO = {
   type: SectionType.HERO;
   visible: boolean;
   tag?: string;
+  BGImage?: ImageType;
   title?: RichTextNode[];
   description?: RichTextNode[];
   children?: React.ReactNode;
@@ -114,7 +116,37 @@ export type PRICING = {
   className?: string;
 };
 
-export type Section = HERO | QNA | CTA | CONTACTFORM | PRICING | null;
+export type USER = {
+  image: ImageType;
+  name: string;
+  trade: string;
+};
+
+export type UserTestimonial = {
+  className?: string;
+  rating: number;
+  comment: string;
+  user: USER;
+};
+
+export type TESTIMONIAL = {
+  type: SectionType.TESTIMONIAL;
+  visible: boolean;
+  BGImage: ImageType;
+  title: string;
+  rating?: string;
+  testimonials: UserTestimonial[];
+  className?: string;
+};
+
+export type Section =
+  | HERO
+  | QNA
+  | CTA
+  | CONTACTFORM
+  | PRICING
+  | TESTIMONIAL
+  | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;

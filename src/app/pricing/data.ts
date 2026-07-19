@@ -10,6 +10,10 @@ export const DATA: DataType = {
     {
       type: 'HERO',
       visible: true,
+      BGImage: {
+        src: '/images/about/BackgroundSKYUNDERLAY.jpg',
+        alt: '',
+      },
       title: [
         { bold: true, weight: 'bold', type: 'text', text: 'Costs less than' },
         {
@@ -109,6 +113,67 @@ export const DATA: DataType = {
         },
       ],
       footer: 'No credit card required • Cancel anytime',
+    },
+    {
+      type: 'TESTIMONIAL',
+      visible: true,
+      BGImage: { src: '/images/lawn.jpg', alt: '' },
+      title: ' What tradies say about the platform',
+      rating: '4.8/5 Rating',
+      testimonials: [
+        {
+          rating: 5,
+          comment:
+            'Saved me hours every week. I just upload photos from the job site and QuoteMatey builds the quote instantly.',
+          user: {
+            image: {
+              src: 'images/user.webp',
+              alt: '',
+            },
+            name: 'Jake Thompson',
+            trade: 'Project Manager',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'Saved me hours every week. I just upload photos from the job site and QuoteMatey builds the quote instantly.',
+          user: {
+            image: {
+              src: 'images/user.webp',
+              alt: '',
+            },
+            name: 'Mason Hughes',
+            trade: 'Project Manager',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'Love the templates and customer-ready formatting. Clients think I spent ages making the quotes.',
+          user: {
+            image: {
+              src: 'images/user.webp',
+              alt: '',
+            },
+            name: 'Ethan Walker',
+            trade: 'Land Scraper',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'The AI labour estimates are surprisingly accurate. Makes quoting electrical jobs way faster.',
+          user: {
+            image: {
+              src: 'images/user.webp',
+              alt: '',
+            },
+            name: 'Liam Carter',
+            trade: 'Electrician',
+          },
+        },
+      ],
     },
     {
       type: 'QNA',
