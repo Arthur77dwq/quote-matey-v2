@@ -12,7 +12,7 @@ const useSectionAnimation = ({
 }: {
   titleRef: React.RefObject<HTMLElement | null>;
   profileContainerRef: React.RefObject<HTMLDivElement | null>;
-  subRefs: React.RefObject<HTMLDivElement | null>[];
+  subRefs: React.RefObject<HTMLAnchorElement | null>[];
 }) => {
   useGSAP(() => {
     // Animation Here
@@ -46,8 +46,8 @@ export const OurTeam = () => {
   const titleRef = useRef<HTMLDivElement | null>(null);
   const profileContainerRef = useRef<HTMLDivElement | null>(null);
   const subRefs = [
-    useRef<HTMLDivElement | null>(null),
-    useRef<HTMLDivElement | null>(null),
+    useRef<HTMLAnchorElement | null>(null),
+    useRef<HTMLAnchorElement | null>(null),
   ];
   useSectionAnimation({ titleRef, profileContainerRef, subRefs });
 
@@ -74,11 +74,13 @@ export const OurTeam = () => {
               name: 'Arthur',
               desc: 'Founder & CEO',
               image: '/images/about/arthur.avif',
+              href: '',
             },
             {
-              name: 'Ankesh Sharma',
+              name: 'Ankesh',
               desc: 'Founding Software Engineer',
               image: '/images/about/ankesh.webp',
+              href: 'https://x.com/imankeshsharma',
             },
           ].map((profile, i) => (
             <ProfileShow

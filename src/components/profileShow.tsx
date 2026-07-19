@@ -1,4 +1,5 @@
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import Link from 'next/link';
 
 import { cn, nameAcronoym } from '@/lib/utils';
 
@@ -9,20 +10,23 @@ export function ProfileShow({
   name,
   desc,
   image,
+  href,
   className,
 }: {
-  ref?: React.RefObject<HTMLDivElement | null>;
+  ref?: React.RefObject<HTMLAnchorElement | null>;
   name: string;
   desc: string;
   image: string;
+  href: string;
   className?: string;
 }) {
   return (
-    <div
+    <Link
+      href={href}
       ref={ref}
       className={cn(
         'flex flex-col justify-between items-center gap-5 h-full w-50',
-        className && className,
+        className,
       )}
     >
       <Avatar className="size-32.5">
@@ -43,6 +47,6 @@ export function ProfileShow({
           {desc}
         </h4>
       </div>
-    </div>
+    </Link>
   );
 }
