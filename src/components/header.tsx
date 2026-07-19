@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -50,13 +51,28 @@ export function Header() {
               )}
             >
               <div className="rounded-md shadow-[0_0_0_4px_#DDE5EDB3] lg:min-w-40 h-14.5 bg-white w-full lg:w-3xl flex justify-between items-center p-2.5">
-                <Image
-                  className="w-35 sm:w-42.5 sm:h-8.7"
-                  src={headers?.logo.src}
-                  alt={headers?.logo.alt}
-                  width={170}
-                  height={35}
-                />
+                {headers?.logo?.active ? (
+                  <Link
+                    href={headers?.logo?.href}
+                    target={headers?.logo?.target}
+                  >
+                    <Image
+                      className="w-35 sm:w-42.5 sm:h-8.7"
+                      src={headers?.logo.src}
+                      alt={headers?.logo.alt}
+                      width={170}
+                      height={35}
+                    />
+                  </Link>
+                ) : (
+                  <Image
+                    className="w-35 sm:w-42.5 sm:h-8.7"
+                    src={headers?.logo.src}
+                    alt={headers?.logo.alt}
+                    width={170}
+                    height={35}
+                  />
+                )}
 
                 {headers?.navBar.active && (
                   <NavBar navLinks={headers?.navBar.links || []} />
@@ -75,15 +91,16 @@ export function Header() {
                               : null
                           }
                         >
-                          Start Free
+                          {button?.text}
                         </Button>
                       );
                     })}
-                  <HamBurgerMenu onClick={toggle} />
+                  <HamBurgerMenu onClick={toggle} open={open} />
                 </div>
               </div>
               {headers?.navBar.active && (
                 <NavBarMobile
+                  onClick={toggle}
                   open={open}
                   navLinks={headers?.navBar.links || []}
                 />

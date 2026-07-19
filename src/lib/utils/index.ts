@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+import { RichTextNode } from '@/types/pages';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -40,4 +42,25 @@ export const nameAcronoym = (name: string) => {
   const acronymArray = parts.map((part) => part[0]);
   const acronym = acronymArray.join('');
   return acronym || null;
+};
+
+export const styleParse = (node: RichTextNode) => {
+  const weightClass = {
+    thin: 'font-thin',
+    extralight: 'font-extralight',
+    light: 'font-light',
+    normal: 'font-normal',
+    medium: 'font-medium',
+    semibold: 'font-semibold',
+    bold: 'font-bold',
+    extrabold: 'font-extrabold',
+    black: 'font-black',
+  } as const;
+
+  if (node.type !== 'lineBreak')
+    return cn(
+      node?.bold && weightClass[node.weight ?? 'normal'],
+      node?.strong && 'text-warning-600',
+      node?.italic && 'italic',
+    );
 };

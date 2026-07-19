@@ -2,11 +2,11 @@
 import { useRef } from 'react';
 
 import { HeroSection } from '@/components/HeroSection';
+import { QNASection } from '@/components/QNASection';
 import { AnimatedRef } from '@/types/global';
 import { CTA, HERO, QNA, Section } from '@/types/pages';
 
 import { CTASection } from './components/CTASection';
-import { QNASection } from './components/QNASection';
 import { useFAQAnimation } from './useFAQAnimation';
 
 export default function Faqs({ sections }: { sections: Section[] }) {

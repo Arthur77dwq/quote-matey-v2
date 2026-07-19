@@ -94,6 +94,7 @@ export type GlobalMetaDataType = {
 };
 
 export type HeaderType = 'GLOBAL_HEADER';
+export type FooterType = 'GLOBAL_FOOTER';
 
 export type IconType = {
   active: boolean;
@@ -109,6 +110,13 @@ export type buttonVarient =
   | 'secondary-dark'
   | 'outline';
 
+export type LINK = {
+  href: string;
+  target: '_self' | '_blank' | '_parent' | '_top' | string;
+  text: string | null;
+  active: boolean;
+};
+
 export type Button = {
   id: number;
   variant: buttonVariants;
@@ -118,13 +126,26 @@ export type Button = {
 };
 
 export type headers = {
-  logo: ImageType;
+  logo: ImageType & Link;
   type: HeaderType;
   navBar: {
     active: boolean;
     links?: LINK[] | null;
   };
   buttons?: Button[];
+};
+
+export type FOOTERLINKS = {
+  category: string;
+  links: LINK[];
+};
+
+export type footer = {
+  BgImage: ImageType;
+  type: FooterType;
+  title: string;
+  cta: LINK;
+  linkCategory: FOOTERLINKS[];
 };
 
 export type loginFormData = z.infer<typeof loginSchema>;
@@ -135,6 +156,7 @@ export type GlobalData = {
   brand: BrandType;
   metadata?: GlobalMetaDataType | null;
   headers?: headers | null;
+  footer?: footer | null;
 };
 
 export interface AnimatedRef {

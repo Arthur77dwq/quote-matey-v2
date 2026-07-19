@@ -2,14 +2,7 @@ import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button } from '../global';
-
-export type LINK = {
-  href: string;
-  target: '_blank' | '_self' | '_parent' | '_top';
-  text: string;
-  active: boolean;
-};
+import { Button, ImageType, LINK } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -22,12 +15,15 @@ export interface SectionType {
   QNA: 'QNA';
   CTA: 'CTA';
   CONTACTFORM: 'CONTACTFORM';
+  PRICING: 'PRICING';
+  TESTIMONIAL: 'TESTIMONIAL';
 }
 
 export type HERO = {
   type: SectionType.HERO;
   visible: boolean;
   tag?: string;
+  BGImage?: ImageType;
   title?: RichTextNode[];
   description?: RichTextNode[];
   children?: React.ReactNode;
@@ -41,19 +37,25 @@ export type QuestionCategoryType =
   | 'Account & support';
 
 export type Question = {
+  variant?: 'primary' | 'secondary';
   question: string;
   answer: string;
 };
 
 export type QuestionCategory = {
   category?: QuestionCategoryType;
+  variant?: 'primary' | 'secondary';
   questions: Question[];
 };
 
 export type QNA = {
   type: SectionType.QNA;
   visible: boolean;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
   categories?: QuestionCategory[];
+  variant?: 'primary' | 'secondary';
+  className?: string;
 };
 
 export type CTA = {
@@ -88,7 +90,63 @@ export type CONTACTFORM = {
   Inputs: InputView[];
 };
 
-export type Section = HERO | QNA | CTA | CONTACTFORM | null;
+export type Feature = { text: string; included: boolean };
+
+export type PricingPlan = {
+  id: string;
+  variant: 'neutral' | 'primary' | 'secondary';
+  version: number;
+  name: string;
+  trend: {
+    text: string;
+    tranding: boolean;
+  };
+  pricing: { price: string; currency: string };
+  period: string;
+  description: string;
+  features: Feature[];
+  cta: LINK;
+};
+
+export type PRICING = {
+  type: SectionType.PRICING;
+  visible: boolean;
+  plans: PricingPlan[];
+  footer?: string;
+  className?: string;
+};
+
+export type USER = {
+  image: ImageType;
+  name: string;
+  trade: string;
+};
+
+export type UserTestimonial = {
+  className?: string;
+  rating: number;
+  comment: string;
+  user: USER;
+};
+
+export type TESTIMONIAL = {
+  type: SectionType.TESTIMONIAL;
+  visible: boolean;
+  BGImage: ImageType;
+  title: string;
+  rating?: string;
+  testimonials: UserTestimonial[];
+  className?: string;
+};
+
+export type Section =
+  | HERO
+  | QNA
+  | CTA
+  | CONTACTFORM
+  | PRICING
+  | TESTIMONIAL
+  | null;
 
 export type DataType = {
   metadata?: MetaDataProps | null;

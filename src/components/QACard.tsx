@@ -1,11 +1,11 @@
 import { useGSAP } from '@gsap/react';
 import { useRef } from 'react';
 
+import { QAAccordian } from '@/components/QAAccordian';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { gsap } from '@/lib/animations/plugins';
+import { cn } from '@/lib/utils';
 import { QuestionCategory } from '@/types/pages';
-
-import { QAAccordian } from './QAAccordian';
 
 const useSectionAnimation = ({
   sectionRef,
@@ -33,12 +33,19 @@ const useSectionAnimation = ({
   });
 };
 
+const variants = {
+  primary: 'bg-neutral-50 rounded-4xl p-5 sm:p-7.5 lg:p-12.5 ',
+  secondary: 'bg-white rounded-none shadow-none',
+};
+
 export function QACard({
   category,
   index,
+  className,
 }: {
   category: QuestionCategory;
   index: number;
+  className?: string;
 }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -46,11 +53,13 @@ export function QACard({
     sectionRef,
   });
 
+  const style = variants[category.variant || 'primary'];
+
   return (
     <Card
       ref={sectionRef}
       key={`${index}-${category?.category}`}
-      className="opacity-0 bg-neutral-50 rounded-4xl border-0 p-5 sm:p-7.5 lg:p-12.5 gap-7.5 w-full"
+      className={cn('opacity-0 border-0 gap-7.5 w-full p-0', style, className)}
     >
       {category?.category && (
         <CardHeader className="h-fit flex flex-col justify-center gap-0 p-0">

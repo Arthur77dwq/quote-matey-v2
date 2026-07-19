@@ -4,6 +4,8 @@
 
 import { SubscriptionStatus } from '@prisma/client';
 
+import { AllPlan } from './paypal/plan';
+
 export type BillingInterval = 'MONTH' | 'YEAR';
 
 export type Environment = 'sandbox' | 'live';

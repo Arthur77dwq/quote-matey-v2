@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
-import { LINK } from '@/types/pages';
+import { LINK } from '@/types/global';
 
 export function NavBarMobile({
+  onClick,
   open,
   navLinks,
 }: {
+  onClick: () => void;
   open?: boolean;
   navLinks: LINK[];
 }) {
@@ -21,6 +23,7 @@ export function NavBarMobile({
         {navLinks.map((link, index) => {
           return (
             <Link
+              onClick={onClick}
               key={`${index}-${link.href}`}
               href={link.href}
               target={link.target}

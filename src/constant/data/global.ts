@@ -44,6 +44,10 @@ export const GLOBAL_DATA: GlobalData = {
   headers: {
     type: 'GLOBAL_HEADER',
     logo: {
+      href: '/',
+      target: '_self',
+      text: null,
+      active: true,
       alt: 'Quote Matey',
       src: '/quotematey-hor-with-out-subtitle.png',
     },
@@ -98,6 +102,69 @@ export const GLOBAL_DATA: GlobalData = {
           active: true,
           icon: 'ArrowRight',
         },
+      },
+    ],
+  },
+  footer: {
+    BgImage: {
+      src: '/images/FooterIMG.png',
+      alt: '',
+    },
+    type: 'GLOBAL_FOOTER',
+    title:
+      'The AI-powered quoting tool that helps tradies win more jobs by quoting faster and looking more professional.',
+    cta: {
+      href: 'mailto:support@quotematey.com',
+      target: '_blank',
+      text: 'support@quotematey.com',
+      active: true,
+    },
+    linkCategory: [
+      {
+        category: 'Pages',
+        links: [
+          {
+            href: '/about',
+            target: '_self',
+            text: 'About',
+            active: true,
+          },
+          {
+            href: '/blog',
+            target: '_self',
+            text: 'Blog',
+            active: true,
+          },
+          {
+            href: '/pricing',
+            target: '_self',
+            text: 'Pricing',
+            active: true,
+          },
+        ],
+      },
+      {
+        category: 'Support',
+        links: [
+          {
+            href: '/faqs',
+            target: '_self',
+            text: 'FAQs',
+            active: true,
+          },
+          {
+            href: '/contact',
+            target: '_self',
+            text: 'Contact',
+            active: true,
+          },
+          {
+            href: '/privacy-policy',
+            target: '_self',
+            text: 'Privacy Policy',
+            active: true,
+          },
+        ],
       },
     ],
   },
