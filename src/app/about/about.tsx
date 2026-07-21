@@ -21,10 +21,17 @@ export default function About() {
     visible: true,
     tag: 'About QuoteMatey',
     title: [
-      { bold: true, weight: 'bold', type: 'text', text: 'AI-Powered Quoting' },
-      { type: 'lineBreak', text: '' },
-      { bold: true, weight: 'bold', type: 'text', text: 'Software' },
       {
+        id: '1',
+        bold: true,
+        weight: 'bold',
+        type: 'text',
+        text: 'AI-Powered Quoting',
+      },
+      { id: '2', type: 'lineBreak', text: '' },
+      { id: '3', bold: true, weight: 'bold', type: 'text', text: 'Software' },
+      {
+        id: '4',
         bold: true,
         weight: 'bold',
         type: 'text',

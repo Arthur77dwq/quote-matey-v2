@@ -15,8 +15,15 @@ export const DATA: DataType = {
         alt: '',
       },
       title: [
-        { bold: true, weight: 'bold', type: 'text', text: 'Costs less than' },
         {
+          id: '1',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: 'Costs less than',
+        },
+        {
+          id: '2',
           bold: true,
           weight: 'bold',
           type: 'text',
@@ -180,12 +187,16 @@ export const DATA: DataType = {
       visible: true,
       variant: 'secondary',
       title: [
-        { bold: true, weight: 'bold', type: 'text', text: 'Frequently asked ' },
         {
-          type: 'lineBreak',
-          text: '',
+          id: '1',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: 'Frequently asked ',
         },
+        { id: '2', type: 'lineBreak' },
         {
+          id: '3',
           bold: true,
           weight: 'bold',
           type: 'text',
@@ -195,6 +206,7 @@ export const DATA: DataType = {
       ],
       description: [
         {
+          id: '1',
           bold: true,
           weight: 'medium',
           type: 'text',

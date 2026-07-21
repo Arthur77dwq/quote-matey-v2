@@ -12,8 +12,15 @@ export const DATA: DataType = {
       type: 'HERO',
       visible: true,
       title: [
-        { bold: true, weight: 'bold', type: 'text', text: 'Get in touch' },
         {
+          id: '1',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: 'Get in touch',
+        },
+        {
+          id: '2',
           bold: true,
           weight: 'bold',
           type: 'text',
@@ -23,26 +30,23 @@ export const DATA: DataType = {
       ],
       description: [
         {
+          id: '1',
           bold: true,
           weight: 'medium',
           type: 'text',
           text: 'Get answers about QuoteMatey, pricing, features, and',
         },
+        { id: '2', type: 'lineBreak', text: '' },
         {
-          type: 'lineBreak',
-          text: '',
-        },
-        {
+          id: '3',
           bold: true,
           weight: 'medium',
           type: 'text',
           text: ' integrations. Our team is here to help you save time, simplify',
         },
+        { id: '4', type: 'lineBreak', text: '' },
         {
-          type: 'lineBreak',
-          text: '',
-        },
-        {
+          id: '5',
           bold: true,
           weight: 'medium',
           type: 'text',
