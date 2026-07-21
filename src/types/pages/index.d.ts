@@ -17,6 +17,7 @@ export interface SectionType {
   CONTACTFORM: 'CONTACTFORM';
   PRICING: 'PRICING';
   TESTIMONIAL: 'TESTIMONIAL';
+  PRIVACYPOLICY: 'PRIVACYPOLICY';
 }
 
 export type HERO = {
@@ -139,6 +140,20 @@ export type TESTIMONIAL = {
   className?: string;
 };
 
+export type HeadingItem = {
+  type: TextNodeType | 'HEADING';
+
+  text?: string;
+  id?: string;
+};
+
+export type PRIVACY = {
+  type: SectionType.PRIVACYPOLICY;
+  visible: boolean;
+  contents: RichTextNode[];
+  className?: string;
+};
+
 export type Section =
   | HERO
   | QNA
@@ -146,6 +161,7 @@ export type Section =
   | CONTACTFORM
   | PRICING
   | TESTIMONIAL
+  | PRIVACY
   | null;
 
 export type DataType = {
@@ -177,23 +193,24 @@ export type fontWeight =
   | 'extrabold'
   | 'black';
 
-export type TextNodeType = 'lineBreak' | 'text';
+export type TextNodeType = 'lineBreak' | 'text' | 'HEADING' | 'ul' | 'li';
 
-export type RichTextNode =
-  | {
-      text: string;
-      type: TextNodeType;
-      bold?: boolean;
-      weight?: fontWeight;
-      italic?: boolean;
-      strong?: boolean;
-      underline?: boolean;
-      strike?: boolean;
-      code?: boolean;
-      href?: string;
-    }
-  | {
-      type: 'lineBreak';
-    };
+export type Item = { text: string; type: TextNodeType };
+
+export type RichTextNode = {
+  level?: number;
+  id: string;
+  text?: string;
+  type: TextNodeType;
+  bold?: boolean;
+  weight?: fontWeight;
+  italic?: boolean;
+  strong?: boolean;
+  underline?: boolean;
+  strike?: boolean;
+  code?: boolean;
+  href?: string;
+  items?: Item[];
+};
 
 export type contactFormData = z.infer<typeof contactSchema>;

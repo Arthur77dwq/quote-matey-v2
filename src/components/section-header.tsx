@@ -19,14 +19,17 @@ export function Title({
         if (node.type === 'lineBreak') {
           return <br key={i} />;
         }
-
-        const Component = node.strong ? 'strong' : 'span';
-
-        return (
-          <Component key={`${i}-${node.text}`} className={cn(styleParse(node))}>
-            {node.text}
-          </Component>
-        );
+        if (node.type === 'text') {
+          const Component = node.strong ? 'strong' : 'span';
+          return (
+            <Component
+              key={`${i}-${node.text}`}
+              className={cn(styleParse(node))}
+            >
+              {node.text}
+            </Component>
+          );
+        }
       })}
     </h1>
   );
