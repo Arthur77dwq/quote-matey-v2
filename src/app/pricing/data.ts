@@ -11,6 +11,7 @@ export const DATA: DataType = {
       type: 'HERO',
       visible: true,
       BGImage: {
+        type: 'IMG',
         src: '/images/about/BackgroundSKYUNDERLAY.jpg',
         alt: '',
       },
@@ -124,7 +125,7 @@ export const DATA: DataType = {
     {
       type: 'TESTIMONIAL',
       visible: true,
-      BGImage: { src: '/images/lawn.jpg', alt: '' },
+      BGImage: { type: 'IMG', src: '/images/lawn.jpg', alt: '' },
       title: ' What tradies say about the platform',
       rating: '4.8/5 Rating',
       testimonials: [
@@ -134,6 +135,7 @@ export const DATA: DataType = {
             'Saved me hours every week. I just upload photos from the job site and QuoteMatey builds the quote instantly.',
           user: {
             image: {
+              type: 'IMG',
               src: 'images/user.webp',
               alt: '',
             },
@@ -147,6 +149,7 @@ export const DATA: DataType = {
             'Saved me hours every week. I just upload photos from the job site and QuoteMatey builds the quote instantly.',
           user: {
             image: {
+              type: 'IMG',
               src: 'images/user.webp',
               alt: '',
             },
@@ -160,6 +163,7 @@ export const DATA: DataType = {
             'Love the templates and customer-ready formatting. Clients think I spent ages making the quotes.',
           user: {
             image: {
+              type: 'IMG',
               src: 'images/user.webp',
               alt: '',
             },
@@ -173,6 +177,7 @@ export const DATA: DataType = {
             'The AI labour estimates are surprisingly accurate. Makes quoting electrical jobs way faster.',
           user: {
             image: {
+              type: 'IMG',
               src: 'images/user.webp',
               alt: '',
             },

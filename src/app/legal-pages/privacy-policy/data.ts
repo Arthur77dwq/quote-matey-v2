@@ -12,6 +12,7 @@ export const DATA: DataType = {
       type: 'HERO',
       visible: true,
       BGImage: {
+        type: 'IMG',
         src: '/images/about/BackgroundSKYUNDERLAY.jpg',
         alt: '',
       },
