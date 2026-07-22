@@ -1,36 +1,16 @@
-import { Suspense } from 'react';
-
-import { AuthScreen } from '@/components/auth-screen';
-import { BeforeAfter } from '@/components/before-after';
-import { Benefits } from '@/components/benefits';
-import { CTASection } from '@/components/cta-section';
-import { FAQ } from '@/components/faq';
-import { HeroSection } from '@/components/hero-section';
-import { HowItWorks } from '@/components/how-it-works';
-import { SocialProofBar } from '@/components/social-proof-bar';
-import { Testimonials } from '@/components/testimonials';
-import { VideoSection } from '@/components/video-section';
 import { generateMetadata } from '@/lib/seo';
 
 import { DATA } from './data';
+import Home from './home';
 
 export const metadata = generateMetadata(DATA.metadata);
 
-export default async function Home() {
+export default async function Page() {
   return (
     <main className="min-h-screen">
-      <Suspense fallback={<div>Loading...</div>}>
-        <AuthScreen />
-      </Suspense>
-      <HeroSection />
-      <SocialProofBar />
-      <HowItWorks />
-      <VideoSection />
-      <BeforeAfter />
-      <Benefits />
-      <Testimonials />
-      <FAQ />
-      <CTASection />
+      {DATA?.sections && DATA?.sections.length && (
+        <Home sections={DATA.sections} />
+      )}
     </main>
   );
 }

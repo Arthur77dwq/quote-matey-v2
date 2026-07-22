@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button, ImageType, LINK } from '../global';
+import { Button, IconType, ImageType, LINK } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -18,6 +18,7 @@ export interface SectionType {
   PRICING: 'PRICING';
   TESTIMONIAL: 'TESTIMONIAL';
   PRIVACYPOLICY: 'PRIVACYPOLICY';
+  LANDINGHERO: 'LANDINGHERO';
 }
 
 export type HERO = {
@@ -159,8 +160,26 @@ export type PRIVACY = {
   className?: string;
 };
 
+export type FootNote = {
+  icon?: ImageType | IconType;
+  text: string;
+};
+
+export type LANDINGHERO = {
+  type: SectionType.LANDINGHERO;
+  visible: boolean;
+  BGImage?: ImageType;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
+  cta?: Button[];
+  children?: React.ReactNode;
+  footNote?: FootNote[];
+  className?: string;
+};
+
 export type Section =
   | HERO
+  | LANDINGHERO
   | QNA
   | CTA
   | CONTACTFORM

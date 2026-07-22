@@ -98,6 +98,7 @@ export const GLOBAL_DATA: GlobalData = {
           active: true,
         },
         icon: {
+          type: 'ICON',
           position: 'right',
           active: true,
           icon: 'ArrowRight',
@@ -107,6 +108,7 @@ export const GLOBAL_DATA: GlobalData = {
   },
   footer: {
     BgImage: {
+      type: 'IMG',
       src: '/images/FooterIMG.png',
       alt: '',
     },

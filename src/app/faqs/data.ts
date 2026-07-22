@@ -165,7 +165,12 @@ export const DATA: DataType = {
             active: true,
           },
           text: 'Talk to our team',
-          icon: { active: true, position: 'right', icon: 'ArrowRight' },
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'right',
+            icon: 'ArrowRight',
+          },
         },
       ],
     },
