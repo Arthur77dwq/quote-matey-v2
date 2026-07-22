@@ -64,3 +64,8 @@ export const styleParse = (node: RichTextNode) => {
       node?.italic && 'italic',
     );
 };
+
+export const prepareSlug = (text: string) => {
+  const slug = text.toLowerCase().replace(/\./g, '').replace(/\s+/g, '-');
+  return slug;
+};

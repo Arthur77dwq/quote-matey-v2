@@ -159,7 +159,7 @@ export const GLOBAL_DATA: GlobalData = {
             active: true,
           },
           {
-            href: '/privacy-policy',
+            href: '/legal-pages/privacy-policy',
             target: '_self',
             text: 'Privacy Policy',
             active: true,

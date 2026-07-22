@@ -12,10 +12,17 @@ export const DATA: DataType = {
       type: 'HERO',
       visible: true,
       title: [
-        { bold: true, weight: 'bold', type: 'text', text: 'Frequently' },
-        { type: 'lineBreak', text: '' },
-        { bold: true, weight: 'bold', type: 'text', text: 'asked' },
         {
+          id: '1',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: 'Frequently',
+        },
+        { id: '2', type: 'lineBreak', text: '' },
+        { id: '3', bold: true, weight: 'bold', type: 'text', text: 'asked' },
+        {
+          id: '4',
           bold: true,
           weight: 'bold',
           type: 'text',
@@ -25,16 +32,15 @@ export const DATA: DataType = {
       ],
       description: [
         {
+          id: '1',
           bold: true,
           weight: 'medium',
           type: 'text',
           text: 'Find quick answers to common questions about QuoteMatey,',
         },
+        { id: '2', type: 'lineBreak', text: '' },
         {
-          type: 'lineBreak',
-          text: '',
-        },
-        {
+          id: '3',
           bold: true,
           weight: 'medium',
           type: 'text',
