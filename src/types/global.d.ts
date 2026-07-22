@@ -73,6 +73,7 @@ export type BrandType = {
 };
 
 export type ImageType = {
+  type: 'IMG';
   alt: string;
   src: string;
 };
@@ -97,6 +98,7 @@ export type HeaderType = 'GLOBAL_HEADER';
 export type FooterType = 'GLOBAL_FOOTER';
 
 export type IconType = {
+  type: 'ICON';
   active: boolean;
   position: 'left' | 'center' | 'right';
   icon?: string | null;
@@ -158,7 +160,3 @@ export type GlobalData = {
   headers?: headers | null;
   footer?: footer | null;
 };
-
-export interface AnimatedRef {
-  timeline: GSAPTimeline;
-}

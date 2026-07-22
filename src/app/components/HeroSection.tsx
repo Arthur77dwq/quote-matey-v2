@@ -1,13 +1,15 @@
 import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/button';
+import { Icon } from '@/components/icon';
+import { SectionHeader } from '@/components/section-header';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
-import { HERO } from '@/types/pages';
-
-import { SectionHeader } from './section-header';
+import { Button as ButtonType } from '@/types/global';
+import { FootNote, LANDINGHERO } from '@/types/pages';
 
 const useSectionAnimation = (
   sectionRef: React.RefObject<HTMLDivElement | null>,
@@ -30,13 +32,14 @@ const useSectionAnimation = (
 
 export function HeroSection({
   visible,
-  tag,
   title,
   description,
   BGImage,
   children,
   className,
-}: HERO) {
+  ...props
+}: LANDINGHERO) {
+  const router = useRouter();
   const sectionRef = useRef<HTMLDivElement | null>(null);
   useSectionAnimation(sectionRef);
 
@@ -80,19 +83,57 @@ export function HeroSection({
             'absolute inset-0 h-full w-full flex items-end justify-center bg-linear-to-b from-white/30 via-white via-41% to-white overflow-hidden'
           }
         />
+
         <div
           ref={sectionRef}
-          className="px-4 sm:p-0 opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
+          className="px-4 sm:p-0 opacity-0 flex flex-col items-center justify-center gap-7.5 w-full h-fit"
         >
-          {tag && (
-            <Badge className="rounded-full py-2.5 px-5 bg-white text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
-              {tag}
-            </Badge>
-          )}
-          {(title || description) && (
-            <SectionHeader {...{ title, description }} />
-          )}
+          <>
+            {(title || description) && (
+              <SectionHeader {...{ title, description }} />
+            )}
+          </>
+          <div className="w-full flex justify-center gap-5">
+            {props.cta?.map((button: ButtonType, i: number) => (
+              <Button
+                key={`${i}-${button.text}`}
+                variant={button.variant}
+                onClick={() =>
+                  button.link && button.link.active
+                    ? router.push(button.link.href)
+                    : null
+                }
+              >
+                {button?.text}
+              </Button>
+            ))}
+          </div>
+          <div className="flex justify-center items-center gap-5">
+            {props.footNote?.map((note: FootNote, index: number) => (
+              <span
+                key={`${index}-${note.text}`}
+                className="flex justify-center items-center gap-1"
+              >
+                {note.icon &&
+                  (note.icon?.type === 'IMG' ? (
+                    <Image
+                      src={note.icon.src}
+                      alt=""
+                      width={1}
+                      height={1}
+                      className="w-4.5 h-4.5"
+                    />
+                  ) : (
+                    note.icon?.type === 'ICON' && (
+                      <Icon name={note.icon.icon || ''} className="w-4 h-4" />
+                    )
+                  ))}
+                <span>{note.text}</span>
+              </span>
+            ))}
+          </div>
         </div>
+
         {children}
       </section>
     )

@@ -1,3 +1,5 @@
+import { ComponentType, SVGProps } from 'react';
+
 import { cn } from '@/lib/utils';
 
 export function GoogleIcon({ className }: { className?: string }) {
@@ -164,3 +166,12 @@ export function Boost({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+  google: GoogleIcon,
+  image: ImageIcon,
+  text: TextIcon,
+  trend: Trend,
+  graph: GraphWithSupport,
+  boost: Boost,
+};

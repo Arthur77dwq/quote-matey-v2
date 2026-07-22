@@ -1,18 +1,12 @@
 'use client';
-import { useRef } from 'react';
 
 import { HeroSection } from '@/components/HeroSection';
 import { QNASection } from '@/components/QNASection';
-import { AnimatedRef } from '@/types/global';
 import { CTA, HERO, QNA, Section } from '@/types/pages';
 
 import { CTASection } from './components/CTASection';
-import { useFAQAnimation } from './useFAQAnimation';
 
 export default function Faqs({ sections }: { sections: Section[] }) {
-  const hero = useRef<AnimatedRef>(null);
-  useFAQAnimation({ hero });
-
   const renderComponents = (sections: Section[]) => {
     return sections.map((section, i) => {
       switch (section?.type) {
@@ -20,7 +14,6 @@ export default function Faqs({ sections }: { sections: Section[] }) {
           return (
             <HeroSection
               key={`${i}-${section?.type}-${section?.visible}`}
-              ref={hero}
               {...(section as HERO)}
             />
           );

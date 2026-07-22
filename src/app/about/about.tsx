@@ -1,21 +1,14 @@
 'use client';
-import { useRef } from 'react';
 
 import { HeroSection } from '@/components/HeroSection';
-import { AnimatedRef } from '@/types/global';
 import { HERO } from '@/types/pages';
 
 import { Compliance } from './components/Compliance';
 import { FounderLetter } from './components/FounderLetter';
 // import { OurTeam } from './components/OurTeam';
 import { SplitSection } from './components/SplitSection';
-import { useAboutAnimation } from './useAboutAnimation';
 
 export default function About() {
-  const hero = useRef<AnimatedRef>(null);
-  const split = useRef<AnimatedRef>(null);
-  useAboutAnimation({ hero, split });
-
   const heroData: HERO = {
     type: 'HERO',
     visible: true,
@@ -43,8 +36,8 @@ export default function About() {
 
   return (
     <>
-      <HeroSection {...heroData} ref={hero} />
-      <SplitSection ref={split} />
+      <HeroSection {...heroData} />
+      <SplitSection />
       <FounderLetter />
       {/* <OurTeam /> */}
       <Compliance />
