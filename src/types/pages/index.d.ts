@@ -147,10 +147,15 @@ export type HeadingItem = {
   id?: string;
 };
 
+export type NODE = {
+  hasHeading: boolean;
+  node: RichTextNode[];
+};
+
 export type PRIVACY = {
   type: SectionType.PRIVACYPOLICY;
   visible: boolean;
-  contents: RichTextNode[];
+  contents: NODE[];
   className?: string;
 };
 
@@ -193,9 +198,15 @@ export type fontWeight =
   | 'extrabold'
   | 'black';
 
-export type TextNodeType = 'lineBreak' | 'text' | 'HEADING' | 'ul' | 'li';
+export type TextNodeType =
+  | 'lineBreak'
+  | 'text'
+  | 'HEADING'
+  | 'ul'
+  | 'li'
+  | 'link';
 
-export type Item = { text: string; type: TextNodeType };
+export type Item = { text?: string; type: TextNodeType; link?: LINK };
 
 export type RichTextNode = {
   level?: number;
@@ -211,6 +222,7 @@ export type RichTextNode = {
   code?: boolean;
   href?: string;
   items?: Item[];
+  link?: LINK;
 };
 
 export type contactFormData = z.infer<typeof contactSchema>;

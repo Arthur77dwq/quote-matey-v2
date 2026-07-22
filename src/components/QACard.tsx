@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react';
 import { useRef } from 'react';
 
-import { QAAccordian } from '@/components/QAAccordian';
+import { QAAccordian, QAContent, QATrigger } from '@/components/QAAccordian';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
@@ -73,8 +73,11 @@ export function QACard({
           category.questions.map((query, z) => (
             <QAAccordian
               key={`${index}-${query?.question}`}
-              {...{ query, index, zIndex: z }}
-            />
+              {...{ index, zIndex: z }}
+            >
+              <QATrigger>{query.question}</QATrigger>
+              <QAContent>{query.answer}</QAContent>
+            </QAAccordian>
           ))}
       </CardContent>
     </Card>
