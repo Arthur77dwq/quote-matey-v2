@@ -126,13 +126,13 @@ export function parseMobileContent(content: RichTextNode[], index: number) {
   return content.map((each: RichTextNode, sequence: number) => {
     if (each.type === 'HEADING') {
       return (
-        <QATrigger className="lg:hidden w-full">
+        <QATrigger key={`${sequence}-${index}`} className="lg:hidden w-full">
           <Head key={`${sequence}-${index}-${each.text}`} {...each} />
         </QATrigger>
       );
     }
     return (
-      <QAContent className="lg:hidden w-full">
+      <QAContent key={`${sequence}-${index}`} className="lg:hidden w-full">
         {renderBody(each, sequence)}
       </QAContent>
     );
@@ -208,7 +208,7 @@ export function PrivacyPolicySection({ contents, className }: PRIVACY) {
                   </div>
                 </>
               ) : (
-                <div className="flex flex-col lg:hidden">
+                <div className="flex flex-col">
                   {parseContent(content.node, index)}
                 </div>
               )}
