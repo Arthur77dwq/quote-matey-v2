@@ -61,14 +61,14 @@ export function HeroSection({
             )}
           </div>
           <Image
-            src="/images/about/cloudRight.png"
+            src="/images/cloudRight.png"
             className="w-140 h-87 absolute -top-20 right-0"
             width={0}
             height={0}
             alt=""
           />
           <Image
-            src="/images/about/cloudLeft.png"
+            src="/images/cloudLeft.png"
             className="w-140 h-87 absolute top-10 left-0"
             width={0}
             height={0}
