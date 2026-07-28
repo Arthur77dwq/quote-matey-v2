@@ -78,6 +78,9 @@ export const GLOBAL_DATA: GlobalData = {
       {
         id: 0,
         variant: 'outline',
+        hidden: {
+          mobile: true,
+        },
         text: 'Login',
         link: {
           href: '/login',
@@ -98,6 +101,7 @@ export const GLOBAL_DATA: GlobalData = {
           active: true,
         },
         icon: {
+          type: 'ICON',
           position: 'right',
           active: true,
           icon: 'ArrowRight',
@@ -107,6 +111,7 @@ export const GLOBAL_DATA: GlobalData = {
   },
   footer: {
     BgImage: {
+      type: 'IMG',
       src: '/images/FooterIMG.png',
       alt: '',
     },

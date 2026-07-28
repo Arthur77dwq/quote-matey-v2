@@ -1,0 +1,219 @@
+import { useGSAP } from '@gsap/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
+
+import { Button } from '@/components/button';
+import { Icon } from '@/components/icon';
+import { Description, Title } from '@/components/section-header';
+import { gsap } from '@/lib/animations/plugins';
+import { cn } from '@/lib/utils';
+import { Button as ButtonType } from '@/types/global';
+import { FootNote, LANDINGHERO } from '@/types/pages';
+
+const useSectionAnimation = (
+  sectionRef: React.RefObject<HTMLDivElement | null>,
+  imageRef: React.RefObject<HTMLDivElement | null>,
+  mountainRef: React.RefObject<HTMLDivElement | null>,
+) => {
+  useGSAP(() => {
+    // Animation Here
+    gsap.fromTo(
+      sectionRef.current,
+      {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+      },
+      { opacity: 1, y: 0, duration: 1 },
+    );
+    gsap.to(mountainRef.current, {
+      yPercent: 190,
+      scale: 2,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 5,
+      },
+    });
+
+    gsap.from(imageRef.current, {
+      y: -250,
+      scale: 0.5,
+      scrollTrigger: {
+        trigger: imageRef.current,
+        scrub: 3,
+        start: 'top bottom',
+      },
+    });
+  });
+};
+
+export function HeroSection({
+  visible,
+  title,
+  description,
+  BGImage,
+  children,
+  className,
+  ...props
+}: LANDINGHERO) {
+  const router = useRouter();
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const imageRef = useRef<HTMLDivElement | null>(null);
+  const mountainRef = useRef<HTMLDivElement | null>(null);
+  useSectionAnimation(sectionRef, imageRef, mountainRef);
+
+  return (
+    visible && (
+      <section
+        className={cn(
+          'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit overflow-hidden',
+          className,
+        )}
+      >
+        <div className={'w-full h-fit flex items-center justify-center'}>
+          <div className="w-full h-full">
+            {BGImage?.src && (
+              <Image
+                src={BGImage?.src}
+                alt="Background"
+                height={1400}
+                width={1200}
+                className="w-full min-w-300 h-250 sm:h-325 lg:h-350"
+                priority
+              />
+            )}
+          </div>
+          <Image
+            src="/images/cloudLeft.png"
+            className="w-140 h-87 absolute top-20 left-169"
+            width={0}
+            height={0}
+            alt=""
+          />
+
+          <Image
+            src="/images/cloudCenter.png"
+            className="w-140 h-87 absolute top-12.5 left-85"
+            width={0}
+            height={0}
+            alt=""
+          />
+          <Image
+            src="/images/cloudRight.png"
+            className="w-140 h-87 absolute -top-10 -left-32.5"
+            width={0}
+            height={0}
+            alt=""
+          />
+        </div>
+
+        <div
+          ref={sectionRef}
+          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 opacity-0 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
+        >
+          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.5 w-fit h-fit">
+            <>
+              {title && (
+                <Title className="leading-23 lg:text-[5.7rem]" title={title} />
+              )}
+              {description && (
+                <Description
+                  className="lg:text-[1.37rem]"
+                  description={description}
+                />
+              )}
+            </>
+            <div className="w-full flex justify-center items-center gap-5">
+              {props.cta?.map((button: ButtonType, i: number) => (
+                <Button
+                  key={`${i}-${button.text}`}
+                  className={
+                    button.variant === 'secondary'
+                      ? 'text-white! text-[0.7rem] sm:text-body-md font-inter font-semibold shadow-[inset_4px_4px_8px_rgba(255, 85, 0, 1),inset_-4px_-4px_8px_rgba(255, 77, 0, 1),0_4px_16px_rgba(255, 77, 0, 0.5)] bg-linear-to-br from-bg-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
+                      : 'h-full transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md'
+                  }
+                  variant={button.variant}
+                  onClick={() =>
+                    button.link && button.link.active
+                      ? router.push(button.link.href)
+                      : null
+                  }
+                >
+                  {button?.text}
+                </Button>
+              ))}
+            </div>
+            <div className="flex justify-center items-center gap-5 whitespace-nowrap">
+              {props.footNote?.map((note: FootNote, index: number) => (
+                <span
+                  key={`${index}-${note.text}`}
+                  className="flex justify-center items-center gap-1"
+                >
+                  {note.icon &&
+                    (note.icon?.type === 'IMG' ? (
+                      <Image
+                        src={note.icon.src}
+                        alt=""
+                        width={1}
+                        height={1}
+                        className="size-2.5 sm:size-4.5"
+                      />
+                    ) : (
+                      note.icon?.type === 'ICON' && (
+                        <Icon name={note.icon.icon || ''} className="w-4 h-4" />
+                      )
+                    ))}
+                  <span className="text-[0.5rem] lg:text-[1rem]">
+                    {note.text}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="relative w-full flex justify-center px-5">
+            <div className="overflow-hidden rounded-[0.625rem] sm:rounded-[1.25rem] border border-neutral-300 flex lg:hidden justify-center items-center w-full h-fit">
+              <Image
+                src={props.otherImages?.uiView.src || '/images/dashboard.png'}
+                alt=""
+                width={1200}
+                height={0}
+                className="max-w-265 w-full"
+              />
+            </div>
+            <div
+              ref={imageRef}
+              className="overflow-hidden rounded-[1.25rem] border border-neutral-300 hidden lg:flex justify-center items-center w-fit h-fit"
+            >
+              <Image
+                src={props.otherImages?.uiView.src || '/images/dashboard.png'}
+                alt=""
+                width={1200}
+                height={0}
+                className="max-w-265"
+              />
+            </div>
+            <div
+              ref={mountainRef}
+              className="w-full hidden lg:flex justify-center absolute -top-100"
+            >
+              <Image
+                src={props.otherImages?.overlay.src || '/images/mountain.png'}
+                alt=""
+                width={1220}
+                height={770}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 w-full h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
+
+        {children}
+      </section>
+    )
+  );
+}

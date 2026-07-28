@@ -1,19 +1,14 @@
 import { useGSAP } from '@gsap/react';
 import { Target } from 'lucide-react';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { useRef } from 'react';
 
 import { Button } from '@/components/button';
 import { Boost, GraphWithSupport } from '@/constant/icons';
 import { gsap } from '@/lib/animations/plugins';
-import { AnimatedRef } from '@/types/global';
 
-const useSectionAnimation = ({
-  sectionsRef,
-  ref,
-}: {
-  sectionsRef: React.RefObject<HTMLDivElement | null>[];
-  ref: React.ForwardedRef<AnimatedRef>;
-}) => {
+const useSectionAnimation = (
+  sectionsRef: React.RefObject<HTMLDivElement | null>[],
+) => {
   const tl = useRef(gsap.timeline());
   useGSAP(() => {
     // Animation Here
@@ -26,16 +21,12 @@ const useSectionAnimation = ({
       { opacity: 1, y: 0, stagger: 0.2 },
     );
   });
-
-  useImperativeHandle(ref, () => ({
-    timeline: tl.current,
-  }));
 };
 
-export const SplitSection = forwardRef<AnimatedRef>((props, ref) => {
+export function SplitSection() {
   const sectionLeftRef = useRef<HTMLDivElement | null>(null);
   const sectionRightRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation({ sectionsRef: [sectionLeftRef, sectionRightRef], ref });
+  useSectionAnimation([sectionLeftRef, sectionRightRef]);
 
   return (
     <section className="w-full h-fit flex justify-center items-start p-4 gap-2.5 sm:px-7.5">
@@ -93,4 +84,4 @@ export const SplitSection = forwardRef<AnimatedRef>((props, ref) => {
       </div>
     </section>
   );
-});
+}
