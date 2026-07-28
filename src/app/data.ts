@@ -9,12 +9,24 @@ export const DATA: DataType = {
   },
   sections: [
     {
-      type: 'HERO',
+      type: 'LANDINGHERO',
       visible: true,
       BGImage: {
         type: 'IMG',
-        src: '/images/about/BackgroundSKYUNDERLAY.jpg',
+        src: '/images/openScene.png',
         alt: '',
+      },
+      otherImages: {
+        uiView: {
+          type: 'IMG',
+          src: '/images/dashboard.png',
+          alt: '',
+        },
+        overlay: {
+          type: 'IMG',
+          src: '/images/mountain.png',
+          alt: '',
+        },
       },
       title: [
         {
@@ -54,7 +66,7 @@ export const DATA: DataType = {
       cta: [
         {
           id: 0,
-          variant: 'default',
+          variant: 'secondary',
           text: 'Get started now',
           link: {
             href: '/login',

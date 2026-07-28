@@ -16,6 +16,7 @@ const useRollMove = ({
   textRef: React.RefObject<HTMLButtonElement | null>;
 }) => {
   const rollMove = useRef<gsap.core.Timeline | null>(null);
+  const easing = 'power2.inOut';
 
   useGSAP(() => {
     gsap.set(leftArrowRef.current, {
@@ -26,7 +27,7 @@ const useRollMove = ({
       x: -13,
       rotate: 0,
       duration: 0.5,
-      ease: 'power2.inOut',
+      ease: easing,
     });
     rollMove.current.to(
       rightArrowRef.current,
@@ -34,7 +35,7 @@ const useRollMove = ({
         xPercent: 150,
         rotate: 45,
         duration: 0.5,
-        ease: 'power2.inOut',
+        ease: easing,
       },
       '<',
     );
@@ -43,7 +44,7 @@ const useRollMove = ({
       {
         xPercent: 27,
         duration: 0.5,
-        ease: 'power2.inOut',
+        ease: easing,
       },
       '<',
     );
@@ -112,7 +113,7 @@ function OutlineButton({
     <Comp
       {...props}
       className={cn(
-        'hidden md:flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer',
+        'flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer',
         className,
       )}
     >
@@ -161,7 +162,7 @@ function SecondaryDarkButton({
 
 function Button({
   className,
-  variant,
+  variant = 'default',
   children,
   ...props
 }: {
@@ -209,6 +210,7 @@ function Button({
         </PrimaryButton>
       );
     case 'default':
+    case 'primary':
     default:
       return (
         <PrimaryButton

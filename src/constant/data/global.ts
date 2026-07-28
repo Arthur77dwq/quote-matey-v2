@@ -78,6 +78,9 @@ export const GLOBAL_DATA: GlobalData = {
       {
         id: 0,
         variant: 'outline',
+        hidden: {
+          mobile: true,
+        },
         text: 'Login',
         link: {
           href: '/login',

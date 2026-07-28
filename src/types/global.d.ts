@@ -119,11 +119,18 @@ export type LINK = {
   active: boolean;
 };
 
+export type HiddenAttr = {
+  mobile?: boolean;
+  tablet?: boolean;
+  desktop?: boolean;
+};
+
 export type Button = {
   id: number;
   variant: buttonVariants;
   link: LINK | null;
   text: string;
+  hidden?: HiddenAttr;
   icon: IconType | null;
 };
 

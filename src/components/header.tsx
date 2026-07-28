@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { Button } from '@/components/button';
 import { AUTH_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
-import { matchRoute } from '@/lib/utils';
+import { cn, matchRoute } from '@/lib/utils';
 
 import { HamBurgerMenu } from './hamburgerMenu';
 import { NavBar } from './navBar/navBar';
@@ -85,6 +85,11 @@ export function Header() {
                         <Button
                           key={`${i}-${button.text}`}
                           variant={button.variant}
+                          className={cn(
+                            button.hidden?.mobile && 'hidden sm:flex',
+                            button.hidden?.tablet && 'sm:hidden lg:flex',
+                            button.hidden?.desktop && 'flex lg:hidden',
+                          )}
                           onClick={() =>
                             button.link && button.link.active
                               ? router.push(button.link.href)

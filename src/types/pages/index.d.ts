@@ -169,6 +169,7 @@ export type LANDINGHERO = {
   type: SectionType.LANDINGHERO;
   visible: boolean;
   BGImage?: ImageType;
+  otherImages?: Record<string, ImageType>;
   title?: RichTextNode[];
   description?: RichTextNode[];
   cta?: Button[];
