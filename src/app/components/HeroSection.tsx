@@ -113,7 +113,7 @@ export function HeroSection({
 
         <div
           ref={sectionRef}
-          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 opacity-0 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-fit"
+          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 opacity-0 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
         >
           <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.5 w-fit h-fit">
             <>
@@ -198,19 +198,19 @@ export function HeroSection({
             </div>
             <div
               ref={mountainRef}
-              className="w-fit hidden lg:flex justify-center absolute -top-100"
+              className="w-full hidden lg:flex justify-center absolute -top-100"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}
                 alt=""
                 width={1220}
                 height={770}
-                className="max-w-300"
+                className="w-full"
               />
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 w-305 h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
+        <div className="absolute bottom-0 w-full h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
 
         {children}
       </section>
