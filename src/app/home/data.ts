@@ -266,5 +266,38 @@ export const DATA: DataType = {
         },
       ],
     },
+    {
+      type: 'VIDEODEMO',
+      visible: true,
+      tag: 'Demo',
+      title: [
+        {
+          id: '1',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: 'QuoteMatey',
+        },
+        {
+          id: '2',
+          bold: true,
+          weight: 'bold',
+          type: 'text',
+          text: ' Demo',
+          strong: true,
+        },
+      ],
+      description: [
+        {
+          id: '1',
+          type: 'text',
+          text: 'See how to use QuoteMatey',
+        },
+      ],
+      video: {
+        src: 'https://res.cloudinary.com/dyohffsp6/video/upload/v1780100162/QuoteMateyDEMO2_yewhtk.mp4',
+        active: true,
+      },
+    },
   ],
 };
