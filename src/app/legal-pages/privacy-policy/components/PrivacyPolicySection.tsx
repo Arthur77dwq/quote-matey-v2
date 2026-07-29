@@ -9,6 +9,7 @@ type HeadProps = RichTextNode & {
 };
 
 function Head({ level, text, className }: HeadProps) {
+  const defaultFont = 'font-inter';
   switch (level) {
     case 1:
       return (
@@ -21,7 +22,7 @@ function Head({ level, text, className }: HeadProps) {
         <h2
           id={prepareSlug(text || '')}
           className={cn(
-            'font-inter text-[1.3rem] lg:text-3xl font-medium lg:font-semibold text-neutral-900',
+            `${defaultFont} text-[1.3rem] lg:text-3xl font-medium lg:font-semibold text-neutral-900`,
             className,
           )}
         >
@@ -33,7 +34,7 @@ function Head({ level, text, className }: HeadProps) {
         <h3
           id={prepareSlug(text || '')}
           className={cn(
-            'font-inter text-[1.3rem] lg:text-2xl font-medium lg:font-semibold text-neutral-900',
+            `${defaultFont} text-[1.3rem] lg:text-2xl font-medium lg:font-semibold text-neutral-900`,
             className,
           )}
         >
@@ -42,28 +43,19 @@ function Head({ level, text, className }: HeadProps) {
       );
     case 4:
       return (
-        <h4
-          id={prepareSlug(text || '')}
-          className={cn('font-inter', className)}
-        >
+        <h4 id={prepareSlug(text || '')} className={cn(defaultFont, className)}>
           {text}
         </h4>
       );
     case 5:
       return (
-        <h5
-          id={prepareSlug(text || '')}
-          className={cn('font-inter ', className)}
-        >
+        <h5 id={prepareSlug(text || '')} className={cn(defaultFont, className)}>
           {text}
         </h5>
       );
     default:
       return (
-        <h6
-          id={prepareSlug(text || '')}
-          className={cn('font-inter ', className)}
-        >
+        <h6 id={prepareSlug(text || '')} className={cn(defaultFont, className)}>
           {text}
         </h6>
       );

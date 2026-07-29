@@ -1,8 +1,7 @@
 import { generateMetadata } from '@/lib/seo';
 
-import { DATA } from './data';
-import Home from './home';
-
+import { DATA } from './home/data';
+import Home from './home/home';
 export const metadata = generateMetadata(DATA.metadata);
 
 export default async function Page() {

@@ -10,9 +10,10 @@ import { AuthScreen } from '@/components/auth-screen';
 // import { SocialProofBar } from '@/components/social-proof-bar';
 // import { Testimonials } from '@/components/testimonials';
 // import { VideoSection } from '@/components/video-section';
-import { LANDINGHERO, Section } from '@/types/pages';
+import { LANDINGHERO, PRODUCT, Section } from '@/types/pages';
 
 import { HeroSection } from './components/HeroSection';
+import { ProductSection } from './components/ProductSection';
 
 export default function Home({ sections }: { sections: Section[] }) {
   return (
@@ -21,6 +22,7 @@ export default function Home({ sections }: { sections: Section[] }) {
         <AuthScreen />
       </Suspense>
       <HeroSection {...(sections[0] as LANDINGHERO)} />
+      <ProductSection {...(sections[1] as PRODUCT)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
