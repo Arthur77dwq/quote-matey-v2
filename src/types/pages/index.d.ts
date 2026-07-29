@@ -20,13 +20,19 @@ export interface SectionType {
   PRIVACYPOLICY: 'PRIVACYPOLICY';
   LANDINGHERO: 'LANDINGHERO';
   PRODUCT: 'PRODUCT';
+  VIDEODEMO: 'VIDEODEMO';
 }
+
+export type VideoType = {
+  src: string;
+  active: boolean;
+};
 
 export type HERO = {
   type: SectionType.HERO;
   visible: boolean;
-  tag?: string;
   BGImage?: ImageType;
+  tag?: string;
   title?: RichTextNode[];
   description?: RichTextNode[];
   children?: React.ReactNode;
@@ -207,9 +213,20 @@ export type PRODUCT = {
   comparison?: Comparison[];
 };
 
+export type VIDEODEMO = {
+  type: SectionType.VIDEODEMO;
+  visible: boolean;
+  tag?: string;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
+  video?: VideoType;
+  className?: string;
+};
+
 export type Section =
   | HERO
   | LANDINGHERO
+  | VIDEODEMO
   | PRODUCT
   | QNA
   | CTA
