@@ -19,6 +19,7 @@ export interface SectionType {
   TESTIMONIAL: 'TESTIMONIAL';
   PRIVACYPOLICY: 'PRIVACYPOLICY';
   LANDINGHERO: 'LANDINGHERO';
+  PRODUCT: 'PRODUCT';
 }
 
 export type HERO = {
@@ -143,7 +144,6 @@ export type TESTIMONIAL = {
 
 export type HeadingItem = {
   type: TextNodeType | 'HEADING';
-
   text?: string;
   id?: string;
 };
@@ -178,9 +178,38 @@ export type LANDINGHERO = {
   className?: string;
 };
 
+export type Stat = {
+  stat: string;
+  text: string;
+};
+
+export type Stats = {
+  type: 'STATS';
+  data: Stat[];
+};
+
+export type Content = Stats;
+
+export type Comparison = {
+  id: string;
+  head?: RichTextNode[];
+  title?: RichTextNode[];
+  icon?: IconType;
+  description?: RichTextNode[];
+  content?: Content[];
+};
+
+export type PRODUCT = {
+  type: SectionType.PRODUCT;
+  visible: boolean;
+  title?: RichTextNode[];
+  comparison?: Comparison[];
+};
+
 export type Section =
   | HERO
   | LANDINGHERO
+  | PRODUCT
   | QNA
   | CTA
   | CONTACTFORM

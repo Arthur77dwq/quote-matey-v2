@@ -102,6 +102,7 @@ export type IconType = {
   active: boolean;
   position: 'left' | 'center' | 'right';
   icon?: string | null;
+  color?: string;
 };
 
 export type Theme = 'dark' | 'light';
