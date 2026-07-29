@@ -47,19 +47,19 @@ export function PlatformSection({
             />
           )}
         </div>
-        <div className="relative w-full h-52.5 sm:h-110 lg:h-171.5 rounded-[0.875rem] overflow-hidden">
+        <div className="relative w-full aspect-3840/2333 rounded-[0.875rem] overflow-hidden">
           <Image
             src={props.FGImage?.src || ''}
             alt={props.FGImage?.alt || ''}
             fill
-            className="w-full h-full object-cover"
+            className="w-full aspect-3840/2333 object-cover"
           />
         </div>
-        <div className="w-full flex flex-col sm:flex-row gap-6">
+        <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-6">
           {props.cards?.map((card, i: number) => (
             <Card
               key={i}
-              className="bg-white border-none w-90 flex justify-center items-center p-0"
+              className="bg-white border-none w-90 h-full flex justify-center items-center p-0"
             >
               <CardContent className="flex flex-col lg:flex-row w-full h-full gap-4 sm:gap-5 p-5 sm:p-7.5">
                 <div className="size-10 aspect-square rounded-[0.625rem] flex justify-center items-center bg-linear-to-br from-[#102E60] to-[#BFD6FF]">
