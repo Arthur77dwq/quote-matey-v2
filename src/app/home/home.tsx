@@ -10,9 +10,16 @@ import { AuthScreen } from '@/components/auth-screen';
 // import { SocialProofBar } from '@/components/social-proof-bar';
 // import { Testimonials } from '@/components/testimonials';
 // import { VideoSection } from '@/components/video-section';
-import { LANDINGHERO, PRODUCT, Section, VIDEODEMO } from '@/types/pages';
+import {
+  LANDINGHERO,
+  PLATFORM,
+  PRODUCT,
+  Section,
+  VIDEODEMO,
+} from '@/types/pages';
 
 import { HeroSection } from './components/HeroSection';
+import { PlatformSection } from './components/PlatformSection';
 import { ProductSection } from './components/ProductSection';
 import { VideoDemoSection } from './components/VideoDemoSection';
 
@@ -28,6 +35,7 @@ export default function Home({ sections }: { sections: Section[] }) {
         className="w-full h-fit"
         {...(sections[2] as VIDEODEMO)}
       />
+      <PlatformSection {...(sections[3] as PLATFORM)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}

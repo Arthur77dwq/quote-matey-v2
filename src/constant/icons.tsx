@@ -167,6 +167,45 @@ export function Boost({ className }: { className?: string }) {
   );
 }
 
+export function Performance({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#FFF"
+      className={cn('size-6', className)}
+      viewBox="0 -960 960 960"
+    >
+      <path d="M480-316.5q38-.5 56-27.5l224-336-336 224q-27 18-28.5 55t22.5 61 62 23.5m0-483.5q59 0 113.5 16.5T696-734l-76 48q-33-17-68.5-25.5T480-720q-133 0-226.5 93.5T160-400q0 42 11.5 83t32.5 77h552q23-38 33.5-79t10.5-85q0-36-8.5-70T766-540l48-76q30 47 47.5 100T880-406t-13 109-41 99q-11 18-30 28t-40 10H204q-21 0-40-10t-30-28q-26-45-40-95.5T80-400q0-83 31.5-155.5t86-127 127.5-86T480-800m7 313" />
+    </svg>
+  );
+}
+
+export function ToolBox({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('size-6', className)}
+      fill="#FFF"
+      viewBox="0 -960 960 960"
+    >
+      <path d="M80-160v-400q0-33 23.5-56.5T160-640h120v-80q0-33 23.5-56.5T360-800h240q33 0 56.5 23.5T680-720v80h120q33 0 56.5 23.5T880-560v400zm240-200v40h-80v-40h-80v120h640v-120h-80v40h-80v-40zM160-560v120h80v-40h80v40h320v-40h80v40h80v-120zm200-80h240v-80H360z" />
+    </svg>
+  );
+}
+
+export function Tools({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('size-6', className)}
+      fill="#FFF"
+      viewBox="0 -960 960 960"
+    >
+      <path d="M756-120 537-339l84-84 219 219zm-552 0-84-84 276-276-68-68-28 28-51-51v82l-28 28-121-121 28-28h82l-50-50 142-142q20-20 43-29t47-9 47 9 43 29l-92 92 50 50-28 28 68 68 90-90q-4-11-6.5-23t-2.5-24q0-59 40.5-99.5T701-841q15 0 28.5 3t27.5 9l-99 99 72 72 99-99q7 14 9.5 27.5T841-701q0 59-40.5 99.5T701-561q-12 0-24-2t-23-7z" />
+    </svg>
+  );
+}
+
 export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   google: GoogleIcon,
   image: ImageIcon,
@@ -174,4 +213,7 @@ export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   trend: Trend,
   graph: GraphWithSupport,
   boost: Boost,
+  performance: Performance,
+  toolBox: ToolBox,
+  tools: Tools,
 };
