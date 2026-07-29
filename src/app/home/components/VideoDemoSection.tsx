@@ -56,7 +56,10 @@ export function VideoDemoSection({
   };
   return (
     <section
-      className={cn('flex flex-col justify-center items-center', className)}
+      className={cn(
+        'py-40 flex flex-col justify-center items-center',
+        className,
+      )}
     >
       <div className="px-4 sm:py-5 sm:p-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit">
         {tag && (
