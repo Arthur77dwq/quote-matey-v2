@@ -299,5 +299,71 @@ export const DATA: DataType = {
         active: true,
       },
     },
+    {
+      type: 'PLATFORM',
+      visible: true,
+      tag: 'Platform overview',
+      title: [
+        {
+          id: '1',
+          type: 'text',
+          weight: 'bold',
+          text: 'See QuoteMatey in action',
+        },
+      ],
+      description: [
+        {
+          id: '1',
+          type: 'text',
+          weight: 'medium',
+          text: 'See the fastest way to create professional quotes that win more jobs',
+        },
+      ],
+      BGImage: {
+        type: 'IMG',
+        alt: '',
+        src: '/images/roof.jpg',
+      },
+      FGImage: {
+        type: 'IMG',
+        alt: '',
+        src: '/images/dashboard.png',
+      },
+      cards: [
+        {
+          id: '1',
+          text: 'Everything your business needs in one place: Manage quotes, templates, customer jobs,  and  AI drafts from one fast, organized dashboard.',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'center',
+            icon: 'toolBox',
+            color: '#FFFFFF',
+          },
+        },
+        {
+          id: '2',
+          text: 'Quote jobs faster: Generate professional quotes in seconds with AI workflows designed to save tradies time and help win more jobs.',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'center',
+            icon: 'performance',
+            color: '#FFFFFF',
+          },
+        },
+        {
+          id: '3',
+          text: 'Built for busy tradies: A clean, distraction free workspace that keeps quoting simple, fast, and easy to manage.',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'center',
+            icon: 'tools',
+            color: '#FFFFFF',
+          },
+        },
+      ],
+    },
   ],
 };
