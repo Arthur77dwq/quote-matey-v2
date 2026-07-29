@@ -70,11 +70,16 @@ export function ProductSection({ title, comparison }: PRODUCT) {
     <section
       ref={sectionRef}
       id="product-section"
-      className="w-full flex flex-col justify-center items-center pt-44.25 px-7.5 pb-37.5"
+      className="w-full flex flex-col justify-center items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
     >
-      {title && <Title className="leading-23 lg:text-6xl" title={title} />}
+      {title && (
+        <Title className="leading-15 lg:leading-23 lg:text-6xl" title={title} />
+      )}
       {comparison?.length && (
-        <ComparisonCard {...{ setActive, active, comparison }} />
+        <ComparisonCard
+          className="w-full h-fit sm:w-3xl sm:h-140"
+          {...{ setActive, active, comparison }}
+        />
       )}
     </section>
   );

@@ -147,19 +147,20 @@ export const DATA: DataType = {
       ],
       comparison: [
         {
+          type: 'DANGER',
           icon: {
             type: 'ICON',
             active: true,
             position: 'center',
-            icon: 'Check',
-            color: '#10B17E',
+            icon: 'X',
+            color: '#FF530A',
           },
           id: '1',
           head: [
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'medium',
               type: 'text',
               text: 'Before QuoteMatey',
             },
@@ -211,19 +212,20 @@ export const DATA: DataType = {
           ],
         },
         {
+          type: 'SAFE',
           icon: {
             type: 'ICON',
             active: true,
             position: 'center',
-            icon: 'X',
-            color: '#FF530A',
+            icon: 'Check',
+            color: '#10B17E',
           },
           id: '2',
           head: [
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'medium',
               type: 'text',
               text: 'After QuoteMatey',
             },

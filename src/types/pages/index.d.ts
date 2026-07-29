@@ -191,6 +191,7 @@ export type Stats = {
 export type Content = Stats;
 
 export type Comparison = {
+  type: 'DANGER' | 'SAFE';
   id: string;
   head?: RichTextNode[];
   title?: RichTextNode[];

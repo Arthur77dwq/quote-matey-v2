@@ -45,7 +45,7 @@ export function Description({
   return (
     <p
       className={cn(
-        'max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter font-medium text-neutral-600 leading-[1.3em]',
+        'max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter text-neutral-600 leading-[1.3em]',
         className,
       )}
     >
