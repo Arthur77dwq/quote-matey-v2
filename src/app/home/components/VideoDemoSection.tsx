@@ -1,5 +1,8 @@
+import { useRef, useState } from 'react';
+
 import { SectionHeader } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
+import { useObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import { VIDEODEMO } from '@/types/pages';
 
@@ -10,6 +13,47 @@ export function VideoDemoSection({
   video,
   className,
 }: VIDEODEMO) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const [, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      setUserInteracted(true);
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play().catch(() => {
+          setVideoLoaded(false);
+        });
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  useObserver(
+    videoRef,
+    (entries) => {
+      if (userInteracted) return;
+      entries.forEach((entry) => {
+        // Play when more or equal to 70% of element visible on viewport
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
+          if (!isPlaying) togglePlayPause();
+        }
+        // Pause when less then 30% of element visible on viewport
+        if (!entry.isIntersecting && entry.intersectionRatio <= 0.3) {
+          if (isPlaying) togglePlayPause();
+        }
+      });
+    },
+    { threshold: [0.7, 0.3] },
+  );
+
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+    // Video starts paused, user must click to play
+  };
   return (
     <section
       className={cn('flex flex-col justify-center items-center', className)}
@@ -25,12 +69,14 @@ export function VideoDemoSection({
         )}
       </div>
       <video
+        ref={videoRef}
         loop
-        className="rounded-[1.5rem] sm:rounded-[3.75rem] w-96.5 h-53 sm:w-187 sm:h-108.25 lg:w-273.75 lg:h-146 object-fill"
         playsInline
-        controls
-        autoPlay
         muted
+        controls
+        onCanPlayThrough={handleVideoLoad}
+        onError={() => setVideoLoaded(false)}
+        className="rounded-[1.5rem] sm:rounded-[3.75rem] w-96.5 h-53 sm:w-187 sm:h-108.25 lg:w-273.75 lg:h-146 object-fill"
       >
         <source className="w-full" src={video?.src} type="video/mp4" />
       </video>
