@@ -1,0 +1,45 @@
+@layer components {
+  .card {
+    background: var(--surface-primary);
+
+    border: 1px solid var(--border-default);
+
+    border-radius: var(--radius-card);
+
+    box-shadow: var(--shadow-card);
+
+    padding: var(--card-padding-md);
+  }
+
+  .card-header {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .card-title {
+    font-size: var(--text-heading-5);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--text-primary);
+  }
+
+  .card-description {
+    margin-top: var(--spacing-2);
+
+    color: var(--text-secondary);
+  }
+
+  .card-content {
+    color: var(--text-primary);
+  }
+
+  .card-footer {
+    margin-top: var(--spacing-6);
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: var(--spacing-3);
+  }
+}

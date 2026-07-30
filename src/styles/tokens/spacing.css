@@ -1,0 +1,87 @@
+/* ========================================================================== */
+/* SPACING TOKENS                                                             */
+/* ========================================================================== */
+
+@theme inline {
+  /* ======================================================================== */
+  /* BASE SPACING SCALE                                                      */
+  /* ======================================================================== */
+
+  --spacing-0: 0rem; /* 0px */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-2: 0.5rem; /* 8px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+  --spacing-20: 5rem; /* 80px */
+  --spacing-24: 6rem; /* 96px */
+  --spacing-32: 8rem; /* 128px */
+
+  /* ======================================================================== */
+  /* COMPONENT SPACING                                                       */
+  /* ======================================================================== */
+
+  /* Buttons */
+
+  --button-padding-x-sm: var(--spacing-3);
+  --button-padding-y-sm: var(--spacing-2);
+
+  --button-padding-x-md: var(--spacing-4);
+  --button-padding-y-md: var(--spacing-3);
+
+  --button-padding-x-lg: var(--spacing-6);
+  --button-padding-y-lg: var(--spacing-4);
+
+  /* Inputs */
+
+  --input-padding-x: var(--spacing-4);
+  --input-padding-y: var(--spacing-3);
+
+  /* Cards */
+
+  --card-padding-sm: var(--spacing-4);
+  --card-padding-md: var(--spacing-6);
+  --card-padding-lg: var(--spacing-8);
+
+  /* Modals */
+
+  --modal-padding: var(--spacing-8);
+
+  /* Tables */
+
+  --table-cell-padding-x: var(--spacing-4);
+  --table-cell-padding-y: var(--spacing-3);
+
+  /* Navigation */
+
+  --nav-item-padding-x: var(--spacing-4);
+  --nav-item-padding-y: var(--spacing-3);
+
+  /* ======================================================================== */
+  /* LAYOUT SPACING                                                          */
+  /* ======================================================================== */
+
+  --section-gap-sm: var(--spacing-8);
+  --section-gap-md: var(--spacing-12);
+  --section-gap-lg: var(--spacing-16);
+
+  --page-padding-mobile: var(--spacing-4);
+  --page-padding-tablet: var(--spacing-6);
+  --page-padding-desktop: var(--spacing-8);
+
+  /* ======================================================================== */
+  /* GRID & STACKS                                                           */
+  /* ======================================================================== */
+
+  --gap-xs: var(--spacing-2);
+  --gap-sm: var(--spacing-4);
+  --gap-md: var(--spacing-6);
+  --gap-lg: var(--spacing-8);
+  --gap-xl: var(--spacing-12);
+  --gap-2xl: var(--spacing-16);
+}

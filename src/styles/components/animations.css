@@ -1,0 +1,37 @@
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-fade-out {
+    animation: fade-out var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-slide-up {
+    animation: slide-up var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-slide-down {
+    animation: slide-down var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-slide-left {
+    animation: slide-left var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-slide-right {
+    animation: slide-right var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-scale-in {
+    animation: scale-in var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-scale-out {
+    animation: scale-out var(--duration-normal) var(--ease-standard);
+  }
+
+  .animate-drop {
+    animation: drop var(--duration-normal) var(--ease-bounce);
+  }
+}
