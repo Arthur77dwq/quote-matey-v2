@@ -365,5 +365,70 @@ export const DATA: DataType = {
         },
       ],
     },
+    {
+      type: 'WORKING',
+      visible: true,
+      tag: 'How it works',
+      title: [
+        {
+          id: '1',
+          type: 'text',
+          weight: 'bold',
+          text: 'Start quoting',
+        },
+        {
+          id: '2',
+          type: 'text',
+          weight: 'bold',
+          strong: true,
+          text: ' in minutes',
+        },
+      ],
+      description: [
+        {
+          id: '1',
+          type: 'text',
+          weight: 'medium',
+          text: 'Create an account, let AI analyze your job, and done.',
+        },
+      ],
+      supportingText: {
+        title: '2 Minutes',
+        description: 'Set up to connect and begin instantly',
+      },
+      cards: [
+        {
+          id: '1',
+          title: 'Take a Photo of the Job',
+          description: 'Take a Photo or input text of the Job',
+          image: {
+            type: 'IMG',
+            src: '/images/snap.png',
+            alt: 'house roof',
+          },
+        },
+        {
+          id: '2',
+          title: 'Upload into QuoteMatey',
+          description: 'AI processes your data to generate clear quotes.',
+          image: {
+            type: 'IMG',
+            src: '/images/upload.png',
+            alt: 'ui upload screenshort',
+          },
+        },
+        {
+          id: '3',
+          title: 'QuoteMatey Generates your quote',
+          description:
+            'Receive real-time recommendations to optimize your portfolio.',
+          image: {
+            type: 'IMG',
+            src: '/images/generate.png',
+            alt: 'ui upload screenshort',
+          },
+        },
+      ],
+    },
   ],
 };
