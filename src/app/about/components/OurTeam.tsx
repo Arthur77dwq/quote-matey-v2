@@ -78,7 +78,7 @@ export const OurTeam = () => {
             {
               name: 'Ankesh',
               desc: 'Founding Software Engineer',
-              image: '/images/about/ankeshPP.webp',
+              image: '/images/about/ankesh.webp',
             },
           ].map((profile, i) => (
             <ProfileShow
