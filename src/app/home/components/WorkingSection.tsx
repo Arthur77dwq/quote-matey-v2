@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 
 import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { WORKING, WorkingCard } from '@/types/pages';
 
@@ -15,13 +16,28 @@ export function WorkingSection({
   ...props
 }: WORKING) {
   const [active, setActive] = useState<WorkingCard | null>(null);
-
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const imageRefs = props.cards.map(() => createRef<HTMLDivElement>());
   const handleChangeValue = (value: string) => {
     if (value !== active?.id) {
       const selected = props.cards?.filter((val) => val.id === value)[0];
       if (selected) setActive(selected);
     }
   };
+
+  useEffect(() => {
+    gsap.fromTo(
+      imageRefs.map((ref) => ref.current),
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        clearProps: 'all',
+      },
+    );
+  }, [active, imageRefs]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActive((prev) => {
@@ -41,7 +57,10 @@ export function WorkingSection({
   }, [props.cards]);
 
   return (
-    <section className={cn('w-full flex bg-white pb-50', className)}>
+    <section
+      ref={sectionRef}
+      className={cn('w-full flex bg-white pb-50', className)}
+    >
       <div className="flex flex-col sm:flex-row w-full px-7.5 gap-17.5">
         <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-center gap-17.5 w-full sm:w-1/2 h-fit">
           <div className="flex flex-col gap-2.5">
@@ -117,7 +136,10 @@ export function WorkingSection({
                 className="w-full flex gap-5 p-1.5 border border-neutral-100 rounded-[1.875rem]"
               >
                 <div className="flex flex-col justify-center items-center gap-10 p-5 lg:p-10 bg-neutral-50 rounded-2xl w-full">
-                  <div className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden">
+                  <div
+                    ref={imageRefs[i]}
+                    className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
+                  >
                     <Image
                       src={card.image.src}
                       alt={card.image.alt}
@@ -126,10 +148,16 @@ export function WorkingSection({
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center gap-1.5">
-                    <h3 className="text-center text-2xl font-semibold text-[#102E60]">
+                    <h3
+                      // ref={refs[i].title}
+                      className="text-center text-2xl font-semibold text-[#102E60]"
+                    >
                       {card.title}
                     </h3>
-                    <p className="text-center text-body-md font-inter font-medium text-neutral-600">
+                    <p
+                      // ref={refs[i].description}
+                      className="text-center text-body-md font-inter font-medium text-neutral-600"
+                    >
                       {card.description}
                     </p>
                   </div>

@@ -263,7 +263,7 @@ export type WORKING = {
   description?: RichTextNode[];
   className?: string;
   supportingText?: SupportText;
-  cards?: WorkingCard[];
+  cards: WorkingCard[];
 };
 
 export type Section =
