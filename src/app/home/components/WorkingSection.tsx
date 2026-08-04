@@ -1,5 +1,6 @@
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
-import { createRef, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +9,32 @@ import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { WORKING, WorkingCard } from '@/types/pages';
 
+const useSectionAnimation = ({
+  sectionRef,
+  imageRef,
+  active,
+}: {
+  sectionRef: React.RefObject<HTMLDivElement | null>;
+  imageRef: React.RefObject<HTMLDivElement | null>;
+  active: WorkingCard | null;
+}) => {
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        imageRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          clearProps: 'all',
+        },
+      );
+    },
+    { scope: sectionRef, dependencies: [active] },
+  );
+};
+
 export function WorkingSection({
   tag,
   title,
@@ -15,28 +42,16 @@ export function WorkingSection({
   className,
   ...props
 }: WORKING) {
-  const [active, setActive] = useState<WorkingCard | null>(null);
+  const [active, setActive] = useState<WorkingCard | null>(props.cards[0]);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const imageRefs = props.cards.map(() => createRef<HTMLDivElement>());
+  const imageRef = useRef<HTMLDivElement>(null);
   const handleChangeValue = (value: string) => {
     if (value !== active?.id) {
       const selected = props.cards?.filter((val) => val.id === value)[0];
       if (selected) setActive(selected);
     }
   };
-
-  useEffect(() => {
-    gsap.fromTo(
-      imageRefs.map((ref) => ref.current),
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        clearProps: 'all',
-      },
-    );
-  }, [active, imageRefs]);
+  useSectionAnimation({ sectionRef, imageRef, active });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -117,7 +132,7 @@ export function WorkingSection({
                       className={cn(
                         'w-fit h-fit rounded-full px-3 lg:px-5 py-1.5 lg:py-2.5 text-sm font-medium transition-[background-position] duration-4000',
                         active?.id === card.id
-                          ? 'bg-[length:200%_100%] bg-[linear-gradient(to_right,#102E60_50%,#EDF1F4_50%)] bg-left text-white'
+                          ? 'bg-size-[200%_100%] bg-[linear-gradient(to_right,#102E60_50%,#EDF1F4_50%)] bg-left text-white'
                           : 'bg-neutral-50 text-neutral-600 bg-right',
                       )}
                     >
@@ -137,7 +152,7 @@ export function WorkingSection({
               >
                 <div className="flex flex-col justify-center items-center gap-10 p-5 lg:p-10 bg-neutral-50 rounded-2xl w-full">
                   <div
-                    ref={imageRefs[i]}
+                    ref={card.id === active?.id ? imageRef : null}
                     className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
                   >
                     <Image
