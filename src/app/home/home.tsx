@@ -42,6 +42,7 @@ export default function Home({ sections }: { sections: Section[] }) {
       <PlatformSection {...(sections[3] as PLATFORM)} />
       <WorkingSection {...(sections[4] as WORKING)} />
       <UseCaseSection {...(sections[5] as USECASES)} />
+      {/* <Testimonial {...sections[6]} /> */}
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
