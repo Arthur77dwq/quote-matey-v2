@@ -24,6 +24,7 @@ export interface SectionType {
   PLATFORM: 'PLATFORM';
   WORKING: 'WORKING';
   USECASES: 'USECASES';
+  LANDINGPRICING: 'LANDINGPRICING';
 }
 
 export type VideoType = {
@@ -123,6 +124,16 @@ export type PricingPlan = {
 export type PRICING = {
   type: SectionType.PRICING;
   visible: boolean;
+  plans: PricingPlan[];
+  footer?: string;
+  className?: string;
+};
+
+export type LANDINGPRICING = {
+  type: SectionType.LANDINGPRICING;
+  visible: boolean;
+  tag?: string;
+  title?: RichTextNode[];
   plans: PricingPlan[];
   footer?: string;
   className?: string;
