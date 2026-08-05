@@ -22,6 +22,7 @@ export interface SectionType {
   PRODUCT: 'PRODUCT';
   VIDEODEMO: 'VIDEODEMO';
   PLATFORM: 'PLATFORM';
+  WORKING: 'WORKING';
 }
 
 export type VideoType = {
@@ -242,12 +243,36 @@ export type PLATFORM = {
   className?: string;
 };
 
+export type SupportText = {
+  title: string;
+  description: string;
+};
+
+export type WorkingCard = {
+  id: string;
+  title: string;
+  description: string;
+  image: ImageType;
+};
+
+export type WORKING = {
+  type: SectionType.WORKING;
+  visible: boolean;
+  tag?: string;
+  title?: RichTextNode[];
+  description?: RichTextNode[];
+  className?: string;
+  supportingText?: SupportText;
+  cards: WorkingCard[];
+};
+
 export type Section =
   | HERO
   | LANDINGHERO
   | VIDEODEMO
   | PRODUCT
   | PLATFORM
+  | WORKING
   | QNA
   | CTA
   | CONTACTFORM

@@ -16,12 +16,14 @@ import {
   PRODUCT,
   Section,
   VIDEODEMO,
+  WORKING,
 } from '@/types/pages';
 
 import { HeroSection } from './components/HeroSection';
 import { PlatformSection } from './components/PlatformSection';
 import { ProductSection } from './components/ProductSection';
 import { VideoDemoSection } from './components/VideoDemoSection';
+import { WorkingSection } from './components/WorkingSection';
 
 export default function Home({ sections }: { sections: Section[] }) {
   return (
@@ -36,6 +38,7 @@ export default function Home({ sections }: { sections: Section[] }) {
         {...(sections[2] as VIDEODEMO)}
       />
       <PlatformSection {...(sections[3] as PLATFORM)} />
+      <WorkingSection {...(sections[4] as WORKING)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
