@@ -430,5 +430,127 @@ export const DATA: DataType = {
         },
       ],
     },
+    {
+      type: 'USECASES',
+      visible: true,
+      tag: 'Use cases',
+      title: [
+        {
+          id: '1',
+          type: 'text',
+          weight: 'bold',
+          text: 'Who this platform is',
+        },
+        {
+          id: '2',
+          type: 'text',
+          weight: 'bold',
+          strong: true,
+          text: ' build for',
+        },
+      ],
+      cards: [
+        {
+          id: '1',
+          type: 'IMAGE',
+          image: {
+            type: 'IMG',
+            src: '/images/tradie.webp',
+            alt: 'tradie ',
+          },
+        },
+        {
+          id: '2',
+          type: 'TEXT-OVERLAYED-IMAGE',
+          title: 'Tradies',
+          description:
+            'Track your quotes, manage jobs, and generate AI-powered estimates without wasting hours on manual admin work.',
+          supportingText: {
+            title: '+32% Faster',
+            description: 'Generate quotes with AI ',
+          },
+          image: {
+            type: 'IMG',
+            src: '/images/mat.webp',
+            alt: 'house mat dirty',
+          },
+        },
+        {
+          id: '3',
+          type: 'IMAGE',
+          image: {
+            type: 'IMG',
+            src: '/images/plumber.jpg',
+            alt: 'plumber',
+          },
+        },
+        {
+          id: '4',
+          type: 'TEXT-OVERLAYED-IMAGE',
+          title: 'Plumbers',
+          description:
+            'Track plumbing jobs, manage customer quotes, and generate AI-powered estimates without wasting hours on paperwork.',
+          supportingText: {
+            title: '+39% More Trustworthy',
+            description: 'Use Templetes to make your buisness consistent',
+          },
+          image: {
+            type: 'IMG',
+            src: '/images/tap.jpg',
+            alt: 'leaking tap',
+          },
+        },
+        {
+          id: '5',
+          type: 'IMAGE',
+          image: {
+            type: 'IMG',
+            src: '/images/project-managers.webp',
+            alt: 'project manager',
+          },
+        },
+        {
+          id: '6',
+          type: 'TEXT-OVERLAYED-IMAGE',
+          title: 'Project Managers',
+          description:
+            'Manage multiple jobs efficiently with organized quote tracking, customer management, and AI-powered workflow support.',
+          supportingText: {
+            title: 'Higher Job Win Rate',
+            description: 'Quotes managed from a single dashboard',
+          },
+          image: {
+            type: 'IMG',
+            src: '/images/roof.jpg',
+            alt: 'roof filled with dried leafs',
+          },
+        },
+        {
+          id: '7',
+          type: 'IMAGE',
+          image: {
+            type: 'IMG',
+            src: '/images/electrician.webp',
+            alt: 'electrician',
+          },
+        },
+        {
+          id: '8',
+          type: 'TEXT-OVERLAYED-IMAGE',
+          title: 'Electrician',
+          description:
+            'Stay on top of every electrical job with fast AI-powered quotes, organized workflows, and quicker customer response times.',
+          supportingText: {
+            title: 'Up to 2X Win Rate',
+            description: 'Better job tracking and faster business growth',
+          },
+          image: {
+            type: 'IMG',
+            src: '/images/electrician2.jpg',
+            alt: 'electrician checking electrial panel',
+          },
+        },
+      ],
+    },
   ],
 };

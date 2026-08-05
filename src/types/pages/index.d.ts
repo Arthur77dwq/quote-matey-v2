@@ -23,6 +23,7 @@ export interface SectionType {
   VIDEODEMO: 'VIDEODEMO';
   PLATFORM: 'PLATFORM';
   WORKING: 'WORKING';
+  USECASES: 'USECASES';
 }
 
 export type VideoType = {
@@ -266,6 +267,24 @@ export type WORKING = {
   cards: WorkingCard[];
 };
 
+export type USECASESCard = {
+  id: string;
+  type: 'IMAGE' | 'TEXT-OVERLAYED-IMAGE';
+  image: ImageType;
+  title?: string;
+  description?: string;
+  supportingText?: SupportText;
+};
+
+export type USECASES = {
+  type: SectionType.USECASES;
+  visible: boolean;
+  tag?: string;
+  title?: RichTextNode[];
+  className?: string;
+  cards: USECASESCard[];
+};
+
 export type Section =
   | HERO
   | LANDINGHERO
@@ -273,6 +292,7 @@ export type Section =
   | PRODUCT
   | PLATFORM
   | WORKING
+  | USECASES
   | QNA
   | CTA
   | CONTACTFORM

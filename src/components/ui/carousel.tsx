@@ -124,7 +124,7 @@ function Carousel({
       }}
     >
       <div
-        ref={carouselRef}
+        // ref={carouselRef}
         onKeyDownCapture={handleKeyDown}
         className={cn('relative overflow-hidden', className)}
         role="region"
