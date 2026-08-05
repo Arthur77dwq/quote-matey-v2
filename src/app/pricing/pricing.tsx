@@ -4,8 +4,8 @@ import { HeroSection } from '@/components/HeroSection';
 import { QNASection } from '@/components/QNASection';
 import { HERO, PRICING, QNA, Section, TESTIMONIAL } from '@/types/pages';
 
+import { Testimonial } from '../../components/testimonialSection';
 import { PricingSection } from './components/pricingSection';
-import { Testimonial } from './components/testimonialSection';
 
 export function Pricing({ sections }: { sections: Section[] }) {
   return (

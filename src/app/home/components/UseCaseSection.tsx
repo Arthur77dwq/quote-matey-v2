@@ -39,18 +39,20 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
     if (!trackRef.current) return;
 
     const ctx = gsap.context(() => {
-      tweenRef.current = gsap.to(trackRef.current!, {
-        x: () => -(trackRef.current!.scrollWidth / 5),
-        duration: 25,
-        ease: 'none',
-        repeat: -1,
-      });
+      if (!isMobile) {
+        tweenRef.current = gsap.to(trackRef.current!, {
+          x: () => -(trackRef.current!.scrollWidth / 5),
+          duration: 25,
+          ease: 'none',
+          repeat: -1,
+        });
+      }
     }, trackRef);
 
     return () => {
       ctx.revert();
     };
-  }, []);
+  }, [isMobile]);
   return (
     <section
       ref={sectionRef}
@@ -85,6 +87,18 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                       className="max-w-95 max-h-69.75 sm:max-h-105 aspect-95/105 w-95 h-69.75 sm:h-105 overflow-hidden p-0 border-0 rounded-none shadow-none"
                     >
                       <CardContent className="relative flex items-center justify-center w-full h-full rounded-[0.625rem] sm:rounded-[1.875rem] p-2.5 overflow-hidden">
+                        {card.image.src && (
+                          <div className="absolute inset-0 z-0">
+                            <Image
+                              src={card.image.src}
+                              alt={card.image.alt}
+                              width={380}
+                              height={279}
+                              sizes="(max-width: 640px) 100vw, 380px"
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
                         {card.type === 'TEXT-OVERLAYED-IMAGE' && (
                           <div
                             className="
@@ -116,17 +130,6 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                                 {card.supportingText?.description}
                               </p>
                             </div>
-                          </div>
-                        )}
-                        {card.image.src && (
-                          <div className="absolute inset-0">
-                            <Image
-                              src={card.image.src}
-                              alt={card.image.alt}
-                              width={380}
-                              height={isMobile ? 279 : 420}
-                              className="object-cover"
-                            />
                           </div>
                         )}
                       </CardContent>
@@ -138,23 +141,33 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
 
         {!isMobile && (
           <div
-            onMouseEnter={() => isMobile && handleMouseEnter()}
-            onMouseLeave={() => isMobile && handleMouseLeave}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             ref={trackRef}
             className="w-max h-105 flex justify-between items-center gap-2.5 pl-5"
           >
             {props.cards.length &&
-              props.cards.map(
-                (card, index) =>
-                  !(card.type === 'IMAGE' && isMobile) && (
-                    <Card
-                      key={index}
-                      className="max-w-95 max-h-69.75 sm:max-h-105 aspect-95/105 w-95 h-69.75 sm:h-105 overflow-hidden p-0 border-0 rounded-none shadow-none"
-                    >
-                      <CardContent className="relative flex items-center justify-center w-full h-full rounded-[0.625rem] sm:rounded-[1.875rem] p-2.5 overflow-hidden">
-                        {card.type === 'TEXT-OVERLAYED-IMAGE' && (
-                          <div
-                            className="
+              props.cards.map((card, index) => (
+                <Card
+                  key={index}
+                  className="max-w-95 max-h-69.75 sm:max-h-105 aspect-95/105 w-95 h-69.75 sm:h-105 overflow-hidden p-0 border-0 rounded-none shadow-none"
+                >
+                  <CardContent className="relative flex items-center justify-center w-full h-full rounded-[0.625rem] sm:rounded-[1.875rem] p-2.5 overflow-hidden">
+                    {card.image.src && (
+                      <div className="absolute inset-0 -z-10">
+                        <Image
+                          src={card.image.src}
+                          alt={card.image.alt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 380px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+
+                    {card.type === 'TEXT-OVERLAYED-IMAGE' && (
+                      <div
+                        className="
                         z-10
                         w-full
                         h-full
@@ -166,40 +179,28 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                         p-7.5 
                         flex flex-col justify-between items-center
                         "
-                          >
-                            <div className="w-full flex flex-col text-balance gap-1.5 p-0 sm:pb-7.5">
-                              <h3 className="text-heading-5 text-neutral-900 font-semibold leading-[1.2em]">
-                                {card.title}
-                              </h3>
-                              <p className="text-body-md font-medium font-inter text-neutral-600 leading-[1.3em]">
-                                {card.description}
-                              </p>
-                            </div>
-                            <div className="w-full flex flex-col text-balance gap-1.5">
-                              <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
-                                {card.supportingText?.title}
-                              </h4>
-                              <p className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]">
-                                {card.supportingText?.description}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                        {card.image.src && (
-                          <div className="absolute inset-0">
-                            <Image
-                              src={card.image.src}
-                              alt={card.image.alt}
-                              width={380}
-                              height={isMobile ? 279 : 420}
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ),
-              )}
+                      >
+                        <div className="w-full flex flex-col text-balance gap-1.5 p-0 sm:pb-7.5">
+                          <h3 className="text-heading-5 text-neutral-900 font-semibold leading-[1.2em]">
+                            {card.title}
+                          </h3>
+                          <p className="text-body-md font-medium font-inter text-neutral-600 leading-[1.3em]">
+                            {card.description}
+                          </p>
+                        </div>
+                        <div className="w-full flex flex-col text-balance gap-1.5">
+                          <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
+                            {card.supportingText?.title}
+                          </h4>
+                          <p className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]">
+                            {card.supportingText?.description}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         )}
       </div>

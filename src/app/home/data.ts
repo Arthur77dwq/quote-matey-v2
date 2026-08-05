@@ -552,5 +552,85 @@ export const DATA: DataType = {
         },
       ],
     },
+    {
+      type: 'TESTIMONIAL',
+      variant: 'secondary',
+      visible: true,
+      BGImage: { type: 'IMG', src: '/images/lawn.jpg', alt: '' },
+      title: ' What tradies say about the platform',
+      rating: '4.8/5 Rating',
+      testimonials: [
+        {
+          rating: 5,
+          comment:
+            'Saved me hours every week. I just upload photos from the job site and QuoteMatey builds the quote instantly.',
+          user: {
+            image: {
+              type: 'IMG',
+              src: 'images/plumber2.png',
+              alt: '',
+            },
+            name: 'Jake Thompson',
+            trade: 'Project Manager',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'The AI labour estimates are surprisingly accurate. Makes quoting electrical jobs way faster.',
+          user: {
+            image: {
+              type: 'IMG',
+              src: 'images/electrician.webp',
+              alt: '',
+            },
+            name: 'Liam Carter',
+            trade: 'Electrician',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'Love the templates and customer-ready formatting. Clients think I spent ages making the quotes.',
+          user: {
+            image: {
+              type: 'IMG',
+              src: 'images/mowingLawn.jpg',
+              alt: '',
+            },
+            name: 'Ethan Walker',
+            trade: 'Land Scraper',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'Super clean dashboard and easy to edit quotes. Helped me send professional quotes much quicker.',
+          user: {
+            image: {
+              type: 'IMG',
+              src: 'images/project-managers.webp',
+              alt: '',
+            },
+            name: 'Mason Hughes',
+            trade: 'Project Manager',
+          },
+        },
+        {
+          rating: 5,
+          comment:
+            'Best quoting software I’ve used so far. The image upload feature is a game changer for site inspections.',
+          user: {
+            image: {
+              type: 'IMG',
+              src: 'images/HVACTechnician.jpg',
+              alt: '',
+            },
+            name: 'Noah Bennett',
+            trade: 'HVAC Technician',
+          },
+        },
+      ],
+    },
   ],
 };
