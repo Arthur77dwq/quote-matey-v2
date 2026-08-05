@@ -142,6 +142,7 @@ export type UserTestimonial = {
 };
 
 export type TESTIMONIAL = {
+  variant?: 'primary' | 'secondary';
   type: SectionType.TESTIMONIAL;
   visible: boolean;
   BGImage: ImageType;

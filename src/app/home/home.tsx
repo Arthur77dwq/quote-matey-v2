@@ -2,6 +2,7 @@
 import { Suspense } from 'react';
 
 import { AuthScreen } from '@/components/auth-screen';
+import { Testimonial } from '@/components/testimonialSection';
 // import { BeforeAfter } from '@/components/before-after';
 // import { Benefits } from '@/components/benefits';
 // import { CTASection } from '@/components/cta-section';
@@ -15,6 +16,7 @@ import {
   PLATFORM,
   PRODUCT,
   Section,
+  TESTIMONIAL,
   USECASES,
   VIDEODEMO,
   WORKING,
@@ -42,7 +44,7 @@ export default function Home({ sections }: { sections: Section[] }) {
       <PlatformSection {...(sections[3] as PLATFORM)} />
       <WorkingSection {...(sections[4] as WORKING)} />
       <UseCaseSection {...(sections[5] as USECASES)} />
-      {/* <Testimonial {...sections[6]} /> */}
+      <Testimonial {...(sections[6] as TESTIMONIAL)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
