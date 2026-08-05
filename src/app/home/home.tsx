@@ -15,6 +15,7 @@ import {
   PLATFORM,
   PRODUCT,
   Section,
+  USECASES,
   VIDEODEMO,
   WORKING,
 } from '@/types/pages';
@@ -22,6 +23,7 @@ import {
 import { HeroSection } from './components/HeroSection';
 import { PlatformSection } from './components/PlatformSection';
 import { ProductSection } from './components/ProductSection';
+import { UseCaseSection } from './components/UseCaseSection';
 import { VideoDemoSection } from './components/VideoDemoSection';
 import { WorkingSection } from './components/WorkingSection';
 
@@ -39,6 +41,7 @@ export default function Home({ sections }: { sections: Section[] }) {
       />
       <PlatformSection {...(sections[3] as PLATFORM)} />
       <WorkingSection {...(sections[4] as WORKING)} />
+      <UseCaseSection {...(sections[5] as USECASES)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
