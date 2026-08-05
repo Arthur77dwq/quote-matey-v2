@@ -2,6 +2,7 @@
 import { Suspense } from 'react';
 
 import { AuthScreen } from '@/components/auth-screen';
+import { QNASection } from '@/components/QNASection';
 import { Title } from '@/components/section-header';
 import { Testimonial } from '@/components/testimonialSection';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,7 @@ import {
   PLATFORM,
   PRICING,
   PRODUCT,
+  QNA,
   Section,
   TESTIMONIAL,
   USECASES,
@@ -68,6 +70,7 @@ export default function Home({ sections }: { sections: Section[] }) {
 
         <PricingSection {...(sections[7] as PRICING)} />
       </section>
+      <QNASection {...(sections[8] as QNA)} />
       {/* <SocialProofBar /> */}
       {/* <HowItWorks /> */}
       {/* <VideoSection /> */}
