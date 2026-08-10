@@ -23,6 +23,10 @@ export const emailSchema = z
   .min(1, 'Email required')
   .email('Enter valid email');
 
+export const tncSchema = z.boolean().refine((value) => value === true, {
+  message: 'You must accept the terms and privacy policy',
+});
+
 export const phoneSchema = z
   .string()
   .trim()

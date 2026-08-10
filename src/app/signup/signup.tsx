@@ -1,9 +1,8 @@
-'use client';
 import { AuthFormSection } from '@/components/auth-form';
 import { AuthHeroSection } from '@/components/auth-hero';
 import { AUTHSCREEN, Section } from '@/types/pages';
 
-export default function LoginPage({ sections }: { sections: Section[] }) {
+export default function SignupPage({ sections }: { sections: Section[] }) {
   const { form, info } = sections[0] as AUTHSCREEN;
 
   return (

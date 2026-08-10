@@ -2,16 +2,16 @@ import { DataType } from '@/types/pages';
 
 export const DATA: DataType = {
   metadata: {
-    title: 'Login',
-    description: `Login to generate Quotes faster using QuoteMatey.`,
-    path: '/login',
+    title: 'Sign Up',
+    description: `Signup to generate Quotes faster using QuoteMatey.`,
+    path: '/signup',
   },
   sections: [
     {
       type: 'AUTHSCREEN',
       visible: true,
       form: {
-        type: 'login',
+        type: 'signup',
         onSuccess: '/chat',
         top: {
           icon: {
@@ -27,19 +27,19 @@ export const DATA: DataType = {
             {
               id: '1',
               type: 'text',
-              text: 'Welcome',
+              text: 'Create your account and ',
               bold: true,
               weight: 'bold',
             },
             {
               id: '2',
               type: 'text',
-              text: ' back',
+              text: ' quote faster.',
               strong: true,
             },
           ],
           description:
-            'Login to access your quotes, templates and AI assistant.',
+            'Join thousands of tradies using AI to send professional quotes in seconds.',
           logo: {
             type: 'IMG',
             src: '/quotematey-hor-with-out-subtitle.png',
@@ -64,7 +64,49 @@ export const DATA: DataType = {
               id: '1',
               name: 'password',
               type: 'password',
-              placeholder: 'Password',
+              placeholder: 'Create password',
+              info: 'Password must be at least 8 characters ',
+              icon: {
+                type: 'ICON',
+                active: true,
+                position: 'left',
+                icon: 'LockKeyhole',
+              },
+            },
+            {
+              id: '2',
+              name: 'tnc',
+              type: 'checkbox',
+              label: [
+                {
+                  id: '0',
+                  type: 'text',
+                  text: 'I agree to the',
+                },
+                {
+                  id: '1',
+                  type: 'link',
+                  href: '/terms',
+                  text: ' Terms',
+                  bold: true,
+                  weight: 'semibold',
+                  strong: true,
+                },
+                {
+                  id: '2',
+                  type: 'text',
+                  text: ' & ',
+                },
+                {
+                  id: '3',
+                  type: 'link',
+                  href: '/legal-pages/privacy-policy',
+                  text: ' Privacy Policy',
+                  bold: true,
+                  weight: 'semibold',
+                  strong: true,
+                },
+              ],
               icon: {
                 type: 'ICON',
                 active: true,
@@ -73,28 +115,20 @@ export const DATA: DataType = {
               },
             },
           ],
-          links: [
-            {
-              id: '0',
-              href: '/reset-password',
-              target: '_self',
-              text: 'Forgot password?',
-              active: true,
-            },
-          ],
+          links: [],
         },
         footer: {
           text: [
             {
               id: '0',
               type: 'text',
-              text: 'Don’t have an account?',
+              text: 'Already have an account?',
             },
             {
               id: '1',
               type: 'link',
-              href: '/signup',
-              text: ' Sign up now',
+              href: '/login',
+              text: ' Login',
               bold: true,
               weight: 'semibold',
               strong: true,
@@ -105,9 +139,9 @@ export const DATA: DataType = {
               id: 0,
               type: 'submit',
               variant: 'primary',
-              action: 'authCustomLogin',
+              action: 'authCustomSignup',
               link: null,
-              text: 'Login',
+              text: 'Create Free Account',
               icon: null,
             },
             { id: 1, type: 'separator', text: 'or', active: true },
@@ -116,7 +150,7 @@ export const DATA: DataType = {
               variant: 'outline',
               action: 'authWithPopUp',
               link: null,
-              text: 'Continue with Google',
+              text: 'Sign up with Google',
               icon: {
                 type: 'ICON',
                 active: true,

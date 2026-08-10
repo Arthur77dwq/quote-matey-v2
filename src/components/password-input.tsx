@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 
+import { cn } from '@/lib/utils';
 import { FormField } from '@/types/pages';
 
 import { Icon } from './icon';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 
 type PasswordProps<T extends FieldValues> = {
+  className?: string;
   input: FormField<T>;
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
 };
 
 export function Password<T extends FieldValues>({
+  className,
   input,
   register,
   errors,
@@ -25,41 +28,43 @@ export function Password<T extends FieldValues>({
   };
 
   return (
-    <div className="grid gap-2">
-      <InputGroup className="min-h-13 rounded-[0.58rem] border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">
-        <InputGroupInput
-          {...register(input.name)}
-          name={input.name}
-          type={show ? 'text' : input.type}
-          className="text-md font-medium"
-          placeholder={input.placeholder}
-        />
-        {input.icon?.active && (
-          <InputGroupAddon>
-            <Icon name={input.icon?.icon || ''} />
-          </InputGroupAddon>
-        )}
-        <InputGroupAddon align="inline-end">
-          {show ? (
-            <Icon
-              name="Eye"
-              className="cursor-pointer"
-              onMouseEnter={toggleShowPassword}
-              onMouseLeave={toggleShowPassword}
-            />
-          ) : (
-            <Icon
-              name="EyeClosed"
-              className="cursor-pointer"
-              onMouseEnter={toggleShowPassword}
-              onMouseLeave={toggleShowPassword}
-            />
+    input.type === 'password' && (
+      <div className={cn('grid gap-2', className)}>
+        <InputGroup className="min-h-13 rounded-[0.58rem] border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">
+          <InputGroupInput
+            {...register(input.name)}
+            name={input.name}
+            type={show ? 'text' : input.type}
+            className="text-md font-medium"
+            placeholder={input.placeholder}
+          />
+          {input.icon?.active && (
+            <InputGroupAddon>
+              <Icon name={input.icon?.icon || ''} />
+            </InputGroupAddon>
           )}
-        </InputGroupAddon>
-      </InputGroup>
-      {error?.message && (
-        <p className="text-red-500 text-xs">{String(error.message)}</p>
-      )}
-    </div>
+          <InputGroupAddon align="inline-end">
+            {show ? (
+              <Icon
+                name="Eye"
+                className="cursor-pointer"
+                onMouseEnter={toggleShowPassword}
+                onMouseLeave={toggleShowPassword}
+              />
+            ) : (
+              <Icon
+                name="EyeClosed"
+                className="cursor-pointer"
+                onMouseEnter={toggleShowPassword}
+                onMouseLeave={toggleShowPassword}
+              />
+            )}
+          </InputGroupAddon>
+        </InputGroup>
+        {error?.message && (
+          <p className="text-red-500 text-xs">{String(error.message)}</p>
+        )}
+      </div>
+    )
   );
 }

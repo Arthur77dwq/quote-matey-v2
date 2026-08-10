@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { emailSchema, nameSchema, passwordSchema } from './base.schema';
+import { emailSchema, passwordSchema, tncSchema } from './base.schema';
 
 export const loginSchema = z.object({
   email: emailSchema,
@@ -8,8 +8,8 @@ export const loginSchema = z.object({
 });
 
 export const signUpSchema = z.object({
+  tnc: tncSchema,
   email: emailSchema,
-  name: nameSchema,
   password: passwordSchema,
 });
 

@@ -1,4 +1,4 @@
-import { Path } from 'react-hook-form';
+import { FieldValues, Path } from 'react-hook-form';
 import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
@@ -305,13 +305,20 @@ export type AUTHHead = {
   logo?: ImageType;
 };
 
-export type FormField<T extends FieldValues> = {
-  id: string;
-  name: Path<T>;
-  type: string;
-  placeholder: string;
-  icon?: IconType;
-};
+export type FormField<T extends FieldValues> =
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'password' | 'email';
+      placeholder: string;
+      icon?: IconType;
+    }
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'checkbox';
+      label: RichTextNode[];
+    };
 
 export type AUTHBody = {
   inputs: FormField[];
@@ -326,10 +333,11 @@ export type Separator = {
 };
 
 export type AUTHFoot = {
+  tnc?: RichTextNode[];
   buttons: (
     | ({
         type?: 'submit';
-        action: 'authWithPopUp' | 'authCustomLogin';
+        action: 'authWithPopUp' | 'authCustomLogin' | 'authCustomSignup';
       } & Button)
     | Separator
   )[];
@@ -337,6 +345,8 @@ export type AUTHFoot = {
 };
 
 export type AUTHForm = {
+  type: 'signup' | 'login';
+  onSuccess: string;
   top?: {
     icon: IconType;
     text: string;

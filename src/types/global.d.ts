@@ -26,7 +26,6 @@ export type AuthContextType = {
     password: string,
   ) => Promise<UserCredential | undefined>;
   signUp: (
-    name: string,
     email: string,
     password: string,
   ) => Promise<UserCredential | undefined>;

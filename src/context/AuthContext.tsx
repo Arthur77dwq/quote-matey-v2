@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
-  updateProfile,
   type User as FirebaseUser,
 } from 'firebase/auth';
 import {
@@ -119,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (name: string, email: string, password: string) => {
+  const signUp = async (email: string, password: string) => {
     try {
       setLoading(true);
 
@@ -131,10 +130,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         password,
       );
-
-      await updateProfile(userCredential.user, {
-        displayName: name,
-      });
 
       await sendEmailVerification(userCredential.user);
     } catch (error: unknown) {
