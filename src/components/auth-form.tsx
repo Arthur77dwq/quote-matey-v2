@@ -12,10 +12,10 @@ import { cn } from '@/lib/utils';
 import { loginFormData } from '@/types/global';
 import { AUTHFoot, AUTHForm, AUTHHead } from '@/types/pages';
 
-import { Button } from './button';
 import { Input } from './form-input';
 import { Icon } from './icon';
 import { Description, Title } from './section-header';
+import { Button } from './ui/button';
 
 export const FormHead = ({ logo, title, description }: AUTHHead) => (
   <div className="w-full h-fit flex flex-col gap-2">
