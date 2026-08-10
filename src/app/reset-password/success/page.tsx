@@ -3,7 +3,6 @@ import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import Achievemnet from '@/components/achievement';
 import { OverlayBg } from '@/components/overlay-bg';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
@@ -28,8 +27,6 @@ export default function SuccessResetPasswordPage() {
       ) : null}
 
       <div className="min-h-screen bg-[#0a1628] p-10 lg:p-0 flex flex-col lg:flex-row items-center lg:items-stretch">
-        <Achievemnet />
-
         <div className="w-fit lg:w-full lg:max-w-xl bg-white lg:flex items-center justify-center px-8 py-16 rounded-xl lg:rounded-none shadow-lg shadow-white/50 lg:shadow-none">
           <div className="w-full max-w-md">
             <div className="mb-8 flex flex-col items-center lg:items-start">
