@@ -6,6 +6,8 @@ import {
   signUpSchema,
 } from '@/lib/schemas/auth.schema';
 
+import { AUTHForm } from './pages';
+
 export type User = {
   uid: string;
   email: string;
@@ -165,6 +167,8 @@ export type resetFormData = z.infer<typeof resetSchema>;
 export type GlobalData = {
   brand: BrandType;
   metadata?: GlobalMetaDataType | null;
+
+  authDialog: AUTHForm;
   headers?: headers | null;
   footer?: footer | null;
 };

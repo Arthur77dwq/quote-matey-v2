@@ -345,11 +345,12 @@ export type AUTHFoot = {
 };
 
 export type AUTHForm = {
+  variant?: 'primary' | 'secondary';
   type: 'signup' | 'login';
   onSuccess: string;
   top?: {
     icon: IconType;
-    text: string;
+    text?: string;
   };
   header?: AUTHHead;
   body?: AUTHBody;

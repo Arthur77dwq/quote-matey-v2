@@ -17,14 +17,19 @@ import { Icon } from './icon';
 import { Description, Title } from './section-header';
 import { Button } from './ui/button';
 
-export const FormHead = ({ logo, title, description }: AUTHHead) => (
-  <div className="w-full h-fit flex flex-col gap-2">
+export const FormHead = ({
+  logo,
+  title,
+  description,
+  className,
+}: AUTHHead & { className?: string }) => (
+  <div className={cn('w-full h-fit flex flex-col gap-2', className)}>
     {logo?.src && (
       <Image src={logo?.src} alt={logo.alt} width={150} height={80} />
     )}
     {title && (
       <Title
-        className="w-full font-inter text-left sm:whitespace-nowrap lg:whitespace-normal leading-10 text-[2.125rem]!"
+        className="w-fit font-inter text-left sm:whitespace-nowrap lg:whitespace-normal leading-10 text-[2.125rem]!"
         title={title}
       />
     )}
@@ -87,6 +92,7 @@ export function AuthFormSection({
   header,
   body,
   footer,
+  variant = 'primary',
   className,
 }: AUTHForm & { className?: string }) {
   const { error, user, signIn, signUp } = useAuth();
@@ -122,7 +128,12 @@ export function AuthFormSection({
     >
       <Button
         onClick={() => router.back()}
-        className="absolute top-3 right-3 flex w-20 h-10 items-center justify-center rounded-[0.56rem] shadow-sm text-neutral-900 cursor-pointer"
+        className={cn(
+          'absolute top-3 right-3 flex w-fit h-fit items-center justify-center rounded-[0.56rem] shadow-sm text-neutral-900 cursor-pointer',
+          top?.text
+            ? ''
+            : 'rounded-full bg-neutral-200/50 size-6 p-3 hover:bg-neutral-200',
+        )}
       >
         {top?.icon.active && (
           <Icon
@@ -130,11 +141,22 @@ export function AuthFormSection({
             className="size-6 text-neutral-900"
           />
         )}
-        <span className="font-medium font-inter">{top?.text}</span>
+        {top?.text && (
+          <span className="font-medium font-inter">{top?.text}</span>
+        )}
       </Button>
 
       <div className="w-full h-full px-0 py-8 sm:p-10 flex flex-col justify-between">
-        {header && <FormHead {...header} />}
+        {header && (
+          <FormHead
+            className={cn(
+              variant === 'secondary'
+                ? 'flex flex-col justify-center items-center text-center'
+                : '',
+            )}
+            {...header}
+          />
+        )}
 
         <form
           onSubmit={handleSubmit(onSubmit)}
