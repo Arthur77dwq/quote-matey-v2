@@ -447,9 +447,9 @@ export type RichTextNode = {
   href?: string;
   items?: Item[];
   link?: LINK;
-  active: boolean;
+  active?: boolean;
   stroke?: string | undefined;
-  position: 'center' | 'left' | 'right';
+  position?: 'center' | 'left' | 'right';
   icon?: string | null | undefined;
   color?: string | undefined;
 };
