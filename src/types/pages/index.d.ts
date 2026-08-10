@@ -1,8 +1,9 @@
+import { Path } from 'react-hook-form';
 import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button, IconType, ImageType, LINK, loginFormData } from '../global';
+import { Button, IconType, ImageType, LINK } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -304,9 +305,9 @@ export type AUTHHead = {
   logo?: ImageType;
 };
 
-export type FormField = {
+export type FormField<T extends FieldValues> = {
   id: string;
-  name: keyof loginFormData;
+  name: Path<T>;
   type: string;
   placeholder: string;
   icon?: IconType;
