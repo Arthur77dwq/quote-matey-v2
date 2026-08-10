@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
 
-import { Button, IconType, ImageType, LINK } from '../global';
+import { Button, IconType, ImageType, LINK, loginFormData } from '../global';
 
 export type MetaDataProps = {
   title: string;
@@ -25,6 +25,7 @@ export interface SectionType {
   WORKING: 'WORKING';
   USECASES: 'USECASES';
   LANDINGPRICING: 'LANDINGPRICING';
+  AUTHSCREEN: 'AUTHSCREEN';
 }
 
 export type VideoType = {
@@ -297,7 +298,83 @@ export type USECASES = {
   cards: USECASESCard[];
 };
 
+export type AUTHHead = {
+  title: RichTextNode[];
+  description: string;
+  logo?: ImageType;
+};
+
+export type FormField = {
+  id: string;
+  name: keyof loginFormData;
+  type: string;
+  placeholder: string;
+  icon?: IconType;
+};
+
+export type AUTHBody = {
+  inputs: FormField[];
+  links: ({ id: string } & LINK)[];
+};
+
+export type Separator = {
+  id: number;
+  type: 'separator';
+  text?: string;
+  active: boolean;
+};
+
+export type AUTHFoot = {
+  buttons: (
+    | ({
+        type?: 'submit';
+        action: 'authWithPopUp' | 'authCustomLogin';
+      } & Button)
+    | Separator
+  )[];
+  text?: RichTextNode[];
+};
+
+export type AUTHForm = {
+  top?: {
+    icon: IconType;
+    text: string;
+  };
+  header?: AUTHHead;
+  body?: AUTHBody;
+  footer?: AUTHFoot;
+};
+
+export type CARDType = {
+  variant: 'primary' | 'secondary';
+  id: string;
+  icon?: IconType;
+  title: (RichTextNode | ({ id: string } & IconType))[];
+  description: string;
+};
+
+export type AUTHINFO = {
+  image?: ImageType;
+  topCard?: CARDType;
+  bottom: CARDType[];
+  achievement: {
+    title: string;
+    users: ImageType[];
+    ratingText: string;
+    star: number;
+  };
+};
+
+export type AUTHSCREEN = {
+  type: SectionType.AUTHSCREEN;
+  visible: boolean;
+  className?: string;
+  form: AUTHForm;
+  info: AUTHINFO;
+};
+
 export type Section =
+  | AUTHSCREEN
   | HERO
   | LANDINGHERO
   | VIDEODEMO
@@ -352,21 +429,23 @@ export type TextNodeType =
 
 export type Item = { text?: string; type: TextNodeType; link?: LINK };
 
-export type RichTextNode = {
-  level?: number;
-  id: string;
-  text?: string;
-  type: TextNodeType;
-  bold?: boolean;
-  weight?: fontWeight;
-  italic?: boolean;
-  strong?: boolean;
-  underline?: boolean;
-  strike?: boolean;
-  code?: boolean;
-  href?: string;
-  items?: Item[];
-  link?: LINK;
-};
+export type RichTextNode =
+  | {
+      level?: number;
+      id: string;
+      text?: string;
+      type: TextNodeType;
+      bold?: boolean;
+      weight?: fontWeight;
+      italic?: boolean;
+      strong?: boolean;
+      underline?: boolean;
+      strike?: boolean;
+      code?: boolean;
+      href?: string;
+      items?: Item[];
+      link?: LINK;
+    }
+  | IconType;
 
 export type contactFormData = z.infer<typeof contactSchema>;

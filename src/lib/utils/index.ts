@@ -57,7 +57,7 @@ export const styleParse = (node: RichTextNode) => {
     black: 'font-black',
   } as const;
 
-  if (node.type !== 'lineBreak')
+  if (node.type !== 'lineBreak' && node.type !== 'ICON')
     return cn(
       node?.bold && weightClass[node.weight ?? 'normal'],
       node?.strong && 'text-warning-600',

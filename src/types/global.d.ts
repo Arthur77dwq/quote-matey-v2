@@ -100,6 +100,7 @@ export type FooterType = 'GLOBAL_FOOTER';
 export type IconType = {
   type: 'ICON';
   active: boolean;
+  stroke?: string;
   position: 'left' | 'center' | 'right';
   icon?: string | null;
   color?: string;
