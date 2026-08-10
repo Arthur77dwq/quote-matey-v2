@@ -307,7 +307,7 @@ export function AuthFormSection({
 
   useEffect(() => {
     if (user) {
-      router.replace('/');
+      router.replace('/chat');
     }
   }, [user, router]);
   const {
@@ -323,7 +323,12 @@ export function AuthFormSection({
   };
 
   return (
-    <div className={cn('lg:w-2/5 h-full bg-[#FEFEFE]', className)}>
+    <div
+      className={cn(
+        'lg:relative lg:top-0 lg:w-2/5 lg:h-full bg-[#FEFEFE]',
+        className,
+      )}
+    >
       <Button
         onClick={() => router.back()}
         className="absolute top-3 right-3 flex w-20 h-10 items-center justify-center rounded-[0.56rem] shadow-sm text-neutral-900 cursor-pointer"
@@ -426,7 +431,7 @@ export default function LoginPage({ sections }: { sections: Section[] }) {
     <section className="relative flex justify-center items-center w-full h-screen">
       <AuthFormSection
         {...form}
-        className="static sm:absolute lg:static z-20 w-full sm:w-fit h-full sm:h-fit p-3 sm:p-0 top-70 shadow-none sm:shadow-xl/30 md:shadow-none rounded-none sm:rounded-2xl"
+        className="static sm:absolute z-20 w-full sm:w-fit h-full sm:h-fit p-3 sm:p-0 top-70 shadow-none sm:shadow-xl/30 lg:shadow-none rounded-none sm:rounded-t-2xl"
       />
       <AuthHeroSection {...info} className="hidden sm:block w-full" />
     </section>

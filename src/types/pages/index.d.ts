@@ -419,33 +419,39 @@ export type fontWeight =
   | 'extrabold'
   | 'black';
 
+export type IconNodeType = 'ICON';
+
 export type TextNodeType =
   | 'lineBreak'
   | 'text'
   | 'HEADING'
   | 'ul'
   | 'li'
-  | 'link';
+  | 'link'
+  | IconNodeType;
 
 export type Item = { text?: string; type: TextNodeType; link?: LINK };
 
-export type RichTextNode =
-  | {
-      level?: number;
-      id: string;
-      text?: string;
-      type: TextNodeType;
-      bold?: boolean;
-      weight?: fontWeight;
-      italic?: boolean;
-      strong?: boolean;
-      underline?: boolean;
-      strike?: boolean;
-      code?: boolean;
-      href?: string;
-      items?: Item[];
-      link?: LINK;
-    }
-  | IconType;
+export type RichTextNode = {
+  level?: number;
+  id: string;
+  text?: string;
+  type: TextNodeType;
+  bold?: boolean;
+  weight?: fontWeight;
+  italic?: boolean;
+  strong?: boolean;
+  underline?: boolean;
+  strike?: boolean;
+  code?: boolean;
+  href?: string;
+  items?: Item[];
+  link?: LINK;
+  active: boolean;
+  stroke?: string | undefined;
+  position: 'center' | 'left' | 'right';
+  icon?: string | null | undefined;
+  color?: string | undefined;
+};
 
 export type contactFormData = z.infer<typeof contactSchema>;
