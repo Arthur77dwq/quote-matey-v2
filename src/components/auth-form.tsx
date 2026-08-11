@@ -37,7 +37,9 @@ export const FormHead = ({
         title={title}
       />
     )}
-    {description && <p className="w-full">{description}</p>}
+    {description && !Array.isArray(description) && (
+      <p className="w-full">{description}</p>
+    )}
   </div>
 );
 
