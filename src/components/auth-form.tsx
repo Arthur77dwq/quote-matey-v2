@@ -166,7 +166,7 @@ export function AuthFormSection({
         )}
       </Button>
 
-      <div className="w-full h-fit sm:h-full gap-12.5 sm:gap-0 px-0 py-8 sm:p-10 flex flex-col justify-between">
+      <div className="w-full h-fit gap-12.5  px-0 py-8 sm:p-10 flex flex-col justify-between">
         {header && (
           <FormHead
             className={cn(
