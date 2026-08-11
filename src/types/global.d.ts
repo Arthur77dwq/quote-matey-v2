@@ -6,7 +6,7 @@ import {
   signUpSchema,
 } from '@/lib/schemas/auth.schema';
 
-import { AUTHForm } from './pages';
+import { AUTHForm, RichTextNode } from './pages';
 
 export type User = {
   uid: string;
@@ -171,4 +171,11 @@ export type GlobalData = {
   authDialog: AUTHForm;
   headers?: headers | null;
   footer?: footer | null;
+  notFound: {
+    tag?: string;
+    title: RichTextNode[];
+    subTitle: string;
+    description: string;
+    buttons: Button[];
+  };
 };
