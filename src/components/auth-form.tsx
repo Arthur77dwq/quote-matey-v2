@@ -7,9 +7,13 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useAuth } from '@/context/AuthContext';
-import { loginSchema, signUpSchema } from '@/lib/schemas/auth.schema';
+import {
+  loginSchema,
+  resetSchema,
+  signUpSchema,
+} from '@/lib/schemas/auth.schema';
 import { cn } from '@/lib/utils';
-import { loginFormData, signUpFormData } from '@/types/global';
+import { loginFormData, resetFormData, signUpFormData } from '@/types/global';
 import { AUTHFoot, AUTHForm, AUTHHead } from '@/types/pages';
 
 import { Input } from './form-input';
@@ -95,34 +99,48 @@ export function AuthFormSection({
   variant = 'primary',
   className,
 }: AUTHForm & { className?: string }) {
-  const { error, user, signIn, signUp } = useAuth();
+  const { error, user, signIn, signUp, resetPassword } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      router.replace(onSuccess);
-    }
-  }, [user, router, onSuccess]);
+  const resolverScheme = () => {
+    if (type === 'login') return loginSchema;
+    if (type === 'reset-password') return resetSchema;
+    return signUpSchema;
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<loginFormData | signUpFormData>({
-    resolver: zodResolver(type === 'login' ? loginSchema : signUpSchema),
+  } = useForm<loginFormData | signUpFormData | resetFormData>({
+    resolver: zodResolver(resolverScheme()),
   });
 
-  const onSubmit = async (data: loginFormData | signUpFormData) => {
-    if (type === 'signup') {
+  const onSubmit = async (
+    data: loginFormData | signUpFormData | resetFormData,
+  ) => {
+    if (data.type === 'reset-password') {
+      await resetPassword(data.email);
+      router.push(
+        `${onSuccess}?email=${encodeURIComponent(data?.email || '')}`,
+      );
+    } else if (data.type === 'signup') {
       await signUp(data.email, data.password);
-    } else {
+    } else if (data.type === 'login') {
       await signIn(data.email, data.password);
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      router.push(onSuccess);
+    }
+  }, [user, router, onSuccess]);
+
   return (
     <div
       className={cn(
-        'lg:relative lg:top-0 lg:w-2/5 lg:h-full bg-[#FEFEFE]',
+        'lg:relative lg:top-0 lg:w-3/5 lg:h-full bg-[#FEFEFE]',
         className,
       )}
     >
@@ -146,7 +164,7 @@ export function AuthFormSection({
         )}
       </Button>
 
-      <div className="w-full h-full px-0 py-8 sm:p-10 flex flex-col justify-between">
+      <div className="w-full h-fit sm:h-full gap-12.5 sm:gap-0 px-0 py-8 sm:p-10 flex flex-col justify-between">
         {header && (
           <FormHead
             className={cn(
@@ -160,7 +178,7 @@ export function AuthFormSection({
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5 h-full w-full flex flex-col justify-between"
+          className="space-y-5 h-fit sm:h-full w-full flex flex-col justify-between"
         >
           <div className="flex flex-col justify-center gap-3 h-full w-full py-3 m-0">
             <div className="w-full flex flex-col justify-center items-center gap-3">

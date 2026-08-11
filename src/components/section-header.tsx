@@ -55,9 +55,11 @@ export function Title({
 export function Description({
   description,
   className,
+  children,
 }: {
-  description: RichTextNode[];
+  description: RichTextNode[] | string;
   className?: string;
+  children?: React.ReactNode;
 }) {
   return (
     <p
@@ -66,42 +68,51 @@ export function Description({
         className,
       )}
     >
-      {description?.map((node, i) => {
-        if (node.type === 'lineBreak') {
-          return <br className="hidden sm:static" key={i} />;
-        }
-        if (node.type === 'link') {
+      {!Array.isArray(description) && description}
+      {Array.isArray(description) &&
+        description?.map((node, i) => {
+          if (node.type === 'lineBreak') {
+            return <br className="hidden sm:static" key={i} />;
+          }
+          if (node.type === 'link') {
+            return (
+              node.href && (
+                <Link
+                  href={node.href}
+                  key={i}
+                  className={cn('inline hover:underline', styleParse(node))}
+                >
+                  {node.text}
+                </Link>
+              )
+            );
+          }
+          if (node.type === 'ICON') {
+            return (
+              node.active &&
+              node.icon && (
+                <Icon
+                  className="size-4"
+                  key={`${i}-${node.icon}`}
+                  name={node.icon}
+                  color={node.color}
+                />
+              )
+            );
+          }
+          if (node.type === 'children') {
+            return (
+              <span key={i} className={cn('inline', styleParse(node))}>
+                {children}
+              </span>
+            );
+          }
           return (
-            node.href && (
-              <Link
-                href={node.href}
-                key={i}
-                className={cn('inline hover:underline', styleParse(node))}
-              >
-                {node.text}
-              </Link>
-            )
+            <span key={i} className={cn('inline', styleParse(node))}>
+              {node.text}{' '}
+            </span>
           );
-        }
-        if (node.type === 'ICON') {
-          return (
-            node.active &&
-            node.icon && (
-              <Icon
-                className="size-4"
-                key={`${i}-${node.icon}`}
-                name={node.icon}
-                color={node.color}
-              />
-            )
-          );
-        }
-        return (
-          <span key={i} className={cn('inline', styleParse(node))}>
-            {node.text}{' '}
-          </span>
-        );
-      })}
+        })}
     </p>
   );
 }

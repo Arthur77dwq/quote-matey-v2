@@ -2,134 +2,100 @@ import { DataType } from '@/types/pages';
 
 export const DATA: DataType = {
   metadata: {
-    title: 'Login',
-    description: `Login to generate Quotes faster using QuoteMatey.`,
-    path: '/login',
+    title: 'Reset Password Success',
+    description: `Reset Password Success to generate Quotes faster using QuoteMatey.`,
+    path: '/reset-password/success',
   },
   sections: [
     {
       type: 'AUTHSCREEN',
       visible: true,
       form: {
-        type: 'login',
-        onSuccess: '/chat',
+        type: 'reset-password',
+        onSuccess: '/',
         top: {
           icon: {
-            active: true,
-            icon: 'ArrowLeft',
             type: 'ICON',
-            position: 'left',
+            active: true,
+            position: 'center',
+            icon: 'Mail',
           },
-          text: 'Back',
         },
         header: {
           title: [
             {
-              id: '1',
+              id: '0',
               type: 'text',
-              text: 'Welcome',
+              bold: true,
+              weight: 'light',
+              text: 'Check your email',
+            },
+          ],
+          description: [
+            {
+              id: '0',
+              type: 'text',
+              bold: true,
+              weight: 'light',
+              text: "We've sent a password reset link to ",
+            },
+            {
+              id: '1',
+              type: 'children',
               bold: true,
               weight: 'bold',
             },
             {
               id: '2',
               type: 'text',
-              text: ' back',
-              strong: true,
-            },
-          ],
-          description:
-            'Login to access your quotes, templates and AI assistant.',
-          logo: {
-            type: 'IMG',
-            src: '/quotematey-hor-with-out-subtitle.png',
-            alt: 'QuoteMatey Logo',
-          },
-        },
-        body: {
-          inputs: [
-            {
-              id: 'alpha',
-              name: 'type',
-              type: 'text',
-              className: 'hidden',
-              value: 'login',
-            },
-            {
-              id: '0',
-              name: 'email',
-              type: 'email',
-              placeholder: 'Email address',
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'Mail',
-              },
-            },
-            {
-              id: '1',
-              name: 'password',
-              type: 'password',
-              placeholder: 'Password',
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'LockKeyhole',
-              },
-            },
-          ],
-          links: [
-            {
-              id: '0',
-              href: '/reset-password',
-              target: '_self',
-              text: 'Forgot password?',
-              active: true,
+              bold: true,
+              weight: 'light',
+              text: '. Please check your inbox and follow the instructions to reset your password.',
             },
           ],
         },
         footer: {
-          text: [
-            {
-              id: '0',
-              type: 'text',
-              text: 'Don’t have an account?',
-            },
-            {
-              id: '1',
-              type: 'link',
-              href: '/signup',
-              text: ' Sign up now',
-              bold: true,
-              weight: 'semibold',
-              strong: true,
-            },
-          ],
           buttons: [
             {
               id: 0,
               type: 'submit',
+              action: '',
               variant: 'primary',
-              action: 'authCustomLogin',
-              link: null,
-              text: 'Login',
+              link: {
+                target: '_self',
+                text: '',
+                href: '/login',
+                active: true,
+              },
+              text: 'Back to Login',
               icon: null,
             },
-            { id: 1, type: 'separator', text: 'or', active: true },
             {
-              id: 2,
-              variant: 'outline',
-              action: 'authWithPopUp',
+              id: 1,
+              type: 'submit',
+              action: 'resend',
+              variant: 'secondary',
               link: null,
-              text: 'Continue with Google',
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'google',
-              },
+              icon: null,
+              text: 'Resend Email',
+            },
+          ],
+          text: [
+            {
+              id: '0',
+              type: 'text',
+              bold: true,
+              weight: 'light',
+              text: "Didn't receive the email? Check your spam folder or ",
+            },
+            {
+              id: '1',
+              type: 'link',
+              bold: true,
+              weight: 'light',
+              href: '/reset-password',
+              text: 'try again',
+              strong: true,
             },
           ],
         },

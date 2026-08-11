@@ -2,17 +2,17 @@ import { DataType } from '@/types/pages';
 
 export const DATA: DataType = {
   metadata: {
-    title: 'Sign Up',
-    description: `Signup to generate Quotes faster using QuoteMatey.`,
-    path: '/signup',
+    title: 'Reset Password',
+    description: `Reset Password to generate Quotes faster using QuoteMatey.`,
+    path: '/reset-password',
   },
   sections: [
     {
       type: 'AUTHSCREEN',
       visible: true,
       form: {
-        type: 'signup',
-        onSuccess: '/chat',
+        type: 'reset-password',
+        onSuccess: '/reset-password/success',
         top: {
           icon: {
             active: true,
@@ -27,19 +27,18 @@ export const DATA: DataType = {
             {
               id: '1',
               type: 'text',
-              text: 'Create your account and ',
+              text: 'Reset Your ',
               bold: true,
               weight: 'bold',
             },
             {
               id: '2',
               type: 'text',
-              text: ' quote faster.',
+              text: ' Password',
               strong: true,
             },
           ],
-          description:
-            'Join thousands of tradies using AI to send professional quotes in seconds.',
+          description: "Enter your email and we'll send you a reset link.",
           logo: {
             type: 'IMG',
             src: '/quotematey-hor-with-out-subtitle.png',
@@ -48,6 +47,13 @@ export const DATA: DataType = {
         },
         body: {
           inputs: [
+            {
+              id: 'alpha',
+              name: 'type',
+              type: 'text',
+              className: 'hidden',
+              value: 'reset-password',
+            },
             {
               id: '0',
               name: 'email',
@@ -60,103 +66,19 @@ export const DATA: DataType = {
                 icon: 'Mail',
               },
             },
-            {
-              id: '1',
-              name: 'password',
-              type: 'password',
-              placeholder: 'Create password',
-              info: 'Password must be at least 8 characters ',
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'LockKeyhole',
-              },
-            },
-            {
-              id: '2',
-              name: 'tnc',
-              type: 'checkbox',
-              label: [
-                {
-                  id: '0',
-                  type: 'text',
-                  text: 'I agree to the',
-                },
-                {
-                  id: '1',
-                  type: 'link',
-                  href: '/terms',
-                  text: ' Terms',
-                  bold: true,
-                  weight: 'semibold',
-                  strong: true,
-                },
-                {
-                  id: '2',
-                  type: 'text',
-                  text: ' & ',
-                },
-                {
-                  id: '3',
-                  type: 'link',
-                  href: '/legal-pages/privacy-policy',
-                  text: ' Privacy Policy',
-                  bold: true,
-                  weight: 'semibold',
-                  strong: true,
-                },
-              ],
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'LockKeyhole',
-              },
-            },
           ],
           links: [],
         },
         footer: {
-          text: [
-            {
-              id: '0',
-              type: 'text',
-              text: 'Already have an account?',
-            },
-            {
-              id: '1',
-              type: 'link',
-              href: '/login',
-              text: ' Login',
-              bold: true,
-              weight: 'semibold',
-              strong: true,
-            },
-          ],
           buttons: [
             {
               id: 0,
               type: 'submit',
               variant: 'primary',
-              action: 'authCustomSignup',
+              action: 'resetPassword',
               link: null,
-              text: 'Create Free Account',
+              text: 'Reset',
               icon: null,
-            },
-            { id: 1, type: 'separator', text: 'or', active: true },
-            {
-              id: 2,
-              variant: 'outline',
-              action: 'authWithPopUp',
-              link: null,
-              text: 'Sign up with Google',
-              icon: {
-                type: 'ICON',
-                active: true,
-                position: 'left',
-                icon: 'google',
-              },
             },
           ],
         },

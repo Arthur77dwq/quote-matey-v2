@@ -9,7 +9,7 @@ export default function ResetPassword({ sections }: { sections: Section[] }) {
     <section className="relative flex justify-center items-center w-full h-screen">
       <AuthFormSection
         {...form}
-        className="static sm:absolute z-20 w-full sm:w-fit h-full sm:h-fit p-3 sm:p-0 top-70 shadow-none sm:shadow-xl/30 lg:shadow-none rounded-none sm:rounded-t-2xl"
+        className="static sm:absolute z-20 w-full sm:w-4/5 h-full sm:h-fit p-3 sm:p-0 bottom-0 shadow-none sm:shadow-xl/30 lg:shadow-none rounded-none sm:rounded-t-2xl"
       />
       <AuthHeroSection {...info} className="hidden sm:block w-full" />
     </section>

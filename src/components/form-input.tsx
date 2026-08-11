@@ -46,7 +46,27 @@ export function Input<T extends FieldValues>({
         </Label>
       </div>
     );
+  if (input.type === 'text') {
+    return (
+      <div
+        className={cn('grid gap-2 w-full', className, input.className)}
+        key={`${input.id}`}
+      >
+        <InputGroup className="min-h-13 rounded-[0.58rem] border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">
+          <InputGroupInput
+            {...register(input.name)}
+            value={input.value}
+            name={input.name}
+            className="text-md font-medium"
+          />
+        </InputGroup>
 
+        {error?.message && (
+          <p className="text-red-500 text-xs">{String(error.message)}</p>
+        )}
+      </div>
+    );
+  }
   return (
     <div className={cn('grid gap-2 w-full', className)} key={`${input.id}`}>
       <InputGroup className="min-h-13 rounded-[0.58rem] border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">

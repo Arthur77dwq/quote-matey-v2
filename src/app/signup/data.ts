@@ -49,6 +49,13 @@ export const DATA: DataType = {
         body: {
           inputs: [
             {
+              id: 'alpha',
+              name: 'type',
+              type: 'text',
+              className: 'hidden',
+              value: 'signup',
+            },
+            {
               id: '0',
               name: 'email',
               type: 'email',

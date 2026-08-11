@@ -301,7 +301,7 @@ export type USECASES = {
 
 export type AUTHHead = {
   title: RichTextNode[];
-  description: string;
+  description: string | RichTextNode[];
   logo?: ImageType;
 };
 
@@ -317,6 +317,14 @@ export type FormField<T extends FieldValues> =
       id: string;
       name: Path<T>;
       type: 'checkbox';
+      label: RichTextNode[];
+    }
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'text';
+      value: 'signup' | 'login' | 'reset-password';
+      className?: string;
       label: RichTextNode[];
     };
 
@@ -337,7 +345,13 @@ export type AUTHFoot = {
   buttons: (
     | ({
         type?: 'submit';
-        action: 'authWithPopUp' | 'authCustomLogin' | 'authCustomSignup';
+        action:
+          | 'authWithPopUp'
+          | 'authCustomLogin'
+          | 'authCustomSignup'
+          | 'resetPassword'
+          | 'resend'
+          | '';
       } & Button)
     | Separator
   )[];
@@ -346,7 +360,7 @@ export type AUTHFoot = {
 
 export type AUTHForm = {
   variant?: 'primary' | 'secondary';
-  type: 'signup' | 'login';
+  type: 'signup' | 'login' | 'reset-password';
   onSuccess: string;
   top?: {
     icon: IconType;
@@ -440,6 +454,7 @@ export type TextNodeType =
   | 'ul'
   | 'li'
   | 'link'
+  | 'children'
   | IconNodeType;
 
 export type Item = { text?: string; type: TextNodeType; link?: LINK };
