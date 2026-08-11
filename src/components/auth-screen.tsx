@@ -14,7 +14,7 @@ export function AuthScreen() {
     return (
       <OverlayBg>
         <AuthFormSection
-          className="w-fit h-fit! rounded-[1rem]"
+          className="sm:relative w-full sm:w-fit h-full sm:h-fit! sm:rounded-[1rem]"
           {...authDialog}
         />
       </OverlayBg>
