@@ -6,6 +6,8 @@ import {
   signUpSchema,
 } from '@/lib/schemas/auth.schema';
 
+import { AUTHForm } from './pages';
+
 export type User = {
   uid: string;
   email: string;
@@ -26,7 +28,6 @@ export type AuthContextType = {
     password: string,
   ) => Promise<UserCredential | undefined>;
   signUp: (
-    name: string,
     email: string,
     password: string,
   ) => Promise<UserCredential | undefined>;
@@ -100,6 +101,7 @@ export type FooterType = 'GLOBAL_FOOTER';
 export type IconType = {
   type: 'ICON';
   active: boolean;
+  stroke?: string;
   position: 'left' | 'center' | 'right';
   icon?: string | null;
   color?: string;
@@ -165,6 +167,8 @@ export type resetFormData = z.infer<typeof resetSchema>;
 export type GlobalData = {
   brand: BrandType;
   metadata?: GlobalMetaDataType | null;
+
+  authDialog: AUTHForm;
   headers?: headers | null;
   footer?: footer | null;
 };

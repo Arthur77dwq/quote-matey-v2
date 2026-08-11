@@ -1,4 +1,4 @@
-export const AUTH_ROUTES = ['/login', '/signup'] as const;
+export const AUTH_ROUTES = ['/login', '/signup', '/reset-password'] as const;
 
 export const PROTECTED_ROUTES = [
   '/api/chat',

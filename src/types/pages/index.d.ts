@@ -1,3 +1,4 @@
+import { FieldValues, Path } from 'react-hook-form';
 import { z } from 'zod';
 
 import { contactSchema } from '@/lib/schemas/contact.schema';
@@ -25,6 +26,7 @@ export interface SectionType {
   WORKING: 'WORKING';
   USECASES: 'USECASES';
   LANDINGPRICING: 'LANDINGPRICING';
+  AUTHSCREEN: 'AUTHSCREEN';
 }
 
 export type VideoType = {
@@ -297,7 +299,108 @@ export type USECASES = {
   cards: USECASESCard[];
 };
 
+export type AUTHHead = {
+  title: RichTextNode[];
+  description: string | RichTextNode[];
+  logo?: ImageType;
+};
+
+export type FormField<T extends FieldValues> =
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'password' | 'email';
+      placeholder: string;
+      icon?: IconType;
+    }
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'checkbox';
+      label: RichTextNode[];
+    }
+  | {
+      id: string;
+      name: Path<T>;
+      type: 'text';
+      value: 'signup' | 'login' | 'reset-password';
+      className?: string;
+      label: RichTextNode[];
+    };
+
+export type AUTHBody = {
+  inputs: FormField[];
+  links: ({ id: string } & LINK)[];
+};
+
+export type Separator = {
+  id: number;
+  type: 'separator';
+  text?: string;
+  active: boolean;
+};
+
+export type AUTHFoot = {
+  tnc?: RichTextNode[];
+  buttons: (
+    | ({
+        type?: 'submit';
+        action:
+          | 'authWithPopUp'
+          | 'authCustomLogin'
+          | 'authCustomSignup'
+          | 'resetPassword'
+          | 'resend'
+          | '';
+      } & Button)
+    | Separator
+  )[];
+  text?: RichTextNode[];
+};
+
+export type AUTHForm = {
+  variant?: 'primary' | 'secondary';
+  type: 'signup' | 'login' | 'reset-password';
+  onSuccess: string;
+  top?: {
+    icon: IconType;
+    text?: string;
+  };
+  header?: AUTHHead;
+  body?: AUTHBody;
+  footer?: AUTHFoot;
+};
+
+export type CARDType = {
+  variant: 'primary' | 'secondary';
+  id: string;
+  icon?: IconType;
+  title: (RichTextNode | ({ id: string } & IconType))[];
+  description: string;
+};
+
+export type AUTHINFO = {
+  image?: ImageType;
+  topCard?: CARDType;
+  bottom: CARDType[];
+  achievement: {
+    title: string;
+    users: ImageType[];
+    ratingText: string;
+    star: number;
+  };
+};
+
+export type AUTHSCREEN = {
+  type: SectionType.AUTHSCREEN;
+  visible: boolean;
+  className?: string;
+  form: AUTHForm;
+  info: AUTHINFO;
+};
+
 export type Section =
+  | AUTHSCREEN
   | HERO
   | LANDINGHERO
   | VIDEODEMO
@@ -342,13 +445,17 @@ export type fontWeight =
   | 'extrabold'
   | 'black';
 
+export type IconNodeType = 'ICON';
+
 export type TextNodeType =
   | 'lineBreak'
   | 'text'
   | 'HEADING'
   | 'ul'
   | 'li'
-  | 'link';
+  | 'link'
+  | 'children'
+  | IconNodeType;
 
 export type Item = { text?: string; type: TextNodeType; link?: LINK };
 
@@ -367,6 +474,11 @@ export type RichTextNode = {
   href?: string;
   items?: Item[];
   link?: LINK;
+  active?: boolean;
+  stroke?: string | undefined;
+  position?: 'center' | 'left' | 'right';
+  icon?: string | null | undefined;
+  color?: string | undefined;
 };
 
 export type contactFormData = z.infer<typeof contactSchema>;
