@@ -41,7 +41,7 @@ const useSectionAnimation = (
 
     gsap.from(imageRef.current, {
       y: -250,
-      scale: 0.5,
+      scale: 0.43,
       scrollTrigger: {
         trigger: imageRef.current,
         scrub: 3,
