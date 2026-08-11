@@ -283,4 +283,39 @@ export const GLOBAL_DATA: GlobalData = {
       ],
     },
   },
+  notFound: {
+    tag: 'Something went wrong',
+    title: [
+      {
+        id: '0',
+        type: 'text',
+        text: '404',
+        strong: true,
+        bold: true,
+        weight: 'bold',
+      },
+    ],
+    subTitle: 'Page not found',
+    description:
+      "The page you are looking for doesn't exist or has been moved.",
+    buttons: [
+      {
+        id: 0,
+        variant: 'secondary',
+        text: 'Back to home',
+        link: {
+          href: '/',
+          target: '_self',
+          text: null,
+          active: true,
+        },
+        icon: {
+          type: 'ICON',
+          active: true,
+          position: 'right',
+          icon: 'ArrowRight',
+        },
+      },
+    ],
+  },
 };
