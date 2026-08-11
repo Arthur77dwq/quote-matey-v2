@@ -70,7 +70,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit overflow-hidden',
+          'relative flex flex-col justify-center items-center gap-2.5 w-full h-350 overflow-hidden',
           className,
         )}
       >
@@ -133,7 +133,7 @@ export function HeroSection({
                   key={`${i}-${button.text}`}
                   className={
                     button.variant === 'secondary'
-                      ? 'text-white! text-[0.7rem] sm:text-body-md font-inter font-semibold shadow-[inset_4px_4px_8px_rgba(255, 85, 0, 1),inset_-4px_-4px_8px_rgba(255, 77, 0, 1),0_4px_16px_rgba(255, 77, 0, 0.5)] bg-linear-to-br from-bg-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
+                      ? 'font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
                       : 'h-full transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md'
                   }
                   variant={button.variant}
@@ -186,7 +186,7 @@ export function HeroSection({
             </div>
             <div
               ref={imageRef}
-              className="overflow-hidden rounded-[1.25rem] border border-neutral-300 hidden lg:flex justify-center items-center w-fit h-fit"
+              className="transform -translate-y-15 overflow-hidden rounded-[1.25rem] border border-neutral-300 hidden lg:flex justify-center items-center w-fit h-fit"
             >
               <Image
                 src={props.otherImages?.uiView.src || '/images/dashboard.png'}
@@ -198,7 +198,7 @@ export function HeroSection({
             </div>
             <div
               ref={mountainRef}
-              className="w-full hidden lg:flex justify-center absolute -top-100"
+              className="w-full hidden lg:flex justify-center absolute -top-129"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}
