@@ -40,16 +40,21 @@ export function ComparisonCard({
             <React.Fragment key={index}>
               <TabsTrigger
                 className={cn(
-                  'border-0 border-neutral-100 shadow-none! pb-5 pl-5 rounded-none h-full flex justify-center items-end',
-                  each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem]',
-                  each.type === 'DANGER' && 'border-r rounded-br-[1.25rem]',
+                  'border-0 border-neutral-100 shadow-none! pb-5 rounded-none h-full flex justify-center items-end',
+                  each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem] pr-5',
+                  each.type === 'DANGER' &&
+                    'border-r rounded-br-[1.25rem] pl-5',
                 )}
                 value={each.id}
                 disabled={each.id !== active}
               >
                 {each.head && (
                   <Description
-                    className="h-full flex justify-center items-end text-neutral-900 leading-1 text-[.6rem] sm:text-[1rem] font-inter"
+                    className={cn(
+                      'h-full flex items-end text-neutral-900 leading-0! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
+                      each.type === 'DANGER' && 'justify-end',
+                      each.type === 'SAFE' && 'justify-start',
+                    )}
                     description={each.head}
                   />
                 )}
@@ -107,7 +112,7 @@ export function ComparisonCard({
                   {each.description && (
                     <Description
                       className={cn(
-                        'text-left',
+                        'text-left font-inter',
                         each.type === 'DANGER' && 'text-neutral-600',
                         each.type === 'SAFE' && 'text-neutral-300',
                       )}
@@ -134,7 +139,7 @@ export function ComparisonCard({
                         <CardContent className="flex flex-col gap-1.5 p-5">
                           <div
                             className={cn(
-                              'w-full text-heading-5 font-semibold',
+                              'w-full text-heading-5! font-semibold',
                               each.type === 'SAFE' && 'text-white',
                               each.type === 'DANGER' && 'text-neutral-900',
                             )}
