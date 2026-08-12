@@ -153,7 +153,7 @@ export function HeroSection({
                   className={cn(
                     button.variant === 'secondary'
                       ? 'h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
-                      : 'h-fit py-4.5 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md',
+                      : 'h-fit px-12.5 py-4.5 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md',
                   )}
                   variant={button.variant}
                   onClick={() =>
