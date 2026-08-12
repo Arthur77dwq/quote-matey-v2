@@ -87,7 +87,9 @@ function PrimaryButton({
           <ArrowRight />
         </span>
       )}
-      <span ref={textRef}>{children}</span>
+      <span ref={textRef} className="w-fit">
+        {children}
+      </span>
       {arrow && (
         <span
           ref={rightArrowRef}
@@ -131,7 +133,7 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="w-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
+    <div className="w-fit h-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
       <PrimaryButton
         {...props}
         className={cn(
