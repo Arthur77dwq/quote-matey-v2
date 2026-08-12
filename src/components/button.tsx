@@ -1,10 +1,11 @@
 import { useGSAP } from '@gsap/react';
-import { ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
 
 import { Button as Comp } from '@/components/ui/button';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
+
+import { Icon } from './icon';
 
 const useRollMove = ({
   leftArrowRef,
@@ -84,7 +85,7 @@ function PrimaryButton({
           key="left"
           className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
         >
-          <ArrowRight />
+          <Icon name="LongTailArrow" className="w-3! h-2!" />
         </span>
       )}
       <span ref={textRef} className="w-fit">
@@ -96,7 +97,7 @@ function PrimaryButton({
           key="right"
           className="bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
         >
-          <ArrowRight />
+          <Icon name="LongTailArrow" className="w-3! h-2!" />
         </span>
       )}
     </Comp>

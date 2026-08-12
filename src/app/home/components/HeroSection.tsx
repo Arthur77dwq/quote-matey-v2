@@ -12,28 +12,30 @@ import { Button as ButtonType } from '@/types/global';
 import { FootNote, LANDINGHERO } from '@/types/pages';
 
 const useSectionAnimation = (
-  sectionRef: React.RefObject<HTMLDivElement | null>,
+  parentRef: React.RefObject<HTMLDivElement | null>,
+  sectionRefs: React.RefObject<(HTMLDivElement | null)[]>,
   imageRef: React.RefObject<HTMLDivElement | null>,
   mountainRef: React.RefObject<HTMLDivElement | null>,
 ) => {
   useGSAP(() => {
     // Animation Here
     gsap.fromTo(
-      sectionRef.current,
+      sectionRefs.current.map((x) => x),
       {
         opacity: 0,
         y: 50,
-        duration: 1,
+        duration: 0.75,
       },
-      { opacity: 1, y: 0, duration: 1 },
+      { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 },
     );
+
     gsap.to(mountainRef.current, {
       yPercent: 150,
       scale: 2,
       opacity: 0,
       ease: 'power1.out',
       scrollTrigger: {
-        trigger: sectionRef.current,
+        trigger: parentRef.current,
         start: 'top top',
         end: 'bottom top',
         scrub: 5,
@@ -41,7 +43,7 @@ const useSectionAnimation = (
     });
 
     gsap.from(imageRef.current, {
-      y: -215,
+      y: -218,
       scale: 0.6,
       ease: 'power4.inOut',
       scrollTrigger: {
@@ -63,10 +65,11 @@ export function HeroSection({
   ...props
 }: LANDINGHERO) {
   const router = useRouter();
-  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const parentRef = useRef<HTMLDivElement | null>(null);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const imageRef = useRef<HTMLDivElement | null>(null);
   const mountainRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation(sectionRef, imageRef, mountainRef);
+  useSectionAnimation(parentRef, sectionRefs, imageRef, mountainRef);
 
   return (
     visible && (
@@ -114,22 +117,36 @@ export function HeroSection({
         </div>
 
         <div
-          ref={sectionRef}
-          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 opacity-0 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
+          ref={parentRef}
+          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
         >
           <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.5 w-fit h-fit">
             <>
               {title && (
-                <Title className="leading-23 lg:text-[5.7rem]" title={title} />
+                <Title
+                  ref={(element) => {
+                    sectionRefs.current[0] = element;
+                  }}
+                  className="opacity-0 leading-23 lg:text-[5.7rem]"
+                  title={title}
+                />
               )}
               {description && (
                 <Description
-                  className="lg:text-[1.37rem]"
+                  ref={(element) => {
+                    sectionRefs.current[1] = element;
+                  }}
+                  className="opacity-0 lg:text-[1.37rem]"
                   description={description}
                 />
               )}
             </>
-            <div className="w-full h-15.95 flex justify-center items-center gap-5">
+            <div
+              ref={(element) => {
+                sectionRefs.current[2] = element;
+              }}
+              className="opacity-0 w-full h-15.95 flex justify-center items-center gap-5"
+            >
               {props.cta?.map((button: ButtonType, i: number) => (
                 <Button
                   key={`${i}-${button.text}`}
@@ -149,7 +166,12 @@ export function HeroSection({
                 </Button>
               ))}
             </div>
-            <div className="flex justify-center items-center gap-5 whitespace-nowrap">
+            <div
+              ref={(element) => {
+                sectionRefs.current[3] = element;
+              }}
+              className="opacity-0 flex justify-center items-center gap-5 whitespace-nowrap"
+            >
               {props.footNote?.map((note: FootNote, index: number) => (
                 <React.Fragment key={index}>
                   <span
@@ -188,7 +210,12 @@ export function HeroSection({
               ))}
             </div>
           </div>
-          <div className="relative w-full flex justify-center px-5">
+          <div
+            ref={(element) => {
+              sectionRefs.current[4] = element;
+            }}
+            className="opacity-0 relative w-full flex justify-center px-5"
+          >
             <div className="overflow-hidden rounded-[0.625rem] sm:rounded-[1.25rem] border border-neutral-300 flex lg:hidden justify-center items-center w-full h-fit">
               <Image
                 src={props.otherImages?.uiView.src || '/images/dashboard.png'}
@@ -212,7 +239,7 @@ export function HeroSection({
             </div>
             <div
               ref={mountainRef}
-              className="w-full hidden lg:flex justify-center absolute -top-132"
+              className="w-full hidden lg:flex justify-center absolute -top-148"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}

@@ -6,14 +6,17 @@ import { RichTextNode } from '@/types/pages';
 import { Icon } from './icon';
 
 export function Title({
+  ref,
   title,
   className,
 }: {
+  ref?: React.RefObject<HTMLDivElement | null> | React.Ref<HTMLDivElement>;
   title: RichTextNode[];
   className?: string;
 }) {
   return (
     <h1
+      ref={ref}
       className={cn(
         'text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]',
         className,
@@ -53,16 +56,19 @@ export function Title({
 }
 
 export function Description({
+  ref,
   description,
   className,
   children,
 }: {
+  ref?: React.RefObject<HTMLDivElement | null> | React.Ref<HTMLDivElement>;
   description: RichTextNode[] | string;
   className?: string;
   children?: React.ReactNode;
 }) {
   return (
     <p
+      ref={ref}
       className={cn(
         'max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter text-neutral-600 leading-[1.3em]',
         className,
