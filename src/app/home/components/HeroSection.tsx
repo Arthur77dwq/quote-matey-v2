@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { Button } from '@/components/button';
 import { Icon } from '@/components/icon';
@@ -28,9 +28,10 @@ const useSectionAnimation = (
       { opacity: 1, y: 0, duration: 1 },
     );
     gsap.to(mountainRef.current, {
-      yPercent: 190,
+      yPercent: 150,
       scale: 2,
-      ease: 'none',
+      opacity: 0,
+      ease: 'power1.out',
       scrollTrigger: {
         trigger: sectionRef.current,
         start: 'top top',
@@ -40,8 +41,9 @@ const useSectionAnimation = (
     });
 
     gsap.from(imageRef.current, {
-      y: -250,
-      scale: 0.43,
+      y: -215,
+      scale: 0.6,
+      ease: 'power4.inOut',
       scrollTrigger: {
         trigger: imageRef.current,
         scrub: 3,
@@ -149,28 +151,40 @@ export function HeroSection({
             </div>
             <div className="flex justify-center items-center gap-5 whitespace-nowrap">
               {props.footNote?.map((note: FootNote, index: number) => (
-                <span
-                  key={`${index}-${note.text}`}
-                  className="flex justify-center items-center gap-1"
-                >
-                  {note.icon &&
-                    (note.icon?.type === 'IMG' ? (
-                      <Image
-                        src={note.icon.src}
-                        alt=""
-                        width={1}
-                        height={1}
-                        className="size-2.5 sm:size-4.5"
-                      />
-                    ) : (
-                      note.icon?.type === 'ICON' && (
-                        <Icon name={note.icon.icon || ''} className="w-4 h-4" />
-                      )
-                    ))}
-                  <span className="text-[0.5rem] lg:text-[1rem]">
-                    {note.text}
+                <React.Fragment key={index}>
+                  <span
+                    key={`${index}-${note.text}`}
+                    className="flex justify-center items-center gap-1"
+                  >
+                    {note.icon &&
+                      (note.icon?.type === 'IMG' ? (
+                        <Image
+                          src={note.icon.src}
+                          alt=""
+                          width={1}
+                          height={1}
+                          className="size-2.5 sm:size-4.5"
+                        />
+                      ) : (
+                        note.icon?.type === 'ICON' && (
+                          <Icon
+                            name={note.icon.icon || ''}
+                            className="w-4 h-4"
+                          />
+                        )
+                      ))}
+                    <span className="text-[0.5rem] lg:text-[1rem]">
+                      {note.text}
+                    </span>
                   </span>
-                </span>
+                  {props.footNote &&
+                    props.footNote[index + 1] !== undefined && (
+                      <span
+                        key={index}
+                        className="h-4 opacity-20 bg-neutral-900 w-px"
+                      />
+                    )}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -193,12 +207,12 @@ export function HeroSection({
                 alt=""
                 width={1200}
                 height={0}
-                className="max-w-265"
+                className="max-w-290"
               />
             </div>
             <div
               ref={mountainRef}
-              className="w-full hidden lg:flex justify-center absolute -top-129"
+              className="w-full hidden lg:flex justify-center absolute -top-132"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}
