@@ -206,6 +206,22 @@ export function Tools({ className }: { className?: string }) {
   );
 }
 
+export function LongTailArrow({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('w-3.25 h-2.25', className)}
+      fill="none"
+      viewBox="0 0 13 9"
+    >
+      <path
+        fill="#1D1D1D"
+        d="M12.06 4.045 8.17.156a.556.556 0 0 0-.785.786l2.94 2.94H.556a.556.556 0 1 0 0 1.111h9.77l-2.94 2.94a.555.555 0 1 0 .786.786L12.06 4.83a.555.555 0 0 0 0-.785"
+      />
+    </svg>
+  );
+}
+
 export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   google: GoogleIcon,
   image: ImageIcon,
@@ -216,4 +232,5 @@ export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   performance: Performance,
   toolBox: ToolBox,
   tools: Tools,
+  LongTailArrow,
 };
