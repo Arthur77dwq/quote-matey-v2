@@ -144,11 +144,6 @@ export function ComparisonCard({
                       each.type === 'DANGER' && 'justify-end',
                       each.type === 'SAFE' && 'justify-start',
                     )}
-                    className={cn(
-                      'h-full flex items-end text-neutral-900 leading-0! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
-                      each.type === 'DANGER' && 'justify-end',
-                      each.type === 'SAFE' && 'justify-start',
-                    )}
                     description={each.head}
                   />
                 )}

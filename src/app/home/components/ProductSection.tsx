@@ -42,7 +42,6 @@ export function ProductSection({ title, comparison }: PRODUCT) {
       ref={sectionRef}
       id="product-section"
       className="relative w-full h-370.25 flex flex-col justify-start items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
-      className="relative w-full h-370.25 flex flex-col justify-start items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
     >
       <div className="sticky top-1/10 -translate-y-1/10 z-10 flex flex-col gap-12.5 pt-35">
         {title && (
