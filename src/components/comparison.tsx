@@ -1,7 +1,9 @@
+import { SplitText } from 'gsap/SplitText';
 import Image from 'next/image';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { Comparison } from '@/types/pages';
 
@@ -20,7 +22,90 @@ export function ComparisonCard({
   active: string;
   setActive: (x: string) => void;
 }) {
+  const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const mid = Math.floor(comparison.length / 2);
+
+  useLayoutEffect(() => {
+    let ctx: gsap.Context | undefined;
+    const frame = requestAnimationFrame(() => {
+      const element = contentRefs.current[active];
+      if (!element) return;
+
+      const title = element.querySelector<HTMLElement>('[data-tab-title]');
+      const description = element.querySelector<HTMLElement>(
+        '[data-tab-description]',
+      );
+      const cards = element.querySelectorAll<HTMLElement>('[data-tab-card]');
+
+      const titleChars = SplitText.create(title, {
+        type: 'words',
+        tag: 'span',
+      });
+
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline();
+        tl.killTweensOf(titleChars.words);
+
+        tl.set(titleChars.words, {
+          clearProps: 'all',
+        });
+
+        tl.fromTo(
+          titleChars.words,
+          {
+            x: 40,
+            opacity: 0,
+            duration: 0.3,
+            ease: 'power4.out',
+            stagger: 0.08,
+          },
+          {
+            x: 0,
+            opacity: 1,
+          },
+        );
+
+        tl.from(
+          titleChars.words,
+          {
+            marginRight: '-10px',
+            duration: 0.5,
+            ease: 'power3.out',
+            stagger: 0.08,
+          },
+          '0',
+        );
+
+        tl.from(
+          description,
+          {
+            y: 50,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.2,
+          },
+          '-=0.5',
+        );
+
+        tl.from(
+          cards,
+          {
+            y: 10,
+            opacity: 0,
+            duration: 0.3,
+            stagger: 0.2,
+          },
+          '-=0.2',
+        );
+      }, element);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      ctx?.revert();
+    };
+  }, [active]);
+
   return (
     <Tabs
       onValueChange={(value) => setActive(value)}
@@ -63,7 +148,7 @@ export function ComparisonCard({
                 <div className="w-fit h-full z-1">
                   <Image
                     src={
-                      active === '2'
+                      active === '1'
                         ? '/images/dialOpen.png'
                         : '/images/dialClose.png'
                     }
@@ -80,6 +165,9 @@ export function ComparisonCard({
       {comparison.map((each, index: number) => {
         return (
           <TabsContent
+            ref={(element) => {
+              contentRefs.current[each.id] = element;
+            }}
             key={index}
             value={each.id}
             className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[1.875rem] border border-neutral-100"
@@ -94,15 +182,17 @@ export function ComparisonCard({
             >
               <div className="w-full sm:w-6/10 flex flex-col justify-start items-start h-full gap-5">
                 {each.title && (
-                  <Title
-                    className={cn(
-                      'text-left leading-10 text-[2rem]!',
-                      each.type === 'SAFE' && 'text-white',
-                    )}
-                    title={each.title}
-                  />
+                  <div data-tab-title className="w-full">
+                    <Title
+                      className={cn(
+                        'text-left leading-10 text-[2rem]! w-full ',
+                        each.type === 'SAFE' && 'text-white',
+                      )}
+                      title={each.title}
+                    />
+                  </div>
                 )}
-                <div className="flex w-full">
+                <div className="flex w-full" data-tab-description>
                   {each.icon?.active && (
                     <Icon
                       style={{ color: each.icon.color }}
@@ -127,7 +217,8 @@ export function ComparisonCard({
                     data.type === 'STATS' &&
                     data.data.map((stat, z) => (
                       <Card
-                        key={i + z}
+                        data-tab-card
+                        key={`${i}+${z}`}
                         className={cn(
                           'w-60 p-0  border',
                           each.type === 'DANGER' &&

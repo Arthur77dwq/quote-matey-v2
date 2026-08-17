@@ -18,11 +18,11 @@ const useSectionAnimation = (
         start: '5% top',
 
         onEnter() {
-          setActive('2');
+          setActive('1');
         },
 
         onLeaveBack() {
-          setActive('1');
+          setActive('0');
         },
       });
 
@@ -33,7 +33,7 @@ const useSectionAnimation = (
 };
 
 export function ProductSection({ title, comparison }: PRODUCT) {
-  const [active, setActive] = useState('1');
+  const [active, setActive] = useState('0');
   const sectionRef = useRef<HTMLDivElement>(null);
   useSectionAnimation(sectionRef, setActive);
 
@@ -43,7 +43,7 @@ export function ProductSection({ title, comparison }: PRODUCT) {
       id="product-section"
       className="relative w-full h-370.25 flex flex-col justify-start items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
     >
-      <div className="sticky top-1/5 -translate-y-1/5 z-10 flex flex-col gap-12.5 pt-35">
+      <div className="sticky top-1/10 -translate-y-1/10 z-10 flex flex-col gap-12.5 pt-35">
         {title && (
           <Title
             className="leading-15 lg:leading-23 lg:text-6xl"

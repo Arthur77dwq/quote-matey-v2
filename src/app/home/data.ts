@@ -155,7 +155,7 @@ export const DATA: DataType = {
             icon: 'X',
             color: '#FF530A',
           },
-          id: '1',
+          id: '0',
           head: [
             {
               id: '1',
@@ -220,7 +220,7 @@ export const DATA: DataType = {
             icon: 'Check',
             color: '#10B17E',
           },
-          id: '2',
+          id: '1',
           head: [
             {
               id: '1',
