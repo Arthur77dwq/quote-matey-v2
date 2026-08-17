@@ -155,7 +155,7 @@ export const DATA: DataType = {
             icon: 'X',
             color: '#FF530A',
           },
-          id: '1',
+          id: '0',
           head: [
             {
               id: '1',
@@ -169,7 +169,7 @@ export const DATA: DataType = {
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'semibold',
               type: 'text',
               text: "The 'Busy Tradie' Text",
               strong: true,
@@ -179,7 +179,7 @@ export const DATA: DataType = {
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'medium',
               type: 'text',
               text: 'I can fix your tap leak in 5',
             },
@@ -190,7 +190,7 @@ export const DATA: DataType = {
             {
               id: '3',
               bold: true,
-              weight: 'bold',
+              weight: 'medium',
               type: 'text',
               text: 'hours will cost $200 + gst',
             },
@@ -220,7 +220,7 @@ export const DATA: DataType = {
             icon: 'Check',
             color: '#10B17E',
           },
-          id: '2',
+          id: '1',
           head: [
             {
               id: '1',
@@ -234,7 +234,7 @@ export const DATA: DataType = {
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'semibold',
               type: 'text',
               text: 'The QuoteMatey Response',
             },
@@ -243,7 +243,7 @@ export const DATA: DataType = {
             {
               id: '1',
               bold: true,
-              weight: 'bold',
+              weight: 'medium',
               type: 'text',
               text: "G'day, I can get that leaking tap sorted for you quickly. The job involves isolating the supply, replacing the faulty internal components, and testing the seal. You are looking at a price between $180 and $350 depending on the specific tap type. I will make sure everything is left clean once the job is done. Let me know if you want to get this booked in. Cheers",
             },

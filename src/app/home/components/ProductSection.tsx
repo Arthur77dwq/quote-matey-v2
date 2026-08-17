@@ -4,54 +4,25 @@ import { RefObject, useRef, useState } from 'react';
 
 import { ComparisonCard } from '@/components/comparison';
 import { Title } from '@/components/section-header';
-import { gsap } from '@/lib/animations/plugins';
 import { PRODUCT } from '@/types/pages';
 
 const useSectionAnimation = (
   ref: RefObject<HTMLDivElement | null>,
   setActive: (x: string) => void,
 ) => {
-  const lockScroll = () => {
-    document.body.style.overflow = 'hidden';
-  };
-
-  const unlockScroll = () => {
-    document.body.style.overflow = '';
-  };
   useGSAP(
     () => {
       if (!ref.current) return;
-
-      let locked = false;
-
       const trigger = ScrollTrigger.create({
         trigger: ref.current,
-        start: 'top top',
+        start: '5% top',
 
         onEnter() {
-          if (locked) return;
-
-          locked = true;
-          lockScroll();
-
-          gsap.delayedCall(0.7, () => {
-            setActive('2');
-            unlockScroll();
-            locked = false;
-          });
+          setActive('1');
         },
 
         onLeaveBack() {
-          if (locked) return;
-
-          locked = true;
-          lockScroll();
-
-          gsap.delayedCall(0.7, () => {
-            setActive('1');
-            unlockScroll();
-            locked = false;
-          });
+          setActive('0');
         },
       });
 
@@ -62,7 +33,7 @@ const useSectionAnimation = (
 };
 
 export function ProductSection({ title, comparison }: PRODUCT) {
-  const [active, setActive] = useState('1');
+  const [active, setActive] = useState('0');
   const sectionRef = useRef<HTMLDivElement>(null);
   useSectionAnimation(sectionRef, setActive);
 
@@ -70,17 +41,22 @@ export function ProductSection({ title, comparison }: PRODUCT) {
     <section
       ref={sectionRef}
       id="product-section"
-      className="w-full flex flex-col justify-center items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
+      className="relative w-full h-370.25 flex flex-col justify-start items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
     >
-      {title && (
-        <Title className="leading-15 lg:leading-23 lg:text-6xl" title={title} />
-      )}
-      {comparison?.length && (
-        <ComparisonCard
-          className="w-full h-fit sm:w-3xl sm:h-140"
-          {...{ setActive, active, comparison }}
-        />
-      )}
+      <div className="sticky top-1/10 -translate-y-1/10 z-10 flex flex-col gap-12.5 pt-35">
+        {title && (
+          <Title
+            className="leading-15 lg:leading-23 lg:text-6xl"
+            title={title}
+          />
+        )}
+        {comparison?.length && (
+          <ComparisonCard
+            className="w-full h-fit sm:w-3xl sm:h-140"
+            {...{ setActive, active, comparison }}
+          />
+        )}
+      </div>
     </section>
   );
 }
