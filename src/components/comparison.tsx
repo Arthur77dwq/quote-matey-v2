@@ -129,12 +129,21 @@ export function ComparisonCard({
                   each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem] pr-5',
                   each.type === 'DANGER' &&
                     'border-r rounded-br-[1.25rem] pl-5',
+                  'border-0 border-neutral-100 shadow-none! pb-5 rounded-none h-full flex justify-center items-end',
+                  each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem] pr-5',
+                  each.type === 'DANGER' &&
+                    'border-r rounded-br-[1.25rem] pl-5',
                 )}
                 value={each.id}
                 disabled={each.id !== active}
               >
                 {each.head && (
                   <Description
+                    className={cn(
+                      'h-full flex items-end text-neutral-900 leading-0! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
+                      each.type === 'DANGER' && 'justify-end',
+                      each.type === 'SAFE' && 'justify-start',
+                    )}
                     className={cn(
                       'h-full flex items-end text-neutral-900 leading-0! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
                       each.type === 'DANGER' && 'justify-end',
@@ -202,6 +211,7 @@ export function ComparisonCard({
                   {each.description && (
                     <Description
                       className={cn(
+                        'text-left font-inter',
                         'text-left font-inter',
                         each.type === 'DANGER' && 'text-neutral-600',
                         each.type === 'SAFE' && 'text-neutral-300',
