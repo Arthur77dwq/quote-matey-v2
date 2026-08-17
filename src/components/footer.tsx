@@ -70,11 +70,10 @@ export function Footer() {
                   height={40}
                   width={195}
                 />
-                <p className="text-[#595269] font-medium w-8/10 sm:w-full">
+                <p className="text-[#595269] text-balance font-medium w-5/10 sm:w-full leading-[1.2em]">
                   {footer?.title}
                 </p>
               </div>
-
               {footer?.cta.active && (
                 <Link
                   href={footer?.cta.href || ''}
