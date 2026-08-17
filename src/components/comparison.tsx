@@ -230,7 +230,7 @@ export function ComparisonCard({
                         <CardContent className="flex flex-col gap-1.5 p-5">
                           <div
                             className={cn(
-                              'w-full text-heading-5! font-semibold',
+                              'w-full text-heading-5! font-semibold leading-[1.2em]',
                               each.type === 'SAFE' && 'text-white',
                               each.type === 'DANGER' && 'text-neutral-900',
                             )}
@@ -239,7 +239,7 @@ export function ComparisonCard({
                           </div>
                           <div
                             className={cn(
-                              'w-full text-[1rem] font-inter font-medium',
+                              'w-full text-[1rem] font-inter font-medium leading-[1.3em]',
                               each.type === 'SAFE' && 'text-neutral-100/70',
                               each.type === 'DANGER' && 'text-neutral-600',
                             )}
