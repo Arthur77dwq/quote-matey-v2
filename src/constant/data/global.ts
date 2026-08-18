@@ -55,7 +55,7 @@ export const GLOBAL_DATA: GlobalData = {
       active: true,
       links: [
         {
-          href: '#product',
+          href: '/#product-section',
           target: '_self',
           text: 'Product',
           active: false,
