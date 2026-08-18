@@ -43,12 +43,12 @@ export function Footer() {
   const shouldHide = matchRoute(pathname, AUTH_ROUTES);
   return (
     !shouldHide && (
-      <footer className="relative w-full lg:h-150 sm:h-screen overflow-hidden flex justify-center items-center">
+      <footer className="relative w-full h-fit sm:h-screen lg:h-150 overflow-hidden flex justify-center items-center">
         <div className="absolute inset-0">
           {footer?.BgImage.src && (
             <Image
               src={footer?.BgImage.src}
-              className="w-full"
+              className="w-full h-full lg:h-auto object-cover"
               width={1600}
               height={100}
               alt=""
@@ -56,7 +56,7 @@ export function Footer() {
           )}
           <div className="absolute inset-0 w-full z-2 bg-linear-to-b from-white via-white/20 via-20% to-transparent" />
         </div>
-        <div className="z-3 w-full max-w-315 h-full md:h-fit lg:h-full flex justify-center items-center px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
+        <div className="z-3 w-full max-w-315 h-fit lg:h-full flex justify-center items-center py-25 px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
           <div
             ref={cardRef}
             className="w-full h-fit md:h-full bg-neutral-0 flex flex-col lg:flex-row flex-start gap-12.5 md:gap-15 p-5 sm:p-7.5 lg:p-25 rounded-[1rem] md:rounded-4xl"
@@ -70,7 +70,7 @@ export function Footer() {
                   height={40}
                   width={195}
                 />
-                <p className="text-[#595269] text-balance font-medium w-5/10 sm:w-full leading-[1.2em]">
+                <p className="text-[#595269] text-balance font-medium w-full leading-[1.2em]">
                   {footer?.title}
                 </p>
               </div>
