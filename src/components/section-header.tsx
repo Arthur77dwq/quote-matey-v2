@@ -24,7 +24,7 @@ export function Title({
     >
       {title?.map((node, i) => {
         if (node.type === 'lineBreak') {
-          return <br className="lg:hidden" key={i} />;
+          return <br key={i} />;
         }
         if (node.type === 'ICON') {
           return (
