@@ -53,6 +53,11 @@ export const DATA: DataType = {
           text: ' quoting, and grow your trade business with AI-powered tools.',
         },
       ],
+      BGImage: {
+        type: 'IMG',
+        src: '/images/scene.png',
+        alt: '',
+      },
     },
     {
       type: 'CONTACTFORM',

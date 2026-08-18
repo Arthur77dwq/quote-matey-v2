@@ -32,6 +32,11 @@ export default function About() {
         strong: true,
       },
     ],
+    BGImage: {
+      type: 'IMG',
+      src: '/images/scene.png',
+      alt: '',
+    },
   };
 
   return (
