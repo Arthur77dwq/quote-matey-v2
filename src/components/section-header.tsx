@@ -18,13 +18,13 @@ export function Title({
     <h1
       ref={ref}
       className={cn(
-        'text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[2.75rem] lg:text-[4.69rem]',
+        'inline-block text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[2.75rem] lg:text-[4.69rem]',
         className,
       )}
     >
       {title?.map((node, i) => {
         if (node.type === 'lineBreak') {
-          return <br key={i} />;
+          return <br className="lg:hidden" key={i} />;
         }
         if (node.type === 'ICON') {
           return (
