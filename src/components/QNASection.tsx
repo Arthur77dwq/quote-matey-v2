@@ -12,7 +12,7 @@ const variants = {
   },
   secondary: {
     container: 'gap-7.5 lg:gap-27.5 px-8 sm:px-15 py-15.75',
-    left: 'flex justify-center items-center lg:block w-full max-w-95',
+    left: 'flex justify-center items-center lg:block w-full lg:max-w-95',
     right: 'w-full max-w-169',
   },
 };
@@ -38,7 +38,7 @@ export function QNASection({
         {title && (
           <div className={cn('flex flex-col h-fit', style.left)}>
             <Title
-              className="tracking-tighter block sm:inline-flex lg:inline-block text-left sm:text-center lg:text-left text-[3.06rem]!"
+              className="w-full tracking-tighter block sm:inline-flex sm:justify-center sm:gap-1 lg:inline-block text-left sm:text-center lg:text-left text-[2.125rem]! sm:text-[3.06rem]!"
               {...{ title }}
             />
 
