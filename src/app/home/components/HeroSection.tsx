@@ -127,7 +127,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="opacity-0 lg:leading-[0.95] text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
+                  className="opacity-0 lg:leading-23 text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
                   title={title}
                 />
               )}
