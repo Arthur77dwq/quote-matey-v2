@@ -152,16 +152,16 @@ export function Testimonial({
           />
         </div>
       </div>
-      <div className="flex flex-col justify-between w-full h-full z-3">
+      <div className="flex flex-col justify-between items-center w-full h-full z-3">
         <div
           className={
             'w-full h-25 sm:h-40 lg:h-50 flex items-end justify-center bg-[linear-gradient(to_bottom,white_0%,rgba(255,255,255,0.85)_40%,rgba(255,255,255,0.4)_70%,transparent_100%)] overflow-hidden z-2'
           }
         />
         {variant === 'primary' && (
-          <div className="px-5 lg:px-7.5 gap-7.5 w-full h-fit grid grid-cols-1 grid-row-4 sm:grid-cols-2 sm:grid-row-3 lg:grid-cols-3 lg:grid-rows-2">
+          <div className="px-5 lg:px-12 gap-7.5 max-w-325 w-full h-fit grid grid-cols-1 grid-row-4 sm:grid-cols-2 sm:grid-row-3 lg:grid-cols-3 lg:grid-rows-2">
             <div className="col-span-1 sm:col-span-2 flex flex-col items-start pb-5 gap-5">
-              <h2 className="whitespace-normal sm:whitespace-nowrap lg:whitespace-normal font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-full lg:w-160 text-white">
+              <h2 className="leading-[1.2em] whitespace-normal sm:whitespace-nowrap lg:whitespace-normal font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-full lg:w-160 text-white">
                 {title}
               </h2>
               <p className="text-[1rem] font-inter font-medium text-white flex justify-start items-center gap-1.5">

@@ -55,7 +55,7 @@ export const GLOBAL_DATA: GlobalData = {
       active: true,
       links: [
         {
-          href: '#product',
+          href: '/#product-section',
           target: '_self',
           text: 'Product',
           active: false,
@@ -174,8 +174,8 @@ export const GLOBAL_DATA: GlobalData = {
     ],
   },
   authDialog: {
+    type: 'signup',
     variant: 'secondary',
-    type: 'login',
     onSuccess: '/chat',
     top: {
       icon: {
@@ -184,18 +184,19 @@ export const GLOBAL_DATA: GlobalData = {
         type: 'ICON',
         position: 'center',
       },
+      text: '',
     },
     header: {
       title: [
         {
           id: '1',
           type: 'text',
-          text: 'Login',
+          text: 'Sign Up',
           bold: true,
           weight: 'bold',
         },
       ],
-      description: 'Welcome back! Login to your account.',
+      description: 'Get started in seconds. Create your account.',
       logo: {
         type: 'IMG',
         src: '/quotematey-hor-with-out-subtitle.png',
@@ -204,6 +205,13 @@ export const GLOBAL_DATA: GlobalData = {
     },
     body: {
       inputs: [
+        {
+          id: 'alpha',
+          name: 'type',
+          type: 'text',
+          className: 'hidden',
+          value: 'signup',
+        },
         {
           id: '0',
           name: 'email',
@@ -220,7 +228,49 @@ export const GLOBAL_DATA: GlobalData = {
           id: '1',
           name: 'password',
           type: 'password',
-          placeholder: 'Password',
+          placeholder: 'Create password',
+          info: 'Password must be at least 8 characters ',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'left',
+            icon: 'LockKeyhole',
+          },
+        },
+        {
+          id: '2',
+          name: 'tnc',
+          type: 'checkbox',
+          label: [
+            {
+              id: '0',
+              type: 'text',
+              text: 'I agree to the',
+            },
+            {
+              id: '1',
+              type: 'link',
+              href: '/terms',
+              text: ' Terms',
+              bold: true,
+              weight: 'semibold',
+              strong: true,
+            },
+            {
+              id: '2',
+              type: 'text',
+              text: ' & ',
+            },
+            {
+              id: '3',
+              type: 'link',
+              href: '/legal-pages/privacy-policy',
+              text: ' Privacy Policy',
+              bold: true,
+              weight: 'semibold',
+              strong: true,
+            },
+          ],
           icon: {
             type: 'ICON',
             active: true,
@@ -229,28 +279,20 @@ export const GLOBAL_DATA: GlobalData = {
           },
         },
       ],
-      links: [
-        {
-          id: '0',
-          href: '/reset-password',
-          target: '_self',
-          text: 'Forgot password?',
-          active: true,
-        },
-      ],
+      links: [],
     },
     footer: {
       text: [
         {
           id: '0',
           type: 'text',
-          text: 'Don’t have an account?',
+          text: 'Already have an account?',
         },
         {
           id: '1',
           type: 'link',
-          href: '/signup',
-          text: ' Sign up now',
+          href: '/login',
+          text: ' Login',
           bold: true,
           weight: 'semibold',
           strong: true,
@@ -261,9 +303,9 @@ export const GLOBAL_DATA: GlobalData = {
           id: 0,
           type: 'submit',
           variant: 'primary',
-          action: 'authCustomLogin',
+          action: 'authCustomSignup',
           link: null,
-          text: 'Login',
+          text: 'Create Free Account',
           icon: null,
         },
         { id: 1, type: 'separator', text: 'or', active: true },
@@ -272,7 +314,7 @@ export const GLOBAL_DATA: GlobalData = {
           variant: 'outline',
           action: 'authWithPopUp',
           link: null,
-          text: 'Continue with Google',
+          text: 'Sign up with Google',
           icon: {
             type: 'ICON',
             active: true,

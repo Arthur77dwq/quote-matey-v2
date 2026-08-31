@@ -11,7 +11,7 @@ const variants = {
     item: '',
     trigger: {
       container: '',
-      icon: 'bg-white group-data-[state=open]:bg-neutral-900',
+      icon: 'bg-neutral-50 group-data-[state=open]:bg-neutral-900',
     },
     content: '',
   },

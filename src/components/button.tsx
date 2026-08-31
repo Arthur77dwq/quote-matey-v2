@@ -43,7 +43,7 @@ const useRollMove = ({
     rollMove.current.to(
       textRef.current,
       {
-        xPercent: 27,
+        x: 15,
         duration: 0.5,
         ease: easing,
       },
@@ -134,7 +134,7 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="w-fit h-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-white flex justify-center items-center">
+    <div className="w-fit h-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-neutral-50 flex justify-center items-center">
       <PrimaryButton
         {...props}
         className={cn(
@@ -145,21 +145,6 @@ function SecondaryButton({
         {children}
       </PrimaryButton>
     </div>
-  );
-}
-
-function SecondaryDarkButton({
-  className,
-  children,
-  ...props
-}: {
-  className: string;
-  children: React.ReactNode;
-} & React.ComponentProps<'button'>) {
-  return (
-    <SecondaryButton {...props} className={className}>
-      {children}
-    </SecondaryButton>
   );
 }
 
@@ -188,15 +173,15 @@ function Button({
       );
     case 'secondary-dark':
       return (
-        <SecondaryDarkButton
+        <SecondaryButton
           {...props}
           className={cn(
-            'shadow-[inset_4px_4px_8px_rgba(255,255,255,0.3),inset_-4px_-4px_8px_rgba(255,255,255,0.3),0_4px_16px_rgba(29,29,29,0.5)] bg-neutral-950 bg-linear-to-br from-bg-neutral-800 to-black border border-neutral-900',
+            'shadow-[inset_4px_4px_8px_#FFFFFF4D,inset_-4px_-4px_8px_#FFFFFF4D,0_4px_16px_#1D1D1D80] bg-neutral-950 bg-linear-to-br from-bg-neutral-800 to-black border border-neutral-900',
             className,
           )}
         >
           {children}
-        </SecondaryDarkButton>
+        </SecondaryButton>
       );
     case 'dark':
       return (

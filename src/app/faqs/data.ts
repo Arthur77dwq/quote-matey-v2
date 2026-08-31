@@ -47,6 +47,11 @@ export const DATA: DataType = {
           text: ' pricing, features, payments, and account support.',
         },
       ],
+      BGImage: {
+        type: 'IMG',
+        src: '/images/scene.png',
+        alt: '',
+      },
     },
     {
       type: 'QNA',

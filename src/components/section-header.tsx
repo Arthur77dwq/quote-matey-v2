@@ -18,7 +18,7 @@ export function Title({
     <h1
       ref={ref}
       className={cn(
-        'text-wrap text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[3.38rem] lg:text-[4.69rem]',
+        'inline-block text-center tracking-[-1.4px] leading-[1.2em] text-neutral-900 text-[2.13rem] sm:text-[2.75rem] lg:text-[4.69rem]',
         className,
       )}
     >
@@ -44,7 +44,10 @@ export function Title({
           return (
             <Component
               key={`${i}-${node.text}`}
-              className={cn('inline', styleParse(node))}
+              className={cn(
+                'whitespace-nowrap inline leading-[1.2em]',
+                styleParse(node),
+              )}
             >
               {node.text}
             </Component>

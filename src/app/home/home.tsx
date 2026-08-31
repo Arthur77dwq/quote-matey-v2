@@ -6,14 +6,6 @@ import { QNASection } from '@/components/QNASection';
 import { Title } from '@/components/section-header';
 import { Testimonial } from '@/components/testimonialSection';
 import { Badge } from '@/components/ui/badge';
-// import { BeforeAfter } from '@/components/before-after';
-// import { Benefits } from '@/components/benefits';
-// import { CTASection } from '@/components/cta-section';
-// import { FAQ } from '@/components/faq';
-// import { HowItWorks } from '@/components/how-it-works';
-// import { SocialProofBar } from '@/components/social-proof-bar';
-// import { Testimonials } from '@/components/testimonials';
-// import { VideoSection } from '@/components/video-section';
 import {
   LANDINGHERO,
   LANDINGPRICING,
@@ -71,14 +63,6 @@ export default function Home({ sections }: { sections: Section[] }) {
         <PricingSection {...(sections[7] as PRICING)} />
       </section>
       <QNASection {...(sections[8] as QNA)} />
-      {/* <SocialProofBar /> */}
-      {/* <HowItWorks /> */}
-      {/* <VideoSection /> */}
-      {/* <BeforeAfter />
-      <Benefits />
-      <Testimonials />
-      <FAQ />
-      <CTASection /> */}
     </>
   );
 }

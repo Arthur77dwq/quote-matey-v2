@@ -1,11 +1,44 @@
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
+import { RefObject, useLayoutEffect, useRef } from 'react';
 
 import { Icon } from '@/components/icon';
 import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { PLATFORM } from '@/types/pages';
+
+const useSectionAnimation = ({
+  textRef,
+  imageRef,
+}: {
+  textRef: RefObject<HTMLDivElement | null>;
+  imageRef: RefObject<HTMLDivElement | null>;
+}) => {
+  useGSAP(() => {
+    gsap.from(textRef.current, {
+      y: 50,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: textRef.current,
+        start: 'top 80%',
+        end: 'bottom top',
+      },
+    });
+
+    gsap.from(imageRef.current, {
+      y: 50,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: imageRef.current,
+        start: 'top 80%',
+        end: 'bottom top',
+      },
+    });
+  });
+};
 
 export function PlatformSection({
   tag,
@@ -14,6 +47,35 @@ export function PlatformSection({
   className,
   ...props
 }: PLATFORM) {
+  const textRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const cardContainerRef = useRef<HTMLDivElement>(null);
+  useSectionAnimation({ textRef, imageRef });
+
+  useLayoutEffect(() => {
+    const container = cardContainerRef.current;
+
+    if (!container) return;
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>('[data-card]');
+
+      gsap.from(cards, {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top 80%',
+        },
+      });
+    }, container);
+
+    return () => ctx.revert();
+  }, [props.cards]);
+
   return (
     <section className={cn('relative w-full h-382.75', className)}>
       <div className="w-full h-full">
@@ -27,7 +89,10 @@ export function PlatformSection({
         />
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-7.5 px-4 sm:px-7.5">
-        <div className="px-4 sm:py-5 sm:p-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit">
+        <div
+          ref={textRef}
+          className="px-4 sm:py-5 sm:p-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
+        >
           {tag && (
             <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
               {tag}
@@ -36,7 +101,7 @@ export function PlatformSection({
 
           {title && (
             <Title
-              className="text-white text-[2.125rem] sm:text-[2.75rem] lg:text-6xl!"
+              className="text-white text-[2.125rem] sm:text-[2.75rem] lg:text-6xl! font-bold"
               {...{ title }}
             />
           )}
@@ -47,7 +112,10 @@ export function PlatformSection({
             />
           )}
         </div>
-        <div className="relative w-full aspect-3840/2333 rounded-[0.875rem] overflow-hidden">
+        <div
+          ref={imageRef}
+          className="relative max-w-300 w-full aspect-3840/2333 rounded-[0.875rem] overflow-hidden"
+        >
           <Image
             src={props.FGImage?.src || ''}
             alt={props.FGImage?.alt || ''}
@@ -55,9 +123,13 @@ export function PlatformSection({
             className="w-full aspect-3840/2333 object-cover"
           />
         </div>
-        <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-6">
+        <div
+          ref={cardContainerRef}
+          className="max-w-300 w-full flex flex-col sm:flex-row justify-between items-center gap-6"
+        >
           {props.cards?.map((card, i: number) => (
             <Card
+              data-card
               key={i}
               className="bg-white border-none w-90 h-full flex justify-center items-center p-0"
             >

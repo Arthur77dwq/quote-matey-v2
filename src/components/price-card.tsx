@@ -92,7 +92,7 @@ export function BaseHeader({
       <div className="flex flex-col gap-1 lg:gap-1.5 w-fit h-full">
         <h6
           className={cn(
-            'text-xl lg:text-2xl font-semibold text-neutral-900 leading-[1.2em]',
+            'text-xl sm:text-[1rem] lg:text-2xl font-semibold text-neutral-900 leading-[1.2em]',
             style.primaryText,
           )}
         >
@@ -100,7 +100,7 @@ export function BaseHeader({
         </h6>
         <p
           className={cn(
-            'text-nowrap text-[.88rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
             style.supportingText,
           )}
         >
@@ -148,23 +148,23 @@ export function BaseContent({
           style.primaryText,
         )}
       >
-        <span className="text-4xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]">
+        <span className="text-4xl sm:text-xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]">
           {plan.pricing.price}
         </span>
-        <span className="text-[1rem] font-inter font-medium leading-[1.3em]">
+        <span className="text-[1rem] sm:text-[0.88rem] lg:text-[1rem] font-inter font-medium leading-[1.3em]">
           /{plan.period}
         </span>
       </div>
       {children}
       <ul
         className={cn(
-          'w-full flex flex-col gap-1 lg:gap-2.5 font-inter font-medium text-[0.88rem] lg:text-[1rem]',
+          'w-full flex flex-col gap-1 sm:gap-0 lg:gap-2.5 font-inter font-medium text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
           style.supportingText,
         )}
       >
         {plan.features.map((feature, featureIndex) => (
-          <li key={featureIndex} className="flex flex-row p-0">
-            <ChevronRight className="text-primary-500" />
+          <li key={featureIndex} className="flex flex-row items-start p-0">
+            <ChevronRight className="text-primary-500 size-auto sm:size-4 lg:size-auto" />
             <span>{feature.text}</span>
           </li>
         ))}

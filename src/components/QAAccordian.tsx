@@ -14,7 +14,7 @@ export type VARIANTS = 'primary' | 'secondary';
 const variants = {
   primary: {
     container: '',
-    child: 'transition-colors data-[state=open]:bg-white',
+    child: 'transition-colors data-[state=open]:bg-neutral-50',
   },
   secondary: { container: '', child: 'data-[state=open]:bg-neutral-50' },
 };

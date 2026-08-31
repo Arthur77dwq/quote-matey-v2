@@ -75,11 +75,11 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-center items-center gap-2.5 w-full h-350 overflow-hidden',
+          'relative flex flex-col justify-center items-center gap-2.5 pb-40 lg:pb-0 w-full h-280 lg:h-350 overflow-hidden',
           className,
         )}
       >
-        <div className={'w-full h-fit flex items-center justify-center'}>
+        <div className={'w-full h-full flex items-center justify-center'}>
           <div className="w-full h-full">
             {BGImage?.src && (
               <Image
@@ -127,7 +127,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="opacity-0 leading-23 lg:text-[5.7rem]"
+                  className="opacity-0 lg:leading-23 text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
                   title={title}
                 />
               )}
