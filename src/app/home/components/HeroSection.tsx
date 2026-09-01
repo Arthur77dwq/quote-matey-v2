@@ -94,24 +94,24 @@ export function HeroSection({
           </div>
           <Image
             src="/images/cloudLeft.png"
-            className="w-140 h-87 absolute top-20 left-169"
-            width={0}
-            height={0}
+            className="w-150.5 h-87.5 absolute -top-10 -left-32.5"
+            width={602}
+            height={350}
             alt=""
           />
 
           <Image
             src="/images/cloudCenter.png"
-            className="w-140 h-87 absolute top-12.5 left-85"
-            width={0}
-            height={0}
+            className="w-129.75 h-60 absolute top-12 left-1/2 -translate-x-1/2"
+            width={519}
+            height={240}
             alt=""
           />
           <Image
             src="/images/cloudRight.png"
-            className="w-140 h-87 absolute -top-10 -left-32.5"
-            width={0}
-            height={0}
+            className="w-146 h-87.5 absolute top-20 -right-15"
+            width={584}
+            height={350}
             alt=""
           />
         </div>
