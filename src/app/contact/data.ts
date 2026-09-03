@@ -11,23 +11,29 @@ export const DATA: DataType = {
     {
       type: 'HERO',
       visible: true,
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Get in touch',
-        },
-        {
-          id: '2',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' with us',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '0',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Get in touch',
+          },
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' with us',
+            strong: true,
+          },
+        ],
+      },
       description: [
         {
           id: '1',

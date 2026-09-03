@@ -1,5 +1,7 @@
 import { GlobalData } from '@/types/global';
 
+const long_with_out_subtitle = '/quotematey-hor-with-out-subtitle.png';
+
 export const GLOBAL_DATA: GlobalData = {
   brand: {
     logo: {
@@ -8,7 +10,7 @@ export const GLOBAL_DATA: GlobalData = {
       with_bg: '/favicon-with-bg.png',
       social: '/images/og-image.png',
       long_with_subtitle: '/quotematey-hor-with-subtitle.png',
-      long_with_out_subtitle: '/quotematey-hor-with-out-subtitle.png',
+      long_with_out_subtitle: long_with_out_subtitle,
     },
   },
   metadata: {
@@ -49,7 +51,7 @@ export const GLOBAL_DATA: GlobalData = {
       text: null,
       active: true,
       alt: 'Quote Matey',
-      src: '/quotematey-hor-with-out-subtitle.png',
+      src: long_with_out_subtitle,
     },
     navBar: {
       active: true,
@@ -187,19 +189,24 @@ export const GLOBAL_DATA: GlobalData = {
       text: '',
     },
     header: {
-      title: [
-        {
-          id: '1',
-          type: 'text',
-          text: 'Sign Up',
-          bold: true,
-          weight: 'bold',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            active: true,
+            id: '1',
+            type: 'TEXT',
+            text: 'Sign Up',
+            bold: true,
+            weight: 'bold',
+          },
+        ],
+      },
       description: 'Get started in seconds. Create your account.',
       logo: {
         type: 'IMG',
-        src: '/quotematey-hor-with-out-subtitle.png',
+        src: long_with_out_subtitle,
         alt: 'QuoteMatey Logo',
       },
     },
@@ -327,16 +334,21 @@ export const GLOBAL_DATA: GlobalData = {
   },
   notFound: {
     tag: 'Something went wrong',
-    title: [
-      {
-        id: '0',
-        type: 'text',
-        text: '404',
-        strong: true,
-        bold: true,
-        weight: 'bold',
-      },
-    ],
+    title: {
+      type: 'HEADING',
+      level: 1,
+      content: [
+        {
+          active: true,
+          id: '0',
+          type: 'TEXT',
+          text: '404',
+          strong: true,
+          bold: true,
+          weight: 'bold',
+        },
+      ],
+    },
     subTitle: 'Page not found',
     description:
       "The page you are looking for doesn't exist or has been moved.",

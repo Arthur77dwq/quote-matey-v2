@@ -1,5 +1,9 @@
 import { DataType } from '@/types/pages';
 
+const defaultUserImage = 'images/user.webp';
+const defaultCtaText = 'Get Started';
+const defaultCtaHref = '/dashboard/plan';
+
 export const DATA: DataType = {
   metadata: {
     title: 'Pricing',
@@ -15,23 +19,29 @@ export const DATA: DataType = {
         src: '/images/about/BackgroundSKYUNDERLAY.jpg',
         alt: '',
       },
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Costs less than',
-        },
-        {
-          id: '2',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' one missed job',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            active: true,
+            id: '1',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Costs less than',
+          },
+          {
+            active: true,
+            id: '2',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' one missed job',
+            strong: true,
+          },
+        ],
+      },
       tag: 'Subscription plans',
     },
     {
@@ -60,9 +70,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: defaultCtaText,
             active: true,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
         {
@@ -87,9 +97,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: defaultCtaText,
             active: true,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
         {
@@ -114,9 +124,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: defaultCtaText,
             active: true,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
       ],
@@ -136,7 +146,7 @@ export const DATA: DataType = {
           user: {
             image: {
               type: 'IMG',
-              src: 'images/user.webp',
+              src: defaultUserImage,
               alt: '',
             },
             name: 'Jake Thompson',
@@ -150,7 +160,7 @@ export const DATA: DataType = {
           user: {
             image: {
               type: 'IMG',
-              src: 'images/user.webp',
+              src: defaultUserImage,
               alt: '',
             },
             name: 'Mason Hughes',
@@ -164,7 +174,7 @@ export const DATA: DataType = {
           user: {
             image: {
               type: 'IMG',
-              src: 'images/user.webp',
+              src: defaultUserImage,
               alt: '',
             },
             name: 'Ethan Walker',
@@ -178,7 +188,7 @@ export const DATA: DataType = {
           user: {
             image: {
               type: 'IMG',
-              src: 'images/user.webp',
+              src: defaultUserImage,
               alt: '',
             },
             name: 'Liam Carter',
@@ -191,31 +201,38 @@ export const DATA: DataType = {
       type: 'QNA',
       visible: true,
       variant: 'secondary',
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Frequently ',
-        },
-        { id: '2', type: 'lineBreak' },
-        {
-          id: '3',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' asked ',
-        },
-        {
-          id: '4',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' questions',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            active: true,
+            id: '1',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Frequently ',
+          },
+          { id: '2', type: 'LINEBREAK', active: true },
+          {
+            active: true,
+            id: '3',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' asked ',
+          },
+          {
+            active: true,
+            id: '4',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' questions',
+            strong: true,
+          },
+        ],
+      },
       description: [
         {
           id: '1',

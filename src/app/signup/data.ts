@@ -23,21 +23,27 @@ export const DATA: DataType = {
           text: 'Back',
         },
         header: {
-          title: [
-            {
-              id: '1',
-              type: 'text',
-              text: 'Create your account and ',
-              bold: true,
-              weight: 'bold',
-            },
-            {
-              id: '2',
-              type: 'text',
-              text: ' quote faster.',
-              strong: true,
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                active: true,
+                id: '1',
+                type: 'TEXT',
+                text: 'Create your account and ',
+                bold: true,
+                weight: 'bold',
+              },
+              {
+                active: true,
+                id: '2',
+                type: 'TEXT',
+                text: ' quote faster.',
+                strong: true,
+              },
+            ],
+          },
           description:
             'Join thousands of tradies using AI to send professional quotes in seconds.',
           logo: {
@@ -184,13 +190,18 @@ export const DATA: DataType = {
             active: true,
             color: 'green',
           },
-          title: [
-            {
-              id: '0',
-              type: 'text',
-              text: 'Quote generated',
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                active: true,
+                id: '0',
+                type: 'TEXT',
+                text: 'Quote generated',
+              },
+            ],
+          },
           description: 'Professional quote ready to send',
         },
         bottom: [
@@ -204,29 +215,36 @@ export const DATA: DataType = {
               stroke: '#0023D6',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                text: '30 mins ',
-                bold: true,
-                weight: 'bold',
-              },
-              {
-                id: '1',
-                type: 'text',
-                text: ' \u2192',
-                bold: true,
-                weight: 'bold',
-              },
-              {
-                id: '2',
-                type: 'text',
-                text: ' 1 min',
-                bold: true,
-                weight: 'bold',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  id: '0',
+                  active: true,
+                  type: 'TEXT',
+                  text: '30 mins ',
+                  bold: true,
+                  weight: 'bold',
+                },
+                {
+                  id: '1',
+                  active: true,
+                  type: 'TEXT',
+                  text: ' \u2192',
+                  bold: true,
+                  weight: 'bold',
+                },
+                {
+                  id: '2',
+                  active: true,
+                  type: 'TEXT',
+                  text: ' 1 min',
+                  bold: true,
+                  weight: 'bold',
+                },
+              ],
+            },
             description: 'Save hours on every quote',
           },
           {
@@ -239,15 +257,20 @@ export const DATA: DataType = {
               stroke: '#FF5900',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                bold: true,
-                weight: 'bold',
-                text: 'Generated in 23 seconds',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  active: true,
+                  id: '0',
+                  type: 'TEXT',
+                  bold: true,
+                  weight: 'bold',
+                  text: 'Generated in 23 seconds',
+                },
+              ],
+            },
             description: 'From photos or text',
           },
           {
@@ -260,15 +283,20 @@ export const DATA: DataType = {
               position: 'left',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                bold: true,
-                weight: 'bold',
-                text: 'Professional every time',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  active: true,
+                  id: '0',
+                  type: 'TEXT',
+                  bold: true,
+                  weight: 'bold',
+                  text: 'Professional every time',
+                },
+              ],
+            },
             description: 'Customer-ready quotes',
           },
         ],

@@ -9,7 +9,7 @@ import { Description, Title } from '@/components/section-header';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { Button as ButtonType } from '@/types/global';
-import { FootNote, LANDINGHERO } from '@/types/pages';
+import { FootNote, LANDINGHERO, RichText } from '@/types/pages';
 
 const useSectionAnimation = (
   parentRef: React.RefObject<HTMLDivElement | null>,
@@ -137,7 +137,7 @@ export function HeroSection({
                     sectionRefs.current[1] = element;
                   }}
                   className="opacity-0 lg:text-[1.37rem]"
-                  description={description}
+                  description={description as RichText[]}
                 />
               )}
             </>

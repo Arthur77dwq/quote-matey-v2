@@ -11,25 +11,38 @@ export const DATA: DataType = {
     {
       type: 'HERO',
       visible: true,
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Frequently',
-        },
-        { id: '2', type: 'lineBreak', text: '' },
-        { id: '3', bold: true, weight: 'bold', type: 'text', text: 'asked' },
-        {
-          id: '4',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' questions',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Frequently',
+          },
+          { id: '2', active: true, type: 'LINEBREAK' },
+          {
+            id: '3',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'asked',
+          },
+          {
+            id: '4',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' questions',
+            strong: true,
+          },
+        ],
+      },
       description: [
         {
           id: '1',
