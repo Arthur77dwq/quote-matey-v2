@@ -94,7 +94,7 @@ export function HeroSection({
           </div>
           <Image
             src="/images/cloudLeft.png"
-            className="w-150.5 h-87.5 absolute -top-10 -left-32.5"
+            className="hidden md:block w-150.5 h-87.5 absolute -top-10 -left-32.5"
             width={602}
             height={350}
             alt=""
@@ -102,14 +102,14 @@ export function HeroSection({
 
           <Image
             src="/images/cloudCenter.png"
-            className="w-129.75 h-60 absolute top-12 left-1/2 -translate-x-1/2"
+            className="hidden md:block w-129.75 h-60 absolute top-12 left-1/2 -translate-x-1/2"
             width={519}
             height={240}
             alt=""
           />
           <Image
             src="/images/cloudRight.png"
-            className="w-146 h-87.5 absolute top-20 -right-15"
+            className="hidden md:block w-146 h-87.5 absolute top-20 -right-15"
             width={584}
             height={350}
             alt=""
@@ -127,7 +127,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="opacity-0 lg:leading-23 text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
+                  className="w-88.5 md:w-full opacity-0 leading-[1em] text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
                   title={title}
                 />
               )}

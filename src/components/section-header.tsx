@@ -17,7 +17,7 @@ function DomNode({ children }: { children: RichText }) {
       }
       return <span className={styleParse(children)}>{children.text}</span>;
     case 'LINEBREAK':
-      return <br />;
+      return <br className="hidden md:inline" />;
     case 'UL':
       return (
         <ul className={styleParse(children)}>
@@ -72,7 +72,7 @@ export function Title({
 }) {
   if (title.type === 'HEADING') {
     const commonClass = cn(
-      'inline-block text-neutral-900 text-center tracking-[-1.4px] leading-[1.2em] text-[2.75rem] md:text-[3.375rem] lg:text-[4.6875rem]',
+      'text-neutral-900 text-center tracking-[-1.4px] leading-[1.2em] text-[2.75rem] md:text-[3.375rem] lg:text-[4.6875rem]',
       className,
     );
     switch (title.level) {
