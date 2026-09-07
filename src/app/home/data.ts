@@ -55,7 +55,7 @@ export const DATA: DataType = {
             bold: true,
             weight: 'bold',
             type: 'TEXT',
-            text: 'professional',
+            text: ' professional',
             strong: true,
           },
           {
@@ -72,6 +72,8 @@ export const DATA: DataType = {
         {
           id: '1',
           active: true,
+          bold: true,
+          weight: 'medium',
           type: 'TEXT',
           text: 'Generate trade quotes in under 60 seconds',
         },
@@ -114,7 +116,16 @@ export const DATA: DataType = {
             src: '/images/tools.png',
             alt: '',
           },
-          text: 'Built for Aussie Tradies',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: 'Built for Aussie Tradies',
+            },
+          ],
         },
         {
           icon: {
@@ -122,7 +133,16 @@ export const DATA: DataType = {
             src: '/images/approved.svg',
             alt: '',
           },
-          text: 'No credit card needed',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: 'No credit card needed',
+            },
+          ],
         },
         {
           icon: {
@@ -130,7 +150,16 @@ export const DATA: DataType = {
             src: '/images/thunder.svg',
             alt: '',
           },
-          text: '10 free quotes',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: '10 free quotes',
+            },
+          ],
         },
       ],
     },

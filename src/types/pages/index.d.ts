@@ -185,7 +185,7 @@ export type PRIVACY = {
 
 export type FootNote = {
   icon?: ImageType | IconType;
-  text: string;
+  text: RichText[];
 };
 
 export type LANDINGHERO = {

@@ -143,7 +143,7 @@ export function Description({
     <p
       ref={ref}
       className={cn(
-        'max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter text-neutral-600 leading-[1.3em]',
+        'max-w-150 w-full text-[1rem] sm:text-body-md text-center tracking-normal font-inter text-neutral-600! leading-[1.3em]',
         className,
       )}
     >
@@ -152,15 +152,12 @@ export function Description({
         description?.map((node, i) => {
           if (node.type === 'CHILDREN') {
             return (
-              <span
-                key={i}
-                className={cn('inline', styleParse(node as RichText))}
-              >
+              <span key={i} className={cn(styleParse(node))}>
                 {children}
               </span>
             );
           } else {
-            return <DomNode key={`${i}`} children={node as RichText} />;
+            return <DomNode key={`${i}`} children={node} />;
           }
         })}
     </p>

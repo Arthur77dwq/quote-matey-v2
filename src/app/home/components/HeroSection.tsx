@@ -30,7 +30,7 @@ const useSectionAnimation = (
     );
 
     gsap.to(mountainRef.current, {
-      yPercent: 150,
+      yPercent: 200,
       scale: 2,
       opacity: 0,
       ease: 'power1.out',
@@ -136,7 +136,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="opacity-0 lg:text-[1.37rem]"
+                  className="w-50 md:w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
                   description={description}
                 />
               )}
@@ -195,9 +195,12 @@ export function HeroSection({
                           />
                         )
                       ))}
-                    <span className="text-[0.5rem] lg:text-[1rem]">
-                      {note.text}
-                    </span>
+                    {note.text && (
+                      <Description
+                        className="text-[0.5rem] lg:text-[1rem] leading-[1.3em]"
+                        description={note.text}
+                      />
+                    )}
                   </span>
                   {props.footNote &&
                     props.footNote[index + 1] !== undefined && (
