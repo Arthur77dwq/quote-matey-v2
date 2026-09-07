@@ -22,32 +22,40 @@ export const DATA: DataType = {
           },
         },
         header: {
-          title: [
-            {
-              id: '0',
-              type: 'text',
-              bold: true,
-              weight: 'light',
-              text: 'Check your email',
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                active: true,
+                id: '0',
+                type: 'TEXT',
+                bold: true,
+                weight: 'light',
+                text: 'Check your email',
+              },
+            ],
+          },
           description: [
             {
               id: '0',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               bold: true,
               weight: 'light',
               text: "We've sent a password reset link to ",
             },
             {
               id: '1',
-              type: 'children',
+              active: true,
+              type: 'CHILDREN',
               bold: true,
               weight: 'bold',
             },
             {
               id: '2',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               bold: true,
               weight: 'light',
               text: '. Please check your inbox and follow the instructions to reset your password.',
@@ -83,17 +91,20 @@ export const DATA: DataType = {
           text: [
             {
               id: '0',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               bold: true,
               weight: 'light',
               text: "Didn't receive the email? Check your spam folder or ",
             },
             {
               id: '1',
-              type: 'link',
+              active: true,
+              type: 'LINK',
               bold: true,
               weight: 'light',
               href: '/reset-password',
+              target: '_self',
               text: 'try again',
               strong: true,
             },
@@ -116,13 +127,18 @@ export const DATA: DataType = {
             active: true,
             color: 'green',
           },
-          title: [
-            {
-              id: '0',
-              type: 'text',
-              text: 'Quote generated',
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                active: true,
+                id: '0',
+                type: 'TEXT',
+                text: 'Quote generated',
+              },
+            ],
+          },
           description: 'Professional quote ready to send',
         },
         bottom: [
@@ -136,29 +152,36 @@ export const DATA: DataType = {
               stroke: '#0023D6',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                text: '30 mins ',
-                bold: true,
-                weight: 'bold',
-              },
-              {
-                id: '1',
-                type: 'text',
-                text: ' \u2192',
-                bold: true,
-                weight: 'bold',
-              },
-              {
-                id: '2',
-                type: 'text',
-                text: ' 1 min',
-                bold: true,
-                weight: 'bold',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  active: true,
+                  id: '0',
+                  type: 'TEXT',
+                  text: '30 mins ',
+                  bold: true,
+                  weight: 'bold',
+                },
+                {
+                  active: true,
+                  id: '1',
+                  type: 'TEXT',
+                  text: ' \u2192',
+                  bold: true,
+                  weight: 'bold',
+                },
+                {
+                  active: true,
+                  id: '2',
+                  type: 'TEXT',
+                  text: ' 1 min',
+                  bold: true,
+                  weight: 'bold',
+                },
+              ],
+            },
             description: 'Save hours on every quote',
           },
           {
@@ -171,15 +194,20 @@ export const DATA: DataType = {
               stroke: '#FF5900',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                bold: true,
-                weight: 'bold',
-                text: 'Generated in 23 seconds',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  active: true,
+                  id: '0',
+                  type: 'TEXT',
+                  bold: true,
+                  weight: 'bold',
+                  text: 'Generated in 23 seconds',
+                },
+              ],
+            },
             description: 'From photos or text',
           },
           {
@@ -192,15 +220,20 @@ export const DATA: DataType = {
               position: 'left',
               active: true,
             },
-            title: [
-              {
-                id: '0',
-                type: 'text',
-                bold: true,
-                weight: 'bold',
-                text: 'Professional every time',
-              },
-            ],
+            title: {
+              type: 'HEADING',
+              level: 1,
+              content: [
+                {
+                  active: true,
+                  id: '0',
+                  type: 'TEXT',
+                  bold: true,
+                  weight: 'bold',
+                  text: 'Professional every time',
+                },
+              ],
+            },
             description: 'Customer-ready quotes',
           },
         ],

@@ -16,21 +16,27 @@ export const DATA: DataType = {
         src: '/images/about/BackgroundSKYUNDERLAY.jpg',
         alt: '',
       },
-      title: [
-        {
-          id: '0',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Privacy Policy',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '0',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Privacy Policy',
+          },
+        ],
+      },
       description: [
         {
           id: '01',
           bold: true,
           weight: 'medium',
-          type: 'text',
+          active: true,
+          type: 'TEXT',
           text: 'Last updated: June 11, 2026',
         },
       ],

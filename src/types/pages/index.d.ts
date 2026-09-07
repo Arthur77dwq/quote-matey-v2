@@ -39,8 +39,8 @@ export type HERO = {
   visible: boolean;
   BGImage?: ImageType;
   tag?: string;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   children?: React.ReactNode;
   className?: string;
 };
@@ -66,8 +66,8 @@ export type QuestionCategory = {
 export type QNA = {
   type: SectionType.QNA;
   visible: boolean;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   categories?: QuestionCategory[];
   variant?: 'primary' | 'secondary';
   className?: string;
@@ -135,7 +135,7 @@ export type LANDINGPRICING = {
   type: SectionType.LANDINGPRICING;
   visible: boolean;
   tag?: string;
-  title?: RichTextNode[];
+  title: HeadingNode;
   plans: PricingPlan[];
   footer?: string;
   className?: string;
@@ -185,7 +185,7 @@ export type PRIVACY = {
 
 export type FootNote = {
   icon?: ImageType | IconType;
-  text: string;
+  text: RichText[];
 };
 
 export type LANDINGHERO = {
@@ -193,8 +193,8 @@ export type LANDINGHERO = {
   visible: boolean;
   BGImage?: ImageType;
   otherImages?: Record<string, ImageType>;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   cta?: Button[];
   children?: React.ReactNode;
   footNote?: FootNote[];
@@ -216,17 +216,17 @@ export type Content = Stats;
 export type Comparison = {
   type: 'DANGER' | 'SAFE';
   id: string;
-  head?: RichTextNode[];
-  title?: RichTextNode[];
+  head?: RichText[];
+  title?: HeadingNode;
   icon?: IconType;
-  description?: RichTextNode[];
+  description?: RichText[];
   content?: Content[];
 };
 
 export type PRODUCT = {
   type: SectionType.PRODUCT;
   visible: boolean;
-  title?: RichTextNode[];
+  title?: HeadingNode;
   comparison?: Comparison[];
 };
 
@@ -234,8 +234,8 @@ export type VIDEODEMO = {
   type: SectionType.VIDEODEMO;
   visible: boolean;
   tag?: string;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   video?: VideoType;
   className?: string;
 };
@@ -253,8 +253,8 @@ export type PLATFORM = {
   BGImage?: ImageType;
   FGImage?: ImageType;
   cards?: PlatformCard[];
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   className?: string;
 };
 
@@ -274,8 +274,8 @@ export type WORKING = {
   type: SectionType.WORKING;
   visible: boolean;
   tag?: string;
-  title?: RichTextNode[];
-  description?: RichTextNode[];
+  title?: HeadingNode;
+  description?: RichText[];
   className?: string;
   supportingText?: SupportText;
   cards: WorkingCard[];
@@ -294,14 +294,14 @@ export type USECASES = {
   type: SectionType.USECASES;
   visible: boolean;
   tag?: string;
-  title?: RichTextNode[];
+  title?: HeadingNode;
   className?: string;
   cards: USECASESCard[];
 };
 
 export type AUTHHead = {
-  title: RichTextNode[];
-  description: string | RichTextNode[];
+  title: HeadingNode;
+  description: string | RichText[];
   logo?: ImageType;
 };
 
@@ -317,7 +317,7 @@ export type FormField<T extends FieldValues> =
       id: string;
       name: Path<T>;
       type: 'checkbox';
-      label: RichTextNode[];
+      label: RichText[];
     }
   | {
       id: string;
@@ -325,7 +325,7 @@ export type FormField<T extends FieldValues> =
       type: 'text';
       value: 'signup' | 'login' | 'reset-password';
       className?: string;
-      label: RichTextNode[];
+      label: RichText[];
     };
 
 export type AUTHBody = {
@@ -355,7 +355,7 @@ export type AUTHFoot = {
       } & Button)
     | Separator
   )[];
-  text?: RichTextNode[];
+  text?: RichText[];
 };
 
 export type AUTHForm = {
@@ -375,7 +375,7 @@ export type CARDType = {
   variant: 'primary' | 'secondary';
   id: string;
   icon?: IconType;
-  title: (RichTextNode | ({ id: string } & IconType))[];
+  title: HeadingNode;
   description: string;
 };
 
@@ -434,6 +434,8 @@ export interface FAQRefs {
   hero: RefObject<AnimatedRef | null>;
 }
 
+export type contactFormData = z.infer<typeof contactSchema>;
+
 export type fontWeight =
   | 'thin'
   | 'extralight'
@@ -460,10 +462,12 @@ export type TextNodeType =
 export type Item = { text?: string; type: TextNodeType; link?: LINK };
 
 export type RichTextNode = {
-  level?: number;
   id: string;
+  active?: boolean;
+  type: TextNodeType; // for node types(heading, ul, li, etc)
+  level?: 1 | 2 | 3 | 4 | 5 | 6; // for heading levels
+  position?: 'center' | 'left' | 'right';
   text?: string;
-  type: TextNodeType;
   bold?: boolean;
   weight?: fontWeight;
   italic?: boolean;
@@ -471,14 +475,78 @@ export type RichTextNode = {
   underline?: boolean;
   strike?: boolean;
   code?: boolean;
-  href?: string;
-  items?: Item[];
-  link?: LINK;
-  active?: boolean;
-  stroke?: string | undefined;
-  position?: 'center' | 'left' | 'right';
-  icon?: string | null | undefined;
-  color?: string | undefined;
+  href?: string; // for link href
+  link?: LINK; // for link
+  items?: Item[]; // for list items
+  icon?: string | null | undefined; // for icon name
+  stroke?: string | undefined; // for icon stroke color
+  color?: string | undefined; // text color
 };
 
-export type contactFormData = z.infer<typeof contactSchema>;
+export type NodeType =
+  | 'TEXT'
+  | 'LINEBREAK'
+  | 'HEADING'
+  | 'UL'
+  | 'OL'
+  | 'LINK'
+  | 'ICON'
+  | 'CHILDREN';
+// LI: 'LI';
+
+export type RichTextBase = {
+  id: string;
+  active: boolean;
+};
+
+export type TextOptions = {
+  bold?: boolean;
+  weight?: fontWeight;
+  italic?: boolean;
+  strong?: boolean;
+  underline?: boolean;
+  strike?: boolean;
+  color?: { token?: string; value?: string };
+};
+
+export type TextNode = {
+  type: 'TEXT';
+  text: string;
+} & TextOptions;
+
+export type ChildNode = {
+  type: 'CHILDREN';
+} & TextOptions;
+
+export type LineBreakNode = {
+  type: 'LINEBREAK';
+};
+
+export type ListNode = {
+  type: 'UL' | 'OL';
+  items: RichText[];
+};
+
+export type LinkNode = {
+  type: 'LINK';
+  text: string;
+} & LINK &
+  TextOptions;
+
+export type IconNode = IconType;
+
+export type RichNode =
+  | TextNode
+  | ChildNode
+  | LineBreakNode
+  | ListNode
+  | LinkNode
+  | IconNode;
+
+export type HeadingNode = {
+  type: 'HEADING';
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  content: RichText[];
+};
+
+export type RichText = RichTextBase & RichNode;

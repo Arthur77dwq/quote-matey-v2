@@ -14,6 +14,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const cardType = 'TEXT-OVERLAYED-IMAGE';
 
   const handleMouseEnter = () => {
     if (!tweenRef.current) return;
@@ -81,7 +82,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
             {props.cards.length &&
               props.cards.map(
                 (card, index) =>
-                  card.type === 'TEXT-OVERLAYED-IMAGE' && (
+                  card.type === cardType && (
                     <Card
                       key={index}
                       className="max-w-95 max-h-69.75 sm:max-h-105 aspect-95/105 w-95 h-69.75 sm:h-105 overflow-hidden p-0 border-0 rounded-none shadow-none"
@@ -99,7 +100,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                             />
                           </div>
                         )}
-                        {card.type === 'TEXT-OVERLAYED-IMAGE' && (
+                        {card.type === cardType && (
                           <div
                             className="
                         z-10
@@ -165,7 +166,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                       </div>
                     )}
 
-                    {card.type === 'TEXT-OVERLAYED-IMAGE' && (
+                    {card.type === cardType && (
                       <div
                         className="
                         z-10

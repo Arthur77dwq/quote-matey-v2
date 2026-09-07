@@ -1,3 +1,4 @@
+import * as Icons from 'lucide-react';
 import { z } from 'zod';
 
 import {
@@ -6,7 +7,7 @@ import {
   signUpSchema,
 } from '@/lib/schemas/auth.schema';
 
-import { AUTHForm, RichTextNode } from './pages';
+import { AUTHForm } from './pages';
 
 export type User = {
   uid: string;
@@ -98,12 +99,24 @@ export type GlobalMetaDataType = {
 export type HeaderType = 'GLOBAL_HEADER';
 export type FooterType = 'GLOBAL_FOOTER';
 
+export type IconKeys =
+  | 'google'
+  | 'image'
+  | 'text'
+  | 'trend'
+  | 'graph'
+  | 'boost'
+  | 'performance'
+  | 'toolBox'
+  | 'tools'
+  | 'LongTailArrow';
+
 export type IconType = {
   type: 'ICON';
   active: boolean;
   stroke?: string;
   position: 'left' | 'center' | 'right';
-  icon?: string | null;
+  icon: keyof typeof Icons | IconKeys;
   color?: string;
 };
 
@@ -164,6 +177,14 @@ export type loginFormData = z.infer<typeof loginSchema>;
 export type signUpFormData = z.infer<typeof signUpSchema>;
 export type resetFormData = z.infer<typeof resetSchema>;
 
+export type NotFound = {
+  tag?: string;
+  title: HeadingNode;
+  subTitle: string;
+  description: string;
+  buttons: Button[];
+};
+
 export type GlobalData = {
   brand: BrandType;
   metadata?: GlobalMetaDataType | null;
@@ -171,11 +192,5 @@ export type GlobalData = {
   authDialog: AUTHForm;
   headers?: headers | null;
   footer?: footer | null;
-  notFound: {
-    tag?: string;
-    title: RichTextNode[];
-    subTitle: string;
-    description: string;
-    buttons: Button[];
-  };
+  notFound: NotFound;
 };

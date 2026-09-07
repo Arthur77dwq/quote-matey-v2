@@ -1,6 +1,7 @@
 import { ComponentType, SVGProps } from 'react';
 
 import { cn } from '@/lib/utils';
+import { IconKeys } from '@/types/global';
 
 export function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -222,7 +223,10 @@ export function LongTailArrow({ className }: { className?: string }) {
   );
 }
 
-export const IconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+export const IconMap: Record<
+  IconKeys,
+  ComponentType<SVGProps<SVGSVGElement>>
+> = {
   google: GoogleIcon,
   image: ImageIcon,
   text: TextIcon,

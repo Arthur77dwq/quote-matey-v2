@@ -1,5 +1,9 @@
 import { DataType } from '@/types/pages';
 
+const cardType = 'TEXT-OVERLAYED-IMAGE';
+const ctaText = 'Get Started';
+const defaultCtaHref = '/dashboard/plan';
+
 export const DATA: DataType = {
   metadata: {
     title: 'AI Quote Generator for Tradies',
@@ -28,38 +32,49 @@ export const DATA: DataType = {
           alt: '',
         },
       },
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Turn messy texts into',
-        },
-        {
-          id: '2',
-          type: 'lineBreak',
-        },
-        {
-          id: '3',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'professional',
-          strong: true,
-        },
-        {
-          id: '4',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' quotes',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Turn messy texts into',
+          },
+          {
+            active: true,
+            id: '2',
+            type: 'LINEBREAK',
+          },
+          {
+            active: true,
+            id: '3',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' professional',
+            strong: true,
+          },
+          {
+            active: true,
+            id: '4',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' quotes',
+          },
+        ],
+      },
       description: [
         {
           id: '1',
-          type: 'text',
+          active: true,
+          bold: true,
+          weight: 'medium',
+          type: 'TEXT',
           text: 'Generate trade quotes in under 60 seconds',
         },
       ],
@@ -101,7 +116,16 @@ export const DATA: DataType = {
             src: '/images/tools.png',
             alt: '',
           },
-          text: 'Built for Aussie Tradies',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: 'Built for Aussie Tradies',
+            },
+          ],
         },
         {
           icon: {
@@ -109,7 +133,16 @@ export const DATA: DataType = {
             src: '/images/approved.svg',
             alt: '',
           },
-          text: 'No credit card needed',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: 'No credit card needed',
+            },
+          ],
         },
         {
           icon: {
@@ -117,34 +150,50 @@ export const DATA: DataType = {
             src: '/images/thunder.svg',
             alt: '',
           },
-          text: '10 free quotes',
+          text: [
+            {
+              id: '0',
+              active: true,
+              bold: true,
+              weight: 'medium',
+              type: 'TEXT',
+              text: '10 free quotes',
+            },
+          ],
         },
       ],
     },
     {
       type: 'PRODUCT',
       visible: true,
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Stop losing jobs to',
-        },
-        {
-          id: '2',
-          type: 'lineBreak',
-        },
-        {
-          id: '3',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: `"I'll send it tonight."`,
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Stop losing jobs to',
+          },
+          {
+            active: true,
+            id: '2',
+            type: 'LINEBREAK',
+          },
+          {
+            id: '3',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: `"I'll send it tonight."`,
+            strong: true,
+          },
+        ],
+      },
       comparison: [
         {
           type: 'DANGER',
@@ -159,39 +208,48 @@ export const DATA: DataType = {
           head: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'Before QuoteMatey',
             },
           ],
-          title: [
-            {
-              id: '1',
-              bold: true,
-              weight: 'semibold',
-              type: 'text',
-              text: "The 'Busy Tradie' Text",
-              strong: true,
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                id: '1',
+                active: true,
+                bold: true,
+                weight: 'semibold',
+                type: 'TEXT',
+                text: "The 'Busy Tradie' Text",
+                strong: true,
+              },
+            ],
+          },
           description: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'I can fix your tap leak in 5',
             },
             {
               id: '2',
-              type: 'lineBreak',
+              active: true,
+              type: 'LINEBREAK',
             },
             {
               id: '3',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'hours will cost $200 + gst',
             },
           ],
@@ -223,28 +281,35 @@ export const DATA: DataType = {
           id: '1',
           head: [
             {
+              active: true,
               id: '1',
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'After QuoteMatey',
             },
           ],
-          title: [
-            {
-              id: '1',
-              bold: true,
-              weight: 'semibold',
-              type: 'text',
-              text: 'The QuoteMatey Response',
-            },
-          ],
+          title: {
+            type: 'HEADING',
+            level: 1,
+            content: [
+              {
+                id: '1',
+                active: true,
+                bold: true,
+                weight: 'semibold',
+                type: 'TEXT',
+                text: 'The QuoteMatey Response',
+              },
+            ],
+          },
           description: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: "G'day, I can get that leaking tap sorted for you quickly. The job involves isolating the supply, replacing the faulty internal components, and testing the seal. You are looking at a price between $180 and $350 depending on the specific tap type. I will make sure everything is left clean once the job is done. Let me know if you want to get this booked in. Cheers",
             },
           ],
@@ -270,27 +335,34 @@ export const DATA: DataType = {
       type: 'VIDEODEMO',
       visible: true,
       tag: 'Demo',
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'QuoteMatey',
-        },
-        {
-          id: '2',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' Demo',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'QuoteMatey',
+          },
+          {
+            id: '2',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' Demo',
+            strong: true,
+          },
+        ],
+      },
       description: [
         {
           id: '1',
-          type: 'text',
+          active: true,
+          type: 'TEXT',
           text: 'See how to use QuoteMatey',
         },
       ],
@@ -303,18 +375,24 @@ export const DATA: DataType = {
       type: 'PLATFORM',
       visible: true,
       tag: 'Platform overview',
-      title: [
-        {
-          id: '1',
-          type: 'text',
-          weight: 'bold',
-          text: 'See QuoteMatey in action',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            type: 'TEXT',
+            active: true,
+            weight: 'bold',
+            text: 'See QuoteMatey in action',
+          },
+        ],
+      },
       description: [
         {
+          active: true,
           id: '1',
-          type: 'text',
+          type: 'TEXT',
           weight: 'medium',
           text: 'See the fastest way to create professional quotes that win more jobs',
         },
@@ -369,25 +447,32 @@ export const DATA: DataType = {
       type: 'WORKING',
       visible: true,
       tag: 'How it works',
-      title: [
-        {
-          id: '1',
-          type: 'text',
-          weight: 'bold',
-          text: 'Start quoting',
-        },
-        {
-          id: '2',
-          type: 'text',
-          weight: 'bold',
-          strong: true,
-          text: ' in minutes',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            type: 'TEXT',
+            weight: 'bold',
+            text: 'Start quoting',
+          },
+          {
+            id: '2',
+            active: true,
+            type: 'TEXT',
+            weight: 'bold',
+            strong: true,
+            text: ' in minutes',
+          },
+        ],
+      },
       description: [
         {
+          active: true,
           id: '1',
-          type: 'text',
+          type: 'TEXT',
           weight: 'medium',
           text: 'Create an account, let AI analyze your job, and done.',
         },
@@ -434,21 +519,27 @@ export const DATA: DataType = {
       type: 'USECASES',
       visible: true,
       tag: 'Use cases',
-      title: [
-        {
-          id: '1',
-          type: 'text',
-          weight: 'bold',
-          text: 'Who this platform is',
-        },
-        {
-          id: '2',
-          type: 'text',
-          weight: 'bold',
-          strong: true,
-          text: ' build for',
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            type: 'TEXT',
+            weight: 'bold',
+            text: 'Who this platform is',
+          },
+          {
+            id: '2',
+            active: true,
+            type: 'TEXT',
+            weight: 'bold',
+            strong: true,
+            text: ' build for',
+          },
+        ],
+      },
       cards: [
         {
           id: '1',
@@ -461,7 +552,7 @@ export const DATA: DataType = {
         },
         {
           id: '2',
-          type: 'TEXT-OVERLAYED-IMAGE',
+          type: cardType,
           title: 'Tradies',
           description:
             'Track your quotes, manage jobs, and generate AI-powered estimates without wasting hours on manual admin work.',
@@ -486,7 +577,7 @@ export const DATA: DataType = {
         },
         {
           id: '4',
-          type: 'TEXT-OVERLAYED-IMAGE',
+          type: cardType,
           title: 'Plumbers',
           description:
             'Track plumbing jobs, manage customer quotes, and generate AI-powered estimates without wasting hours on paperwork.',
@@ -511,7 +602,7 @@ export const DATA: DataType = {
         },
         {
           id: '6',
-          type: 'TEXT-OVERLAYED-IMAGE',
+          type: cardType,
           title: 'Project Managers',
           description:
             'Manage multiple jobs efficiently with organized quote tracking, customer management, and AI-powered workflow support.',
@@ -536,7 +627,7 @@ export const DATA: DataType = {
         },
         {
           id: '8',
-          type: 'TEXT-OVERLAYED-IMAGE',
+          type: cardType,
           title: 'Electrician',
           description:
             'Stay on top of every electrical job with fast AI-powered quotes, organized workflows, and quicker customer response times.',
@@ -636,23 +727,29 @@ export const DATA: DataType = {
       type: 'LANDINGPRICING',
       visible: true,
       tag: 'Subscription plans',
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Costs less than',
-        },
-        {
-          id: '2',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' one missed job',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            active: true,
+            id: '1',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Costs less than',
+          },
+          {
+            active: true,
+            id: '2',
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' one missed job',
+            strong: true,
+          },
+        ],
+      },
       plans: [
         {
           id: 'free',
@@ -676,9 +773,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: ctaText,
             active: false,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
         {
@@ -703,9 +800,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: ctaText,
             active: false,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
         {
@@ -730,9 +827,9 @@ export const DATA: DataType = {
           ],
           cta: {
             target: '_self',
-            text: 'Get Started',
+            text: ctaText,
             active: false,
-            href: '/dashboard/plan',
+            href: defaultCtaHref,
           },
         },
       ],
@@ -742,30 +839,37 @@ export const DATA: DataType = {
       type: 'QNA',
       visible: true,
       variant: 'secondary',
-      title: [
-        {
-          id: '1',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: 'Frequently asked ',
-        },
-        { id: '2', type: 'lineBreak' },
-        {
-          id: '3',
-          bold: true,
-          weight: 'bold',
-          type: 'text',
-          text: ' questions',
-          strong: true,
-        },
-      ],
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            id: '1',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: 'Frequently asked ',
+          },
+          { id: '2', active: true, type: 'LINEBREAK' },
+          {
+            id: '3',
+            active: true,
+            bold: true,
+            weight: 'bold',
+            type: 'TEXT',
+            text: ' questions',
+            strong: true,
+          },
+        ],
+      },
       description: [
         {
           id: '1',
+          active: true,
           bold: true,
           weight: 'medium',
-          type: 'text',
+          type: 'TEXT',
           text: 'Find quick answers to common questions about the platform, pricing, and security.',
         },
       ],

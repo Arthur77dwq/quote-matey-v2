@@ -30,7 +30,7 @@ const useSectionAnimation = (
     );
 
     gsap.to(mountainRef.current, {
-      yPercent: 150,
+      yPercent: 200,
       scale: 2,
       opacity: 0,
       ease: 'power1.out',
@@ -94,24 +94,24 @@ export function HeroSection({
           </div>
           <Image
             src="/images/cloudLeft.png"
-            className="w-140 h-87 absolute top-20 left-169"
-            width={0}
-            height={0}
+            className="hidden md:block w-150.5 h-87.5 absolute -top-10 -left-32.5"
+            width={602}
+            height={350}
             alt=""
           />
 
           <Image
             src="/images/cloudCenter.png"
-            className="w-140 h-87 absolute top-12.5 left-85"
-            width={0}
-            height={0}
+            className="hidden md:block w-129.75 h-60 absolute top-12 left-1/2 -translate-x-1/2"
+            width={519}
+            height={240}
             alt=""
           />
           <Image
             src="/images/cloudRight.png"
-            className="w-140 h-87 absolute -top-10 -left-32.5"
-            width={0}
-            height={0}
+            className="hidden md:block w-146 h-87.5 absolute top-20 -right-15"
+            width={584}
+            height={350}
             alt=""
           />
         </div>
@@ -127,7 +127,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="opacity-0 lg:leading-23 text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
+                  className="w-88.5 md:w-full opacity-0 leading-[1em] text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
                   title={title}
                 />
               )}
@@ -136,7 +136,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="opacity-0 lg:text-[1.37rem]"
+                  className="w-50 md:w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
                   description={description}
                 />
               )}
@@ -195,9 +195,12 @@ export function HeroSection({
                           />
                         )
                       ))}
-                    <span className="text-[0.5rem] lg:text-[1rem]">
-                      {note.text}
-                    </span>
+                    {note.text && (
+                      <Description
+                        className="text-[0.5rem] lg:text-[1rem] leading-[1.3em]"
+                        description={note.text}
+                      />
+                    )}
                   </span>
                   {props.footNote &&
                     props.footNote[index + 1] !== undefined && (
