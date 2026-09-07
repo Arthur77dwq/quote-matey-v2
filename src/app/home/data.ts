@@ -71,7 +71,8 @@ export const DATA: DataType = {
       description: [
         {
           id: '1',
-          type: 'text',
+          active: true,
+          type: 'TEXT',
           text: 'Generate trade quotes in under 60 seconds',
         },
       ],
@@ -178,9 +179,10 @@ export const DATA: DataType = {
           head: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'Before QuoteMatey',
             },
           ],
@@ -202,20 +204,23 @@ export const DATA: DataType = {
           description: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'I can fix your tap leak in 5',
             },
             {
               id: '2',
-              type: 'lineBreak',
+              active: true,
+              type: 'LINEBREAK',
             },
             {
               id: '3',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'hours will cost $200 + gst',
             },
           ],
@@ -247,10 +252,11 @@ export const DATA: DataType = {
           id: '1',
           head: [
             {
+              active: true,
               id: '1',
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: 'After QuoteMatey',
             },
           ],
@@ -271,9 +277,10 @@ export const DATA: DataType = {
           description: [
             {
               id: '1',
+              active: true,
               bold: true,
               weight: 'medium',
-              type: 'text',
+              type: 'TEXT',
               text: "G'day, I can get that leaking tap sorted for you quickly. The job involves isolating the supply, replacing the faulty internal components, and testing the seal. You are looking at a price between $180 and $350 depending on the specific tap type. I will make sure everything is left clean once the job is done. Let me know if you want to get this booked in. Cheers",
             },
           ],
@@ -325,7 +332,8 @@ export const DATA: DataType = {
       description: [
         {
           id: '1',
-          type: 'text',
+          active: true,
+          type: 'TEXT',
           text: 'See how to use QuoteMatey',
         },
       ],
@@ -353,8 +361,9 @@ export const DATA: DataType = {
       },
       description: [
         {
+          active: true,
           id: '1',
-          type: 'text',
+          type: 'TEXT',
           weight: 'medium',
           text: 'See the fastest way to create professional quotes that win more jobs',
         },
@@ -432,8 +441,9 @@ export const DATA: DataType = {
       },
       description: [
         {
+          active: true,
           id: '1',
-          type: 'text',
+          type: 'TEXT',
           weight: 'medium',
           text: 'Create an account, let AI analyze your job, and done.',
         },
@@ -827,9 +837,10 @@ export const DATA: DataType = {
       description: [
         {
           id: '1',
+          active: true,
           bold: true,
           weight: 'medium',
-          type: 'text',
+          type: 'TEXT',
           text: 'Find quick answers to common questions about the platform, pricing, and security.',
         },
       ],

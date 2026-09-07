@@ -40,7 +40,7 @@ export type HERO = {
   BGImage?: ImageType;
   tag?: string;
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   children?: React.ReactNode;
   className?: string;
 };
@@ -67,7 +67,7 @@ export type QNA = {
   type: SectionType.QNA;
   visible: boolean;
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   categories?: QuestionCategory[];
   variant?: 'primary' | 'secondary';
   className?: string;
@@ -135,7 +135,7 @@ export type LANDINGPRICING = {
   type: SectionType.LANDINGPRICING;
   visible: boolean;
   tag?: string;
-  title?: HeadingNode;
+  title: HeadingNode;
   plans: PricingPlan[];
   footer?: string;
   className?: string;
@@ -194,7 +194,7 @@ export type LANDINGHERO = {
   BGImage?: ImageType;
   otherImages?: Record<string, ImageType>;
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   cta?: Button[];
   children?: React.ReactNode;
   footNote?: FootNote[];
@@ -216,10 +216,10 @@ export type Content = Stats;
 export type Comparison = {
   type: 'DANGER' | 'SAFE';
   id: string;
-  head?: RichTextNode[];
+  head?: RichText[];
   title?: HeadingNode;
   icon?: IconType;
-  description?: RichTextNode[];
+  description?: RichText[];
   content?: Content[];
 };
 
@@ -235,7 +235,7 @@ export type VIDEODEMO = {
   visible: boolean;
   tag?: string;
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   video?: VideoType;
   className?: string;
 };
@@ -254,7 +254,7 @@ export type PLATFORM = {
   FGImage?: ImageType;
   cards?: PlatformCard[];
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   className?: string;
 };
 
@@ -275,7 +275,7 @@ export type WORKING = {
   visible: boolean;
   tag?: string;
   title?: HeadingNode;
-  description?: RichTextNode[];
+  description?: RichText[];
   className?: string;
   supportingText?: SupportText;
   cards: WorkingCard[];
@@ -301,7 +301,7 @@ export type USECASES = {
 
 export type AUTHHead = {
   title: HeadingNode;
-  description: string | RichTextNode[];
+  description: string | RichText[];
   logo?: ImageType;
 };
 
@@ -317,7 +317,7 @@ export type FormField<T extends FieldValues> =
       id: string;
       name: Path<T>;
       type: 'checkbox';
-      label: RichTextNode[];
+      label: RichText[];
     }
   | {
       id: string;
@@ -325,7 +325,7 @@ export type FormField<T extends FieldValues> =
       type: 'text';
       value: 'signup' | 'login' | 'reset-password';
       className?: string;
-      label: RichTextNode[];
+      label: RichText[];
     };
 
 export type AUTHBody = {
@@ -355,7 +355,7 @@ export type AUTHFoot = {
       } & Button)
     | Separator
   )[];
-  text?: RichTextNode[];
+  text?: RichText[];
 };
 
 export type AUTHForm = {
@@ -530,7 +530,8 @@ export type ListNode = {
 export type LinkNode = {
   type: 'LINK';
   text: string;
-} & LINK;
+} & LINK &
+  TextOptions;
 
 export type IconNode = IconType;
 

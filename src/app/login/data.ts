@@ -100,13 +100,16 @@ export const DATA: DataType = {
           text: [
             {
               id: '0',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               text: 'Don’t have an account?',
             },
             {
               id: '1',
-              type: 'link',
+              active: true,
+              type: 'LINK',
               href: '/signup',
+              target: '_self',
               text: ' Sign up now',
               bold: true,
               weight: 'semibold',

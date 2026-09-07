@@ -250,14 +250,17 @@ export const GLOBAL_DATA: GlobalData = {
           type: 'checkbox',
           label: [
             {
+              active: true,
               id: '0',
-              type: 'text',
+              type: 'TEXT',
               text: 'I agree to the',
             },
             {
+              active: true,
               id: '1',
-              type: 'link',
+              type: 'LINK',
               href: '/terms',
+              target: '_self',
               text: ' Terms',
               bold: true,
               weight: 'semibold',
@@ -265,12 +268,15 @@ export const GLOBAL_DATA: GlobalData = {
             },
             {
               id: '2',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               text: ' & ',
             },
             {
               id: '3',
-              type: 'link',
+              active: true,
+              type: 'LINK',
+              target: '_self',
               href: '/legal-pages/privacy-policy',
               text: ' Privacy Policy',
               bold: true,
@@ -292,14 +298,17 @@ export const GLOBAL_DATA: GlobalData = {
       text: [
         {
           id: '0',
-          type: 'text',
+          active: true,
+          type: 'TEXT',
           text: 'Already have an account?',
         },
         {
           id: '1',
-          type: 'link',
+          active: true,
+          type: 'LINK',
           href: '/login',
           text: ' Login',
+          target: '_self',
           bold: true,
           weight: 'semibold',
           strong: true,

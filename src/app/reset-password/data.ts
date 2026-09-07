@@ -30,14 +30,15 @@ export const DATA: DataType = {
               {
                 id: '1',
                 active: true,
-                type: 'text',
+                type: 'TEXT',
                 text: 'Reset Your ',
                 bold: true,
                 weight: 'bold',
               },
               {
+                active: true,
                 id: '2',
-                type: 'text',
+                type: 'TEXT',
                 text: ' Password',
                 strong: true,
               },

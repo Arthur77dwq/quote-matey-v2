@@ -134,14 +134,17 @@ export const DATA: DataType = {
           text: [
             {
               id: '0',
-              type: 'text',
+              active: true,
+              type: 'TEXT',
               text: 'Already have an account?',
             },
             {
               id: '1',
-              type: 'link',
+              type: 'LINK',
               href: '/login',
               text: ' Login',
+              active: true,
+              target: '_self',
               bold: true,
               weight: 'semibold',
               strong: true,
