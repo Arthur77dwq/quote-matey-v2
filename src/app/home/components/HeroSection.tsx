@@ -75,7 +75,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-center items-center gap-2.5 pb-40 lg:pb-0 w-full h-280 lg:h-350 overflow-hidden',
+          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 lg:pb-0 w-full h-220 md:h-280 lg:h-350 overflow-hidden',
           className,
         )}
       >
@@ -87,7 +87,7 @@ export function HeroSection({
                 alt="Background"
                 height={1400}
                 width={1200}
-                className="w-full min-w-300 h-250 sm:h-325 lg:h-350"
+                className="w-full min-w-100 object-cover sm:min-w-300 h-full md:h-325 lg:h-350"
                 priority
               />
             )}
@@ -118,7 +118,7 @@ export function HeroSection({
 
         <div
           ref={parentRef}
-          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-70 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
         >
           <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.75 w-fit h-fit">
             {/* Hero Content */}
@@ -137,7 +137,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="w-50 md:w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
+                  className="whitespace-nowrap md:whitespace-normal w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
                   description={description}
                 />
               )}
@@ -181,7 +181,14 @@ export function HeroSection({
                 <React.Fragment key={index}>
                   <span
                     key={`${index}-${note.text}`}
-                    className="flex justify-center items-center gap-1"
+                    className="hidden md:flex justify-center items-center gap-1"
+                    style={{
+                      display:
+                        props.footNote !== undefined &&
+                        Math.floor(props.footNote?.length / 2) === index
+                          ? 'flex !important'
+                          : 'hidden',
+                    }}
                   >
                     {note.icon &&
                       (note.icon?.type === 'IMG' ? (
@@ -190,7 +197,7 @@ export function HeroSection({
                           alt=""
                           width={1}
                           height={1}
-                          className="h-2.5 w-auto sm:h-4.5"
+                          className="w-auto h-4.5"
                         />
                       ) : (
                         note.icon?.type === 'ICON' && (
@@ -202,7 +209,7 @@ export function HeroSection({
                       ))}
                     {note.text && (
                       <Description
-                        className="text-[0.5rem] lg:text-[1rem] leading-[1.3em]"
+                        className="text-[1rem]! leading-[1.3em]"
                         description={note.text}
                       />
                     )}
@@ -211,7 +218,7 @@ export function HeroSection({
                     props.footNote[index + 1] !== undefined && (
                       <span
                         key={index}
-                        className="h-4 opacity-20 bg-neutral-900 w-px"
+                        className="hidden md:inline h-4 opacity-20 bg-neutral-900 w-px"
                       />
                     )}
                 </React.Fragment>
@@ -260,7 +267,7 @@ export function HeroSection({
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 w-full h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
+        <div className="absolute bottom-0 w-full h-25 md:h-40 lg:h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
 
         {children}
       </section>
