@@ -75,7 +75,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 lg:pb-0 w-full h-220 md:h-280 lg:h-350 overflow-hidden',
+          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-200 md:h-280 lg:h-350 overflow-hidden',
           className,
         )}
       >
@@ -118,9 +118,9 @@ export function HeroSection({
 
         <div
           ref={parentRef}
-          className="pt-39.5 md:pt-70 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-70 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
-          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.75 w-fit h-fit">
+          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
             {/* Hero Content */}
             <div className="w-full h-full flex flex-col items-center justify-center gap-6.5">
               {title && (
