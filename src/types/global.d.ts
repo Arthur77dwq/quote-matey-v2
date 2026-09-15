@@ -78,6 +78,7 @@ export type ImageType = {
   type: 'IMG';
   alt: string;
   src: string;
+  aspect?: string;
 };
 
 export type GlobalMetaDataType = {

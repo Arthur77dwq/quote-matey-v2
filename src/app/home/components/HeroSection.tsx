@@ -120,8 +120,9 @@ export function HeroSection({
           ref={parentRef}
           className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
         >
-          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.5 w-fit h-fit">
-            <>
+          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.75 w-fit h-fit">
+            {/* Hero Content */}
+            <div className="w-full h-full flex flex-col items-center justify-center gap-6.5">
               {title && (
                 <Title
                   ref={(element) => {
@@ -140,7 +141,9 @@ export function HeroSection({
                   description={description}
                 />
               )}
-            </>
+            </div>
+
+            {/* CTA */}
             <div
               ref={(element) => {
                 sectionRefs.current[2] = element;
@@ -152,7 +155,7 @@ export function HeroSection({
                   key={`${i}-${button.text}`}
                   className={cn(
                     button.variant === 'secondary'
-                      ? 'h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
+                      ? 'w-fit h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] border border-[#FF530A]'
                       : 'h-fit px-12.5 py-4.5 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md',
                   )}
                   variant={button.variant}
@@ -166,6 +169,8 @@ export function HeroSection({
                 </Button>
               ))}
             </div>
+
+            {/* Footnote */}
             <div
               ref={(element) => {
                 sectionRefs.current[3] = element;
@@ -185,7 +190,7 @@ export function HeroSection({
                           alt=""
                           width={1}
                           height={1}
-                          className="size-2.5 sm:size-4.5"
+                          className="h-2.5 w-auto sm:h-4.5"
                         />
                       ) : (
                         note.icon?.type === 'ICON' && (
@@ -213,6 +218,7 @@ export function HeroSection({
               ))}
             </div>
           </div>
+
           <div
             ref={(element) => {
               sectionRefs.current[4] = element;
