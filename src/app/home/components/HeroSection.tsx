@@ -75,7 +75,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-200 md:h-280 lg:h-350 overflow-hidden',
+          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-200 md:h-310 lg:h-350 overflow-hidden',
           className,
         )}
       >
@@ -118,7 +118,7 @@ export function HeroSection({
 
         <div
           ref={parentRef}
-          className="pt-39.5 md:pt-70 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
           <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
             {/* Hero Content */}
@@ -181,14 +181,13 @@ export function HeroSection({
                 <React.Fragment key={index}>
                   <span
                     key={`${index}-${note.text}`}
-                    className="hidden md:flex justify-center items-center gap-1"
-                    style={{
-                      display:
-                        props.footNote !== undefined &&
+                    className={cn(
+                      'md:flex justify-center items-center gap-1',
+                      props.footNote !== undefined &&
                         Math.floor(props.footNote?.length / 2) === index
-                          ? 'flex !important'
-                          : 'hidden',
-                    }}
+                        ? 'flex'
+                        : 'hidden',
+                    )}
                   >
                     {note.icon &&
                       (note.icon?.type === 'IMG' ? (
