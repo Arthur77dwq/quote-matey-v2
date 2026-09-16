@@ -116,7 +116,7 @@ export function ComparisonCard({
         className,
       )}
     >
-      <TabsList className="relative sm:w-162.5 sm:h-22.5 flex gap-5 p-0">
+      <TabsList className="relative sm:w-162.5 h-15 sm:h-22.5 flex gap-5 p-0">
         <div className="absolute bg-white w-35.5 sm:w-51 h-0.5 -bottom-0.5" />
         <div className="absolute bg-linear-to-b from-white to-white/0 w-1/2 h-1/2 top-0" />
 
@@ -149,7 +149,7 @@ export function ComparisonCard({
                 )}
               </TabsTrigger>
               {mid - 1 === index && (
-                <div className="w-fit h-full z-1">
+                <div className="w-20 md:w-fit h-full z-1">
                   <Image
                     src={
                       active === '1'
@@ -158,7 +158,7 @@ export function ComparisonCard({
                     }
                     alt=""
                     width={130}
-                    height={50}
+                    height={30}
                   />
                 </div>
               )}
