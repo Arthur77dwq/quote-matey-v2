@@ -15,7 +15,7 @@ const useSectionAnimation = (
       if (!ref.current) return;
       const trigger = ScrollTrigger.create({
         trigger: ref.current,
-        start: '5% top',
+        start: '10% top',
 
         onEnter() {
           setActive('1');
@@ -41,12 +41,12 @@ export function ProductSection({ title, comparison }: PRODUCT) {
     <section
       ref={sectionRef}
       id="product-section"
-      className="relative w-full h-370.25 flex flex-col justify-start items-center pt-44.25 px-7.5 pb-37.5 gap-12.5"
+      className="relative w-full h-400 flex flex-col justify-start items-center pt-25 md:pt-40 lg:pt-44.25 px-7.5 gap-12.5"
     >
-      <div className="sticky top-1/10 -translate-y-1/10 z-10 flex flex-col gap-12.5 pt-35">
+      <div className="sticky top-20 z-10 flex flex-col gap-12.5">
         {title && (
           <Title
-            className="leading-15 lg:leading-23 lg:text-6xl"
+            className="tracking-[-1px] leading-[1.3em] lg:text-6xl"
             title={title}
           />
         )}
