@@ -46,7 +46,7 @@ export function ProductSection({ title, comparison }: PRODUCT) {
       <div className="sticky top-20 z-10 flex flex-col gap-12.5">
         {title && (
           <Title
-            className="tracking-[-1px] leading-[1.3em] lg:text-6xl"
+            className="tracking-[-1px] leading-[1.3em] text-[2.125rem] md:text-[2.75rem] lg:text-6xl"
             title={title}
           />
         )}

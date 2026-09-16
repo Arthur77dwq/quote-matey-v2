@@ -174,11 +174,11 @@ export function ComparisonCard({
             }}
             key={index}
             value={each.id}
-            className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[1.875rem] border border-neutral-100"
+            className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[0.625rem] md:rounded-[1.875rem] border border-neutral-100"
           >
             <div
               className={cn(
-                'flex flex-col sm:flex-row justify-center w-full h-full gap-7.5 p-7.5 pt-22.5 rounded-2xl',
+                'flex flex-col sm:flex-row justify-center w-full h-full gap-7.5 p-5 pt-10 md:pt-22.5 rounded-[0.375rem] md:rounded-2xl',
                 each.type === 'DANGER' && 'bg-neutral-50',
                 each.type === 'SAFE' &&
                   'bg-linear-to-b from-[#102E60] via-60% via-[#102E60] to-black/80',
@@ -216,7 +216,7 @@ export function ComparisonCard({
                   )}
                 </div>
               </div>
-              <div className="flex flex-col items-start gap-7.5 w-full sm:w-3/10">
+              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center gap-7.5 w-full sm:w-3/10">
                 {each.content?.map(
                   (data, i) =>
                     data.type === 'STATS' &&
@@ -225,7 +225,7 @@ export function ComparisonCard({
                         data-tab-card
                         key={`${i}+${z}`}
                         className={cn(
-                          'w-60 p-0  border',
+                          'w-40 md:w-50 p-0  border',
                           each.type === 'DANGER' &&
                             'border-[#FF0D0D]/30 bg-[#FF0D0D]/5',
                           each.type === 'SAFE' &&
@@ -244,7 +244,7 @@ export function ComparisonCard({
                           </div>
                           <div
                             className={cn(
-                              'w-full text-[1rem] font-inter font-medium leading-[1.3em]',
+                              'w-full text-[1rem] font-inter font-medium tracking-0 leading-[1.3em]',
                               each.type === 'SAFE' && 'text-neutral-100/70',
                               each.type === 'DANGER' && 'text-neutral-600',
                             )}
