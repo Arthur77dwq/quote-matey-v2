@@ -30,7 +30,7 @@ const useSectionAnimation = (
     );
 
     gsap.to(mountainRef.current, {
-      yPercent: 150,
+      yPercent: 200,
       scale: 2,
       opacity: 0,
       ease: 'power1.out',
@@ -75,7 +75,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-center items-center gap-2.5 pb-40 lg:pb-0 w-full h-280 lg:h-350 overflow-hidden',
+          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-200 md:h-310 lg:h-350 overflow-hidden',
           className,
         )}
       >
@@ -87,47 +87,48 @@ export function HeroSection({
                 alt="Background"
                 height={1400}
                 width={1200}
-                className="w-full min-w-300 h-250 sm:h-325 lg:h-350"
+                className="w-full min-w-100 object-cover sm:min-w-300 h-full md:h-325 lg:h-350"
                 priority
               />
             )}
           </div>
           <Image
             src="/images/cloudLeft.png"
-            className="w-140 h-87 absolute top-20 left-169"
-            width={0}
-            height={0}
+            className="hidden md:block w-150.5 h-87.5 absolute -top-10 -left-32.5"
+            width={602}
+            height={350}
             alt=""
           />
 
           <Image
             src="/images/cloudCenter.png"
-            className="w-140 h-87 absolute top-12.5 left-85"
-            width={0}
-            height={0}
+            className="hidden md:block w-129.75 h-60 absolute top-12 left-1/2 -translate-x-1/2"
+            width={519}
+            height={240}
             alt=""
           />
           <Image
             src="/images/cloudRight.png"
-            className="w-140 h-87 absolute -top-10 -left-32.5"
-            width={0}
-            height={0}
+            className="hidden md:block w-146 h-87.5 absolute top-20 -right-15"
+            width={584}
+            height={350}
             alt=""
           />
         </div>
 
         <div
           ref={parentRef}
-          className="pt-39.5 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-10 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
-          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-7.5 w-fit h-fit">
-            <>
+          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
+            {/* Hero Content */}
+            <div className="w-full h-full flex flex-col items-center justify-center gap-6.5">
               {title && (
                 <Title
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="opacity-0 lg:leading-23 text-heading-3! sm:text-[3.75rem]! lg:text-[5.7rem]!"
+                  className="w-88.5 md:w-full opacity-0 leading-[1em] text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
                   title={title}
                 />
               )}
@@ -136,11 +137,13 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="opacity-0 lg:text-[1.37rem]"
+                  className="whitespace-nowrap md:whitespace-normal w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
                   description={description}
                 />
               )}
-            </>
+            </div>
+
+            {/* CTA */}
             <div
               ref={(element) => {
                 sectionRefs.current[2] = element;
@@ -152,7 +155,7 @@ export function HeroSection({
                   key={`${i}-${button.text}`}
                   className={cn(
                     button.variant === 'secondary'
-                      ? 'h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] w-fit border border-[#FF530A]'
+                      ? 'w-fit h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[0.7rem] sm:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] border border-[#FF530A]'
                       : 'h-fit px-12.5 py-4.5 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 w-fit rounded-4xl font-inter font-semibold text-[0.7rem] sm:text-body-md',
                   )}
                   variant={button.variant}
@@ -166,6 +169,8 @@ export function HeroSection({
                 </Button>
               ))}
             </div>
+
+            {/* Footnote */}
             <div
               ref={(element) => {
                 sectionRefs.current[3] = element;
@@ -176,7 +181,13 @@ export function HeroSection({
                 <React.Fragment key={index}>
                   <span
                     key={`${index}-${note.text}`}
-                    className="flex justify-center items-center gap-1"
+                    className={cn(
+                      'md:flex justify-center items-center gap-1',
+                      props.footNote !== undefined &&
+                        Math.floor(props.footNote?.length / 2) === index
+                        ? 'flex'
+                        : 'hidden',
+                    )}
                   >
                     {note.icon &&
                       (note.icon?.type === 'IMG' ? (
@@ -185,7 +196,7 @@ export function HeroSection({
                           alt=""
                           width={1}
                           height={1}
-                          className="size-2.5 sm:size-4.5"
+                          className="w-auto h-4.5"
                         />
                       ) : (
                         note.icon?.type === 'ICON' && (
@@ -195,21 +206,25 @@ export function HeroSection({
                           />
                         )
                       ))}
-                    <span className="text-[0.5rem] lg:text-[1rem]">
-                      {note.text}
-                    </span>
+                    {note.text && (
+                      <Description
+                        className="text-[1rem]! leading-[1.3em]"
+                        description={note.text}
+                      />
+                    )}
                   </span>
                   {props.footNote &&
                     props.footNote[index + 1] !== undefined && (
                       <span
                         key={index}
-                        className="h-4 opacity-20 bg-neutral-900 w-px"
+                        className="hidden md:inline h-4 opacity-20 bg-neutral-900 w-px"
                       />
                     )}
                 </React.Fragment>
               ))}
             </div>
           </div>
+
           <div
             ref={(element) => {
               sectionRefs.current[4] = element;
@@ -251,7 +266,7 @@ export function HeroSection({
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 w-full h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
+        <div className="absolute bottom-0 w-full h-25 md:h-40 lg:h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
 
         {children}
       </section>

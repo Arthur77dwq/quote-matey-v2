@@ -115,6 +115,9 @@ import { cleanOutput } from '@/lib/utils';
 import { canUserUseFeature } from '@/services/access';
 import { updateUsage } from '@/services/usage';
 
+const userId = 'test-user-id';
+const wrongError = 'Something went wrong. ';
+
 describe('Chat API', () => {
   const expectedErrorMessage = '❌ Something went wrong. Please try again.';
   describe('Core Functionality', () => {
@@ -124,7 +127,7 @@ describe('Chat API', () => {
       process.env.GEMINI_API_KEY = 'test-key';
 
       vi.mocked(getUserId).mockResolvedValue({
-        uid: 'test-user-id',
+        uid: userId,
       } as DecodedIdToken);
       vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(canUserUseFeature).mockResolvedValue(true);
@@ -171,7 +174,8 @@ describe('Chat API', () => {
     });
 
     test('TC-05: Should provide response.', async () => {
-      mockGenerate.mockReturnValue(mockStream('Final quote'));
+      const mockResponse = 'Final quote';
+      mockGenerate.mockReturnValue(mockStream(mockResponse));
 
       const req = createRequest({
         messages: createTextMsg('Need electrician'),
@@ -179,8 +183,8 @@ describe('Chat API', () => {
 
       const res = await POST(req);
       const data = await readStreamResponse(res);
-      expect(findTextpart(data[0].parts).text).toBe('Final quote');
-      expect('Final quote').toBe('Final quote');
+      expect(findTextpart(data[0].parts).text).toBe(mockResponse);
+      expect(mockResponse).toBe(mockResponse);
     });
 
     test('TC-33: Returns upgrade notification when usage exceeded', async () => {
@@ -300,7 +304,7 @@ describe('Chat API', () => {
       process.env.GEMINI_API_KEY = 'test-key';
       vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
-        uid: 'test-user-id',
+        uid: userId,
       } as DecodedIdToken);
     });
 
@@ -341,7 +345,7 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(findTextpart(data.parts).text).toContain('Something went wrong.');
+      expect(findTextpart(data.parts).text).toContain(wrongError);
     });
 
     test('TC-10: Handles null content safely', async () => {
@@ -375,7 +379,7 @@ describe('Chat API', () => {
       const res = await POST(req);
       const data = await res.json();
 
-      expect(findTextpart(data.parts).text).toContain('Something went wrong.');
+      expect(findTextpart(data.parts).text).toContain(wrongError);
     });
 
     test('TC-13: Handles very long input safely', async () => {
@@ -403,7 +407,7 @@ describe('Chat API', () => {
       process.env.GEMINI_API_KEY = 'test-key';
       vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
-        uid: 'test-user-id',
+        uid: userId,
       } as DecodedIdToken);
     });
 
@@ -546,7 +550,7 @@ describe('Chat API', () => {
       vi.useFakeTimers();
       vi.mocked(updateUsage).mockResolvedValue(undefined);
       vi.mocked(getUserId).mockResolvedValue({
-        uid: 'test-user-id',
+        uid: userId,
       } as DecodedIdToken);
     });
 

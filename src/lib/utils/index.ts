@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { RichTextNode } from '@/types/pages';
+import { RichText } from '@/types/pages';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,7 +44,7 @@ export const nameAcronoym = (name: string) => {
   return acronym || null;
 };
 
-export const styleParse = (node: RichTextNode) => {
+export const styleParse = (node: RichText) => {
   const weightClass = {
     thin: 'font-thin',
     extralight: 'font-extralight',
@@ -57,12 +57,16 @@ export const styleParse = (node: RichTextNode) => {
     black: 'font-black',
   } as const;
 
-  if (node.type !== 'lineBreak' && node.type !== 'ICON')
+  if (node.type === 'TEXT') {
     return cn(
       node?.bold && weightClass[node.weight ?? 'normal'],
-      node?.strong && 'text-warning-600',
       node?.italic && 'italic',
+      node?.strike && 'line-through',
+      node?.underline && 'underline',
+      node?.color?.token && node.color.token,
+      node?.color?.value && `text-[${node.color.value}]`,
     );
+  }
 };
 
 export const prepareSlug = (text: string) => {

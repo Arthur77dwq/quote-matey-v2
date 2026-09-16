@@ -55,7 +55,7 @@ export default function Home({ sections }: { sections: Section[] }) {
           {(sections[7] as LANDINGPRICING).title && (
             <Title
               className="leading-23 text-[2.125rem] sm:text-[2.75rem] lg:text-6xl"
-              title={(sections[7] as LANDINGPRICING).title || []}
+              title={(sections[7] as LANDINGPRICING).title}
             />
           )}
         </div>

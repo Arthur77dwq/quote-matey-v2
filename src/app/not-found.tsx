@@ -9,7 +9,8 @@ import { Button as ButtonType } from '@/types/global';
 
 export default function Page() {
   const { notFound } = GLOBAL_DATA;
-  const { tag, buttons, title, subTitle, description } = notFound;
+  const { tag, buttons, title, subTitle, description }: typeof notFound =
+    notFound;
   const router = useRouter();
   return (
     <section className="w-full h-fit flex justify-center items-center pb-20">
@@ -21,7 +22,7 @@ export default function Page() {
             </Badge>
           )}
 
-          {title && title.length > 0 && (
+          {title && (
             <Title
               className="leading-40 text-7xl sm:text-display-xl!"
               title={title}
