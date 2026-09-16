@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import { AUTH_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { gsap } from '@/lib/animations/plugins';
-import { matchRoute } from '@/lib/utils';
+import { cn, matchRoute } from '@/lib/utils';
 import { FOOTERLINKS, LINK } from '@/types/global';
 
 const useSectionAnimation = ({
@@ -101,7 +101,10 @@ export function Footer() {
                         link.active && (
                           <Link
                             key={`${index}${i}`}
-                            className="hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600"
+                            className={cn(
+                              'hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600',
+                              pathname === link.href && 'text-[#3B82F6]',
+                            )}
                             href={link.href}
                             target={link.target}
                           >
