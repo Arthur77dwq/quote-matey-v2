@@ -216,7 +216,7 @@ export function ComparisonCard({
                   )}
                 </div>
               </div>
-              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center gap-7.5 w-full sm:w-3/10">
+              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center w-full sm:w-3/10">
                 {each.content?.map(
                   (data, i) =>
                     data.type === 'STATS' &&
@@ -225,14 +225,14 @@ export function ComparisonCard({
                         data-tab-card
                         key={`${i}+${z}`}
                         className={cn(
-                          'w-40 md:w-50 p-0  border',
+                          'w-35 md:w-50 p-0  border',
                           each.type === 'DANGER' &&
                             'border-[#FF0D0D]/30 bg-[#FF0D0D]/5',
                           each.type === 'SAFE' &&
                             'border-[#10B981]/30 bg-[#10B981]/10',
                         )}
                       >
-                        <CardContent className="flex flex-col gap-1.5 p-5">
+                        <CardContent className="flex flex-col gap-1.5 p-2.5 md:p-5">
                           <div
                             className={cn(
                               'w-full text-heading-5! font-semibold leading-[1.2em]',
