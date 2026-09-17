@@ -395,6 +395,7 @@ export const DATA: DataType = {
           active: true,
           id: '1',
           type: 'TEXT',
+          bold: true,
           weight: 'medium',
           text: 'See the fastest way to create professional quotes that win more jobs',
         },
