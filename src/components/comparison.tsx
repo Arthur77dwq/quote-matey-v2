@@ -116,7 +116,7 @@ export function ComparisonCard({
         className,
       )}
     >
-      <TabsList className="relative sm:w-162.5 sm:h-22.5 flex gap-5 p-0">
+      <TabsList className="relative sm:w-162.5 h-15 sm:h-22.5 flex gap-5 p-0">
         <div className="absolute bg-white w-35.5 sm:w-51 h-0.5 -bottom-0.5" />
         <div className="absolute bg-linear-to-b from-white to-white/0 w-1/2 h-1/2 top-0" />
 
@@ -149,7 +149,7 @@ export function ComparisonCard({
                 )}
               </TabsTrigger>
               {mid - 1 === index && (
-                <div className="w-fit h-full z-1">
+                <div className="w-20 md:w-fit h-full z-1">
                   <Image
                     src={
                       active === '1'
@@ -158,7 +158,7 @@ export function ComparisonCard({
                     }
                     alt=""
                     width={130}
-                    height={50}
+                    height={30}
                   />
                 </div>
               )}
@@ -174,11 +174,11 @@ export function ComparisonCard({
             }}
             key={index}
             value={each.id}
-            className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[1.875rem] border border-neutral-100"
+            className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[0.625rem] md:rounded-[1.875rem] border border-neutral-100"
           >
             <div
               className={cn(
-                'flex flex-col sm:flex-row justify-center w-full h-full gap-7.5 p-7.5 pt-22.5 rounded-2xl',
+                'flex flex-col sm:flex-row justify-center w-full h-full gap-7.5 p-5 pt-10 md:pt-22.5 rounded-[0.375rem] md:rounded-2xl',
                 each.type === 'DANGER' && 'bg-neutral-50',
                 each.type === 'SAFE' &&
                   'bg-linear-to-b from-[#102E60] via-60% via-[#102E60] to-black/80',
@@ -216,7 +216,7 @@ export function ComparisonCard({
                   )}
                 </div>
               </div>
-              <div className="flex flex-col items-start gap-7.5 w-full sm:w-3/10">
+              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center gap-7.5 w-full sm:w-3/10">
                 {each.content?.map(
                   (data, i) =>
                     data.type === 'STATS' &&
@@ -225,7 +225,7 @@ export function ComparisonCard({
                         data-tab-card
                         key={`${i}+${z}`}
                         className={cn(
-                          'w-60 p-0  border',
+                          'w-40 md:w-50 p-0  border',
                           each.type === 'DANGER' &&
                             'border-[#FF0D0D]/30 bg-[#FF0D0D]/5',
                           each.type === 'SAFE' &&
@@ -244,7 +244,7 @@ export function ComparisonCard({
                           </div>
                           <div
                             className={cn(
-                              'w-full text-[1rem] font-inter font-medium leading-[1.3em]',
+                              'w-full text-[1rem] font-inter font-medium tracking-0 leading-[1.3em]',
                               each.type === 'SAFE' && 'text-neutral-100/70',
                               each.type === 'DANGER' && 'text-neutral-600',
                             )}

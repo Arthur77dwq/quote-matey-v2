@@ -5,7 +5,13 @@ import { HeadingNode, RichText } from '@/types/pages';
 
 import { Icon } from './icon';
 
-function DomNode({ children }: { children: RichText }) {
+function DomNode({
+  children,
+  br = false,
+}: {
+  children: RichText;
+  br?: boolean;
+}) {
   switch (children.type) {
     case 'TEXT':
       if (children?.strong) {
@@ -17,13 +23,13 @@ function DomNode({ children }: { children: RichText }) {
       }
       return <span className={styleParse(children)}>{children.text}</span>;
     case 'LINEBREAK':
-      return <br className="hidden md:inline" />;
+      return <br className={cn('inline md:inline', br && 'hidden')} />;
     case 'UL':
       return (
         <ul className={styleParse(children)}>
           {children.items?.map((item, index) => (
             <li key={index} className={styleParse(item)}>
-              <DomNode key={`${index}`} children={item} />
+              <DomNode br={br} key={`${index}`} children={item} />
             </li>
           ))}
         </ul>
@@ -33,7 +39,7 @@ function DomNode({ children }: { children: RichText }) {
         <ol className={styleParse(children)}>
           {children.items?.map((item, index) => (
             <li key={index} className={styleParse(item)}>
-              <DomNode key={`${index}`} children={item} />
+              <DomNode br={br} key={`${index}`} children={item} />
             </li>
           ))}
         </ol>
@@ -65,8 +71,10 @@ export function Title({
   ref,
   title,
   className,
+  br,
 }: {
   ref?: React.RefObject<HTMLDivElement | null> | React.Ref<HTMLDivElement>;
+  br?: boolean;
   title: HeadingNode;
   className?: string;
 }) {
@@ -80,7 +88,7 @@ export function Title({
         return (
           <h2 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h2>
         );
@@ -88,7 +96,7 @@ export function Title({
         return (
           <h3 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h3>
         );
@@ -96,7 +104,7 @@ export function Title({
         return (
           <h4 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h4>
         );
@@ -104,7 +112,7 @@ export function Title({
         return (
           <h5 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h5>
         );
@@ -112,7 +120,7 @@ export function Title({
         return (
           <h6 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h6>
         );
@@ -120,7 +128,7 @@ export function Title({
         return (
           <h1 ref={ref} className={commonClass}>
             {title.content.map((node, i) => (
-              <DomNode key={`${i}`} children={node} />
+              <DomNode br={br} key={`${i}`} children={node} />
             ))}
           </h1>
         );
@@ -133,7 +141,9 @@ export function Description({
   description,
   className,
   children,
+  br = false,
 }: {
+  br?: boolean;
   ref?: React.RefObject<HTMLDivElement | null> | React.Ref<HTMLDivElement>;
   description: RichText[] | string;
   className?: string;
@@ -157,7 +167,7 @@ export function Description({
               </span>
             );
           } else {
-            return <DomNode key={`${i}`} children={node} />;
+            return <DomNode br={br} key={`${i}`} children={node} />;
           }
         })}
     </p>
