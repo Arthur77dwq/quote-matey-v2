@@ -216,7 +216,7 @@ export function ComparisonCard({
                   )}
                 </div>
               </div>
-              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center w-full sm:w-3/10">
+              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center md:gap-7.5 w-full sm:w-3/10">
                 {each.content?.map(
                   (data, i) =>
                     data.type === 'STATS' &&
