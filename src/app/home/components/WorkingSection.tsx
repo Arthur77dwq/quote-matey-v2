@@ -74,10 +74,13 @@ export function WorkingSection({
   return (
     <section
       ref={sectionRef}
-      className={cn('w-full flex bg-white pb-50', className)}
+      className={cn(
+        'w-full flex justify-center items-center bg-white pb-50',
+        className,
+      )}
     >
-      <div className="flex flex-col sm:flex-row w-full px-7.5 gap-17.5">
-        <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-center gap-17.5 w-full sm:w-1/2 h-fit">
+      <div className="flex flex-col items-center justify-center sm:flex-row w-full px-7.5 gap-17.5">
+        <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-center gap-17.5 w-full md:w-1/3 h-fit">
           <div className="flex flex-col gap-2.5">
             {tag && (
               <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
@@ -110,7 +113,7 @@ export function WorkingSection({
             </div>
           )}
         </div>
-        <div className="w-full sm:w-90 lg:w-1/2 h-full flex">
+        <div className="w-full md:w-90 lg:w-fit h-full flex justify-end">
           <Tabs
             defaultValue={props.cards && props.cards[0].id}
             onValueChange={handleChangeValue}
@@ -171,7 +174,7 @@ export function WorkingSection({
                     </h3>
                     <p
                       // ref={refs[i].description}
-                      className="text-center text-body-md font-inter font-medium text-neutral-600"
+                      className="text-center text-wrap text-body-md font-inter font-medium text-neutral-600"
                     >
                       {card.description}
                     </p>
