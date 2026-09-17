@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { SectionHeader } from '@/components/section-header';
+import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
 import { useObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
@@ -57,19 +57,31 @@ export function VideoDemoSection({
   return (
     <section
       className={cn(
-        'py-40 flex flex-col justify-center items-center',
+        'py-40 px-2 flex flex-col justify-center items-center',
         className,
       )}
     >
-      <div className="px-4 sm:py-5 sm:p-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit">
+      <div className="px-4 py-5 sm:px-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit">
         {tag && (
           <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
             {tag}
           </Badge>
         )}
-        {(title || description) && (
-          <SectionHeader {...{ title, description }} />
-        )}
+
+        <div className="flex flex-col justify-center items-center">
+          {title && (
+            <Title
+              className="text-[2.125rem]! md:text-[3.75rem]!"
+              {...{ title }}
+            />
+          )}
+          {description && (
+            <Description
+              className="text-neutral-900! text-[1rem]! md:text-body-md!"
+              {...{ description }}
+            />
+          )}
+        </div>
       </div>
       <video
         ref={videoRef}
