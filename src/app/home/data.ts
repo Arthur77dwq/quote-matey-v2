@@ -362,6 +362,8 @@ export const DATA: DataType = {
         {
           id: '1',
           active: true,
+          bold: true,
+          weight: 'medium',
           type: 'TEXT',
           text: 'See how to use QuoteMatey',
         },
