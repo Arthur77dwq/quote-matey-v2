@@ -482,7 +482,27 @@ export const DATA: DataType = {
       ],
       supportingText: {
         title: '2 Minutes',
-        description: 'Set up to connect and begin instantly',
+        description: [
+          {
+            active: true,
+            id: '1',
+            type: 'TEXT',
+            weight: 'medium',
+            text: 'Set up to connect',
+          },
+          {
+            id: '2',
+            active: true,
+            type: 'LINEBREAK',
+          },
+          {
+            active: true,
+            id: '3',
+            type: 'TEXT',
+            weight: 'medium',
+            text: ' and begin instantly',
+          },
+        ],
       },
       cards: [
         {
@@ -561,7 +581,14 @@ export const DATA: DataType = {
             'Track your quotes, manage jobs, and generate AI-powered estimates without wasting hours on manual admin work.',
           supportingText: {
             title: '+32% Faster',
-            description: 'Generate quotes with AI ',
+            description: [
+              {
+                active: true,
+                id: '0',
+                type: 'TEXT',
+                text: 'Generate quotes with AI ',
+              },
+            ],
           },
           image: {
             type: 'IMG',
@@ -586,7 +613,14 @@ export const DATA: DataType = {
             'Track plumbing jobs, manage customer quotes, and generate AI-powered estimates without wasting hours on paperwork.',
           supportingText: {
             title: '+39% More Trustworthy',
-            description: 'Use Templetes to make your buisness consistent',
+            description: [
+              {
+                id: '0',
+                active: true,
+                type: 'TEXT',
+                text: 'Use Templetes to make your buisness consistent',
+              },
+            ],
           },
           image: {
             type: 'IMG',
@@ -611,7 +645,14 @@ export const DATA: DataType = {
             'Manage multiple jobs efficiently with organized quote tracking, customer management, and AI-powered workflow support.',
           supportingText: {
             title: 'Higher Job Win Rate',
-            description: 'Quotes managed from a single dashboard',
+            description: [
+              {
+                active: true,
+                id: '0',
+                type: 'TEXT',
+                text: 'Quotes managed from a single dashboard',
+              },
+            ],
           },
           image: {
             type: 'IMG',
@@ -636,7 +677,14 @@ export const DATA: DataType = {
             'Stay on top of every electrical job with fast AI-powered quotes, organized workflows, and quicker customer response times.',
           supportingText: {
             title: 'Up to 2X Win Rate',
-            description: 'Better job tracking and faster business growth',
+            description: [
+              {
+                type: 'TEXT',
+                id: '0',
+                active: true,
+                text: 'Better job tracking and faster business growth',
+              },
+            ],
           },
           image: {
             type: 'IMG',

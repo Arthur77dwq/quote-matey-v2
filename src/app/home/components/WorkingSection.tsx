@@ -1,6 +1,5 @@
-import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
@@ -8,32 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { WORKING, WorkingCard } from '@/types/pages';
-
-const useSectionAnimation = ({
-  sectionRef,
-  imageRef,
-  active,
-}: {
-  sectionRef: React.RefObject<HTMLDivElement | null>;
-  imageRef: React.RefObject<HTMLDivElement | null>;
-  active: WorkingCard | null;
-}) => {
-  useGSAP(
-    () => {
-      gsap.fromTo(
-        imageRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          clearProps: 'all',
-        },
-      );
-    },
-    { scope: sectionRef, dependencies: [active] },
-  );
-};
 
 export function WorkingSection({
   tag,
@@ -44,14 +17,17 @@ export function WorkingSection({
 }: WORKING) {
   const [active, setActive] = useState<WorkingCard | null>(props.cards[0]);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<Record<string, HTMLDivElement>>({});
+  const cardsTitleRef = useRef<Record<string, HTMLDivElement>>({});
+  const cardsDescriptionRef = useRef<Record<string, HTMLDivElement>>({});
+  const imagesRef = useRef<Record<string, HTMLDivElement>>({});
+
   const handleChangeValue = (value: string) => {
     if (value !== active?.id) {
       const selected = props.cards?.filter((val) => val.id === value)[0];
       if (selected) setActive(selected);
     }
   };
-  useSectionAnimation({ sectionRef, imageRef, active });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,7 +45,46 @@ export function WorkingSection({
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [props.cards]);
+  }, [props.cards, active]);
+
+  useLayoutEffect(() => {
+    let ctx: gsap.Context | undefined;
+
+    const frame = requestAnimationFrame(() => {
+      const card = cardsRef.current[active ? active.id : 0];
+      const cardTitle = cardsTitleRef.current[active ? active.id : 0];
+      const cardDescription =
+        cardsDescriptionRef.current[active ? active.id : 0];
+      const image = imagesRef.current[active ? active.id : 0];
+
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline();
+        tl.from(image, {
+          opacity: 0,
+          y: 50,
+        });
+
+        tl.from(cardTitle, {
+          opacity: 0,
+          y: 50,
+        });
+
+        tl.from(
+          cardDescription,
+          {
+            opacity: 0,
+            y: 50,
+          },
+          '-=0.3',
+        );
+      }, card);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      ctx?.revert();
+    };
+  }, [active]);
 
   return (
     <section
@@ -79,8 +94,8 @@ export function WorkingSection({
         className,
       )}
     >
-      <div className="flex flex-col items-center justify-center sm:flex-row w-full px-7.5 gap-17.5">
-        <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-center gap-17.5 w-full md:w-1/3 h-fit">
+      <div className="flex flex-col items-start justify-center sm:flex-row w-full px-7.5 gap-17.5">
+        <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-start gap-17.5 w-full md:w-1/3 h-fit">
           <div className="flex flex-col gap-2.5">
             {tag && (
               <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
@@ -96,7 +111,7 @@ export function WorkingSection({
             )}
             {description && (
               <Description
-                className="text-left text-neutral-600 font-inter"
+                className="text-left text-neutral-600 font-inter font-medium"
                 {...{ description }}
               />
             )}
@@ -107,9 +122,10 @@ export function WorkingSection({
               <h3 className="text-[2rem] font-semibold text-[#102E60]">
                 {props.supportingText.title}
               </h3>
-              <p className="text-[1rem] font-inter font-medium">
-                {props.supportingText.description}
-              </p>
+              <Description
+                className="text-[1rem] font-inter font-medium text-left"
+                {...{ description: props.supportingText.description }}
+              />
             </div>
           )}
         </div>
@@ -153,9 +169,16 @@ export function WorkingSection({
                 value={card.id}
                 className="w-full flex gap-5 p-1.5 border border-neutral-100 rounded-[1.875rem]"
               >
-                <div className="flex flex-col justify-center items-center gap-10 p-5 lg:p-10 bg-neutral-50 rounded-2xl w-full">
+                <div
+                  ref={(element) => {
+                    cardsRef.current[card.id] = element;
+                  }}
+                  className="flex flex-col justify-center items-center gap-10 p-5 lg:p-10 bg-neutral-50 rounded-2xl w-full"
+                >
                   <div
-                    ref={card.id === active?.id ? imageRef : null}
+                    ref={(element) => {
+                      imagesRef.current[card.id] = element;
+                    }}
                     className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
                   >
                     <Image
@@ -167,13 +190,17 @@ export function WorkingSection({
                   </div>
                   <div className="flex flex-col justify-center items-center gap-1.5">
                     <h3
-                      // ref={refs[i].title}
+                      ref={(e) => {
+                        cardsTitleRef.current[card.id] = e;
+                      }}
                       className="text-center text-2xl font-semibold text-[#102E60]"
                     >
                       {card.title}
                     </h3>
                     <p
-                      // ref={refs[i].description}
+                      ref={(e) => {
+                        cardsDescriptionRef.current[card.id] = e;
+                      }}
                       className="text-center text-wrap text-body-md font-inter font-medium text-neutral-600"
                     >
                       {card.description}

@@ -260,7 +260,7 @@ export type PLATFORM = {
 
 export type SupportText = {
   title: string;
-  description: string;
+  description: RichText[];
 };
 
 export type WorkingCard = {
