@@ -18,8 +18,8 @@ export function WorkingSection({
   const [active, setActive] = useState<WorkingCard | null>(props.cards[0]);
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<Record<string, HTMLDivElement>>({});
-  const cardsTitleRef = useRef<Record<string, HTMLDivElement>>({});
-  const cardsDescriptionRef = useRef<Record<string, HTMLDivElement>>({});
+  const cardsTitleRef = useRef<Record<string, HTMLHeadingElement>>({});
+  const cardsDescriptionRef = useRef<Record<string, HTMLParagraphElement>>({});
   const imagesRef = useRef<Record<string, HTMLDivElement>>({});
 
   const handleChangeValue = (value: string) => {
@@ -170,13 +170,13 @@ export function WorkingSection({
                 className="w-full flex gap-5 p-1.5 border border-neutral-100 rounded-[1.875rem]"
               >
                 <div
-                  ref={(element) => {
+                  ref={(element: HTMLDivElement) => {
                     cardsRef.current[card.id] = element;
                   }}
                   className="flex flex-col justify-center items-center gap-10 p-5 lg:p-10 bg-neutral-50 rounded-2xl w-full"
                 >
                   <div
-                    ref={(element) => {
+                    ref={(element: HTMLDivElement) => {
                       imagesRef.current[card.id] = element;
                     }}
                     className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
@@ -190,7 +190,7 @@ export function WorkingSection({
                   </div>
                   <div className="flex flex-col justify-center items-center gap-1.5">
                     <h3
-                      ref={(e) => {
+                      ref={(e: HTMLHeadingElement) => {
                         cardsTitleRef.current[card.id] = e;
                       }}
                       className="text-center text-2xl font-semibold text-[#102E60]"
@@ -198,7 +198,7 @@ export function WorkingSection({
                       {card.title}
                     </h3>
                     <p
-                      ref={(e) => {
+                      ref={(e: HTMLParagraphElement) => {
                         cardsDescriptionRef.current[card.id] = e;
                       }}
                       className="text-center text-wrap text-body-md font-inter font-medium text-neutral-600"

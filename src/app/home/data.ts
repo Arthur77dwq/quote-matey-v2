@@ -528,8 +528,7 @@ export const DATA: DataType = {
         {
           id: '3',
           title: 'QuoteMatey Generates your quote',
-          description:
-            'Receive real-time recommendations to optimize your portfolio.',
+          description: 'QuoteMatey generates a job ready quote',
           image: {
             type: 'IMG',
             src: '/images/generate.png',
