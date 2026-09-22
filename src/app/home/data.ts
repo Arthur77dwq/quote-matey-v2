@@ -528,7 +528,8 @@ export const DATA: DataType = {
         {
           id: '3',
           title: 'QuoteMatey Generates your quote',
-          description: 'QuoteMatey generates a job ready quote',
+          description:
+            'QuoteMatey generates a job ready quote which you can send to client',
           image: {
             type: 'IMG',
             src: '/images/generate.png',
