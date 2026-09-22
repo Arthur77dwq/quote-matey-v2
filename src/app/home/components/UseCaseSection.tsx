@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useLayoutEffect, useRef } from 'react';
 
-import { Description,Title } from '@/components/section-header';
+import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -58,11 +58,11 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
     <section
       ref={sectionRef}
       className={cn(
-        'flex flex-col justify-center items-cente p-0 gap-7.5 sm:gap-10 w-full bg-white pb-50',
+        'flex flex-col justify-center items-cente p-0 gap-12.5 sm:gap-10 w-full bg-white py-15',
         className,
       )}
     >
-      <div className="flex flex-col items-center gap-2.5 px-5">
+      <div className="flex flex-col items-center gap-2.5 px-7.5">
         {tag && (
           <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
             {tag}
@@ -71,7 +71,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
 
         {title && (
           <Title
-            className="whitespace-normal font-bold text-[2.125rem] sm:text-6xl! leading-[1.2em] tracking-[-1px] px-5"
+            className="md:w-[75%] lg:w-full whitespace-normal font-bold text-[2.125rem] md:text-6xl! leading-[1.2em] tracking-[-1px] px-5"
             {...{ title }}
           />
         )}
@@ -96,7 +96,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                               width={380}
                               height={279}
                               sizes="(max-width: 640px) 100vw, 380px"
-                              className="object-cover"
+                              className="object-cover h-full"
                             />
                           </div>
                         )}
