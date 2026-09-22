@@ -114,7 +114,7 @@ export function WorkingSection({
         className,
       )}
     >
-      <div className="flex flex-col items-start justify-center sm:flex-row w-full px-4 md:px-7.5 gap-10 md:gap-17.5">
+      <div className="flex flex-col items-start justify-center sm:flex-row w-full h-218.62 md:h-138.2 lg:h-147.75 px-4 md:px-7.5 gap-10 md:gap-17.5">
         <div className="sm:py-5 lg:pt-14.75 flex flex-col items-start justify-start gap-5 md:gap-17.5 w-4/5 md:w-2/3 lg:w-1/3 h-fit">
           <div className="flex flex-col gap-2.5">
             {tag && (
@@ -151,7 +151,7 @@ export function WorkingSection({
         </div>
         <div
           ref={cardContainerRef}
-          className="w-full md:w-90 lg:w-fit h-full flex justify-end"
+          className="w-full md:w-90 lg:w-fit h-fit flex justify-end"
         >
           <Tabs
             defaultValue={props.cards && props.cards[0].id}
