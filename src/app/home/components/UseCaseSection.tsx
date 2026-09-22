@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useLayoutEffect, useRef } from 'react';
 
-import { Title } from '@/components/section-header';
+import { Description,Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -123,14 +123,20 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                                 {card.description}
                               </p>
                             </div>
-                            <div className="w-full flex flex-col text-balance gap-1.5">
-                              <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
-                                {card.supportingText?.title}
-                              </h4>
-                              <p className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]">
-                                {card.supportingText?.description}
-                              </p>
-                            </div>
+                            {card.supportingText && (
+                              <div className="w-full flex flex-col text-balance gap-1.5">
+                                <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
+                                  {card.supportingText?.title}
+                                </h4>
+                                <Description
+                                  className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]"
+                                  {...{
+                                    description:
+                                      card.supportingText.description,
+                                  }}
+                                />
+                              </div>
+                            )}
                           </div>
                         )}
                       </CardContent>
@@ -189,14 +195,19 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
                             {card.description}
                           </p>
                         </div>
-                        <div className="w-full flex flex-col text-balance gap-1.5">
-                          <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
-                            {card.supportingText?.title}
-                          </h4>
-                          <p className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]">
-                            {card.supportingText?.description}
-                          </p>
-                        </div>
+                        {card.supportingText && (
+                          <div className="w-full flex flex-col text-balance gap-1.5">
+                            <h4 className="text-2xl text-neutral-900 font-semibold leading-[1.2em]">
+                              {card.supportingText?.title}
+                            </h4>
+                            <Description
+                              className="text-[1rem] font-medium font-inter text-neutral-900 leading-[1.3em]"
+                              {...{
+                                description: card.supportingText.description,
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     )}
                   </CardContent>
