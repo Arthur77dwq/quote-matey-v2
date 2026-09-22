@@ -110,12 +110,12 @@ export function WorkingSection({
     <section
       ref={sectionRef}
       className={cn(
-        'w-full flex justify-center items-center bg-white md:pb-30 lg:pb-50',
+        'w-full flex justify-center items-center bg-white pb-25 md:pb-30 lg:pb-50',
         className,
       )}
     >
-      <div className="flex flex-col items-start justify-center sm:flex-row w-full px-7.5 gap-17.5">
-        <div className="px-4 sm:py-5 lg:pt-14.75 sm:p-0 flex flex-col items-start justify-start gap-17.5 w-full md:w-2/3 lg:w-1/3 h-fit">
+      <div className="flex flex-col items-start justify-center sm:flex-row w-full px-4 md:px-7.5 gap-10 md:gap-17.5">
+        <div className="sm:py-5 lg:pt-14.75flex flex-col items-start justify-start gap-5 md:gap-17.5 w-4/5 md:w-2/3 lg:w-1/3 h-fit">
           <div className="flex flex-col gap-2.5">
             {tag && (
               <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
@@ -131,7 +131,7 @@ export function WorkingSection({
             )}
             {description && (
               <Description
-                className="md:w-[80%] lg:w-full text-left text-neutral-600 font-inter font-medium"
+                className="w-[80%] lg:w-full text-left text-neutral-600 font-inter font-medium"
                 {...{ description }}
               />
             )}
@@ -190,19 +190,19 @@ export function WorkingSection({
               <TabsContent
                 key={i}
                 value={card.id}
-                className="w-full flex gap-5 p-1.5 border border-neutral-100 md:rounded-[0.625rem] lg:rounded-[1.875rem] overflow-hidden"
+                className="w-full flex gap-5 p-1.5 border border-neutral-100 rounded-[0.625rem] lg:rounded-[1.875rem] overflow-hidden"
               >
                 <div
                   ref={(element: HTMLDivElement) => {
                     cardsRef.current[card.id] = element;
                   }}
-                  className="flex flex-col justify-center items-center md:gap-5 lg:gap-10 p-5 lg:p-10 bg-neutral-50 md:rounded-[0.375rem] lg:rounded-2xl w-full"
+                  className="flex flex-col justify-center items-center gap-5 lg:gap-10 p-5 lg:p-10 bg-neutral-50 rounded-[0.375rem] lg:rounded-2xl w-full"
                 >
                   <div
                     ref={(element: HTMLDivElement) => {
                       imagesRef.current[card.id] = element;
                     }}
-                    className="relative rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
+                    className="relative md:rounded-[1.875rem] w-full h-49.5 lg:h-81.75 overflow-hidden"
                   >
                     <Image
                       src={card.image.src}
@@ -216,7 +216,7 @@ export function WorkingSection({
                       ref={(e: HTMLHeadingElement) => {
                         cardsTitleRef.current[card.id] = e;
                       }}
-                      className="text-center text-2xl font-semibold text-[#102E60]"
+                      className="text-center text-2xl font-semibold text-[#102E60] leading-[1.2em]"
                     >
                       {card.title}
                     </h3>
