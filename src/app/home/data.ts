@@ -461,6 +461,7 @@ export const DATA: DataType = {
             weight: 'bold',
             text: 'Start quoting',
           },
+          { id: '0', active: true, type: 'LINEBREAK' },
           {
             id: '2',
             active: true,

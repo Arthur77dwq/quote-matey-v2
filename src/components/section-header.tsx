@@ -23,7 +23,7 @@ function DomNode({
       }
       return <span className={styleParse(children)}>{children.text}</span>;
     case 'LINEBREAK':
-      return <br className={cn('inline md:inline', br && 'hidden')} />;
+      return <br className={cn('inline md:inline', br ? '' : 'hidden')} />;
     case 'UL':
       return (
         <ul className={styleParse(children)}>

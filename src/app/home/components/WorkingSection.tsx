@@ -115,7 +115,7 @@ export function WorkingSection({
       )}
     >
       <div className="flex flex-col items-start justify-center sm:flex-row w-full px-4 md:px-7.5 gap-10 md:gap-17.5">
-        <div className="sm:py-5 lg:pt-14.75flex flex-col items-start justify-start gap-5 md:gap-17.5 w-4/5 md:w-2/3 lg:w-1/3 h-fit">
+        <div className="sm:py-5 lg:pt-14.75 flex flex-col items-start justify-start gap-5 md:gap-17.5 w-4/5 md:w-2/3 lg:w-1/3 h-fit">
           <div className="flex flex-col gap-2.5">
             {tag && (
               <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
@@ -126,7 +126,7 @@ export function WorkingSection({
             {title && (
               <Title
                 className="w-5/6 text-left font-bold text-[2.125rem] md:text-[2.75rem] lg:text-6xl! leading-[1.2em]"
-                {...{ title }}
+                {...{ br: true, title }}
               />
             )}
             {description && (
