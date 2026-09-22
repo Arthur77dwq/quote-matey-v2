@@ -1,5 +1,6 @@
+import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { Description, Title } from '@/components/section-header';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +8,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { WORKING, WorkingCard } from '@/types/pages';
+
+function useSectionAnimation({
+  cardContainerRef,
+  sectionRef,
+}: {
+  cardContainerRef: RefObject<HTMLDivElement | null>;
+  sectionRef: RefObject<HTMLDivElement | null>;
+}) {
+  useGSAP(() => {
+    gsap.from(cardContainerRef.current, {
+      opacity: 0,
+      y: 50,
+      scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
+    });
+  });
+}
 
 export function WorkingSection({
   tag,
@@ -16,11 +33,14 @@ export function WorkingSection({
   ...props
 }: WORKING) {
   const [active, setActive] = useState<WorkingCard | null>(props.cards[0]);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<Record<string, HTMLDivElement>>({});
   const cardsTitleRef = useRef<Record<string, HTMLHeadingElement>>({});
   const cardsDescriptionRef = useRef<Record<string, HTMLParagraphElement>>({});
   const imagesRef = useRef<Record<string, HTMLDivElement>>({});
+  const cardContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useSectionAnimation({ sectionRef, cardContainerRef });
 
   const handleChangeValue = (value: string) => {
     if (value !== active?.id) {
@@ -129,7 +149,10 @@ export function WorkingSection({
             </div>
           )}
         </div>
-        <div className="w-full md:w-90 lg:w-fit h-full flex justify-end">
+        <div
+          ref={cardContainerRef}
+          className="w-full md:w-90 lg:w-fit h-full flex justify-end"
+        >
           <Tabs
             defaultValue={props.cards && props.cards[0].id}
             onValueChange={handleChangeValue}
