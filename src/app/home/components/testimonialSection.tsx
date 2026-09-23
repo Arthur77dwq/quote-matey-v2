@@ -132,7 +132,7 @@ export function Testimonial({
     <section
       ref={sectionRef}
       className={cn(
-        'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit sm:h-272.5 lg:h-screen',
+        'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit lg:h-screen',
         className,
       )}
     >
@@ -146,15 +146,15 @@ export function Testimonial({
             src={prop.BGImage.src}
             alt="Background"
             fill
-            className="object-cover"
+            className="object-cover object-top-right"
             priority
           />
         </div>
       </div>
-      <div className="relative flex flex-col justify-between items-center w-full h-full overflow-hidden z-3">
+      <div className="relative flex flex-col justify-between items-center py-30 w-full h-full overflow-hidden z-3">
         <div
           className={
-            'absolute top-0 w-full h-25 sm:h-40 lg:h-40 flex items-end justify-center bg-linear-to-t from-transparent via-white/70 via-25% to-white to-100%  overflow-hidden z-2'
+            'absolute top-0 w-full h-25 md:h-40 lg:h-40 flex items-end justify-center bg-linear-to-t from-transparent via-white/70 via-25% to-white to-100%  overflow-hidden z-2'
           }
         />
 
@@ -202,7 +202,7 @@ export function Testimonial({
         </div>
         <div
           className={
-            'absolute bottom-0 w-full h-25 sm:h-40 lg:h-40 flex items-end justify-center bg-linear-to-b from-transparent via-white/70 via-25% to-white to-100% overflow-hidden z-2'
+            'absolute bottom-0 w-full h-25 md:h-40 lg:h-40 flex items-end justify-center bg-linear-to-b from-transparent via-white/70 via-25% to-white to-100% overflow-hidden z-2'
           }
         />
       </div>
