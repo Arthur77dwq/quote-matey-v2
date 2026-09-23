@@ -2,7 +2,7 @@
 import { useGSAP } from '@gsap/react';
 import { Star } from 'lucide-react';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { RefObject, useRef } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -12,8 +12,10 @@ import { TESTIMONIAL, UserTestimonial } from '@/types/pages';
 
 const useSectionAnimation = ({
   sectionRef,
+  cardsRef,
 }: {
   sectionRef: React.RefObject<HTMLElement | null>;
+  cardsRef: RefObject<Record<string, HTMLDivElement>>;
 }) => {
   useGSAP(() => {
     gsap.from(sectionRef.current, {
@@ -25,6 +27,17 @@ const useSectionAnimation = ({
         start: 'top 80%',
       },
     });
+    const cards = Object.values(cardsRef.current);
+
+    gsap.from(cards, {
+      y: 50,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: cards,
+        start: 'top 70%',
+      },
+      stagger: 0.15,
+    });
   });
 };
 
@@ -33,9 +46,13 @@ export function TestimonialCard({
   comment,
   user,
   className,
-}: UserTestimonial) {
+  ref,
+}: UserTestimonial & {
+  ref: React.Ref<HTMLDivElement>;
+}) {
   return (
     <Card
+      ref={ref}
       className={cn(
         'flex gap-auto justify-between bg-white w-full h-full rounded-[0.625rem] sm:rounded-[1.87rem] border-0 p-10',
         className,
@@ -84,7 +101,13 @@ export function Testimonial({
   ...prop
 }: TESTIMONIAL) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation({ sectionRef });
+  const cardsRef = useRef<Record<string, HTMLDivElement>>({});
+
+  useSectionAnimation({ sectionRef, cardsRef });
+
+  const setCardRef = (i: number) => (element: HTMLDivElement) => {
+    cardsRef.current[i] = element;
+  };
 
   return (
     <section
@@ -127,6 +150,7 @@ export function Testimonial({
           </div>
           {testimonials.map((testimonial: UserTestimonial, i: number) => (
             <TestimonialCard
+              ref={setCardRef(i)}
               {...testimonial}
               className="h-74.75 sm:h-auto"
               key={i}
