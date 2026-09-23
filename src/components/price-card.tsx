@@ -2,6 +2,7 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { bricolageGrotesque } from '@/fonts';
 import { cn } from '@/lib/utils';
 import { LINK } from '@/types/global';
 import { PricingPlan } from '@/types/pages';
@@ -45,7 +46,7 @@ const Button = ({
     href={href}
     target={target}
     className={cn(
-      'transition-colors duration-300 ease-in-out flex justify-center items-center gap-1.75 lg:gap-3.5 text-[.88rem] lg:text-body-md font-inter font-semibold leading-[1.3em] px-5.5 lg:px-11 py-2.5 lg:py-4.5 rounded-full w-full',
+      'transition-colors duration-300 ease-in-out flex justify-center items-center gap-1.75 lg:gap-3.5 text-[.88rem] lg:text-body-md font-inter font-semibold leading-[1.3em] px-5.5 lg:px-11 py-2.5 lg:py-4.5 rounded-full w-full tracking-[-0.01em]',
       className,
     )}
   >
@@ -63,7 +64,7 @@ export function BaseCard({
   return (
     <Card
       className={cn(
-        'p-3.75 lg:p-7.5 flex gap-3.5 rounded-[1.25rem] border border-neutral-100 w-full max-w-101.25 h-full max-h-136',
+        'p-3.75 lg:p-7.5 flex gap-3.5 rounded-[1.75rem] border border-neutral-100 w-full max-w-101.25 min-h-[36rem] lg:min-h-[39rem] h-full max-h-156',
         className,
       )}
     >
@@ -92,7 +93,7 @@ export function BaseHeader({
       <div className="flex flex-col gap-1 lg:gap-1.5 w-fit h-full">
         <h6
           className={cn(
-            'text-xl sm:text-[1rem] lg:text-2xl font-semibold text-neutral-900 leading-[1.2em]',
+            'text-xl sm:text-[1rem] lg:text-2xl font-bold text-neutral-900 leading-[1.2em] tracking-[-0.03em]',
             style.primaryText,
           )}
         >
@@ -100,7 +101,7 @@ export function BaseHeader({
         </h6>
         <p
           className={cn(
-            'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em] tracking-[-0.01em]',
             style.supportingText,
           )}
         >
@@ -144,28 +145,39 @@ export function BaseContent({
     >
       <div
         className={cn(
-          'flex items-center gap-1.5 w-full h-auto',
+          'flex items-end gap-1.5 w-full h-auto leading-none',
           style.primaryText,
         )}
       >
-        <span className="text-4xl sm:text-xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]">
+        <span
+          className={cn(
+            bricolageGrotesque.className,
+            'whitespace-nowrap text-[44px] font-semibold leading-[1em] tracking-[-1px]',
+          )}
+        >
           {plan.pricing.price}
         </span>
-        <span className="text-[1rem] sm:text-[0.88rem] lg:text-[1rem] font-inter font-medium leading-[1.3em]">
+        <span className="pb-1 text-[0.82rem] sm:text-[0.8rem] lg:text-[0.95rem] font-inter font-medium leading-[1.2em] text-current/80">
           /{plan.period}
         </span>
       </div>
       {children}
       <ul
         className={cn(
-          'w-full flex flex-col gap-1 sm:gap-0 lg:gap-2.5 font-inter font-medium text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
+          'w-full flex flex-col gap-1.5 sm:gap-1 lg:gap-2.5 font-inter font-normal text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem] tracking-[-0.01em]',
           style.supportingText,
         )}
       >
         {plan.features.map((feature, featureIndex) => (
-          <li key={featureIndex} className="flex flex-row items-start p-0">
-            <ChevronRight className="text-primary-500 size-auto sm:size-4 lg:size-auto" />
-            <span>{feature.text}</span>
+          <li
+            key={featureIndex}
+            className="flex flex-row items-start gap-1.5 p-0"
+          >
+            <ChevronRight
+              className="mt-0.5 size-3.5 shrink-0 text-primary-500"
+              strokeWidth={1.75}
+            />
+            <span className="font-medium leading-[1.5]">{feature.text}</span>
           </li>
         ))}
       </ul>
