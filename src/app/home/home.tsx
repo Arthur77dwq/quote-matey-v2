@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import { AuthScreen } from '@/components/auth-screen';
 import { QNASection } from '@/components/QNASection';
 import { Title } from '@/components/section-header';
-import { Testimonial } from '@/components/testimonialSection';
 import { Badge } from '@/components/ui/badge';
 import {
   LANDINGHERO,
@@ -24,6 +23,7 @@ import { PricingSection } from '../pricing/components/pricingSection';
 import { HeroSection } from './components/HeroSection';
 import { PlatformSection } from './components/PlatformSection';
 import { ProductSection } from './components/ProductSection';
+import { Testimonial } from './components/testimonialSection';
 import { UseCaseSection } from './components/UseCaseSection';
 import { VideoDemoSection } from './components/VideoDemoSection';
 import { WorkingSection } from './components/WorkingSection';

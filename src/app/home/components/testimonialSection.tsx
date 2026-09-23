@@ -82,7 +82,6 @@ export function Testimonial({
   title,
   testimonials,
   className,
-  variant = 'primary',
   ...prop
 }: TESTIMONIAL) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -133,7 +132,7 @@ export function Testimonial({
     <section
       ref={sectionRef}
       className={cn(
-        'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit sm:h-272.5 lg:h-257.25',
+        'relative flex flex-col justify-center items-center gap-2.5 w-full h-fit sm:h-272.5 lg:h-screen',
         className,
       )}
     >
@@ -152,16 +151,17 @@ export function Testimonial({
           />
         </div>
       </div>
-      <div className="flex flex-col justify-between items-center w-full h-full z-3">
+      <div className="relative flex flex-col justify-between items-center w-full h-full overflow-hidden z-3">
         <div
           className={
-            'w-full h-25 sm:h-40 lg:h-50 flex items-end justify-center bg-[linear-gradient(to_bottom,white_0%,rgba(255,255,255,0.85)_40%,rgba(255,255,255,0.4)_70%,transparent_100%)] overflow-hidden z-2'
+            'absolute top-0 w-full h-25 sm:h-40 lg:h-40 flex items-end justify-center bg-linear-to-t from-transparent via-white/70 via-25% to-white to-100%  overflow-hidden z-2'
           }
         />
-        {variant === 'primary' && (
-          <div className="px-5 lg:px-12 gap-7.5 max-w-325 w-full h-fit grid grid-cols-1 grid-row-4 sm:grid-cols-2 sm:grid-row-3 lg:grid-cols-3 lg:grid-rows-2">
-            <div className="col-span-1 sm:col-span-2 flex flex-col items-start pb-5 gap-5">
-              <h2 className="leading-[1.2em] whitespace-normal sm:whitespace-nowrap lg:whitespace-normal font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-full lg:w-160 text-white">
+
+        <div className="flex flex-col justify-center items-center w-full h-full gap-12.5">
+          <div className="px-5 lg:px-41.5 gap-12.5 w-full h-fit flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-start pb-5 gap-2.25">
+              <h2 className="font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-fit text-white leading-[1.2em] tracking-[-1px]">
                 {title}
               </h2>
               <p className="text-[1rem] font-inter font-medium text-white flex justify-start items-center gap-1.5">
@@ -169,66 +169,40 @@ export function Testimonial({
                 <span>{prop.rating || ''}</span>
               </p>
             </div>
-            {testimonials.map((testimonial: UserTestimonial, i: number) => (
-              <TestimonialCard
-                {...testimonial}
-                className="h-74.75 sm:h-auto"
-                key={i}
-              />
-            ))}
-          </div>
-        )}
-        {variant === 'secondary' && (
-          <>
-            <div className="px-5 lg:px-7.5 gap-12.5 w-full h-fit flex flex-col items-center">
-              <div className="w-full flex flex-col items-start pb-5 gap-5">
-                <h2 className="font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-fit text-white">
-                  {title}
-                </h2>
-                <p className="text-[1rem] font-inter font-medium text-white flex justify-start items-center gap-1.5">
-                  <Star fill="#FFD700" stroke="#FFD700" size={18} />
-                  <span>{prop.rating || ''}</span>
-                </p>
-              </div>
-              {isMobile && (
-                <div className="w-full h-fit flex flex-col gap-5 justify-center items-center overflow-hidden">
-                  {testimonials.map(
-                    (testimonial: UserTestimonial, i: number) => (
-                      <TestimonialCard
-                        {...testimonial}
-                        className="h-74.75 w-full"
-                        key={i}
-                      />
-                    ),
-                  )}
-                </div>
-              )}
-            </div>
-            {!isMobile && (
-              <div className="w-full h-fit flex justify-center items-center overflow-hidden">
-                <div
-                  ref={trackRef}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  className="w-max flex items-center gap-12.5"
-                >
-                  {testimonials.map(
-                    (testimonial: UserTestimonial, i: number) => (
-                      <TestimonialCard
-                        {...testimonial}
-                        className="h-74.75 w-100"
-                        key={i}
-                      />
-                    ),
-                  )}
-                </div>
+            {isMobile && (
+              <div className="w-full h-fit flex flex-col gap-5 justify-center items-center overflow-hidden">
+                {testimonials.map((testimonial: UserTestimonial, i: number) => (
+                  <TestimonialCard
+                    {...testimonial}
+                    className="h-74.75 w-full"
+                    key={i}
+                  />
+                ))}
               </div>
             )}
-          </>
-        )}
+          </div>
+          {!isMobile && (
+            <div className="w-full h-75 flex justify-center items-center overflow-hidden">
+              <div
+                ref={trackRef}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className="w-max h-full flex items-center gap-12.5"
+              >
+                {testimonials.map((testimonial: UserTestimonial, i: number) => (
+                  <TestimonialCard
+                    {...testimonial}
+                    className="h-full aspect-400/299"
+                    key={i}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
         <div
           className={
-            'w-full h-25 sm:h-40 lg:h-50 flex items-end justify-center bg-linear-to-b from-white/0 via-white/70 via-27% to-white overflow-hidden z-2'
+            'absolute bottom-0 w-full h-25 sm:h-40 lg:h-40 flex items-end justify-center bg-linear-to-b from-transparent via-white/70 via-25% to-white to-100% overflow-hidden z-2'
           }
         />
       </div>
