@@ -697,7 +697,6 @@ export const DATA: DataType = {
     },
     {
       type: 'TESTIMONIAL',
-      variant: 'secondary',
       visible: true,
       BGImage: { type: 'IMG', src: '/images/lawn.jpg', alt: '' },
       title: ' What tradies say about the platform',
