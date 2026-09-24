@@ -60,7 +60,7 @@ export default function Home({ sections }: { sections: Section[] }) {
           )}
         </div>
 
-        <PricingSection {...(sections[7] as PRICING)} />
+        <PricingSection {...(sections[7] as PRICING)} landing />
       </section>
       <QNASection {...(sections[8] as QNA)} />
     </>
