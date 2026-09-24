@@ -323,6 +323,8 @@ export type FormField<T extends FieldValues> =
       name: Path<T>;
       type: 'text';
       value: 'signup' | 'login' | 'reset-password';
+      placeholder: string;
+      icon?: IconType;
       className?: string;
       label: RichText[];
     };
