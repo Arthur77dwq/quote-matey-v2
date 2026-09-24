@@ -11,7 +11,7 @@ const variants = {
     right: 'w-full sm:w-3xl h-auto',
   },
   secondary: {
-    container: 'gap-7.5 lg:gap-27.5 px-8 sm:px-15 py-15.75',
+    container: 'gap-7.5 lg:justify-center lg:gap-27.5 px-8 sm:px-15 py-15.75',
     left: 'flex justify-center items-center lg:block w-full lg:max-w-95',
     right: 'w-full max-w-169',
   },
