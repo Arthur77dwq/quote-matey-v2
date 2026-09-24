@@ -15,6 +15,7 @@ export default function Faqs({ sections }: { sections: Section[] }) {
             <HeroSection
               key={`${i}-${section?.type}-${section?.visible}`}
               {...(section as HERO)}
+              className="[&_h1]:!leading-[1em]"
             />
           );
 

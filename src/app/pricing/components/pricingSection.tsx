@@ -1,5 +1,5 @@
 import { useGSAP } from '@gsap/react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { PriceCard } from '@/components/price-card';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -34,11 +34,12 @@ const useSectionAnimation = ({
     );
   });
 
-  useEffect(() => {
+  useGSAP(() => {
     const footer = footerRef.current;
     const card = cardRef.current;
     const cards = cardsRef.current;
     const header = document.querySelector<HTMLElement>('[data-site-header]');
+    let isFooterVisible: boolean | undefined;
 
     if (!footer || !card || !cards) return;
 
@@ -47,16 +48,29 @@ const useSectionAnimation = ({
       const headerBottom = header?.getBoundingClientRect().bottom ?? 80;
       const shouldShow = cardsRect.top > headerBottom - cardsRect.height * 0.1;
 
-      footer.style.opacity = shouldShow ? '1' : '0';
-      footer.style.transform = shouldShow
-        ? 'translateY(0)'
-        : 'translateY(12px)';
+      if (shouldShow === isFooterVisible) return;
+
+      const duration = isFooterVisible === undefined ? 0 : 0.22;
+      isFooterVisible = shouldShow;
       footer.style.pointerEvents = shouldShow ? 'auto' : 'none';
-      footer.style.maxHeight = shouldShow ? '52px' : '0px';
-      footer.style.paddingTop = shouldShow ? '0.75rem' : '0px';
-      footer.style.paddingBottom = shouldShow ? '0px' : '0px';
-      card.style.gap = shouldShow ? '1rem' : '0px';
-      card.style.paddingBottom = shouldShow ? '0.75rem' : '1px';
+
+      gsap.to(footer, {
+        duration,
+        ease: 'power2.out',
+        opacity: shouldShow ? 1 : 0,
+        y: shouldShow ? 0 : 12,
+        maxHeight: shouldShow ? 52 : 0,
+        paddingTop: shouldShow ? 12 : 0,
+        paddingBottom: 0,
+        overwrite: 'auto',
+      });
+      gsap.to(card, {
+        duration,
+        ease: 'power2.out',
+        gap: shouldShow ? 16 : 0,
+        paddingBottom: shouldShow ? 12 : 1,
+        overwrite: 'auto',
+      });
     };
 
     updateFooterVisibility();
@@ -68,8 +82,9 @@ const useSectionAnimation = ({
     return () => {
       window.removeEventListener('scroll', updateFooterVisibility);
       window.removeEventListener('resize', updateFooterVisibility);
+      gsap.killTweensOf([footer, card]);
     };
-  }, [cardRef, cardsRef, footerRef]);
+  });
 };
 
 export function PricingSection({ plans, footer, className }: PRICING) {
@@ -91,7 +106,7 @@ export function PricingSection({ plans, footer, className }: PRICING) {
     >
       <Card
         ref={cardRef}
-        className="overflow-hidden h-auto w-full flex p-1.5 pb-3 rounded-[2.25rem] border border-neutral-100 transition-all duration-200 ease-out"
+        className="overflow-hidden h-auto w-full flex p-1.5 pb-3 rounded-[2.25rem] border border-neutral-100"
       >
         <CardContent
           ref={cardsRef}
@@ -106,7 +121,7 @@ export function PricingSection({ plans, footer, className }: PRICING) {
         </CardContent>
         <CardFooter
           ref={footerRef}
-          className="z-10 relative flex flex-wrap justify-center gap-x-5 gap-y-1 px-3 pt-3 text-center text-[0.88rem] font-medium text-neutral-600 font-inter transition-all duration-200 ease-out"
+          className="z-10 relative flex flex-wrap justify-center gap-x-5 gap-y-1 px-3 pt-3 text-center text-[0.88rem] font-medium text-neutral-600 font-inter"
           style={{
             opacity: 1,
             transform: 'translateY(0)',
