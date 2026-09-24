@@ -247,7 +247,7 @@ export const GLOBAL_DATA: GlobalData = {
           id: '2',
           name: 'password',
           type: 'password',
-          placeholder: 'Create password',
+          placeholder: 'Password',
           info: 'Password must be at least 8 characters ',
           icon: {
             type: 'ICON',
