@@ -1,9 +1,4 @@
-import {
-  Bricolage_Grotesque,
-  Geist,
-  Geist_Mono,
-  Inter,
-} from 'next/font/google';
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 
 export const plusJakarta = localFont({
@@ -24,13 +19,6 @@ export const plusJakarta = localFont({
 export const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  display: 'swap',
-});
-
-export const bricolageGrotesque = Bricolage_Grotesque({
-  subsets: ['latin'],
-  weight: '600',
-  variable: '--font-bricolage-grotesque',
   display: 'swap',
 });
 

@@ -32,6 +32,5 @@
 @theme {
   --font-sans: var(--font-plus-jakarta);
   --font-inter: var(--font-inter);
-  --font-bricolage: var(--font-bricolage-grotesque);
   --font-mono: var(--font-geist-mono);
 }

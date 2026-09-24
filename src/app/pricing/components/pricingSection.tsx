@@ -10,13 +10,9 @@ import { PRICING } from '@/types/pages';
 const useSectionAnimation = ({
   sectionRef,
   footerRef,
-  cardRef,
-  cardsRef,
 }: {
   sectionRef: React.RefObject<HTMLElement | null>;
-  footerRef: React.RefObject<HTMLDivElement | null>;
-  cardRef: React.RefObject<HTMLDivElement | null>;
-  cardsRef: React.RefObject<HTMLDivElement | null>;
+  footerRef: React.RefObject<HTMLElement | null>;
 }) => {
   useGSAP(() => {
     gsap.fromTo(
@@ -32,86 +28,43 @@ const useSectionAnimation = ({
         opacity: 1,
       },
     );
-  });
-
-  useGSAP(() => {
-    const footer = footerRef.current;
-    const card = cardRef.current;
-    const cards = cardsRef.current;
-    const header = document.querySelector<HTMLElement>('[data-site-header]');
-    let isFooterVisible: boolean | undefined;
-
-    if (!footer || !card || !cards) return;
-
-    const updateFooterVisibility = () => {
-      const cardsRect = cards.getBoundingClientRect();
-      const headerBottom = header?.getBoundingClientRect().bottom ?? 80;
-      const shouldShow = cardsRect.top > headerBottom - cardsRect.height * 0.1;
-
-      if (shouldShow === isFooterVisible) return;
-
-      const duration = isFooterVisible === undefined ? 0 : 0.22;
-      isFooterVisible = shouldShow;
-      footer.style.pointerEvents = shouldShow ? 'auto' : 'none';
-
-      gsap.to(footer, {
-        duration,
-        ease: 'power2.out',
-        opacity: shouldShow ? 1 : 0,
-        y: shouldShow ? 0 : 12,
-        maxHeight: shouldShow ? 52 : 0,
-        paddingTop: shouldShow ? 12 : 0,
-        paddingBottom: 0,
-        overwrite: 'auto',
-      });
-      gsap.to(card, {
-        duration,
-        ease: 'power2.out',
-        gap: shouldShow ? 16 : 0,
-        paddingBottom: shouldShow ? 12 : 1,
-        overwrite: 'auto',
-      });
-    };
-
-    updateFooterVisibility();
-    window.addEventListener('scroll', updateFooterVisibility, {
-      passive: true,
-    });
-    window.addEventListener('resize', updateFooterVisibility);
-
-    return () => {
-      window.removeEventListener('scroll', updateFooterVisibility);
-      window.removeEventListener('resize', updateFooterVisibility);
-      gsap.killTweensOf([footer, card]);
-    };
+    gsap.fromTo(
+      footerRef.current,
+      {
+        y: 0,
+        height: footerRef.current?.offsetHeight,
+      },
+      {
+        y: -40,
+        height: 0,
+        display: 'none',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: 'top bottom',
+          end: 'bottom 70%',
+          scrub: true,
+        },
+      },
+    );
   });
 };
 
 export function PricingSection({ plans, footer, className }: PRICING) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const cardsRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation({ sectionRef, footerRef, cardRef, cardsRef });
-
-  const footerItems = footer?.split('•') ?? [];
+  useSectionAnimation({ sectionRef, footerRef });
 
   return (
     <section
       ref={sectionRef}
       className={cn(
-        'opacity-0 flex justify-center w-full lg:w-6xl h-auto px-2.5 pt-0 pb-7.5 sm:px-7.5',
+        'opacity-0 flex justify-center w-full lg:w-6xl h-full p-0 sm:p-7.5',
         className,
       )}
     >
-      <Card
-        ref={cardRef}
-        className="overflow-hidden h-auto w-full flex p-1.5 pb-3 rounded-[2.25rem] border border-neutral-100"
-      >
-        <CardContent
-          ref={cardsRef}
-          className="z-2 grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-neutral-50 rounded-[2rem] border-0 w-full h-auto overflow-hidden"
-        >
+      <Card className="overflow-hidden h-full w-full flex p-1.5 pb-5 rounded-[1.88rem] border border-neutral-100">
+        <CardContent className="z-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-2.5 bg-neutral-50 rounded-2xl border-0 w-full h-full overflow-hidden">
           {plans.map((plan, index) => (
             <PriceCard
               key={`${index}-${plan.id}`}
@@ -121,21 +74,9 @@ export function PricingSection({ plans, footer, className }: PRICING) {
         </CardContent>
         <CardFooter
           ref={footerRef}
-          className="z-10 relative flex flex-wrap justify-center gap-x-5 gap-y-1 px-3 pt-3 text-center text-[0.88rem] font-medium text-neutral-600 font-inter"
-          style={{
-            opacity: 1,
-            transform: 'translateY(0)',
-            maxHeight: '52px',
-            overflow: 'hidden',
-            paddingTop: '0.75rem',
-            paddingBottom: 0,
-          }}
+          className="z-0 text-center flex justify-center text-[0.88rem] font-medium text-neutral-600 font-inter"
         >
-          {footerItems.map((item, index) => (
-            <span key={index} className="whitespace-nowrap">
-              {item.trim()}
-            </span>
-          ))}
+          {footer}
         </CardFooter>
       </Card>
     </section>
