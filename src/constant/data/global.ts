@@ -221,6 +221,18 @@ export const GLOBAL_DATA: GlobalData = {
         },
         {
           id: '0',
+          name: 'fullName',
+          type: 'text',
+          placeholder: 'Full Name',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'left',
+            icon: 'User',
+          },
+        },
+        {
+          id: '1',
           name: 'email',
           type: 'email',
           placeholder: 'Email address',
@@ -232,7 +244,7 @@ export const GLOBAL_DATA: GlobalData = {
           },
         },
         {
-          id: '1',
+          id: '2',
           name: 'password',
           type: 'password',
           placeholder: 'Create password',
@@ -245,7 +257,7 @@ export const GLOBAL_DATA: GlobalData = {
           },
         },
         {
-          id: '2',
+          id: '3',
           name: 'tnc',
           type: 'checkbox',
           label: [
@@ -321,7 +333,7 @@ export const GLOBAL_DATA: GlobalData = {
           variant: 'primary',
           action: 'authCustomSignup',
           link: null,
-          text: 'Create Free Account',
+          text: 'SignUp',
           icon: null,
         },
         { id: 1, type: 'separator', text: 'or', active: true },

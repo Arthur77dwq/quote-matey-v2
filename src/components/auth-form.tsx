@@ -71,7 +71,7 @@ export const FormFooter = ({ buttons, text }: AUTHFoot) => {
               className={cn(
                 'cursor-pointer w-full h-13 flex items-center justify-center gap-2.5 px-8 py-4 text-base font-semibold transition-all hover:-translate-y-0.1',
                 element.variant === 'primary'
-                  ? 'bg-[#f57a0a] hover:bg-[#e06d00] text-white'
+                  ? 'bg-linear-to-b from-[#FF7B00] to-[#FF5500] hover:bg-[#e06d00] font-semibold font-inter text-white'
                   : 'text-neutral-900 border-[#E8E8EA] border-2',
               )}
             >
@@ -127,7 +127,7 @@ export function AuthFormSection({
         `${onSuccess}?email=${encodeURIComponent(data?.email || '')}`,
       );
     } else if (data.type === 'signup') {
-      await signUp(data.email, data.password);
+      await signUp(data.fullName, data.email, data.password);
     } else if (data.type === 'login') {
       await signIn(data.email, data.password);
     }

@@ -55,10 +55,16 @@ export function Input<T extends FieldValues>({
         <InputGroup className="min-h-13 rounded-[0.58rem] border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">
           <InputGroupInput
             {...register(input.name)}
-            value={input.value}
+            placeholder={input.placeholder}
+            defaultValue={input.value}
             name={input.name}
             className="text-md font-medium"
           />
+          {input.icon?.active && (
+            <InputGroupAddon>
+              <Icon name={input.icon?.icon || ''} />
+            </InputGroupAddon>
+          )}
         </InputGroup>
 
         {error?.message && (
