@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { CARDType } from '@/types/pages';
 
 import { Icon } from './icon';
@@ -9,11 +10,17 @@ export function Chip({
   title,
   description,
   variant = 'primary',
-}: CARDType) {
+  className,
+}: CARDType & { className?: string }) {
   switch (variant) {
     case 'secondary':
       return (
-        <Card className="h-full aspect-square gap-0 bg-white p-0  overflow-hidden flex justify-center items-center shadow-md border-none">
+        <Card
+          className={cn(
+            'h-full aspect-square gap-0 bg-white p-0  overflow-hidden flex justify-center items-center shadow-md border-none',
+            className,
+          )}
+        >
           <CardContent className="w-full h-full flex flex-col justify-start items-start gap-2.5 p-3">
             <div>
               {icon && icon.icon && icon.active && (
