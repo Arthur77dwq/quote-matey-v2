@@ -103,7 +103,7 @@ export function PricingSection({
           className={cn(
             'text-center justify-center text-[0.88rem] font-medium text-neutral-600 font-inter',
             landing
-              ? 'z-10 relative flex flex-wrap gap-x-5 gap-y-1 px-3 min-h-0 overflow-hidden'
+              ? 'z-0 relative flex flex-wrap gap-x-5 gap-y-1 px-3 min-h-0 overflow-hidden'
               : 'z-0 flex',
           )}
           style={

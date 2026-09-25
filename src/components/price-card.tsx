@@ -200,7 +200,7 @@ export function BaseContent({
           <li
             key={featureIndex}
             className={cn(
-              'flex flex-row items-start p-0',
+              'flex flex-row items-center p-0',
               landing && 'gap-1.5',
             )}
           >
@@ -208,7 +208,7 @@ export function BaseContent({
               className={cn(
                 'text-primary-500',
                 landing
-                  ? 'mt-0.5 size-3.5 shrink-0'
+                  ? 'size-3.5 shrink-0'
                   : 'size-auto sm:size-4 lg:size-auto',
               )}
               strokeWidth={landing ? 1.75 : undefined}
