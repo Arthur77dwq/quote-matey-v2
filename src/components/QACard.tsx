@@ -59,7 +59,7 @@ export function QACard({
     <Card
       ref={sectionRef}
       key={`${index}-${category?.category}`}
-      className={cn('opacity-0 border-0 gap-7.5 w-full p-0', style, className)}
+      className={cn('border-0 gap-7.5 w-full p-0', style, className)}
     >
       {category?.category && (
         <CardHeader className="h-fit flex flex-col justify-center gap-0 p-0">

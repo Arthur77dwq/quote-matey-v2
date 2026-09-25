@@ -54,7 +54,7 @@ export function QAContent({
       variant={variant}
       ref={ref}
       className={cn(
-        'cursor-pointer text-[1rem] font-inter font-medium text-neutral-600',
+        'cursor-pointer text-[1.125rem] leading-[1.35em] font-inter font-medium text-neutral-600',
         className,
       )}
     >
