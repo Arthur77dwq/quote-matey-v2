@@ -7,7 +7,7 @@ import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { HERO } from '@/types/pages';
 
-import { SectionHeader } from './section-header';
+import { Description, Title } from './section-header';
 
 const useSectionAnimation = (
   sectionRef: React.RefObject<HTMLDivElement | null>,
@@ -89,9 +89,14 @@ export function HeroSection({
               {tag}
             </Badge>
           )}
-          {(title || description) && (
-            <SectionHeader {...{ title, description }} />
+
+          {title && (
+            <Title
+              {...{ title }}
+              className="leading-[1.2em] tracking-[-1.4px]"
+            />
           )}
+          {description && <Description {...{ description }} />}
         </div>
         {children}
       </section>
