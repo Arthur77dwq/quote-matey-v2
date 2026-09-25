@@ -56,10 +56,10 @@ export function Footer() {
           )}
           <div className="absolute inset-0 w-full z-2 bg-linear-to-b from-white via-white/20 via-20% to-transparent" />
         </div>
-        <div className="z-3 w-full max-w-315 h-fit lg:h-full flex justify-center items-center py-25 px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
+        <div className="z-3 w-full max-w-315 h-fit lg:h-full flex justify-center items-center pt-25 pb-12.5 sm:pt-25 sm:pb-15 lg:py-25 px-4 sm:px-7.5 gap-12.5 lg:gap-2.5">
           <div
             ref={cardRef}
-            className="w-full h-fit md:h-full bg-neutral-0 flex flex-col lg:flex-row flex-start gap-12.5 md:gap-15 p-5 sm:p-7.5 lg:p-25 rounded-[1rem] md:rounded-4xl"
+            className="w-full h-fit md:h-full bg-neutral-0 flex flex-col lg:flex-row flex-start gap-10 md:gap-10 p-5 sm:p-7.5 lg:p-25 rounded-[1rem] md:rounded-4xl"
           >
             <div className="h-fit md:h-full w-full sm:w-7/10 lg:w-4/10 gap-5 sm:gap-10 flex flex-col justify-between">
               {/* Left */}
@@ -78,7 +78,7 @@ export function Footer() {
                 <Link
                   href={footer?.cta.href || ''}
                   target={footer.cta.target}
-                  className="transition-colors ease-in-out hover:bg-neutral-100 bg-neutral-900 hover:text-neutral-900 text-neutral-0 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-body-md"
+                  className="transition-colors duration-600 ease-out hover:bg-neutral-100 bg-neutral-900 hover:text-neutral-900 text-neutral-0 px-6.5 py-3.5 w-fit rounded-4xl font-inter font-semibold text-body-md"
                 >
                   {footer?.cta.text}
                 </Link>
@@ -102,11 +102,14 @@ export function Footer() {
                           <Link
                             key={`${index}${i}`}
                             className={cn(
-                              'hover:text-[#3B82F6] text-[1rem] font-medium font-inter text-neutral-600',
+                              'text-[1rem] font-medium font-inter text-neutral-600 transition-colors duration-600 ease-out hover:text-[#3B82F6]',
                               pathname === link.href && 'text-[#3B82F6]',
                             )}
                             href={link.href}
                             target={link.target}
+                            aria-current={
+                              pathname === link.href ? 'page' : undefined
+                            }
                           >
                             {link.text}
                           </Link>
