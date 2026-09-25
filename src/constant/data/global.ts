@@ -56,10 +56,16 @@ export const GLOBAL_DATA: GlobalData = {
     navBar: {
       active: true,
       links: [
+        // {
+        //   href: '/#product-section',
+        //   target: '_self',
+        //   text: 'Product',
+        //   active: false,
+        // },
         {
-          href: '/#product-section',
+          href: '/contact',
           target: '_self',
-          text: 'Product',
+          text: 'Contact',
           active: false,
         },
         {
