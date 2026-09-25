@@ -34,7 +34,7 @@ export function QATrigger({
     <AccordionTrigger
       variant={variant}
       className={cn(
-        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-[1.38rem] font-inter font-medium',
+        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-wrap text-[1.38rem] font-inter font-medium',
         className,
       )}
     >
