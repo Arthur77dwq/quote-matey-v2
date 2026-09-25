@@ -21,7 +21,7 @@ export default function About() {
           id: '0',
           active: true,
           bold: true,
-          weight: 'bold',
+          weight: 'extrabold',
           type: 'TEXT',
           text: 'AI-Powered Quoting',
         },
@@ -30,7 +30,7 @@ export default function About() {
           id: '2',
           active: true,
           bold: true,
-          weight: 'bold',
+          weight: 'extrabold',
           type: 'TEXT',
           text: 'Software',
         },
@@ -38,7 +38,7 @@ export default function About() {
           id: '3',
           active: true,
           bold: true,
-          weight: 'bold',
+          weight: 'extrabold',
           type: 'TEXT',
           text: ' Built for Tradies',
           strong: true,
@@ -54,7 +54,10 @@ export default function About() {
 
   return (
     <>
-      <HeroSection {...heroData} />
+      <HeroSection
+        {...heroData}
+        titleClassName="font-sans font-extrabold leading-[1em]"
+      />
       <SplitSection />
       <FounderLetter />
       {/* <OurTeam /> */}

@@ -36,7 +36,8 @@ export function HeroSection({
   BGImage,
   children,
   className,
-}: HERO) {
+  titleClassName,
+}: HERO & { titleClassName?: string }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   useSectionAnimation(sectionRef);
 
@@ -90,7 +91,7 @@ export function HeroSection({
             </Badge>
           )}
           {(title || description) && (
-            <SectionHeader {...{ title, description }} />
+            <SectionHeader {...{ title, description, titleClassName }} />
           )}
         </div>
         {children}

@@ -177,13 +177,15 @@ export function Description({
 export function SectionHeader({
   title,
   description,
+  titleClassName,
 }: {
   title?: HeadingNode;
   description?: RichText[] | string;
+  titleClassName?: string;
 }) {
   return (
     <>
-      {title && <Title {...{ title }} />}
+      {title && <Title title={title} className={titleClassName} />}
       {description && <Description {...{ description }} />}
     </>
   );
