@@ -12,100 +12,44 @@ type PricingSectionProps = PRICING & { landing?: boolean };
 const useSectionAnimation = ({
   sectionRef,
   footerRef,
-  cardRef,
-  cardsRef,
-  landing,
 }: {
   sectionRef: React.RefObject<HTMLElement | null>;
   footerRef: React.RefObject<HTMLDivElement | null>;
-  cardRef: React.RefObject<HTMLDivElement | null>;
-  cardsRef: React.RefObject<HTMLDivElement | null>;
-  landing: boolean;
 }) => {
   useGSAP(() => {
     gsap.fromTo(
       sectionRef.current,
-      { opacity: 0, scale: 1.05, duration: 0.8, ease: 'expo.out' },
-      { scale: 1, opacity: 1 },
+      {
+        opacity: 0,
+        scale: 1.05,
+        duration: 0.8,
+        ease: 'expo.out',
+      },
+      {
+        scale: 1,
+        opacity: 1,
+      },
+    );
+    gsap.fromTo(
+      footerRef.current,
+      {
+        y: 0,
+        height: footerRef.current?.offsetHeight,
+      },
+      {
+        y: -40,
+        height: 0,
+        display: 'none',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: 'top bottom',
+          end: 'bottom 70%',
+          scrub: true,
+        },
+      },
     );
   });
-
-  useGSAP(
-    () => {
-      const footer = footerRef.current;
-      const card = cardRef.current;
-      const cards = cardsRef.current;
-
-      if (!footer || !card || !cards) return;
-
-      if (!landing) {
-        gsap.fromTo(
-          footer,
-          { y: 0, height: footer.offsetHeight },
-          {
-            y: -40,
-            height: 0,
-            display: 'none',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: footer,
-              start: 'top bottom',
-              end: 'bottom 70%',
-              scrub: true,
-            },
-          },
-        );
-        return;
-      }
-
-      const header = document.querySelector<HTMLElement>('[data-site-header]');
-      let isFooterVisible: boolean | undefined;
-
-      const updateFooterVisibility = () => {
-        const cardsRect = cards.getBoundingClientRect();
-        const headerBottom = header?.getBoundingClientRect().bottom ?? 80;
-        const shouldShow =
-          cardsRect.top > headerBottom - cardsRect.height * 0.1;
-
-        if (shouldShow === isFooterVisible) return;
-
-        const duration = isFooterVisible === undefined ? 0 : 0.22;
-        isFooterVisible = shouldShow;
-        footer.style.pointerEvents = shouldShow ? 'auto' : 'none';
-
-        gsap.to(footer, {
-          duration,
-          ease: 'power2.out',
-          opacity: shouldShow ? 1 : 0,
-          y: shouldShow ? 0 : 12,
-          height: shouldShow ? 32 : 8,
-          paddingTop: 0,
-          paddingBottom: 0,
-          overwrite: 'auto',
-        });
-        gsap.to(card, {
-          duration,
-          ease: 'power2.out',
-          gap: shouldShow ? 6 : 0,
-          paddingBottom: 6,
-          overwrite: 'auto',
-        });
-      };
-
-      updateFooterVisibility();
-      window.addEventListener('scroll', updateFooterVisibility, {
-        passive: true,
-      });
-      window.addEventListener('resize', updateFooterVisibility);
-
-      return () => {
-        window.removeEventListener('scroll', updateFooterVisibility);
-        window.removeEventListener('resize', updateFooterVisibility);
-        gsap.killTweensOf([footer, card]);
-      };
-    },
-    { dependencies: [landing] },
-  );
 };
 
 export function PricingSection({
@@ -116,9 +60,7 @@ export function PricingSection({
 }: PricingSectionProps) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const cardsRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation({ sectionRef, footerRef, cardRef, cardsRef, landing });
+  useSectionAnimation({ sectionRef, footerRef });
 
   const footerItems = footer?.split('•') ?? [];
 
@@ -133,7 +75,6 @@ export function PricingSection({
       )}
     >
       <Card
-        ref={cardRef}
         className={cn(
           'overflow-hidden w-full flex p-1.5 border border-neutral-100',
           landing
@@ -142,7 +83,6 @@ export function PricingSection({
         )}
       >
         <CardContent
-          ref={cardsRef}
           className={cn(
             'z-2 grid grid-cols-1 sm:grid-cols-3 bg-neutral-50 border-0 w-full overflow-hidden',
             landing

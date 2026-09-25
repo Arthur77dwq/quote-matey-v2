@@ -2,6 +2,7 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { useAuth } from '@/context/AuthContext';
 import { bricolageGrotesque } from '@/fonts';
 import { cn } from '@/lib/utils';
 import { LINK } from '@/types/global';
@@ -234,12 +235,13 @@ export function PriceCard({
   landing?: boolean;
 }) {
   const style = variants[plan.variant || 'primary'];
+  const { isAuthenticated } = useAuth();
 
   return (
     <BaseCard className={cn(style.card, className)} landing={landing}>
       <BaseHeader plan={plan} landing={landing} />
       <BaseContent plan={plan} landing={landing}>
-        {plan.cta.active && (
+        {plan.cta.active && (landing || isAuthenticated) && (
           <Button {...plan.cta} className={style.button} landing={landing} />
         )}
         {children}

@@ -31,10 +31,7 @@ export function Header() {
     <>
       {!shouldHide && headers?.type === 'GLOBAL_HEADER' && (
         <>
-          <div
-            data-site-header
-            className="fixed z-200 top-0 w-full flex flex-col justify-center items-center p-5"
-          >
+          <div className="fixed z-200 top-0 w-full flex flex-col justify-center items-center p-5">
             <div
               className="
               absolute
