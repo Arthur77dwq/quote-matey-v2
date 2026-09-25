@@ -2,6 +2,8 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { useAuth } from '@/context/AuthContext';
+import { bricolageGrotesque } from '@/fonts';
 import { cn } from '@/lib/utils';
 import { LINK } from '@/types/global';
 import { PricingPlan } from '@/types/pages';
@@ -40,12 +42,14 @@ const Button = ({
   target,
   text,
   className,
-}: LINK & { className?: string }) => (
+  landing = false,
+}: LINK & { className?: string; landing?: boolean }) => (
   <Link
     href={href}
     target={target}
     className={cn(
       'transition-colors duration-300 ease-in-out flex justify-center items-center gap-1.75 lg:gap-3.5 text-[.88rem] lg:text-body-md font-inter font-semibold leading-[1.3em] px-5.5 lg:px-11 py-2.5 lg:py-4.5 rounded-full w-full',
+      landing && 'tracking-[-0.01em]',
       className,
     )}
   >
@@ -56,14 +60,19 @@ const Button = ({
 export function BaseCard({
   children,
   className,
+  landing = false,
 }: {
   children?: React.ReactNode;
   className?: string;
+  landing?: boolean;
 }) {
   return (
     <Card
       className={cn(
-        'p-3.75 lg:p-7.5 flex gap-3.5 rounded-[1.25rem] border border-neutral-100 w-full max-w-101.25 h-full max-h-136',
+        'p-3.75 lg:p-7.5 flex gap-3.5 border border-neutral-100 w-full max-w-101.25 h-full',
+        landing
+          ? 'rounded-[1.75rem] min-h-[27rem] lg:min-h-[29.25rem] max-h-156'
+          : 'rounded-[1.25rem] max-h-136',
         className,
       )}
     >
@@ -76,10 +85,12 @@ export function BaseHeader({
   plan,
   children,
   className,
+  landing = false,
 }: {
   plan: PricingPlan;
   children?: React.ReactNode;
   className?: string;
+  landing?: boolean;
 }) {
   const style = variants[plan.variant || 'primary'];
   return (
@@ -92,7 +103,8 @@ export function BaseHeader({
       <div className="flex flex-col gap-1 lg:gap-1.5 w-fit h-full">
         <h6
           className={cn(
-            'text-xl sm:text-[1rem] lg:text-2xl font-semibold text-neutral-900 leading-[1.2em]',
+            'text-xl sm:text-[1rem] lg:text-2xl text-neutral-900 leading-[1.2em]',
+            landing ? 'font-bold tracking-[-0.03em]' : 'font-semibold',
             style.primaryText,
           )}
         >
@@ -101,6 +113,7 @@ export function BaseHeader({
         <p
           className={cn(
             'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            landing && 'tracking-[-0.01em]',
             style.supportingText,
           )}
         >
@@ -129,10 +142,12 @@ export function BaseContent({
   plan,
   children,
   className,
+  landing = false,
 }: {
   plan: PricingPlan;
   children?: React.ReactNode;
   className?: string;
+  landing?: boolean;
 }) {
   const style = variants[plan.variant || 'primary'];
   return (
@@ -144,28 +159,63 @@ export function BaseContent({
     >
       <div
         className={cn(
-          'flex items-center gap-1.5 w-full h-auto',
+          'flex gap-1.5 w-full h-auto',
+          landing ? 'items-end leading-none' : 'items-center',
           style.primaryText,
         )}
       >
-        <span className="text-4xl sm:text-xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]">
+        <span
+          className={cn(
+            landing
+              ? [
+                  bricolageGrotesque.className,
+                  'whitespace-nowrap text-[44px] font-semibold leading-[1em] tracking-[-1px]',
+                ]
+              : 'text-4xl sm:text-xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]',
+          )}
+        >
           {plan.pricing.price}
         </span>
-        <span className="text-[1rem] sm:text-[0.88rem] lg:text-[1rem] font-inter font-medium leading-[1.3em]">
+        <span
+          className={cn(
+            landing
+              ? 'pb-1 text-[0.82rem] sm:text-[0.8rem] lg:text-[0.95rem] font-inter font-medium leading-[1.2em] text-current/80'
+              : 'text-[1rem] sm:text-[0.88rem] lg:text-[1rem] font-inter font-medium leading-[1.3em]',
+          )}
+        >
           /{plan.period}
         </span>
       </div>
       {children}
       <ul
         className={cn(
-          'w-full flex flex-col gap-1 sm:gap-0 lg:gap-2.5 font-inter font-medium text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
+          'w-full flex flex-col font-inter text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
+          landing
+            ? 'gap-1.5 sm:gap-1 lg:gap-2.5 font-normal tracking-[-0.01em]'
+            : 'gap-1 sm:gap-0 lg:gap-2.5 font-medium',
           style.supportingText,
         )}
       >
         {plan.features.map((feature, featureIndex) => (
-          <li key={featureIndex} className="flex flex-row items-start p-0">
-            <ChevronRight className="text-primary-500 size-auto sm:size-4 lg:size-auto" />
-            <span>{feature.text}</span>
+          <li
+            key={featureIndex}
+            className={cn(
+              'flex flex-row items-center p-0',
+              landing && 'gap-1.5',
+            )}
+          >
+            <ChevronRight
+              className={cn(
+                'text-primary-500',
+                landing
+                  ? 'size-3.5 shrink-0'
+                  : 'size-auto sm:size-4 lg:size-auto',
+              )}
+              strokeWidth={landing ? 1.75 : undefined}
+            />
+            <span className={cn(landing && 'font-medium leading-[1.5]')}>
+              {feature.text}
+            </span>
           </li>
         ))}
       </ul>
@@ -177,18 +227,23 @@ export function PriceCard({
   plan,
   children,
   className,
+  landing = false,
 }: {
   plan: PricingPlan;
   children?: React.ReactNode;
   className?: string;
+  landing?: boolean;
 }) {
   const style = variants[plan.variant || 'primary'];
+  const { isAuthenticated } = useAuth();
 
   return (
-    <BaseCard className={cn(style.card, className)}>
-      <BaseHeader {...{ plan }} />
-      <BaseContent {...{ plan }}>
-        {plan.cta.active && <Button {...plan.cta} className={style.button} />}
+    <BaseCard className={cn(style.card, className)} landing={landing}>
+      <BaseHeader plan={plan} landing={landing} />
+      <BaseContent plan={plan} landing={landing}>
+        {plan.cta.active && (landing || isAuthenticated) && (
+          <Button {...plan.cta} className={style.button} landing={landing} />
+        )}
         {children}
       </BaseContent>
     </BaseCard>
