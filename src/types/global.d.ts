@@ -137,6 +137,10 @@ export type LINK = {
   active: boolean;
 };
 
+export type AuthRequirement = {
+  authRequired: boolean;
+};
+
 export type HiddenAttr = {
   mobile?: boolean;
   tablet?: boolean;
@@ -149,6 +153,7 @@ export type Button = {
   link: LINK | null;
   text: string;
   hidden?: HiddenAttr;
+  auth?: AuthRequirement;
   icon: IconType | null;
 };
 

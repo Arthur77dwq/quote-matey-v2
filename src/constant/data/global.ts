@@ -89,6 +89,7 @@ export const GLOBAL_DATA: GlobalData = {
         hidden: {
           mobile: true,
         },
+        auth: { authRequired: true },
         text: 'Login',
         link: {
           href: '/login',
