@@ -930,7 +930,16 @@ export const DATA: DataType = {
           bold: true,
           weight: 'medium',
           type: 'TEXT',
-          text: 'Find quick answers to common questions about the platform, pricing, and security.',
+          text: 'Find quick answers to common questions',
+        },
+        { id: '2', active: true, type: 'LINEBREAK' },
+        {
+          id: '3',
+          active: true,
+          bold: true,
+          weight: 'medium',
+          type: 'TEXT',
+          text: 'about the platform, pricing, and security.',
         },
       ],
       categories: [
