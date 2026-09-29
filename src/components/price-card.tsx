@@ -44,7 +44,7 @@ export function BaseCard({
   return (
     <Card
       className={cn(
-        'p-3.75 lg:p-7.5 flex gap-3.5 border border-neutral-100 w-full max-w-101.25 h-full',
+        'p-3.75 lg:p-4 flex gap-3.5 border border-neutral-100 w-full max-w-101.25 h-full',
         'rounded-[1.75rem] min-h-[27rem] lg:min-h-[29.25rem] max-h-156',
         className,
       )}

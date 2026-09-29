@@ -61,12 +61,12 @@ export function PricingSection({ plans, footer, className }: PRICING) {
     <section
       ref={sectionRef}
       className={cn(
-        'opacity-0 flex justify-center w-full lg:w-6xl h-auto px-2.5 pt-0 pb-7.5 sm:px-7.5',
+        'opacity-0 flex justify-center w-full lg:w-6xl h-auto bg-neutral-50 px-0 pt-0 pb-7.5 sm:bg-transparent sm:px-7.5',
         className,
       )}
     >
-      <Card className="overflow-hidden w-full h-fit flex gap-0 p-1.5 pb-1.5 rounded-[2.25rem] border border-neutral-100">
-        <CardContent className="z-2 grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-neutral-50 rounded-[2rem] border-0 w-full h-fit overflow-hidden">
+      <Card className="overflow-hidden w-full h-fit flex gap-0 bg-white p-0 rounded-none border-0 sm:p-1.5 sm:pb-1.5 sm:rounded-[2.25rem] sm:border sm:border-neutral-100">
+        <CardContent className="z-2 grid grid-cols-1 sm:grid-cols-3 justify-items-center sm:justify-items-stretch gap-3 p-3 bg-neutral-50 rounded-none sm:rounded-[2rem] border-0 w-full h-fit overflow-hidden">
           {plans.map((plan, index) => (
             <PriceCard key={`${index}-${plan.id}`} plan={plan} />
           ))}
