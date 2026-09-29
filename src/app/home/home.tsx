@@ -45,7 +45,7 @@ export default function Home({ sections }: { sections: Section[] }) {
       <UseCaseSection {...(sections[5] as USECASES)} />
       <Testimonial {...(sections[6] as TESTIMONIAL)} />
       {/* pricing section */}
-      <section className="flex flex-col justify-center items-center gap-10 pb-25">
+      <section className="flex flex-col justify-center items-center gap-10 lg:gap-15 pb-25">
         <div className="w-full flex flex-col justify-center items-center gap-2.5">
           {(sections[7] as LANDINGPRICING).tag && (
             <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
@@ -54,7 +54,7 @@ export default function Home({ sections }: { sections: Section[] }) {
           )}
           {(sections[7] as LANDINGPRICING).title && (
             <Title
-              className="leading-23 text-[2.125rem] sm:text-[2.75rem] lg:text-6xl"
+              className="leading-23 text-[1.9rem] sm:text-[2.75rem] lg:text-6xl lg:relative lg:-top-1.5"
               title={(sections[7] as LANDINGPRICING).title}
             />
           )}
