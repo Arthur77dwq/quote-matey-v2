@@ -56,7 +56,8 @@ export default function About() {
     <>
       <HeroSection
         {...heroData}
-        titleClassName="font-sans font-extrabold leading-[1em]"
+        className="lg:pb-[4.6875rem]"
+        titleClassName="font-sans font-extrabold leading-[1em] lg:text-[75px] lg:tracking-[-1.4px] lg:leading-[1.2em]"
       />
       <SplitSection />
       <FounderLetter />
