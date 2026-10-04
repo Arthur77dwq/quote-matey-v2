@@ -83,8 +83,7 @@ export function Header() {
                   {headers?.buttons &&
                     headers?.buttons?.length > 0 &&
                     headers?.buttons?.map((button, i) => {
-                      return button.auth &&
-                        button.auth.authRequired === isAuthenticated ? null : (
+                      return (
                         <Button
                           key={`${i}-${button.text}`}
                           variant={button.variant}
@@ -93,6 +92,13 @@ export function Header() {
                             button.hidden?.tablet && 'sm:hidden lg:flex',
                             button.hidden?.desktop && 'flex lg:hidden',
                           )}
+                          style={{
+                            display:
+                              button.hidden &&
+                              button.hidden.auth === isAuthenticated
+                                ? 'none'
+                                : 'flex',
+                          }}
                           onClick={() =>
                             button.link && button.link.active
                               ? router.push(button.link.href)

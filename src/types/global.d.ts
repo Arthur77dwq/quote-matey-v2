@@ -137,14 +137,11 @@ export type LINK = {
   active: boolean;
 };
 
-export type AuthRequirement = {
-  authRequired: boolean;
-};
-
 export type HiddenAttr = {
   mobile?: boolean;
   tablet?: boolean;
   desktop?: boolean;
+  auth?: boolean;
 };
 
 export type Button = {
@@ -153,7 +150,6 @@ export type Button = {
   link: LINK | null;
   text: string;
   hidden?: HiddenAttr;
-  auth?: AuthRequirement;
   icon: IconType | null;
 };
 
