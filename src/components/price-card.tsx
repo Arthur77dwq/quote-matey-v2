@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader } from './ui/card';
 
 const variants = {
   neutral: {
-    card: 'text-neutral-900 bg-neutral-50 shadow-none border-neutral-50',
+    card: 'text-neutral-900 bg-neutral-50 shadow-none border-neutral-50 max-sm:!w-[min(337.5px,calc(100vw-40px))] max-sm:!h-[398.7px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-2.5 max-sm:!gap-5',
     button:
       'bg-neutral-900 text-neutral-0 hover:bg-neutral-100 hover:text-neutral-900',
     primaryText: 'text-neutral-900',
@@ -18,7 +18,7 @@ const variants = {
   },
 
   primary: {
-    card: 'text-white bg-[linear-gradient(to_bottom_right,#102E60_0%,#000_100%)]',
+    card: 'text-white bg-[linear-gradient(to_bottom_right,#102E60_0%,#000_100%)] sm:!h-[20.375rem] lg:!h-auto max-sm:!w-[min(345.6px,calc(100vw-32px))] max-sm:!h-[405.9px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-5 max-sm:!gap-5',
     button:
       'bg-neutral-100 text-neutral-900 hover:bg-black hover:text-neutral-0',
     primaryText: 'text-white',
@@ -26,7 +26,7 @@ const variants = {
   },
 
   secondary: {
-    card: 'text-white bg-[linear-gradient(to_bottom_right,#FF530A_0%,#FF7236_63%,#FF4D00_73%,#000_100%)]',
+    card: 'text-white bg-[linear-gradient(to_bottom_right,#FF530A_0%,#FF7236_63%,#FF4D00_73%,#000_100%)] sm:!h-[20.375rem] lg:!h-auto max-sm:!w-[min(345.6px,calc(100vw-32px))] max-sm:!h-[450px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-7.5 max-sm:!gap-7.5 max-sm:!mt-5',
     button:
       'bg-neutral-100 text-neutral-900 hover:bg-black hover:text-neutral-0',
     primaryText: 'text-white',
@@ -45,7 +45,7 @@ export function BaseCard({
     <Card
       className={cn(
         'p-3.75 lg:p-4 flex gap-3.5 border border-neutral-100 w-full max-w-101.25 h-full',
-        'rounded-[1.75rem] min-h-[27rem] lg:min-h-[29.25rem] max-h-156',
+        'rounded-[1.25rem] min-h-[27rem] sm:min-h-0 sm:h-[19.25rem] lg:h-full lg:min-h-[29.25rem] max-h-156',
         className,
       )}
     >
@@ -74,8 +74,8 @@ export function BaseHeader({
       <div className="flex flex-col gap-1 lg:gap-1.5 w-fit h-full">
         <h6
           className={cn(
-            'text-xl sm:text-[1rem] lg:text-2xl text-neutral-900 leading-[1.2em]',
-            'font-bold tracking-[-0.03em]',
+            'text-xl sm:text-[0.875rem] lg:text-2xl text-neutral-900 leading-[1.2em]',
+            'font-semibold tracking-normal',
             style.primaryText,
           )}
         >
@@ -83,8 +83,8 @@ export function BaseHeader({
         </h6>
         <p
           className={cn(
-            'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
-            'tracking-[-0.01em]',
+            'text-nowrap text-[.88rem] max-sm:text-[1rem] sm:text-[0.6875rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            'tracking-[-0.01em] max-sm:tracking-normal',
             style.supportingText,
           )}
         >
@@ -152,8 +152,8 @@ export function BaseContent({
       {children}
       <ul
         className={cn(
-          'w-full flex flex-col font-inter text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
-          'gap-1.5 sm:gap-1 lg:gap-2.5 font-normal tracking-[-0.01em]',
+          'w-full flex flex-col font-inter text-[0.88rem] max-sm:text-[0.9375rem] sm:text-[0.625rem] lg:text-[1rem]',
+          'gap-1.5 sm:gap-1 lg:gap-2.5 font-normal tracking-[-0.01em] max-sm:tracking-normal',
           style.supportingText,
         )}
       >
@@ -166,7 +166,9 @@ export function BaseContent({
               className={cn('text-primary-500', 'size-3.5 shrink-0')}
               strokeWidth={1.75}
             />
-            <span className="font-medium leading-[1.5]">{feature.text}</span>
+            <span className="font-medium leading-[1.5] max-sm:leading-[1.3em]">
+              {feature.text}
+            </span>
           </li>
         ))}
       </ul>
