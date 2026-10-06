@@ -38,7 +38,7 @@ export function SplitSection() {
           <h2 className="font-sans font-semibold text-[2rem] text-neutral-900">
             Our mission
           </h2>
-          <p className="w-fit text-[18px] font-sans font-semibold leading-[1.3em] tracking-0 text-neutral-600 lg:w-full">
+          <p className="w-fit text-[18px] font-inter font-medium leading-[1.3em] tracking-0 text-neutral-600 lg:w-full">
             Our mission is to simplify quoting and job management for
             <br className="hidden lg:block" /> tradies through intelligent
             technology. We believe running a <br className="hidden lg:block" />
@@ -48,7 +48,10 @@ export function SplitSection() {
             to quote, manage, and grow their business efficiently.
           </p>
 
-          <Button variant="secondary-dark" className="w-fit">
+          <Button
+            variant="secondary-dark"
+            className="w-[16.15rem] h-[2.7625rem] rounded-full font-inter text-[1.125rem] font-semibold leading-[1.3em] [&>span:first-child]:size-[1.9625rem]! [&>span:last-child]:size-[1.9625rem]!"
+          >
             Explore QuoteMatey
           </Button>
         </div>
