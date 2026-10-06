@@ -1,9 +1,8 @@
 'use client';
 import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 
+import { bricolageGrotesque } from '@/fonts';
 import { cn } from '@/lib/utils';
-import { LINK } from '@/types/global';
 import { PricingPlan } from '@/types/pages';
 
 import { Label } from './label';
@@ -11,7 +10,7 @@ import { Card, CardContent, CardHeader } from './ui/card';
 
 const variants = {
   neutral: {
-    card: 'text-neutral-900 bg-neutral-50 shadow-none border-neutral-50',
+    card: 'text-neutral-900 bg-neutral-50 shadow-none border-neutral-50 max-sm:!w-[min(337.5px,calc(100vw-40px))] max-sm:!h-[398.7px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-2.5 max-sm:!gap-5',
     button:
       'bg-neutral-900 text-neutral-0 hover:bg-neutral-100 hover:text-neutral-900',
     primaryText: 'text-neutral-900',
@@ -19,7 +18,7 @@ const variants = {
   },
 
   primary: {
-    card: 'text-white bg-[linear-gradient(to_bottom_right,#102E60_0%,#000_100%)]',
+    card: 'text-white bg-[linear-gradient(to_bottom_right,#102E60_0%,#000_100%)] sm:!h-[20.375rem] lg:!h-auto max-sm:!w-[min(345.6px,calc(100vw-32px))] max-sm:!h-[405.9px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-5 max-sm:!gap-5',
     button:
       'bg-neutral-100 text-neutral-900 hover:bg-black hover:text-neutral-0',
     primaryText: 'text-white',
@@ -27,31 +26,13 @@ const variants = {
   },
 
   secondary: {
-    card: 'text-white bg-[linear-gradient(to_bottom_right,#FF530A_0%,#FF7236_63%,#FF4D00_73%,#000_100%)]',
+    card: 'text-white bg-[linear-gradient(to_bottom_right,#FF530A_0%,#FF7236_63%,#FF4D00_73%,#000_100%)] sm:!h-[20.375rem] lg:!h-auto max-sm:!w-[min(345.6px,calc(100vw-32px))] max-sm:!h-[450px] max-sm:!min-h-0 max-sm:!max-h-none max-sm:!p-7.5 max-sm:!gap-7.5 max-sm:!mt-5',
     button:
       'bg-neutral-100 text-neutral-900 hover:bg-black hover:text-neutral-0',
     primaryText: 'text-white',
     supportingText: 'text-neutral-0',
   },
 };
-
-const Button = ({
-  href,
-  target,
-  text,
-  className,
-}: LINK & { className?: string }) => (
-  <Link
-    href={href}
-    target={target}
-    className={cn(
-      'transition-colors duration-300 ease-in-out flex justify-center items-center gap-1.75 lg:gap-3.5 text-[.88rem] lg:text-body-md font-inter font-semibold leading-[1.3em] px-5.5 lg:px-11 py-2.5 lg:py-4.5 rounded-full w-full',
-      className,
-    )}
-  >
-    {text}
-  </Link>
-);
 
 export function BaseCard({
   children,
@@ -63,7 +44,8 @@ export function BaseCard({
   return (
     <Card
       className={cn(
-        'p-3.75 lg:p-7.5 flex gap-3.5 rounded-[1.25rem] border border-neutral-100 w-full max-w-101.25 h-full max-h-136',
+        'p-3.75 lg:p-4 flex gap-3.5 border border-neutral-100 w-full max-w-101.25 h-full',
+        'rounded-[1.25rem] min-h-[27rem] sm:min-h-0 sm:h-[19.25rem] lg:h-full lg:min-h-[29.25rem] max-h-156',
         className,
       )}
     >
@@ -92,7 +74,8 @@ export function BaseHeader({
       <div className="flex flex-col gap-1 lg:gap-1.5 w-fit h-full">
         <h6
           className={cn(
-            'text-xl sm:text-[1rem] lg:text-2xl font-semibold text-neutral-900 leading-[1.2em]',
+            'text-xl sm:text-[0.875rem] lg:text-2xl text-neutral-900 leading-[1.2em]',
+            'font-semibold tracking-normal',
             style.primaryText,
           )}
         >
@@ -100,7 +83,8 @@ export function BaseHeader({
         </h6>
         <p
           className={cn(
-            'text-nowrap text-[.88rem] sm:text-[0.75rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            'text-nowrap text-[.88rem] max-sm:text-[1rem] sm:text-[0.6875rem] lg:text-body-md font-medium font-inter leading-[1.3em]',
+            'tracking-[-0.01em] max-sm:tracking-normal',
             style.supportingText,
           )}
         >
@@ -144,28 +128,47 @@ export function BaseContent({
     >
       <div
         className={cn(
-          'flex items-center gap-1.5 w-full h-auto',
+          'flex gap-1.5 w-full h-auto',
+          'items-end leading-none',
           style.primaryText,
         )}
       >
-        <span className="text-4xl sm:text-xl lg:text-5xl font-inter font-semibold leading-[1em] tracking-[-1px]">
+        <span
+          className={cn(
+            bricolageGrotesque.className,
+            'whitespace-nowrap text-[44px] font-semibold leading-[1em] tracking-[-1px]',
+          )}
+        >
           {plan.pricing.price}
         </span>
-        <span className="text-[1rem] sm:text-[0.88rem] lg:text-[1rem] font-inter font-medium leading-[1.3em]">
+        <span
+          className={cn(
+            'pb-1 text-[0.82rem] sm:text-[0.8rem] lg:text-[0.95rem] font-inter font-medium leading-[1.2em] text-current/80',
+          )}
+        >
           /{plan.period}
         </span>
       </div>
       {children}
       <ul
         className={cn(
-          'w-full flex flex-col gap-1 sm:gap-0 lg:gap-2.5 font-inter font-medium text-[0.88rem] sm:text-[0.75rem] lg:text-[1rem]',
+          'w-full flex flex-col font-inter text-[0.88rem] max-sm:text-[0.9375rem] sm:text-[0.625rem] lg:text-[1rem]',
+          'gap-1.5 sm:gap-1 lg:gap-2.5 font-normal tracking-[-0.01em] max-sm:tracking-normal',
           style.supportingText,
         )}
       >
         {plan.features.map((feature, featureIndex) => (
-          <li key={featureIndex} className="flex flex-row items-start p-0">
-            <ChevronRight className="text-primary-500 size-auto sm:size-4 lg:size-auto" />
-            <span>{feature.text}</span>
+          <li
+            key={featureIndex}
+            className={cn('flex flex-row items-center p-0', 'gap-1.5')}
+          >
+            <ChevronRight
+              className={cn('text-primary-500', 'size-3.5 shrink-0')}
+              strokeWidth={1.75}
+            />
+            <span className="font-medium leading-[1.5] max-sm:leading-[1.3em]">
+              {feature.text}
+            </span>
           </li>
         ))}
       </ul>
@@ -186,11 +189,8 @@ export function PriceCard({
 
   return (
     <BaseCard className={cn(style.card, className)}>
-      <BaseHeader {...{ plan }} />
-      <BaseContent {...{ plan }}>
-        {plan.cta.active && <Button {...plan.cta} className={style.button} />}
-        {children}
-      </BaseContent>
+      <BaseHeader plan={plan} />
+      <BaseContent plan={plan}>{children}</BaseContent>
     </BaseCard>
   );
 }

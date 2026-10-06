@@ -12,7 +12,7 @@ export function Pricing({ sections }: { sections: Section[] }) {
     <main>
       {sections[0]?.visible && (
         <HeroSection
-          className="px-7.5 gap-7.5 lg:gap-12.5 pb-0"
+          className="px-7.5 gap-7.5 lg:gap-15 pb-0 max-sm:[&_h1]:text-[1.9rem] lg:[&_h1]:relative lg:[&_h1]:-top-1.5"
           {...(sections[0] as HERO)}
         >
           {sections[1]?.visible && (
