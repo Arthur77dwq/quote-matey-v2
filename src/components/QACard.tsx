@@ -72,11 +72,12 @@ export function QACard({
         {category.questions &&
           category.questions.map((query, z) => (
             <QAAccordian
+              variant={category.variant}
               key={`${index}-${query?.question}`}
               {...{ index, zIndex: z }}
             >
-              <QATrigger>{query.question}</QATrigger>
-              <QAContent>{query.answer}</QAContent>
+              <QATrigger variant={category.variant}>{query.question}</QATrigger>
+              <QAContent variant={category.variant}>{query.answer}</QAContent>
             </QAAccordian>
           ))}
       </CardContent>
