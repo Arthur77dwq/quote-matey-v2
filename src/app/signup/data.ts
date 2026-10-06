@@ -12,7 +12,7 @@ export const DATA: DataType = {
       visible: true,
       form: {
         type: 'signup',
-        onSuccess: '/chat',
+        onSuccess: '/dashboard/chat',
         top: {
           icon: {
             active: true,

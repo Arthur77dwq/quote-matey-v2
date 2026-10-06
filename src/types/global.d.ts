@@ -72,6 +72,7 @@ export type LogoType = {
 };
 
 export type BrandType = {
+  active: boolean;
   logo: LogoType;
 };
 
@@ -98,7 +99,7 @@ export type GlobalMetaDataType = {
   };
 };
 
-export type HeaderType = 'GLOBAL_HEADER';
+export type HeaderType = 'LANDING_HEADER' | 'DASHBOARD_HEADER';
 export type FooterType = 'GLOBAL_FOOTER';
 
 export type IconKeys =
@@ -130,10 +131,18 @@ export type buttonVarient =
   | 'secondary-dark'
   | 'outline';
 
+export type Highlight = {
+  active: boolean;
+  type: 'dot' | 'badge';
+  text: string;
+};
+
 export type LINK = {
   href: string;
   target: '_self' | '_blank' | '_parent' | '_top' | string;
   text: string | null;
+  icon?: IconType;
+  highlight?: Highlight;
   active: boolean;
 };
 
@@ -152,13 +161,15 @@ export type Button = {
   icon: IconType | null;
 };
 
+export type NavBar = {
+  active: boolean;
+  links?: LINK[];
+};
+
 export type headers = {
   logo: ImageType & Link;
   type: HeaderType;
-  navBar: {
-    active: boolean;
-    links?: LINK[] | null;
-  };
+  navBar: NavBar;
   buttons?: Button[];
 };
 

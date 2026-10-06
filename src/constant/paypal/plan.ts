@@ -26,7 +26,7 @@ export const plans: SubscriptionPlan[] = [
     highlighted: true,
     cta: {
       text: 'Get Started',
-      target: '/chat',
+      target: '/dashboard/chat',
     },
   },
   {

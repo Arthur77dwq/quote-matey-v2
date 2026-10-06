@@ -30,5 +30,33 @@
         "gutterIcon": true
     }
 },
-"editor.mouseWheelZoom": true
+"editor.mouseWheelZoom": true,
+"better-todo-tree.highlights.customHighlight": {
+    "TODO": {
+        "icon": "check",
+        "type": "line",
+        "foreground": "green",
+        "background": "black"
+    },
+    "FIXME": {
+        "foreground": "black",
+        "background": "yellow",
+        "iconColour": "yellow",
+        "gutterIcon": true
+    },
+    "BUG": {
+        "foreground": "black",
+        "background": "red",
+        "iconColour": "yellow",
+        "gutterIcon": true
+    }
+},
+"better-todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "red",
+    "background": "white",
+    "opacity": 50,
+    "iconColour": "blue"
+}
 }
