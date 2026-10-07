@@ -131,16 +131,16 @@ export function PlatformSection({
           </div>
           <div
             ref={cardContainerRef}
-            className="max-w-300 w-full flex flex-col sm:flex-row justify-between items-center gap-5 md:gap-7.5"
+            className="max-w-300 w-full flex flex-col sm:flex-row justify-center items-center gap-5 md:gap-7.5"
           >
             {props.cards?.map((card, i: number) => (
               <Card
                 data-card
                 key={i}
-                className="bg-white border-none w-90 h-full flex justify-center items-center p-0 rounded-[0.625rem] md:rounded-[1.25rem]"
+                className="bg-white border-none w-full sm:flex-1 h-full flex justify-center items-center p-0 rounded-[0.625rem] md:rounded-[1.25rem]"
               >
                 <CardContent className="flex flex-col lg:flex-row w-full h-full gap-4 md:gap-5 p-5 md:p-7.5">
-                  <div className="size-8.5 md:size-10 aspect-square rounded-[0.625rem] flex justify-center items-center bg-linear-to-br from-[#102E60] to-[#BFD6FF]">
+                  <div className="size-8.5 md:size-10 shrink-0 aspect-square rounded-[0.625rem] flex justify-center items-center bg-linear-to-br from-[#102E60] to-[#BFD6FF]">
                     {card.icon?.active && (
                       <Icon
                         className="size-4 md:size-6.5"
@@ -148,7 +148,7 @@ export function PlatformSection({
                       />
                     )}
                   </div>
-                  <p className="text-neutral-600 leading-[1.3em] text-body-md font-medium font-inter w-full h-fit">
+                  <p className="text-neutral-600 leading-[1.3em] text-body-md font-medium font-inter flex-1 min-w-0 h-fit">
                     {card.text}
                   </p>
                 </CardContent>

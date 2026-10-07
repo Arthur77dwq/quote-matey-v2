@@ -23,10 +23,10 @@ export function QNASection({
   categories,
   title,
   description,
-  variant,
+  variant = 'primary',
   className,
 }: QNA) {
-  const style = variants[variant || 'primary'];
+  const style = variants[variant];
   return (
     visible && (
       <section

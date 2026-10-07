@@ -26,7 +26,7 @@ const useSectionAnimation = ({
         duration: 0.5,
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: 'top 90%',
         },
       },
     );

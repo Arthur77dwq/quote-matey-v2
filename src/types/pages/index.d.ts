@@ -155,7 +155,6 @@ export type UserTestimonial = {
 };
 
 export type TESTIMONIAL = {
-  variant?: 'primary' | 'secondary';
   type: SectionType.TESTIMONIAL;
   visible: boolean;
   BGImage: ImageType;
@@ -324,6 +323,8 @@ export type FormField<T extends FieldValues> =
       name: Path<T>;
       type: 'text';
       value: 'signup' | 'login' | 'reset-password';
+      placeholder: string;
+      icon?: IconType;
       className?: string;
       label: RichText[];
     };

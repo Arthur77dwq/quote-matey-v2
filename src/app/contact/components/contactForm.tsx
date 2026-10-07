@@ -67,7 +67,7 @@ export function ContactForm({ visible, Inputs }: CONTACTFORM) {
                 return (
                   <div
                     key={i}
-                    className="w-full flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-7.5"
+                    className="w-full flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-5.5"
                   >
                     {input.map((each, z) => (
                       <Field

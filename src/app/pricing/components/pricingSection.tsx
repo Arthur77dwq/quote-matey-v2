@@ -33,12 +33,14 @@ const useSectionAnimation = ({
       {
         y: 0,
         height: footerRef.current?.offsetHeight,
+        autoAlpha: 1,
       },
       {
         y: -40,
         height: 0,
-        display: 'none',
+        autoAlpha: 0,
         ease: 'none',
+        immediateRender: false,
         scrollTrigger: {
           trigger: footerRef.current,
           start: 'top bottom',

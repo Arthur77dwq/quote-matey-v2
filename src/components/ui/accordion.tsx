@@ -1,7 +1,7 @@
 'use client';
 
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { Plus, X } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -11,7 +11,7 @@ const variants = {
     item: '',
     trigger: {
       container: '',
-      icon: 'bg-neutral-50 group-data-[state=open]:bg-neutral-900',
+      icon: 'bg-neutral-50 group-data-[state=open]:bg-neutral-900 group-data-[state=closed]:bg-white',
     },
     content: '',
   },
@@ -70,7 +70,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'group [&[data-state=open]_.plus]:rotate-90 [&[data-state=open]_.plus]:opacity-0 [&[data-state=open]_.close]:rotate-0 [&[data-state=open]_.close]:opacity-100 focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
+          'group [&[data-state=open]_.plus]:rotate-90 [&[data-state=open]_.plus]:opacity-0 [&[data-state=open]_.minus]:rotate-0 [&[data-state=open]_.minus]:opacity-100 focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
           style?.trigger.container,
           className,
         )}
@@ -79,7 +79,7 @@ function AccordionTrigger({
         {children}
         <div
           className={cn(
-            'relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-300',
+            'relative bg-white flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300',
             style?.trigger.icon,
           )}
         >
@@ -87,7 +87,7 @@ function AccordionTrigger({
             className="
             plus
             absolute
-            size-[1.125rem]
+            size-4
             rotate-0
             transform-gpu
             will-change-transform
@@ -99,11 +99,11 @@ function AccordionTrigger({
             "
           />
 
-          <X
+          <Minus
             className="
-            close
+            minus
             absolute
-            size-[1.125rem]
+            size-4
             -rotate-90
             opacity-0
             transform-gpu
