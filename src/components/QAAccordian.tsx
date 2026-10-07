@@ -34,7 +34,9 @@ export function QATrigger({
     <AccordionTrigger
       variant={variant}
       className={cn(
-        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-wrap text-[1.38rem] font-inter font-medium',
+        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-[1.38rem] font-inter font-medium',
+        variant === 'secondary' &&
+          'text-[1.125rem]! md:text-[1.25rem]! lg:text-[1.375rem]! leading-[1.25em]! tracking-[-0.005em]!',
         className,
       )}
     >
@@ -54,7 +56,9 @@ export function QAContent({
       variant={variant}
       ref={ref}
       className={cn(
-        'cursor-pointer text-[1rem] font-inter font-medium text-neutral-600',
+        'cursor-pointer text-[1.125rem] leading-[1.35em] font-inter font-medium text-neutral-600',
+        variant === 'secondary' &&
+          'text-[0.9375rem]! md:text-[1rem]! lg:text-[1rem]! leading-[1.3em]! pt-2.5! pb-[17px]! md:pb-[31px]! lg:pb-2.5! lg:max-w-[500px]',
         className,
       )}
     >
@@ -101,6 +105,7 @@ export function QAAccordian({
     <Accordion
       className={cn(
         'cursor-pointer w-full overflow-hidden rounded-[1.25rem] border border-neutral-900/20',
+        variant === 'secondary' && 'rounded-[0.625rem] md:rounded-[1.25rem]',
         className,
         style.container,
       )}
@@ -114,6 +119,8 @@ export function QAAccordian({
         variant={variant}
         className={cn(
           'cursor-pointer gap-2.5 text-balance text-[1.38rem] font-inter font-medium p-5',
+          variant === 'secondary' &&
+            'p-[13px_12px_13px_20px]! md:p-[16px_20px]! lg:p-[17px_20px]!',
           style.child,
         )}
       >

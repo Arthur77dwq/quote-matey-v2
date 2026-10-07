@@ -11,13 +11,7 @@ import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
-import {
-  bricolageGrotesque,
-  geist,
-  geistMono,
-  inter,
-  plusJakarta,
-} from '@/fonts';
+import { geist, geistMono, inter, plusJakarta } from '@/fonts';
 import { isProd } from '@/lib/utils';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -116,7 +110,6 @@ export default function RootLayout({
       <body
         className={`${plusJakarta.variable}
           ${inter.variable}
-          ${bricolageGrotesque.variable}
           ${geist.variable}
           ${geistMono.variable}
            font-sans antialiased`}

@@ -11,9 +11,10 @@ const variants = {
     right: 'w-full sm:w-3xl h-auto',
   },
   secondary: {
-    container: 'gap-7.5 lg:gap-27.5 px-8 sm:px-15 py-15.75',
-    left: 'flex justify-center items-center lg:block w-full lg:max-w-95',
-    right: 'w-full max-w-169',
+    container:
+      'items-start! gap-7.5 px-4 py-15.75 md:grid md:grid-cols-[36%_60%] md:gap-[4%] md:px-5 lg:grid-cols-[424px_706px] lg:justify-center lg:gap-[70px] lg:px-0',
+    left: 'flex flex-col justify-start items-start w-full gap-2.5',
+    right: 'w-full max-w-none',
   },
 };
 
@@ -32,18 +33,21 @@ export function QNASection({
         className={cn(
           'flex flex-col lg:flex-row items-center lg:items-start w-full h-auto',
           style.container,
-          className,
+          variant === 'primary' && className,
         )}
       >
         {title && (
           <div className={cn('flex flex-col h-fit', style.left)}>
             <Title
-              className="w-full tracking-tighter block sm:inline-flex sm:justify-center sm:gap-1 lg:inline-block text-left sm:text-center lg:text-left text-[2.125rem]! sm:text-[3.06rem]!"
-              {...{ title }}
+              className="w-full block text-left! text-[2.125rem]! md:text-[3.25rem]! font-bold! tracking-[-1px]! leading-[1.2em]!"
+              {...{ title, br: true }}
             />
 
             {description && (
-              <Description className="text-left" {...{ description }} />
+              <Description
+                className="text-left! text-[1rem]! lg:text-[1.125rem]! font-medium! leading-[1.3em]!"
+                {...{ description }}
+              />
             )}
           </div>
         )}
