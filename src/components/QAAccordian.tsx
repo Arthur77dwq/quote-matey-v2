@@ -14,7 +14,7 @@ export type VARIANTS = 'primary' | 'secondary';
 const variants = {
   primary: {
     container: '',
-    child: 'transition-colors data-[state=open]:bg-neutral-50',
+    child: 'transition-colors data-[state=open]:bg-white',
   },
   secondary: { container: '', child: 'data-[state=open]:bg-neutral-50' },
 };
@@ -34,7 +34,7 @@ export function QATrigger({
     <AccordionTrigger
       variant={variant}
       className={cn(
-        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-[1.38rem] font-inter font-medium',
+        'p-0 cursor-pointer hover:no-underline text-neutral-900 text-wrap text-[1.38rem] font-inter font-medium',
         className,
       )}
     >

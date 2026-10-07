@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
+  updateProfile,
   type User as FirebaseUser,
 } from 'firebase/auth';
 import {
@@ -118,20 +119,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (name: string, email: string, password: string) => {
     try {
       setLoading(true);
 
       if (!auth)
         throw new Error(getFirebaseErrorMessage(authInitError).message);
 
-      const userCredential = await createUserWithEmailAndPassword(
+      const credential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
-      );
+      ).then((credential) => {
+        return updateProfile(credential.user, { displayName: name }).then(() =>
+          Promise.resolve(credential),
+        );
+      });
 
-      await sendEmailVerification(userCredential.user);
+      await sendEmailVerification(credential.user);
     } catch (error: unknown) {
       const err = getFirebaseErrorMessage(error);
       setError(err.message);

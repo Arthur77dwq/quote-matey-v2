@@ -10,6 +10,7 @@ export const loginSchema = z.object({
 
 export const signUpSchema = z.object({
   type: z.literal('signup'),
+  fullName: z.string(),
   tnc: tncSchema,
   email: emailSchema,
   password: passwordSchema,

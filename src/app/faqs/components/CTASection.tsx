@@ -47,7 +47,7 @@ export function CTASection({ visible, title, description, buttons }: CTA) {
               <Button
                 key={`${button.id}-${button.variant}-${i}`}
                 variant={button.variant}
-                className="w-fit"
+                className="w-55 text-body-md! font-semibold"
                 onClick={() =>
                   button.link && button.link.active
                     ? router.push(button.link.href)

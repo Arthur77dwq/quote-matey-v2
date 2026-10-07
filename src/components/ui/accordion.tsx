@@ -11,7 +11,7 @@ const variants = {
     item: '',
     trigger: {
       container: '',
-      icon: 'bg-neutral-50 group-data-[state=open]:bg-neutral-900',
+      icon: 'bg-neutral-50 group-data-[state=open]:bg-neutral-900 group-data-[state=closed]:bg-white',
     },
     content: '',
   },
@@ -79,7 +79,7 @@ function AccordionTrigger({
         {children}
         <div
           className={cn(
-            'relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300',
+            'relative bg-white flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300',
             style?.trigger.icon,
           )}
         >

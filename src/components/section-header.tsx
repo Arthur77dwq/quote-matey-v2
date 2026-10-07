@@ -47,7 +47,15 @@ function DomNode({
     case 'LINK':
       return (
         children.active && (
-          <Link href={children.href} target={children.target}>
+          <Link
+            href={children.href}
+            target={children.target}
+            className={cn(
+              children?.strong && 'text-warning-600',
+              'hover:underline',
+              styleParse(children),
+            )}
+          >
             {children.text}
           </Link>
         )

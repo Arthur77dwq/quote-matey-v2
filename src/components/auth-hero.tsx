@@ -20,7 +20,7 @@ export function AuthHeroSection({
       <div className="absolute top-0 right-0  bg-[#FF7B00] blur-3xl rounded-full size-40" />
 
       <div className="absolute inset-0 z-10 py-10 flex justify-center items-center">
-        <div className="h-full flex flex-col-reverse lg:flex-col items-center justify-between gap-5 px-10">
+        <div className="h-full flex flex-col-reverse lg:flex-col items-center justify-end lg:justify-between gap-5 px-10">
           {topCard && <Chip {...topCard} />}
 
           {props.image && props.image.src && (
@@ -35,9 +35,9 @@ export function AuthHeroSection({
             </div>
           )}
 
-          <div className="flex justify-center items-center gap-6 w-full h-35">
+          <div className="flex justify-center lg:justify-between items-center md:gap-10 lg:gap-0 w-auto h-35 aspect-146/35">
             {bottom.map((card, i) => (
-              <Chip key={i} {...card} />
+              <Chip key={i} {...card} className="lg:w-45" />
             ))}
           </div>
 
