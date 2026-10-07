@@ -22,6 +22,7 @@ const useRollMove = ({
   useGSAP(() => {
     gsap.set(leftArrowRef.current, {
       rotate: -45,
+      x: -64,
     });
     rollMove.current = gsap.timeline({ paused: true });
     rollMove.current.to(leftArrowRef.current, {
@@ -83,7 +84,7 @@ function PrimaryButton({
         <span
           ref={leftArrowRef}
           key="left"
-          className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+          className="absolute -translate-x-16 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
         >
           <Icon name="LongTailArrow" className="w-3! h-2!" />
         </span>
