@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 import { IconType, ImageType, LINK, NavBar } from '../global';
 import { RichText } from '../pages';
 
@@ -29,13 +31,13 @@ export type StatCategory = {
 
 export type StatSummary = {
   active: boolean;
-  title: string;
-  cta: LINK;
+  title: DynamicValue;
   primaryCTA: CTA;
   stats: StatCategory[];
+  style?: CSSProperties;
 };
 
-export type SideBar = {
+export type SideBarType = {
   active: boolean;
   logo?: ImageType & LINK;
   navBar?: NavBar;
@@ -51,5 +53,5 @@ export type SideBar = {
 };
 
 export type DashboardData = {
-  sidebar?: SideBar;
+  sidebar?: SideBarType;
 };

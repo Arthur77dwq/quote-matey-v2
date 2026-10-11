@@ -117,7 +117,7 @@ export type IconKeys =
 export type IconType = {
   type: 'ICON';
   active: boolean;
-  stroke?: string;
+  strokeWidth?: number;
   position: 'left' | 'center' | 'right';
   icon: keyof typeof Icons | IconKeys;
   color?: string;
@@ -134,7 +134,7 @@ export type buttonVarient =
 export type Highlight = {
   active: boolean;
   type: 'dot' | 'badge';
-  text: string;
+  defaultValue: string;
 };
 
 export type LINK = {
