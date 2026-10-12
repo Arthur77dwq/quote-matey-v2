@@ -181,12 +181,11 @@ export const DASHBOARD_DATA: DashboardData = {
       stats: [
         {
           active: true,
-          name: 'Quotes:',
-          icon: {
-            active: false,
-            type: 'ICON',
-            position: 'right',
-            icon: 'LoaderCircle',
+          beforeValue: {
+            active: true,
+            id: 'before-value-stats-quotes',
+            type: 'TEXT',
+            text: 'Quotes:',
           },
           defaultValue: {
             active: true,
@@ -203,12 +202,19 @@ export const DASHBOARD_DATA: DashboardData = {
         },
         {
           active: true,
-          name: 'Points:',
-          icon: {
+          beforeValue: {
+            active: true,
+            id: 'before-value-stats-points',
+            type: 'TEXT',
+            text: 'Points:',
+          },
+          afterValue: {
+            id: 'afterValue-stats-points',
             active: true,
             type: 'ICON',
             position: 'right',
             icon: 'Info',
+            color: 'grey',
           },
           defaultValue: {
             active: true,
@@ -218,10 +224,6 @@ export const DASHBOARD_DATA: DashboardData = {
           },
         },
       ],
-      style: {
-        backgroundColor: 'oklch(64.6% 0.222 41.116)',
-        color: 'white',
-      },
     },
     bottom: {
       active: true,

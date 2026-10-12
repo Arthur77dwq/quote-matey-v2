@@ -25,8 +25,6 @@ export type CTA = {
 
 export type StatCategory = {
   active: boolean;
-  name: string;
-  icon: IconType;
 } & DynamicValue;
 
 export type StatSummary = {

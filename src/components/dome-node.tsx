@@ -8,10 +8,12 @@ import { Icon } from './icon';
 
 export const DomNode = ({
   children,
+  icon,
   br = false,
 }: {
   children: RichText;
   br?: boolean;
+  icon?: string;
 }) => {
   switch (children.type) {
     case 'TEXT':
@@ -65,7 +67,7 @@ export const DomNode = ({
       return (
         children.active && (
           <Icon
-            className="size-4"
+            className={cn('size-4', icon)}
             key={`${children.icon}`}
             name={children.icon}
             stroke={children.color}
@@ -77,14 +79,21 @@ export const DomNode = ({
 
 export const DynamicNode = ({
   className,
+  icon,
   ...values
-}: DynamicValue & { className?: string }) =>
+}: DynamicValue & { className?: string; icon?: string }) =>
   values.active && (
-    <span className={cn('flex gap-2 items-center justify-center', className)}>
-      {values.beforeValue?.active && <DomNode children={values.beforeValue} />}
-      {values.defaultValue?.active && (
-        <DomNode children={values.defaultValue} />
+    <span
+      className={cn('w-full flex gap-2 items-center justify-center', className)}
+    >
+      {values.beforeValue?.active && (
+        <DomNode icon={icon} children={values.beforeValue} />
       )}
-      {values.afterValue?.active && <DomNode children={values.afterValue} />}
+      {values.defaultValue?.active && (
+        <DomNode icon={icon} children={values.defaultValue} />
+      )}
+      {values.afterValue?.active && (
+        <DomNode icon={icon} children={values.afterValue} />
+      )}
     </span>
   );
