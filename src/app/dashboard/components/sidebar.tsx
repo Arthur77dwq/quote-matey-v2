@@ -10,12 +10,13 @@ import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { SideBarType, StatCategory, StatSummary } from '@/types/dashboard';
+import { SideBarType, StatSummary } from '@/types/dashboard';
 import { Highlight, NavBar } from '@/types/global';
 
 function VerticalNavBar({ links, className }: NavBar & { className?: string }) {
@@ -68,7 +69,7 @@ function VerticalNavBar({ links, className }: NavBar & { className?: string }) {
   );
 }
 
-function StatsCard({ style, title, stats, primaryCTA }: StatSummary) {
+function StatsCard({ style, title, primaryCTA, consumption }: StatSummary) {
   return (
     <Card
       className="w-full h-fit gap-0 p-3 bg-[#FFEEE8] border-0 rounded-md"
@@ -96,41 +97,21 @@ function StatsCard({ style, title, stats, primaryCTA }: StatSummary) {
         </CardHeader>
       )}
       <CardContent className="w-full h-fit p-0 pt-1">
-        <div className="w-full flex items-center justify-start bg-[#D8D7D7] rounded-full overflow-hidden">
-          <span
-            className="h-2.5 rounded-md bg-orange-600 transition-all flex-1"
-            style={{ transform: `translateX(-${100 - 40}%)` }}
-          />
-        </div>
-        <div className="flex flex-col items-start justify-start gap-1 py-1">
-          {stats.map(
-            (stat: StatCategory, i: number) =>
-              stat.active && (
-                <p
-                  key={i}
-                  className="relative w-full flex items-center gap-2 text-xs font-semibold text-neutral-700"
-                >
-                  <span className="w-fit flex items-center justify-start gap-1">
-                    {stat.beforeValue?.active && (
-                      <DomNode children={stat.beforeValue} />
-                    )}
-                    {stat.defaultValue?.active && (
-                      <DomNode children={stat.defaultValue} />
-                    )}
-                  </span>
-                  {stat.afterValue?.active && (
-                    <span
-                      className={cn(
-                        stat.afterValue.type === 'ICON'
-                          ? 'absolute right-0'
-                          : '',
-                      )}
-                    >
-                      <DomNode children={stat.afterValue} />
-                    </span>
-                  )}
-                </p>
-              ),
+        <div className="flex gap-2">
+          <div className="w-full flex items-center justify-start bg-[#D8D7D7] rounded-full overflow-hidden">
+            <span
+              className="h-2.5 rounded-md bg-orange-600 transition-all flex-1"
+              style={{
+                transform: `translateX(-${consumption.total - consumption.used}%)`,
+              }}
+            />
+          </div>
+          {consumption?.icon && consumption.icon.active && (
+            <Icon
+              name={consumption.icon.icon}
+              className="w-fit h-3"
+              style={{ stroke: consumption.icon.color }}
+            />
           )}
         </div>
       </CardContent>
@@ -164,6 +145,7 @@ export default function SideBar({
   primaryCta,
   navBar,
   statSummary,
+  bottom,
 }: SideBarType) {
   return (
     active && (
@@ -219,8 +201,51 @@ export default function SideBar({
         </div>
 
         {/* Bottom */}
-        <div className="w-full h-fit flex flex-col justify-between items-center gap-2 mt-auto">
+        <div className="w-full h-fit flex flex-col justify-between items-center gap-3 mt-auto">
           {statSummary?.active && <StatsCard {...statSummary} />}
+          {bottom?.active && (
+            <Card className="w-full border-0 p-3 flex flex-row gap-0 outline-2 outline-[#D8D7D7] bg-[#D8D7D7]/10 rounded-md">
+              <div className="w-fit h-full flex">
+                <Icon
+                  name={bottom.icon.icon}
+                  className="h-3.5 min-w-fit"
+                  style={{
+                    stroke: bottom.icon.color,
+                    strokeWidth: bottom.icon.strokeWidth,
+                  }}
+                />
+              </div>
+              <CardContent className="w-full h-full flex flex-col gap-2 p-0 text-sm">
+                <div>
+                  <CardTitle className="flex items-center gap-1 font-bold">
+                    {bottom.title}
+                  </CardTitle>
+                  <CardDescription className="text-neutral-600">
+                    {bottom.description}
+                  </CardDescription>
+                </div>
+                {bottom.link.active && (
+                  <Link
+                    href={bottom.link.href}
+                    target={bottom.link.target}
+                    className="text-[#97ACD9] font-semibold flex items-center text-xs hover:underline"
+                  >
+                    {bottom.link.text}
+                    {bottom.link.icon?.active && (
+                      <Icon
+                        name={bottom.link.icon.icon}
+                        className="h-4 min-w-fit"
+                        style={{
+                          stroke: bottom.link.icon.color,
+                          strokeWidth: bottom.link.icon.strokeWidth,
+                        }}
+                      />
+                    )}
+                  </Link>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     )

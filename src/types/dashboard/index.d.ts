@@ -23,15 +23,15 @@ export type CTA = {
   style: 'primary' | 'secondary' | 'tertiary'; // TODO: Add styles according to design system
 };
 
-export type StatCategory = {
-  active: boolean;
-} & DynamicValue;
-
 export type StatSummary = {
   active: boolean;
   title: DynamicValue;
+  consumption: {
+    icon?: IconType;
+    total: number;
+    used: number;
+  };
   primaryCTA: CTA;
-  stats: StatCategory[];
   style?: CSSProperties;
 };
 

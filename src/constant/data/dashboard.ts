@@ -178,52 +178,17 @@ export const DASHBOARD_DATA: DashboardData = {
         action: 'upgradeToNextPlan',
         style: 'primary',
       },
-      stats: [
-        {
+      consumption: {
+        icon: {
           active: true,
-          beforeValue: {
-            active: true,
-            id: 'before-value-stats-quotes',
-            type: 'TEXT',
-            text: 'Quotes:',
-          },
-          defaultValue: {
-            active: true,
-            id: 'default-value-stats-quotes',
-            type: 'TEXT',
-            text: '0/10',
-          },
-          afterValue: {
-            id: 'after-value-stats-quote',
-            active: true,
-            type: 'TEXT',
-            text: ' used',
-          },
+          type: 'ICON',
+          icon: 'Info',
+          position: 'right',
+          color: 'grey',
         },
-        {
-          active: true,
-          beforeValue: {
-            active: true,
-            id: 'before-value-stats-points',
-            type: 'TEXT',
-            text: 'Points:',
-          },
-          afterValue: {
-            id: 'afterValue-stats-points',
-            active: true,
-            type: 'ICON',
-            position: 'right',
-            icon: 'Info',
-            color: 'grey',
-          },
-          defaultValue: {
-            active: true,
-            id: 'default-value-stats-points',
-            type: 'TEXT',
-            text: '0/1000',
-          },
-        },
-      ],
+        total: 100,
+        used: 20,
+      },
     },
     bottom: {
       active: true,
@@ -233,7 +198,7 @@ export const DASHBOARD_DATA: DashboardData = {
         active: true,
         position: 'right',
         type: 'ICON',
-        icon: 'ArrowRight',
+        icon: 'CircleQuestionMark',
       },
       link: {
         active: true,
