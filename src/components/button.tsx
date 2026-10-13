@@ -21,14 +21,18 @@ const useRollMove = ({
 
   useGSAP(() => {
     const arrowSize = leftArrowRef.current?.offsetWidth ?? 22;
+    const leftArrowRestX = -32 - (leftArrowRef.current?.offsetLeft ?? 0);
 
     gsap.set(leftArrowRef.current, {
+      x: leftArrowRestX,
       rotate: -45,
+      opacity: 0,
     });
     rollMove.current = gsap.timeline({ paused: true });
     rollMove.current.to(leftArrowRef.current, {
       x: 9 - arrowSize,
       rotate: 0,
+      opacity: 1,
       duration: 0.5,
       ease: easing,
     });
