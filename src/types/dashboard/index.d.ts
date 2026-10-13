@@ -30,6 +30,7 @@ export type StatSummary = {
     icon?: IconType;
     total: number;
     used: number;
+    stats: { name: string; active: boolean; used: number; total: number }[];
   };
   primaryCTA: CTA;
   style?: CSSProperties;

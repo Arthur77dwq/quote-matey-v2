@@ -188,6 +188,20 @@ export const DASHBOARD_DATA: DashboardData = {
         },
         total: 100,
         used: 20,
+        stats: [
+          {
+            name: 'Quotes',
+            active: true,
+            used: 10,
+            total: 40,
+          },
+          {
+            name: 'Images',
+            active: true,
+            used: 20,
+            total: 60,
+          },
+        ],
       },
     },
     bottom: {

@@ -1,7 +1,9 @@
 'use client';
+import { TooltipContent } from '@radix-ui/react-tooltip';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCallback, useRef } from 'react';
 
 import { Button } from '@/components/button';
 import { DomNode, DynamicNode } from '@/components/dome-node';
@@ -15,7 +17,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
+import { gsap } from '@/lib/animations/plugins';
+import { cn, shortNumber } from '@/lib/utils';
 import { SideBarType, StatSummary } from '@/types/dashboard';
 import { Highlight, NavBar } from '@/types/global';
 
@@ -70,6 +74,32 @@ function VerticalNavBar({ links, className }: NavBar & { className?: string }) {
 }
 
 function StatsCard({ style, title, primaryCTA, consumption }: StatSummary) {
+  const tooltipContainerRef = useRef<HTMLDivElement>(null);
+
+  const setTooltipContainerRef = useCallback(
+    (element: HTMLDivElement | null) => {
+      tooltipContainerRef.current = element;
+
+      if (!element) return;
+
+      gsap.fromTo(
+        element,
+        {
+          opacity: 0,
+          xPercent: -100,
+        },
+        {
+          opacity: 1,
+          xPercent: 0,
+          duration: 0.5,
+          ease: 'power.out',
+          clearProps: 'opacity,transform',
+        },
+      );
+    },
+    [],
+  );
+
   return (
     <Card
       className="w-full h-fit gap-0 p-3 bg-[#FFEEE8] border-0 rounded-md"
@@ -107,11 +137,32 @@ function StatsCard({ style, title, primaryCTA, consumption }: StatSummary) {
             />
           </div>
           {consumption?.icon && consumption.icon.active && (
-            <Icon
-              name={consumption.icon.icon}
-              className="w-fit h-3"
-              style={{ stroke: consumption.icon.color }}
-            />
+            <Tooltip>
+              <TooltipTrigger>
+                <Icon
+                  name={consumption.icon.icon}
+                  className="w-fit h-3"
+                  style={{ stroke: consumption.icon.color }}
+                />
+              </TooltipTrigger>
+              <TooltipContent
+                ref={setTooltipContainerRef}
+                className="bg-neutral-100 rounded-md shadow-sm py-1.5 pl-6 pr-3 flex flex-col items-start gap-1 -z-10"
+                side="right"
+              >
+                {consumption.stats.map((stat, i: number) => (
+                  <p key={i} className="text-xs ">
+                    <span className="font-semibold">{stat.name}:</span>{' '}
+                    {shortNumber(stat.used)}/{shortNumber(stat.total)}
+                  </p>
+                ))}
+                <p className="text-xs ">
+                  <span className="font-semibold">Points:</span>{' '}
+                  {shortNumber(consumption.used)}/
+                  {shortNumber(consumption.total)}
+                </p>
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
       </CardContent>

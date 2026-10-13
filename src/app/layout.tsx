@@ -9,6 +9,7 @@ import { Toaster } from 'sonner';
 import GoogleAnalyticsTracker from '@/components/analytics';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { AuthProvider } from '@/context/AuthContext';
 import { geist, geistMono, inter, plusJakarta } from '@/fonts';
@@ -125,6 +126,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <TooltipProvider>{children}</TooltipProvider>
           </AuthProvider>
         </Suspense>
         <Analytics />
