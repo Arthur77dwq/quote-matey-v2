@@ -47,7 +47,7 @@ export function CTASection({ visible, title, description, buttons }: CTA) {
               <Button
                 key={`${button.id}-${button.variant}-${i}`}
                 variant={button.variant}
-                className="w-[11.8227rem] h-[2.3rem] min-[810px]:w-[12.8008rem] min-[810px]:h-[2.4625rem] lg:w-[14.0508rem] lg:h-[2.9625rem] border-0 outline-none rounded-full py-2 pl-5 pr-3 lg:py-3 lg:pl-[1.875rem] font-inter text-[1rem]! min-[810px]:text-[1.125rem]! lg:text-[1.125rem]! font-semibold leading-[1.3em] bg-[linear-gradient(110deg,#323232_0%,#000_100%)] shadow-[inset_4px_4px_8px_#FFFFFF4D,inset_-4px_-4px_8px_#FFFFFF4D,0_8px_16px_#1D1D1D80] [&>span:first-child]:opacity-0 hover:[&>span:first-child]:opacity-100 [&>span:last-child]:size-[1.55rem]! min-[810px]:[&>span:last-child]:size-[1.7125rem]! lg:[&>span:last-child]:size-[1.9625rem]!"
+                className="w-[11.8227rem] h-[2.3rem] min-[810px]:w-[12.8008rem] min-[810px]:h-[2.4625rem] lg:w-[14.0508rem] lg:h-[2.9625rem] border-0 outline-none rounded-full py-2 pl-5 pr-3 lg:py-3 lg:pl-[1.875rem] font-inter text-[1rem]! min-[810px]:text-[1.125rem]! lg:text-[1.125rem]! font-semibold leading-[1.3em] bg-[linear-gradient(110deg,#323232_0%,#000_100%)] shadow-[inset_4px_4px_8px_#FFFFFF4D,inset_-4px_-4px_8px_#FFFFFF4D,0_8px_16px_#1D1D1D80] [&>span:first-child]:size-[1.55rem]! min-[810px]:[&>span:first-child]:size-[1.7125rem]! lg:[&>span:first-child]:size-[1.9625rem]! [&>span:first-child]:opacity-0 hover:[&>span:first-child]:opacity-100 [&>span:last-child]:size-[1.55rem]! min-[810px]:[&>span:last-child]:size-[1.7125rem]! lg:[&>span:last-child]:size-[1.9625rem]!"
                 onClick={() =>
                   button.link && button.link.active
                     ? router.push(button.link.href)

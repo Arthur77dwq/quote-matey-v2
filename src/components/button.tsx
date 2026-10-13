@@ -20,12 +20,14 @@ const useRollMove = ({
   const easing = 'power2.inOut';
 
   useGSAP(() => {
+    const arrowSize = leftArrowRef.current?.offsetWidth ?? 22;
+
     gsap.set(leftArrowRef.current, {
       rotate: -45,
     });
     rollMove.current = gsap.timeline({ paused: true });
     rollMove.current.to(leftArrowRef.current, {
-      x: -13,
+      x: 9 - arrowSize,
       rotate: 0,
       duration: 0.5,
       ease: easing,
@@ -43,7 +45,7 @@ const useRollMove = ({
     rollMove.current.to(
       textRef.current,
       {
-        x: 15,
+        x: arrowSize - 7,
         duration: 0.5,
         ease: easing,
       },
