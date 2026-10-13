@@ -1,4 +1,5 @@
 import * as Icons from 'lucide-react';
+import { CSSProperties } from 'react';
 import { z } from 'zod';
 
 import {
@@ -135,6 +136,7 @@ export type Highlight = {
   active: boolean;
   type: 'dot' | 'badge';
   defaultValue: string;
+  style?: CSSProperties;
 };
 
 export type LINK = {

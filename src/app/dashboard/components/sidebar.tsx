@@ -25,12 +25,16 @@ import { Highlight, NavBar } from '@/types/global';
 
 function VerticalNavBar({ links, className }: NavBar & { className?: string }) {
   const pathname = usePathname();
-  const Highlight = ({ type, defaultValue }: Highlight) => {
+  const Highlight = ({ type, defaultValue, style }: Highlight) => {
     switch (type) {
       case 'dot':
-        return <span />;
+        return <span style={{ ...style }} className="text-xs rounded-full" />;
       default:
-        return <Badge>{defaultValue}</Badge>;
+        return (
+          <Badge style={{ ...style }} className="text-xs rounded-full">
+            {defaultValue}
+          </Badge>
+        );
     }
   };
   return (

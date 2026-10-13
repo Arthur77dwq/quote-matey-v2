@@ -67,6 +67,10 @@ export const DASHBOARD_DATA: DashboardData = {
             active: true,
             type: 'badge',
             defaultValue: '12',
+            style: {
+              color: 'oklch(70.5% 0.213 47.604)',
+              backgroundColor: '#FFEEE8',
+            },
           },
         },
         {
@@ -120,6 +124,10 @@ export const DASHBOARD_DATA: DashboardData = {
             active: true,
             type: 'badge',
             defaultValue: 'Admin',
+            style: {
+              color: '#8B6BF6',
+              backgroundColor: '#F3EEFE',
+            },
           },
         },
       ],
