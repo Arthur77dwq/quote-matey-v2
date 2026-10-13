@@ -126,7 +126,7 @@ export function HeroSection({
           ref={parentRef}
           className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 lg:translate-y-[1.289rem] absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
-          <div className="z-5 px-4 sm:p-0 -translate-y-[1.875rem] md:translate-y-7 lg:translate-y-0 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
+          <div className="z-5 px-4 sm:p-0 -translate-y-[1.875rem] md:translate-y-7 lg:translate-y-5 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
             {/* Hero Content */}
             <div className="w-full h-full flex flex-col items-center justify-center gap-6.5">
               {title && (
@@ -134,7 +134,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="w-88.5 md:w-full opacity-0 leading-[1em] text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
+                  className="w-88.5 md:w-full lg:w-[65.1875rem] max-w-full opacity-0 leading-[1em]! font-bold [&_*]:font-bold text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
                   title={title}
                 />
               )}

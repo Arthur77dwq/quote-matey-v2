@@ -38,7 +38,7 @@ export function QNASection({
         {title && (
           <div className={cn('flex flex-col h-fit', style.left)}>
             <Title
-              className="w-full tracking-tighter block sm:inline-flex sm:justify-center sm:gap-1 lg:inline-block text-left sm:text-center lg:text-left text-[2.125rem]! sm:text-[3.06rem]!"
+              className="w-full tracking-[-1px]! block sm:inline-flex sm:justify-center sm:gap-1 lg:inline-block text-left sm:text-center lg:text-left font-bold! [&_*]:font-bold! text-[2.125rem]! sm:text-[3.25rem]! leading-[1.2em]! [&_*]:leading-[1.2em]!"
               {...{ title }}
             />
 
