@@ -11,7 +11,7 @@ export default function DashboardLayout({
   const { sidebar } = DASHBOARD_DATA;
 
   return (
-    <section className="relative flex max-h-screen max-w-screen">
+    <section className="relative flex max-h-screen max-w-screen overflow-hidden">
       <aside className="min-w-fit">
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
