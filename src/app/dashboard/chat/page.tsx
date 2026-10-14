@@ -279,9 +279,7 @@ function ChatContent() {
   }, [user?.subscription]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
-      {/* <ChatNavbar /> */}
-
+    <div className="bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       {isDragActive && (
         <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
           <div className="flex flex-col justify-center items-center">
