@@ -44,12 +44,7 @@ export function Header() {
               [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent)]
               "
             />
-            <div
-              className={twMerge(
-                'z-200 relative w-full lg:w-auto lg:h-fit',
-                open && 'h-screen',
-              )}
-            >
+            <div className="z-200 relative w-full lg:w-auto lg:h-fit">
               <div className="rounded-md shadow-[0_0_0_4px_#DDE5EDB3] lg:min-w-40 h-14.5 bg-white w-full lg:w-3xl flex justify-between items-center p-2.5">
                 {headers?.logo?.active ? (
                   <Link
@@ -117,6 +112,7 @@ export function Header() {
               'backdrop-blur-md inset-0 z-100',
               open ? 'fixed' : 'hidden',
             )}
+            onClick={() => setOpen(false)}
           />
         </>
       )}

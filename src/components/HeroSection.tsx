@@ -7,7 +7,7 @@ import { gsap } from '@/lib/animations/plugins';
 import { cn } from '@/lib/utils';
 import { HERO } from '@/types/pages';
 
-import { Description, Title } from './section-header';
+import { SectionHeader } from './section-header';
 
 const useSectionAnimation = (
   sectionRef: React.RefObject<HTMLDivElement | null>,
@@ -36,7 +36,8 @@ export function HeroSection({
   BGImage,
   children,
   className,
-}: HERO) {
+  titleClassName,
+}: HERO & { titleClassName?: string }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   useSectionAnimation(sectionRef);
 
@@ -82,21 +83,16 @@ export function HeroSection({
         />
         <div
           ref={sectionRef}
-          className="px-4 sm:p-0 opacity-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
+          className="px-4 sm:p-0 flex flex-col items-center justify-center gap-2.5 w-full h-fit"
         >
           {tag && (
             <Badge className="rounded-full py-2.5 px-5 bg-white text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
               {tag}
             </Badge>
           )}
-
-          {title && (
-            <Title
-              {...{ title }}
-              className="leading-[1.2em] tracking-[-1.4px]"
-            />
+          {(title || description) && (
+            <SectionHeader {...{ title, description, titleClassName }} />
           )}
-          {description && <Description {...{ description }} />}
         </div>
         {children}
       </section>
