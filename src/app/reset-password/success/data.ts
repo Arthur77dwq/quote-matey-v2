@@ -149,7 +149,7 @@ export const DATA: DataType = {
               type: 'ICON',
               icon: 'Clock',
               position: 'left',
-              stroke: '#0023D6',
+              color: '#0023D6',
               active: true,
             },
             title: {
@@ -191,7 +191,7 @@ export const DATA: DataType = {
               type: 'ICON',
               icon: 'Zap',
               position: 'left',
-              stroke: '#FF5900',
+              color: '#FF5900',
               active: true,
             },
             title: {
@@ -216,7 +216,7 @@ export const DATA: DataType = {
             icon: {
               type: 'ICON',
               icon: 'MessageSquare',
-              stroke: '#001685',
+              color: '#001685',
               position: 'left',
               active: true,
             },

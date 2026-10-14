@@ -101,7 +101,7 @@ export const DATA: DataType = {
           variant: 'outline',
           text: 'View Demo',
           link: {
-            href: '/chat',
+            href: '/dashboard/chat',
             target: '_self',
             text: null,
             active: true,

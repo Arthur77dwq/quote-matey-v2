@@ -24,11 +24,7 @@ export function Chip({
           <CardContent className="w-full h-full flex flex-col justify-start items-start gap-2.5 p-3">
             <div>
               {icon && icon.icon && icon.active && (
-                <Icon
-                  name={icon.icon}
-                  color={icon.color}
-                  stroke={icon.stroke}
-                />
+                <Icon name={icon.icon} color={icon.color} stroke={icon.color} />
               )}
             </div>
             <div>

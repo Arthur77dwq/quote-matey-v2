@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { Button } from '@/components/button';
-import { AUTH_ROUTES } from '@/constant/config/route';
+import { AUTH_ROUTES, PROTECTED_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { cn, matchRoute } from '@/lib/utils';
 
@@ -25,11 +25,14 @@ export function Header() {
   const toggle = () => setOpen((prev) => !prev);
 
   const pathname = usePathname();
-  const shouldHide = matchRoute(pathname, [...AUTH_ROUTES, '/chat']);
+  const shouldHide = matchRoute(pathname, [
+    ...AUTH_ROUTES,
+    ...PROTECTED_ROUTES,
+  ]);
 
   return (
     <>
-      {!shouldHide && headers?.type === 'GLOBAL_HEADER' && (
+      {!shouldHide && headers?.type === 'LANDING_HEADER' && (
         <>
           <div className="fixed z-200 top-0 w-full flex flex-col justify-center items-center p-5">
             <div

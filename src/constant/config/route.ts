@@ -5,7 +5,7 @@ export const PROTECTED_ROUTES = [
   '/api/subscription',
   '/api/user',
   '/api/logs',
-  '/chat',
+  '/dashboard',
   '/pricing/success',
   '/pricing/cancel',
 ] as const;

@@ -1,4 +1,5 @@
 import * as Icons from 'lucide-react';
+import { CSSProperties } from 'react';
 import { z } from 'zod';
 
 import {
@@ -72,6 +73,7 @@ export type LogoType = {
 };
 
 export type BrandType = {
+  active: boolean;
   logo: LogoType;
 };
 
@@ -98,7 +100,7 @@ export type GlobalMetaDataType = {
   };
 };
 
-export type HeaderType = 'GLOBAL_HEADER';
+export type HeaderType = 'LANDING_HEADER' | 'DASHBOARD_HEADER';
 export type FooterType = 'GLOBAL_FOOTER';
 
 export type IconKeys =
@@ -116,7 +118,7 @@ export type IconKeys =
 export type IconType = {
   type: 'ICON';
   active: boolean;
-  stroke?: string;
+  strokeWidth?: number;
   position: 'left' | 'center' | 'right';
   icon: keyof typeof Icons | IconKeys;
   color?: string;
@@ -130,10 +132,19 @@ export type buttonVarient =
   | 'secondary-dark'
   | 'outline';
 
+export type Highlight = {
+  active: boolean;
+  type: 'dot' | 'badge';
+  defaultValue: string;
+  style?: CSSProperties;
+};
+
 export type LINK = {
   href: string;
   target: '_self' | '_blank' | '_parent' | '_top' | string;
   text: string | null;
+  icon?: IconType;
+  highlight?: Highlight;
   active: boolean;
 };
 
@@ -152,13 +163,15 @@ export type Button = {
   icon: IconType | null;
 };
 
+export type NavBar = {
+  active: boolean;
+  links?: LINK[];
+};
+
 export type headers = {
   logo: ImageType & Link;
   type: HeaderType;
-  navBar: {
-    active: boolean;
-    links?: LINK[] | null;
-  };
+  navBar: NavBar;
   buttons?: Button[];
 };
 

@@ -1,47 +1,41 @@
 'use client';
-
-import { ChevronLeft } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-
 import { useAuth } from '@/context/AuthContext';
 
 import { AccountMenu } from './account-menu';
+import { Icon } from './icon';
+import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 
 export function ChatNavbar() {
   const { user, logOut } = useAuth();
+  const search = () => {};
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border/50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-18">
-          {/* Back to Home */}
-          <Link
-            href="/"
-            className="w-fit inline-flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/80"
-          >
-            <ChevronLeft className="w-4 h-4 text-muted-foreground hover:text-foreground transition-colors" />
-            <span className="hidden lg:flex">Back to Home</span>
-          </Link>
+    <header className="flex items-center justify-end gap-5 py-5 h-15 bg-white/80 backdrop-blur-xl border-b border-neutral-300 border-border/50">
+      {/* Dashboard Global search */}
+      <InputGroup className="max-w-xs h-10 rounded-md ring-1 ring-neutral-200 border-[#E8E8EA] focus-within:border-[#E8E8EA]! focus-within:ring-0!">
+        <InputGroupInput
+          onChange={search}
+          placeholder="Search quotes, jobs, templates..."
+          className="font-semibold"
+        />
+        <InputGroupAddon>
+          <Icon name="Search" className="text-neutral-400" strokeWidth={3} />
+        </InputGroupAddon>
+      </InputGroup>
 
-          {/* Logo - navigates to home */}
-          <Link
-            href="/"
-            className="w-full lg:w-auto flex justify-center items-center gap-2.5 hover:opacity-80 transition-opacity"
-          >
-            <Image
-              src="/images/quotematey-logo.png"
-              alt="QuoteMatey"
-              width={36}
-              height={36}
-              className="w-9 h-9"
-            />
-            <span className="text-xl font-bold tracking-tight text-[#0a1628]">
-              QuoteMatey
-            </span>
-          </Link>
-          {!!user && <AccountMenu user={user} logOut={logOut} />}
-        </div>
-      </div>
+      {/* Points */}
+      <span className="flex items-center justify-between gap-2 px-3 w-fit h-10 bg-white ring-1 ring-neutral-200 p-1 rounded-md">
+        <span className="w-fit h-full flex items-center justify-center">
+          <Icon name="Bolt" className="text-[#FF814C] size-5" strokeWidth={4} />
+        </span>
+        <span className="w-full h-full flex items-center justify-center text-xs font-bold">
+          900 pts
+        </span>
+      </span>
+
+      {/* seperator */}
+      <span className="h-10 w-px rounded-full bg-neutral-300/60" />
+      {/* profile */}
+      {!!user && <AccountMenu user={user} logOut={logOut} />}
     </header>
   );
 }

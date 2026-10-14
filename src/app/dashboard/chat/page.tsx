@@ -8,7 +8,6 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { ChatNavbar } from '@/components/chat-navbar';
 import ImagePreview from '@/components/ui/images-preview-grid';
 import UsageLimitNotification from '@/components/ui/usage-limit-notification';
 import { useAuth } from '@/context/AuthContext';
@@ -91,6 +90,7 @@ function ChatContent() {
     return parts;
   };
 
+  // TODO: Refactor below function to reduce its cognitive complexity
   const handleSendMessage = async (text: string) => {
     // TODO: Implement notification handler in chat
     const trimmedText = text.trim() || null;
@@ -279,9 +279,7 @@ function ChatContent() {
   }, [user?.subscription]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
-      <ChatNavbar />
-
+    <div className="bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
       {isDragActive && (
         <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
           <div className="flex flex-col justify-center items-center">
