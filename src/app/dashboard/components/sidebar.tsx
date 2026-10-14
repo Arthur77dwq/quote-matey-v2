@@ -1,9 +1,10 @@
 'use client';
+import { useGSAP } from '@gsap/react';
 import { TooltipContent } from '@radix-ui/react-tooltip';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { Button } from '@/components/button';
 import { DomNode, DynamicNode } from '@/components/dome-node';
@@ -18,6 +19,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { gsap } from '@/lib/animations/plugins';
 import { cn, shortNumber } from '@/lib/utils';
 import { SideBarType, StatSummary } from '@/types/dashboard';
@@ -201,10 +203,49 @@ export default function SideBar({
   navBar,
   statSummary,
   bottom,
-}: SideBarType) {
+  className,
+}: SideBarType & { className?: string }) {
+  const navigationBarRef = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
+  const animation = useRef<gsap.core.Tween | null>(null);
+  const isMobile = useIsMobile();
+
+  useGSAP(
+    () => {
+      if (!isMobile || !navigationBarRef.current) return;
+      animation.current ??= gsap.fromTo(
+        navigationBarRef.current,
+        { opacity: 0, xPercent: -100 },
+        {
+          opacity: 1,
+          xPercent: 0,
+          duration: 0.5,
+          ease: 'power.out',
+          paused: true,
+          onReverseComplete: () => setOpen((prev) => !prev),
+        },
+      );
+    },
+    { dependencies: [isMobile], revertOnUpdate: true },
+  );
+
+  const toggleMenu = () => {
+    if (isMobile) {
+      if (open) animation.current?.reverse();
+      else animation.current?.play();
+
+      if (!open) setOpen((prev) => !prev);
+    }
+  };
   return (
     active && (
-      <div className="w-full h-screen py-5 px-2 flex flex-col items-center gap-3">
+      <div
+        className={cn(
+          'fixed top-0 md:static inset-0 min-w-fit border-0 border-r-2 border-black/20 z-40 w-full bg-white py-5 px-2 flex flex-col items-center gap-3',
+          open ? 'h-screen' : 'h-fit md:h-screen',
+          className,
+        )}
+      >
         {/* BRAND Identity */}
         <div className="w-full h-8 flex items-center px-3">
           {logo?.active &&
@@ -233,74 +274,100 @@ export default function SideBar({
                 style={{ aspectRatio: logo?.aspect }}
               />
             ))}
+          <button
+            onClick={toggleMenu}
+            className={cn(
+              'size-11 flex md:hidden justify-center items-center rounded-md',
+              open ? 'bg-[#FAFBFD]' : 'bg-[#FFF0E9] ',
+            )}
+          >
+            <Icon
+              name={open ? 'X' : 'Menu'}
+              className={cn(open ? '' : 'text-[#FF5000]')}
+            />
+          </button>
         </div>
 
-        {/* Body */}
-        <div className="flex flex-col gap-2 item-center w-full">
-          {/* Primary CTA */}
-          {primaryCta?.active && (
-            <div className="w-full">
-              <Button
-                variant="outline"
-                className="text-white bg-orange-600 w-full rounded-md"
-              >
-                {primaryCta.title.active && (
-                  <DynamicNode {...primaryCta.title} />
-                )}
-              </Button>
-            </div>
+        <div
+          ref={navigationBarRef}
+          className={cn(
+            'w-full h-full flex flex-col gap-5',
+            open ? 'flex' : 'hidden md:flex',
           )}
-
-          {/* Vertical Navigation Bar */}
-          {navBar?.active && <VerticalNavBar className="w-full" {...navBar} />}
-        </div>
-
-        {/* Bottom */}
-        <div className="w-full h-fit flex flex-col justify-between items-center gap-3 mt-auto">
-          {statSummary?.active && <StatsCard {...statSummary} />}
-          {bottom?.active && (
-            <Card className="w-full border-0 p-3 flex flex-row gap-0 outline-2 outline-[#D8D7D7] bg-[#D8D7D7]/10 rounded-md">
-              <div className="w-fit h-full flex">
-                <Icon
-                  name={bottom.icon.icon}
-                  className="h-3.5 min-w-fit"
-                  style={{
-                    stroke: bottom.icon.color,
-                    strokeWidth: bottom.icon.strokeWidth,
-                  }}
-                />
+        >
+          {/* Body */}
+          <div className={cn('flex flex-col gap-2 item-center w-full')}>
+            {/* Primary CTA */}
+            {primaryCta?.active && (
+              <div className="w-full">
+                <Button
+                  variant="outline"
+                  className="text-white bg-orange-600 w-full rounded-md"
+                >
+                  {primaryCta.title.active && (
+                    <DynamicNode {...primaryCta.title} />
+                  )}
+                </Button>
               </div>
-              <CardContent className="w-full h-full flex flex-col gap-2 p-0 text-sm">
-                <div>
-                  <CardTitle className="flex items-center gap-1 font-bold">
-                    {bottom.title}
-                  </CardTitle>
-                  <CardDescription className="text-neutral-600">
-                    {bottom.description}
-                  </CardDescription>
+            )}
+
+            {/* Vertical Navigation Bar */}
+            {navBar?.active && (
+              <VerticalNavBar className="w-full" {...navBar} />
+            )}
+          </div>
+
+          {/* Bottom */}
+          <div
+            className={cn(
+              'w-full h-fit flex flex-col justify-between items-center gap-3 md:mt-auto',
+            )}
+          >
+            {statSummary?.active && <StatsCard {...statSummary} />}
+            {bottom?.active && (
+              <Card className="w-full border-0 p-3 flex flex-row gap-0 outline-2 outline-[#D8D7D7] bg-[#D8D7D7]/10 rounded-md">
+                <div className="w-fit h-full flex">
+                  <Icon
+                    name={bottom.icon.icon}
+                    className="h-3.5 min-w-fit"
+                    style={{
+                      stroke: bottom.icon.color,
+                      strokeWidth: bottom.icon.strokeWidth,
+                    }}
+                  />
                 </div>
-                {bottom.link.active && (
-                  <Link
-                    href={bottom.link.href}
-                    target={bottom.link.target}
-                    className="text-[#97ACD9] font-semibold flex items-center text-xs hover:underline"
-                  >
-                    {bottom.link.text}
-                    {bottom.link.icon?.active && (
-                      <Icon
-                        name={bottom.link.icon.icon}
-                        className="h-4 min-w-fit"
-                        style={{
-                          stroke: bottom.link.icon.color,
-                          strokeWidth: bottom.link.icon.strokeWidth,
-                        }}
-                      />
-                    )}
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
-          )}
+                <CardContent className="w-full h-full flex flex-col gap-2 p-0 text-sm">
+                  <div>
+                    <CardTitle className="flex items-center gap-1 font-bold">
+                      {bottom.title}
+                    </CardTitle>
+                    <CardDescription className="text-neutral-600">
+                      {bottom.description}
+                    </CardDescription>
+                  </div>
+                  {bottom.link.active && (
+                    <Link
+                      href={bottom.link.href}
+                      target={bottom.link.target}
+                      className="text-[#97ACD9] font-semibold flex items-center text-xs hover:underline"
+                    >
+                      {bottom.link.text}
+                      {bottom.link.icon?.active && (
+                        <Icon
+                          name={bottom.link.icon.icon}
+                          className="h-4 min-w-fit"
+                          style={{
+                            stroke: bottom.link.icon.color,
+                            strokeWidth: bottom.link.icon.strokeWidth,
+                          }}
+                        />
+                      )}
+                    </Link>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
       </div>
     )

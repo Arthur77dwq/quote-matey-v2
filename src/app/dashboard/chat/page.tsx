@@ -90,6 +90,7 @@ function ChatContent() {
     return parts;
   };
 
+  // TODO: Refactor below function to reduce its cognitive complexity
   const handleSendMessage = async (text: string) => {
     // TODO: Implement notification handler in chat
     const trimmedText = text.trim() || null;

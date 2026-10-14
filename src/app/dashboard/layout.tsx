@@ -10,11 +10,11 @@ export default function DashboardLayout({
   const { sidebar } = DASHBOARD_DATA;
 
   return (
-    <section className="grid grid-cols-7">
-      <aside className="col-span-1 border-0 border-r-2 border-black/20 z-20">
+    <section className="relative flex max-h-screen max-w-screen">
+      <aside className="min-w-fit">
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
-      <main className="relative col-span-6">{children}</main>
+      <main className="flex-1 z-0">{children}</main>
     </section>
   );
 }
