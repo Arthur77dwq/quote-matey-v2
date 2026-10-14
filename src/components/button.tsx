@@ -89,7 +89,7 @@ function PrimaryButton({
         <span
           ref={leftArrowRef}
           key="left"
-          className="absolute -translate-x-12 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
+          className="absolute -translate-x-16 bg-white text-black text-body-xs justify-self-end flex items-center justify-center rounded-full size-5.5"
         >
           <Icon name="LongTailArrow" className="w-3! h-2!" />
         </span>
@@ -140,7 +140,7 @@ function SecondaryButton({
   children: React.ReactNode;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="w-fit h-fit shrink-0 p-1.5 bg-white/10 rounded-full border-2 border-neutral-50 flex justify-center items-center">
+    <div className="w-fit h-fit shrink-0 p-1.5 bg-white/10 rounded-full flex justify-center items-center">
       <PrimaryButton
         {...props}
         className={cn(
@@ -182,7 +182,7 @@ function Button({
         <SecondaryButton
           {...props}
           className={cn(
-            'shadow-[inset_4px_4px_8px_#FFFFFF4D,inset_-4px_-4px_8px_#FFFFFF4D,0_4px_16px_#1D1D1D80] bg-neutral-950 bg-linear-to-br from-bg-neutral-800 to-black border border-neutral-900',
+            'shadow-[inset_4px_4px_8px_#FFFFFF4D,inset_-4px_-4px_8px_#FFFFFF4D,0_8px_16px_#1D1D1D80] bg-transparent! bg-[linear-gradient(110deg,#323232_0%,#000_100%)] border-0',
             className,
           )}
         >

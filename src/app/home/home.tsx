@@ -62,7 +62,10 @@ export default function Home({ sections }: { sections: Section[] }) {
 
         <PricingSection {...(sections[7] as PRICING)} />
       </section>
-      <QNASection {...(sections[8] as QNA)} />
+      <QNASection
+        className="max-sm:[&_h1]:!text-center max-sm:[&_p]:!text-center lg:gap-[55px] lg:[&>div:first-child]:max-w-112.5 lg:[&>div:nth-child(2)]:max-w-[44.75rem] [&_h1]:!leading-[1.05em] lg:[&_h1]:!text-[3.75rem] [&_p]:mt-[22px] [&_p]:!font-sans [&_p]:!font-medium [&_p]:!tracking-[-0.01em] lg:[&_p]:!text-[1.25rem] lg:[&_p]:!leading-[1.3em] [&_[data-slot=accordion]]:border-[#D9E3ED] [&_[data-slot=accordion-item]]:p-4 [&_[data-slot=accordion-trigger]]:!font-sans [&_[data-slot=accordion-trigger]]:!text-[1.25rem] lg:[&_[data-slot=accordion-trigger]]:!text-[1.5rem] [&_[data-slot=accordion-content]]:pt-2.5 [&_[data-slot=accordion-content]]:!font-sans [&_[data-slot=accordion-content]]:!leading-[1.3em] lg:[&_[data-slot=accordion-content]]:max-w-[30.8rem] lg:[&_[data-slot=accordion-content]]:!text-[0.75rem]"
+        {...(sections[8] as QNA)}
+      />
     </>
   );
 }
