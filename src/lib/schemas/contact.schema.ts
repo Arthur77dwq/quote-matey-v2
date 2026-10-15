@@ -8,10 +8,17 @@ import {
   shortTextSchema,
 } from './base.schema';
 
+const optionalField = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess(
+    (value) =>
+      typeof value === 'string' && value.trim() === '' ? undefined : value,
+    schema.optional(),
+  );
+
 export const contactSchema = z.object({
   name: nameSchema,
   email: emailSchema,
-  phone: phoneSchema,
-  subject: shortTextSchema,
-  message: bigTextSchema,
+  phone: optionalField(phoneSchema),
+  subject: optionalField(shortTextSchema),
+  message: optionalField(bigTextSchema),
 });

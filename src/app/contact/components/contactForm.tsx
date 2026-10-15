@@ -2,6 +2,7 @@ import { useGSAP } from '@gsap/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,15 +42,31 @@ export function ContactForm({ visible, Inputs }: CONTACTFORM) {
 
   const {
     register,
-    // handleSubmit,
-    formState: { errors },
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<contactFormData>({
     resolver: zodResolver(contactSchema),
   });
 
-  // const onSubmit = async (data: contactFormData) => {
-  //   console.log(data);
-  // };
+  const onSubmit = async (data: contactFormData) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Contact form submission failed');
+      }
+
+      reset();
+      toast.success('Your message has been sent.');
+    } catch {
+      toast.error('Unable to send your message. Please try again.');
+    }
+  };
 
   return (
     visible && (
@@ -60,7 +77,7 @@ export function ContactForm({ visible, Inputs }: CONTACTFORM) {
         <Card className="p-0 w-full bg-neutral-50 border-0">
           <CardContent className="flex justify-center items-center p-5 pb-20 sm:pb-17.5 lg:p-10">
             <form
-              // onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onSubmit)}
               className="w-full flex flex-col justify-between items-center gap-5 sm:gap-7.5"
             >
               {Inputs.map((input, i) => {
@@ -115,8 +132,13 @@ export function ContactForm({ visible, Inputs }: CONTACTFORM) {
               })}
               <div className="w-full">
                 <div className="w-fit">
-                  <Button variant="dark" type="submit" className="w-fit">
-                    Send Message
+                  <Button
+                    variant="dark"
+                    type="submit"
+                    className="w-fit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </div>
               </div>
