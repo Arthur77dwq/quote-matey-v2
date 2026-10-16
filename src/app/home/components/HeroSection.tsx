@@ -260,7 +260,7 @@ export function HeroSection({
             </div>
             <div
               ref={mountainRef}
-              className="w-full hidden lg:flex [@media(max-height:850px)]:-top-106 [@media(max-width:1100px)_and_(max-height:800px)]:hidden justify-center absolute -top-148"
+              className="w-full hidden lg:flex [@media(max-height:850px)]:-top-[29.6875rem] [@media(max-width:1100px)_and_(max-height:800px)]:hidden justify-center absolute -top-148"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}
