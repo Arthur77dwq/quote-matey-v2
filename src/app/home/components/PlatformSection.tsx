@@ -103,7 +103,7 @@ export function PlatformSection({
 
           {title && (
             <Title
-              className="w-70 md:w-full text-white text-[2.125rem] md:text-[2.75rem]! lg:text-6xl! font-bold"
+              className="w-70 md:w-full text-white text-[2.125rem] md:text-[2.75rem]! lg:text-6xl! font-bold [&_*]:font-bold leading-[1.2em]! [&_*]:leading-[1.2em]!"
               {...{ title }}
             />
           )}

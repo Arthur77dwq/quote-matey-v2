@@ -29,29 +29,35 @@ const useSectionAnimation = (
       { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 },
     );
 
-    gsap.to(mountainRef.current, {
-      yPercent: 200,
-      scale: 2,
-      opacity: 0,
-      ease: 'power1.out',
+    const scrollTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: parentRef.current,
         start: 'top top',
         end: 'bottom top',
-        scrub: 5,
+        scrub: 3,
       },
     });
 
-    gsap.from(imageRef.current, {
-      y: -218,
-      scale: 0.6,
-      ease: 'power4.inOut',
-      scrollTrigger: {
-        trigger: imageRef.current,
-        scrub: 3,
-        start: 'top bottom',
-      },
-    });
+    scrollTimeline
+      .to(
+        mountainRef.current,
+        {
+          yPercent: 200,
+          scale: 2,
+          opacity: 0,
+          ease: 'power1.out',
+        },
+        0,
+      )
+      .from(
+        imageRef.current,
+        {
+          y: -221,
+          scale: 0.584,
+          ease: 'power1.out',
+        },
+        0,
+      );
   });
 };
 
@@ -75,7 +81,7 @@ export function HeroSection({
     visible && (
       <section
         className={cn(
-          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-200 md:h-310 lg:h-350 overflow-hidden',
+          'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-[54.83125rem] md:h-[70.45rem] lg:h-350 overflow-hidden',
           className,
         )}
       >
@@ -118,9 +124,9 @@ export function HeroSection({
 
         <div
           ref={parentRef}
-          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 lg:translate-y-[1.289rem] absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
-          <div className="z-5 px-4 sm:p-0 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
+          <div className="z-5 px-4 sm:p-0 -translate-y-[1.875rem] md:translate-y-7 lg:translate-y-5 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-fit h-fit">
             {/* Hero Content */}
             <div className="w-full h-full flex flex-col items-center justify-center gap-6.5">
               {title && (
@@ -128,7 +134,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[0] = element;
                   }}
-                  className="w-88.5 md:w-full opacity-0 leading-[1em] text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
+                  className="w-88.5 md:w-full lg:w-[65.1875rem] max-w-full opacity-0 leading-[1em]! font-bold [&_*]:font-bold text-heading-3 md:text-[3.75rem] lg:text-[5.6875rem]"
                   title={title}
                 />
               )}
@@ -137,7 +143,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="whitespace-nowrap md:whitespace-normal w-full opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
+                  className="whitespace-normal w-[21.45rem] md:w-full p-0.5 md:p-0 opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md md:text-body-lg lg:text-heading-sm-4"
                   description={description}
                 />
               )}
@@ -229,9 +235,9 @@ export function HeroSection({
             ref={(element) => {
               sectionRefs.current[4] = element;
             }}
-            className="opacity-0 relative w-full flex justify-center px-5"
+            className="opacity-0 relative w-full translate-y-[2.1375rem] md:translate-y-15 lg:translate-y-0 flex justify-center px-4 md:px-5"
           >
-            <div className="overflow-hidden rounded-[0.625rem] sm:rounded-[1.25rem] border border-neutral-300 flex lg:hidden justify-center items-center w-full h-fit">
+            <div className="overflow-hidden rounded-[0.625rem] sm:rounded-[1.25rem] border-0 ring-1 ring-inset ring-neutral-300 flex lg:hidden justify-center items-center w-full h-fit">
               <Image
                 src={props.otherImages?.uiView.src || '/images/dashboard.png'}
                 alt=""
@@ -254,7 +260,7 @@ export function HeroSection({
             </div>
             <div
               ref={mountainRef}
-              className="w-full hidden lg:flex justify-center absolute -top-148"
+              className="w-full hidden lg:flex [@media(max-height:850px)]:-top-[29.6875rem] [@media(max-width:1100px)_and_(max-height:800px)]:hidden justify-center absolute -top-148"
             >
               <Image
                 src={props.otherImages?.overlay.src || '/images/mountain.png'}
