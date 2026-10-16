@@ -17,6 +17,8 @@ import { contactSchema } from '@/lib/schemas/contact.schema';
 import { cn } from '@/lib/utils';
 import { CONTACTFORM, contactFormData } from '@/types/pages';
 
+import { submitContactFormAction } from '../actions';
+
 const useSectionAnimation = (
   sectionRef: React.RefObject<HTMLDivElement | null>,
 ) => {
@@ -51,13 +53,9 @@ export function ContactForm({ visible, Inputs }: CONTACTFORM) {
 
   const onSubmit = async (data: contactFormData) => {
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      const result = await submitContactFormAction(data);
 
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error('Contact form submission failed');
       }
 
