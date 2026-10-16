@@ -30,6 +30,7 @@ export const tncSchema = z.boolean().refine((value) => value === true, {
 export const phoneSchema = z
   .string()
   .trim()
+  .regex(/^\+?[0-9\s()-]+$/, 'Enter a valid phone number')
   .transform((value, ctx) => {
     const phone = value.startsWith('+')
       ? parsePhoneNumberFromString(value)
