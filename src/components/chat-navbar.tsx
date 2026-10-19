@@ -12,7 +12,7 @@ import { AccountMenu } from './account-menu';
 import { Icon } from './icon';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 
-function DashboardGlobalSearch({ className }: { className?: string }) {
+export function DashboardGlobalSearch({ className }: { className?: string }) {
   const [query, setQuery] = useState<string>('');
   const [open, setOpen] = useState(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -128,7 +128,7 @@ function DashboardGlobalSearch({ className }: { className?: string }) {
         </InputGroupAddon>
       </InputGroup>
       {data && open && (
-        <div className="py-3 absolute inset-0 h-fit z-50 top-12 w-full flex flex-col items-center bg-white rounded-md border-neutral-200 ring-1 ring-neutral-100">
+        <div className="overflow-y-auto overscroll-contain py-3 absolute top-12 min-w-xs w-80 max-h-screen flex flex-col items-center bg-white rounded-md border-neutral-200 ring-1 ring-neutral-100">
           <p className="pt-0 px-3 pb-2 w-full border-b-2 border-neutral-200/50 flex items-center justify-between text-xs">
             <span className="font-semibold">
               {data.totalResults} results for "{data.query}"

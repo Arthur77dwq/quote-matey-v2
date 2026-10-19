@@ -15,9 +15,9 @@ export default function DashboardLayout({
       <aside className="min-w-fit">
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
-      <main className="flex-1 z-0">
+      <main className="w-full h-full z-0">
         <ChatNavbar />
-        <div className="h-full">{children}</div>
+        <div className="h-full w-full">{children}</div>
       </main>
     </section>
   );

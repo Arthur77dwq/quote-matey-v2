@@ -437,13 +437,13 @@ function ChatContent() {
         {/* Fixed Input Area */}
         <div
           className={twMerge(
-            'left-0 right-0 bg-linear-to-t from-white via-white to-white/80 backdrop-blur-xl',
+            'left-0 right-0 bg-linear-to-t from-white via-white to-white/80',
             messages?.length > 0
               ? 'fixed bottom-0 border-t border-border/50'
-              : '',
+              : 'flex w-full items-center justify-center',
           )}
         >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-col w-full max-w-4xl mx-auto px-4 sm:px-6 py-4">
             {messages?.length <= 0 ? (
               <h1 className="text-4xl text-center text-muted-foreground mb-16">
                 What's the job about?

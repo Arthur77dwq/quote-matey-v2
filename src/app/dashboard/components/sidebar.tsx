@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 
 import { Button } from '@/components/button';
+import { DashboardGlobalSearch } from '@/components/chat-navbar';
 import { DomNode, DynamicNode } from '@/components/dome-node';
 import { Icon } from '@/components/icon';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +19,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { gsap } from '@/lib/animations/plugins';
@@ -196,6 +199,28 @@ function StatsCard({ style, title, primaryCTA, consumption }: StatSummary) {
   );
 }
 
+function Search() {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      {isMobile && (
+        <Drawer open={open} onOpenChange={setOpen} direction="bottom">
+          <DrawerTrigger className="flex items-center gap-2 w-22 bg-neutral-100/30 rounded-full p-3 shadow-xs border-px border-neutral-100">
+            <Icon name="Search" className="text-neutral-600 size-4" />
+            <span className="text-xs font-normal text-neutral-500">Search</span>
+          </DrawerTrigger>
+
+          <DrawerContent className="h-dvh px-5 border-px border-neutral-100 bg-white">
+            <DialogTitle className="text-xs font-semibold text-neutral-500"></DialogTitle>
+            <DashboardGlobalSearch />
+          </DrawerContent>
+        </Drawer>
+      )}
+    </>
+  );
+}
+
 export default function SideBar({
   active,
   logo,
@@ -287,7 +312,7 @@ export default function SideBar({
                 900 pts
               </span>
             </span> */}
-
+            <Search />
             <button
               onClick={toggleMenu}
               className={cn(
