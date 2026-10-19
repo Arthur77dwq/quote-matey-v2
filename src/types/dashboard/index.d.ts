@@ -54,3 +54,55 @@ export type SideBarType = {
 export type DashboardData = {
   sidebar?: SideBarType;
 };
+
+export type Items = {
+  id: string;
+  type: 'quote' | 'job' | 'quote_template';
+  lineItemCount?: number;
+  title: string;
+  customer?: {
+    name: string;
+  };
+  amount?: {
+    value: number;
+    currency: string;
+  };
+  status?: 'Sent' | 'Draft' | 'scheduled' | 'completed';
+  scheduledAt?: string;
+  completedAt?: string;
+  highlightTerms: string[];
+  url: Link;
+  location?: {
+    address: string;
+  };
+  actions: [
+    {
+      id: string;
+      label: string;
+    },
+  ];
+};
+
+export type ItemGroup = {
+  type: 'quotes' | 'jobs' | 'templates';
+  label: string;
+  count: number;
+  items: Items[];
+};
+
+export type SearchData = {
+  query: string;
+  totalResults: number;
+  organization: {
+    name: string;
+  };
+  groups: ItemGroup[];
+  navigation: {
+    keyboard: {
+      next: 'ArrowDown';
+      previous: 'ArrowUp';
+      open: 'Enter';
+      close: 'Escape';
+    };
+  };
+};

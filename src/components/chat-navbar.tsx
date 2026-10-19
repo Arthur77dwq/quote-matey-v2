@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { search } from '@/app/dashboard/actions/dashboardGlobalSearch';
-import { SEARCH_DEMO_DATA } from '@/constant/data/dashboard';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
+import { SearchData } from '@/types/dashboard';
 
 import { AccountMenu } from './account-menu';
 import { Icon } from './icon';
@@ -25,7 +25,7 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
     item_index: null,
     id: null,
   });
-  const [data, setData] = useState<typeof SEARCH_DEMO_DATA | null>(null);
+  const [data, setData] = useState<SearchData | null>(null);
   const router = useRouter();
 
   const handleHotKey = useCallback(
@@ -215,7 +215,14 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
                                 >
                                   <Icon name="Dot" className="size-3" />
                                   <span className="text-xs">
-                                    {item.lineItemCount} line items
+                                    {
+                                      (
+                                        item as typeof item & {
+                                          lineItemCount: number;
+                                        }
+                                      ).lineItemCount
+                                    }{' '}
+                                    line items
                                   </span>
                                 </li>
                               </>
@@ -232,17 +239,32 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
                                 >
                                   <Icon name="Dot" className="size-3" />
                                   <span className="text-nowrap">
-                                    {item.customer.name}
+                                    {
+                                      (
+                                        item as typeof item & {
+                                          customer: { name: string };
+                                        }
+                                      ).customer.name
+                                    }
                                   </span>
                                 </li>
                                 <li className="flex items-center ">
                                   <Icon name="Dot" className="size-3" />{' '}
                                   <span className="text-xs">$</span>{' '}
-                                  {item.amount.value}
+                                  {
+                                    (
+                                      item as typeof item & {
+                                        amount: { value: number };
+                                      }
+                                    ).amount.value
+                                  }
                                 </li>
                                 <li className="flex items-center ">
                                   <Icon name="Dot" className="size-3" />
-                                  {item.status}
+                                  {
+                                    (item as typeof item & { status: string })
+                                      .status
+                                  }
                                 </li>
                               </>
                             ) : (
@@ -253,7 +275,13 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
                                 >
                                   <Icon name="Dot" className="size-3" />
                                   <span className="text-xs">
-                                    {item.location.address}
+                                    {
+                                      (
+                                        item as typeof item & {
+                                          location: { address: string };
+                                        }
+                                      ).location.address
+                                    }
                                   </span>
                                 </li>
                               )

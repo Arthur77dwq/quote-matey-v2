@@ -1,4 +1,4 @@
-import { DashboardData } from '@/types/dashboard';
+import { DashboardData, SearchData } from '@/types/dashboard';
 
 export const DASHBOARD_DATA: DashboardData = {
   sidebar: {
@@ -238,7 +238,7 @@ export const DASHBOARD_DATA: DashboardData = {
   },
 };
 
-export const SEARCH_DEMO_DATA = {
+export const SEARCH_DEMO_DATA: SearchData = {
   query: '',
   totalResults: 6,
   organization: {
@@ -410,6 +410,5 @@ export const SEARCH_DEMO_DATA = {
       open: 'Enter',
       close: 'Escape',
     },
-    selectedItemId: 'Q-1042',
   },
 };
