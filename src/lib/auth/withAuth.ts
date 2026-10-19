@@ -19,3 +19,10 @@ export async function withAuth(
     return new Response('Unauthorized', { status: 401 });
   }
 }
+
+export async function withServerActionAuth<T>(
+  handler: (uid: string) => Promise<T>,
+): Promise<T> {
+  const { uid } = await getUserId();
+  return handler(uid);
+}

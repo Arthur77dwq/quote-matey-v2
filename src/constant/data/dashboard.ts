@@ -237,3 +237,179 @@ export const DASHBOARD_DATA: DashboardData = {
     },
   },
 };
+
+export const SEARCH_DEMO_DATA = {
+  query: '',
+  totalResults: 6,
+  organization: {
+    name: 'Plumbing Co.',
+  },
+  groups: [
+    {
+      type: 'quotes',
+      label: 'Quotes',
+      count: 2,
+      items: [
+        {
+          id: 'Q-1042',
+          type: 'quote',
+          title: 'Hot water system replacement',
+          customer: {
+            name: 'Sarah Wilson',
+          },
+          amount: {
+            value: 2450,
+            currency: 'USD',
+          },
+          status: 'Sent',
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/quote/?id=Q-1042',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open quote',
+            },
+          ],
+        },
+        {
+          id: 'Q-1038',
+          type: 'quote',
+          title: 'Hot water unit installation',
+          customer: {
+            name: 'James Cooper',
+          },
+          amount: {
+            value: 1850,
+            currency: 'USD',
+          },
+          status: 'Draft',
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/quote/?id=Q-1038',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open quote',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'jobs',
+      label: 'Jobs',
+      count: 2,
+      items: [
+        {
+          id: 'J-0286',
+          type: 'job',
+          title: 'Hot water cylinder repair',
+          location: {
+            address: '18 Oak St',
+          },
+          status: 'scheduled',
+          scheduledAt: '2026-10-16',
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/job/?id=J-0286',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open job',
+            },
+          ],
+        },
+        {
+          id: 'J-0274',
+          type: 'job',
+          title: 'Hot water valve replacement',
+          location: {
+            address: '42 Park Rd',
+          },
+          status: 'completed',
+          completedAt: '2026-10-12',
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/job/?id=J-0274',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open job',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'templates',
+      label: 'Templates',
+      count: 2,
+      items: [
+        {
+          id: 'QT-001',
+          type: 'quote_template',
+          title: 'Hot water system replacement',
+          lineItemCount: 6,
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/template/?id=QT-001',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open template',
+            },
+          ],
+        },
+        {
+          id: 'QT-002',
+          type: 'quote_template',
+          title: 'Hot water service & maintenance',
+          lineItemCount: 4,
+          highlightTerms: ['Hot water'],
+          url: {
+            href: '/dashboard/template/?id=QT-002',
+            target: '_self',
+            text: null,
+            active: true,
+          },
+          actions: [
+            {
+              id: 'open',
+              label: 'Open template',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  navigation: {
+    keyboard: {
+      next: 'ArrowDown',
+      previous: 'ArrowUp',
+      open: 'Enter',
+      close: 'Escape',
+    },
+    selectedItemId: 'Q-1042',
+  },
+};

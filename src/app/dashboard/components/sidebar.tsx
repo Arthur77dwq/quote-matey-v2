@@ -247,13 +247,13 @@ export default function SideBar({
         )}
       >
         {/* BRAND Identity */}
-        <div className="w-full h-8 flex items-center px-3">
+        <div className="w-full h-8 flex items-center justify-between px-3">
           {logo?.active &&
             (logo.href ? (
               <Link
                 href={logo.href}
                 target={logo.target}
-                className="w-full h-full flex items-center justify-start"
+                className="w-fit h-full flex items-center justify-start"
               >
                 <Image
                   className="w-fit h-full"
@@ -274,18 +274,33 @@ export default function SideBar({
                 style={{ aspectRatio: logo?.aspect }}
               />
             ))}
-          <button
-            onClick={toggleMenu}
-            className={cn(
-              'size-11 flex md:hidden justify-center items-center rounded-md',
-              open ? 'bg-[#FAFBFD]' : 'bg-[#FFF0E9] ',
-            )}
-          >
-            <Icon
-              name={open ? 'X' : 'Menu'}
-              className={cn(open ? '' : 'text-[#FF5000]')}
-            />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* <span className="flex md:hidden items-center justify-between gap-2 px-3 w-fit h-10 bg-white ring-1 ring-neutral-200 p-1 rounded-md">
+              <span className="w-fit h-full flex items-center justify-center">
+                <Icon
+                  name="Bolt"
+                  className="text-[#FF814C] size-5"
+                  strokeWidth={4}
+                />
+              </span>
+              <span className="w-full h-full flex items-center justify-center text-xs font-bold">
+                900 pts
+              </span>
+            </span> */}
+
+            <button
+              onClick={toggleMenu}
+              className={cn(
+                'size-11 flex md:hidden justify-center items-center rounded-md',
+                open ? 'bg-[#FAFBFD]' : 'bg-[#FFF0E9] ',
+              )}
+            >
+              <Icon
+                name={open ? 'X' : 'Menu'}
+                className={cn(open ? '' : 'text-[#FF5000]')}
+              />
+            </button>
+          </div>
         </div>
 
         <div
