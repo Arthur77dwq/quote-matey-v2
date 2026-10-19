@@ -4,6 +4,7 @@ const long_with_out_subtitle = '/quotematey-hor-with-out-subtitle.png';
 
 export const GLOBAL_DATA: GlobalData = {
   brand: {
+    active: true,
     logo: {
       normal: '/favicon.svg',
       big: '/favicon-big.png',
@@ -44,7 +45,7 @@ export const GLOBAL_DATA: GlobalData = {
     },
   },
   headers: {
-    type: 'GLOBAL_HEADER',
+    type: 'LANDING_HEADER',
     logo: {
       href: '/',
       target: '_self',
@@ -103,7 +104,7 @@ export const GLOBAL_DATA: GlobalData = {
         variant: 'default',
         text: 'Start Free',
         link: {
-          href: '/chat',
+          href: '/dashboard/chat',
           target: '_self',
           text: null,
           active: true,
@@ -184,7 +185,7 @@ export const GLOBAL_DATA: GlobalData = {
   authDialog: {
     type: 'signup',
     variant: 'secondary',
-    onSuccess: '/chat',
+    onSuccess: '/dashboard/chat',
     top: {
       icon: {
         active: true,

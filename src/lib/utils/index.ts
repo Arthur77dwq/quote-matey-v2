@@ -73,3 +73,9 @@ export const prepareSlug = (text: string) => {
   const slug = text.toLowerCase().replace(/\./g, '').replace(/\s+/g, '-');
   return slug;
 };
+
+export const shortNumber = (x: number) =>
+  Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(x);

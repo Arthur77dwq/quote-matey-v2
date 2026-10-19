@@ -33,7 +33,7 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL('/pricing', request.url));
 
   if (!token) {
-    if (request.url.includes('/chat')) {
+    if (request.url.includes('/dashboard')) {
       url.searchParams.set('reason', 'unauthorized');
       url.searchParams.set('target', pathname);
       return NextResponse.redirect(url);
@@ -61,9 +61,9 @@ export const config = {
     '/api/subscription/:path',
     '/api/user/:path',
     '/api/chat',
-    '/chat',
     '/pricing/:path*',
     '/login',
     '/signup',
+    '/dashboard/:path*',
   ],
 };

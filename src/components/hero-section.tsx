@@ -22,9 +22,11 @@ export function HeroSection() {
 
   const generateQuote = () => {
     if (jobDescription.trim()) {
-      router.push(`/chat?message=${encodeURIComponent(jobDescription)}`);
+      router.push(
+        `/dashboard/chat?message=${encodeURIComponent(jobDescription)}`,
+      );
     } else {
-      router.push('/chat');
+      router.push('/dashboard/chat');
     }
   };
 
@@ -80,7 +82,7 @@ export function HeroSection() {
             {/* Primary + Secondary CTA */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <button
-                onClick={() => router.push('/chat')}
+                onClick={() => router.push('/dashboard/chat')}
                 className="group inline-flex items-center justify-center gap-2.5 bg-[#f57a0a] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#e06d00] transition-all shadow-xl shadow-[#f57a0a]/25 hover:shadow-2xl hover:shadow-[#f57a0a]/30 hover:-translate-y-0.5"
               >
                 <Zap className="w-5 h-5" />

@@ -54,7 +54,7 @@ export function CTASection() {
           {/* CTA Button */}
           <div className="flex flex-col items-center gap-6 mb-12">
             <button
-              onClick={() => router.push('/chat')}
+              onClick={() => router.push('/dashboard/chat')}
               className="group inline-flex items-center gap-3 bg-[#f57a0a] text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-[#e06d00] transition-all shadow-2xl shadow-[#f57a0a]/30 hover:shadow-[#f57a0a]/40 hover:-translate-y-1"
             >
               <Zap className="w-6 h-6" />

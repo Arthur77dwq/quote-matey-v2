@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 
-import { AUTH_ROUTES } from '@/constant/config/route';
+import { AUTH_ROUTES, PROTECTED_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
 import { gsap } from '@/lib/animations/plugins';
 import { cn, matchRoute } from '@/lib/utils';
@@ -40,7 +40,10 @@ export function Footer() {
   const cardRef = useRef<HTMLDivElement | null>(null);
   useSectionAnimation({ cardRef });
   const pathname = usePathname();
-  const shouldHide = matchRoute(pathname, AUTH_ROUTES);
+  const shouldHide = matchRoute(pathname, [
+    ...AUTH_ROUTES,
+    ...PROTECTED_ROUTES,
+  ]);
   return (
     !shouldHide && (
       <footer className="relative w-full h-fit sm:h-screen lg:h-150 overflow-hidden flex justify-center items-center">

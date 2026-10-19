@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+import { cn } from '@/lib/utils';
 import { User } from '@/types/global';
 
 import { Profile } from './profile';
@@ -10,9 +11,10 @@ import { Profile } from './profile';
 type Props = {
   user: User;
   logOut: () => Promise<void>;
+  className?: string;
 };
 
-export function AccountMenu({ user, logOut }: Props) {
+export function AccountMenu({ user, logOut, className }: Props) {
   const [show, setShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +38,7 @@ export function AccountMenu({ user, logOut }: Props) {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative inline-block">
+    <div ref={containerRef} className={cn('relative inline-block', className)}>
       <Profile
         user={user}
         onClick={toggleProfileShow}
