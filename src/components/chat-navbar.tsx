@@ -128,7 +128,7 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
         </InputGroupAddon>
       </InputGroup>
       {data && open && (
-        <div className="overflow-y-auto overscroll-contain py-3 absolute top-12 min-w-xs w-80 max-h-screen flex flex-col items-center bg-white rounded-md border-neutral-200 ring-1 ring-neutral-100">
+        <div className="py-3 absolute top-12 min-w-xs w-full h-fit flex flex-col items-center bg-white rounded-md border-neutral-200 ring-1 ring-neutral-100">
           <p className="pt-0 px-3 pb-2 w-full border-b-2 border-neutral-200/50 flex items-center justify-between text-xs">
             <span className="font-semibold">
               {data.totalResults} results for "{data.query}"

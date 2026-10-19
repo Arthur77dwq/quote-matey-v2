@@ -211,9 +211,9 @@ function Search() {
             <span className="text-xs font-normal text-neutral-500">Search</span>
           </DrawerTrigger>
 
-          <DrawerContent className="h-dvh px-5 border-px border-neutral-100 bg-white">
+          <DrawerContent className="overflow-y-auto overscroll-contain min-h-[90vh] px-5 border-px border-neutral-100 bg-white">
             <DialogTitle className="text-xs font-semibold text-neutral-500"></DialogTitle>
-            <DashboardGlobalSearch />
+            <DashboardGlobalSearch className="w-full" />
           </DrawerContent>
         </Drawer>
       )}
