@@ -152,6 +152,7 @@ export type HiddenAttr = {
   mobile?: boolean;
   tablet?: boolean;
   desktop?: boolean;
+  auth?: boolean;
 };
 
 export type Button = {

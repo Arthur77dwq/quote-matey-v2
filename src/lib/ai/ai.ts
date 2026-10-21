@@ -23,23 +23,17 @@ export class OpenAIGenAI {
   private client: OpenAI;
 
   constructor() {
-    const apiKey = process.env.NURRIC_API_KEY?.trim();
-    const baseURL = process.env.NURRIC_BASE_URL?.trim();
+    const apiKey = process.env.OPENAI_API_KEY?.trim();
+    const baseURL = process.env.OPENAI_BASE_URL?.trim();
 
     if (!apiKey || apiKey === 'false' || apiKey === 'undefined') {
-      serverLogger.error('Nurric API key is not set in environment variables.');
-      throw new ValueNotFound(
-        'Nurric API key is not set in environment variables.',
-      );
+      serverLogger.error('API key is not set in environment variables.');
+      throw new ValueNotFound('API key is not set in environment variables.');
     }
 
     if (!baseURL || baseURL === 'false' || baseURL === 'undefined') {
-      serverLogger.error(
-        'Nurric base URL is not set in environment variables.',
-      );
-      throw new ValueNotFound(
-        'Nurric base URL is not set in environment variables.',
-      );
+      serverLogger.error('base URL is not set in environment variables.');
+      throw new ValueNotFound('base URL is not set in environment variables.');
     }
 
     this.client = new OpenAI({ apiKey, baseURL });

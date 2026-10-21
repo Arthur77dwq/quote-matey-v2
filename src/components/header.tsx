@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { Button } from '@/components/button';
 import { AUTH_ROUTES, PROTECTED_ROUTES } from '@/constant/config/route';
 import { GLOBAL_DATA } from '@/constant/data/global';
+import { useAuth } from '@/context/AuthContext';
 import { cn, matchRoute } from '@/lib/utils';
 
 import { HamBurgerMenu } from './hamburgerMenu';
@@ -19,6 +20,7 @@ export const getGlobalData = () => {
 };
 
 export function Header() {
+  const { isAuthenticated } = useAuth();
   const { headers } = getGlobalData();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -88,6 +90,13 @@ export function Header() {
                             button.hidden?.tablet && 'sm:hidden lg:flex',
                             button.hidden?.desktop && 'flex lg:hidden',
                           )}
+                          style={{
+                            display:
+                              button.hidden &&
+                              button.hidden.auth === isAuthenticated
+                                ? 'none'
+                                : 'flex',
+                          }}
                           onClick={() =>
                             button.link && button.link.active
                               ? router.push(button.link.href)
