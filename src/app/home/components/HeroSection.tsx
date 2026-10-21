@@ -154,7 +154,7 @@ export function HeroSection({
               ref={(element) => {
                 sectionRefs.current[2] = element;
               }}
-              className="relative max-md:top-1 opacity-0 w-full h-15.95 flex flex-row justify-center items-center gap-4 lg:gap-5 max-md:[&>div:first-child]:border max-md:[&>div:first-child]:border-white"
+              className="relative max-md:top-1 opacity-0 w-full h-15.95 flex flex-row justify-center items-center gap-4 lg:gap-5 [&>div:first-child]:ring-1 [&>div:first-child]:ring-inset [&>div:first-child]:ring-white/70 [&>div:first-child]:backdrop-blur-[5px] max-md:[&>div:first-child>button]:pl-5 max-md:[&>div:first-child>button]:pr-1.5 max-md:[&>div:first-child>button>span:last-child]:size-[1.55rem]"
             >
               {props.cta?.map((button: ButtonType, i: number) => (
                 <Button
