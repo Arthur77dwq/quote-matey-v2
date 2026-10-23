@@ -29,12 +29,19 @@ const useSectionAnimation = (
       { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 },
     );
 
+    gsap.set(mountainRef.current, {
+      yPercent: 0,
+      scale: 1,
+      opacity: 1,
+    });
+
     const scrollTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: parentRef.current,
         start: 'top top',
         end: 'bottom top',
-        scrub: 3,
+        scrub: true,
+        invalidateOnRefresh: true,
       },
     });
 
