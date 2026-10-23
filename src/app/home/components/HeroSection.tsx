@@ -52,7 +52,7 @@ const useSectionAnimation = (
       .from(
         imageRef.current,
         {
-          y: -221,
+          y: -201,
           scale: 0.584,
           ease: 'power1.out',
         },
@@ -162,7 +162,7 @@ export function HeroSection({
                   className={cn(
                     button.variant === 'secondary'
                       ? 'w-[11.7325rem] lg:w-[13.94921875rem] h-[2.3rem] lg:h-[2.9625rem] p-0! py-2! pl-5! pr-1.5! lg:py-3! lg:pl-[1.875rem]! lg:pr-2! [&>span:first-child]:size-[1.55rem] [&>span:last-child]:size-[1.55rem] lg:[&>span:first-child]:size-[1.9625rem] lg:[&>span:last-child]:size-[1.9625rem] font-semibold leading-[1.3em] shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[1rem] lg:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] border border-[#FF530A]'
-                      : 'w-[8.632rem] lg:w-[11.5546875rem] h-[3.0625rem] lg:h-[3.6875rem] p-0 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 rounded-4xl font-inter font-semibold leading-[1.3em] text-[1rem] lg:text-body-md',
+                      : 'w-[8.632rem] lg:w-[11.5546875rem] h-[3.0625rem] lg:h-[3.6875rem] p-0 border border-[#E5E7EB] hover:border-neutral-900 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 rounded-4xl font-inter font-semibold leading-[1.3em] text-[1rem] lg:text-body-md',
                   )}
                   variant={button.variant}
                   onClick={() =>
@@ -181,7 +181,7 @@ export function HeroSection({
               ref={(element) => {
                 sectionRefs.current[3] = element;
               }}
-              className="relative max-md:top-2 max-lg:-mb-2.5 opacity-0 flex justify-center items-center gap-5 whitespace-nowrap [&>span:nth-of-type(3)]:text-black"
+              className="relative max-md:top-2 max-lg:-mb-2.5 opacity-0 flex justify-center items-center gap-5 whitespace-nowrap"
             >
               {props.footNote?.map((note: FootNote, index: number) => (
                 <React.Fragment key={index}>
@@ -214,7 +214,7 @@ export function HeroSection({
                       ))}
                     {note.text && (
                       <Description
-                        className="text-[0.9375rem]! lg:text-[1rem]! font-medium text-neutral-900! leading-[1.3em]"
+                        className="text-[0.9375rem]! lg:text-[1rem]! font-medium text-neutral-600! leading-[1.3em]"
                         description={note.text}
                       />
                     )}
@@ -248,7 +248,7 @@ export function HeroSection({
             </div>
             <div
               ref={imageRef}
-              className="transform -translate-y-15 overflow-hidden rounded-[1.25rem] border border-neutral-300 hidden lg:flex justify-center items-center w-fit h-fit"
+              className="transform -translate-y-10 overflow-hidden rounded-[1.25rem] border border-neutral-300 hidden lg:flex justify-center items-center w-fit h-fit"
             >
               <Image
                 src={props.otherImages?.uiView.src || '/images/dashboard.png'}
@@ -262,7 +262,7 @@ export function HeroSection({
         </div>
         <div
           ref={mountainRef}
-          className="pointer-events-none absolute bottom-[15.5rem] left-0 z-[2] hidden w-[calc(100%+1.25rem)] max-w-none justify-center lg:flex"
+          className="pointer-events-none absolute bottom-[18.625rem] left-0 z-[2] hidden w-[calc(100%+1.25rem)] max-w-none justify-center lg:flex"
         >
           <Image
             src={props.otherImages?.overlay.src || '/images/mountain.png'}
