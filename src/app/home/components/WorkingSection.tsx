@@ -125,7 +125,7 @@ export function WorkingSection({
 
             {title && (
               <Title
-                className="w-5/6 text-left font-bold text-[2.125rem] md:text-[2.75rem] lg:text-6xl! leading-[1.2em]"
+                className="w-full max-w-[31.4rem] text-left font-bold [&_*]:font-bold text-[2.125rem] md:text-[2.75rem] lg:text-6xl! leading-[1.2em]! [&_*]:leading-[1.2em]! tracking-[-1px]"
                 {...{ br: true, title }}
               />
             )}
