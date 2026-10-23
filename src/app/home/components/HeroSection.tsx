@@ -124,7 +124,7 @@ export function HeroSection({
 
         <div
           ref={parentRef}
-          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 lg:translate-y-[1.289rem] absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
+          className="pt-39.5 md:pt-15 pb-20 lg:pb-0 lg:pt-48.5 absolute flex flex-col justify-center items-center gap-7.5 lg:gap-39.5 w-full"
         >
           <div className="z-5 px-0 -translate-y-[1.875rem] md:translate-y-[1.3125rem] lg:translate-y-5 flex flex-col items-center justify-center gap-6.5 md:gap-7.75 w-88.5 lg:w-fit h-fit">
             {/* Hero Content */}
@@ -143,7 +143,7 @@ export function HeroSection({
                   ref={(element) => {
                     sectionRefs.current[1] = element;
                   }}
-                  className="max-md:relative max-md:-top-0.5 whitespace-normal w-[21.45rem] md:w-[23.4125rem] lg:w-full p-0.5 md:p-0 opacity-0 tracking-[-0.005em] leading-[1.25em] text-balance text-body-md lg:text-heading-sm-4"
+                  className="max-md:relative max-md:-top-0.5 whitespace-normal w-[21.45rem] md:w-[23.4125rem] lg:w-full p-0.5 md:p-0 opacity-0 font-medium tracking-[-0.005em] leading-[1.25em] text-balance text-body-md lg:text-heading-sm-4"
                   description={description}
                 />
               )}
@@ -154,15 +154,15 @@ export function HeroSection({
               ref={(element) => {
                 sectionRefs.current[2] = element;
               }}
-              className="relative max-md:top-1 opacity-0 w-full h-15.95 flex flex-row justify-center items-center gap-4 lg:gap-5 [&>div:first-child]:ring-1 [&>div:first-child]:ring-inset [&>div:first-child]:ring-white/70 [&>div:first-child]:backdrop-blur-[5px] max-md:[&>div:first-child>button]:pl-5 max-md:[&>div:first-child>button]:pr-1.5 max-md:[&>div:first-child>button>span:last-child]:size-[1.55rem]"
+              className="relative max-md:top-1 opacity-0 w-full h-15.95 flex flex-row justify-center items-center gap-4 lg:gap-5 [&>div:first-child]:ring-1 [&>div:first-child]:ring-inset [&>div:first-child]:ring-white/70 [&>div:first-child]:backdrop-blur-[5px]"
             >
               {props.cta?.map((button: ButtonType, i: number) => (
                 <Button
                   key={`${i}-${button.text}`}
                   className={cn(
                     button.variant === 'secondary'
-                      ? 'w-[11.7325rem] lg:w-fit h-[2.3rem] lg:h-full font-semibold shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[1rem] lg:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] border border-[#FF530A]'
-                      : 'w-[8.632rem] lg:w-fit h-[3.0625rem] lg:h-fit p-0 lg:px-12.5 lg:py-4.5 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 rounded-4xl font-inter font-semibold text-[1rem] lg:text-body-md',
+                      ? 'w-[11.7325rem] lg:w-[13.94921875rem] h-[2.3rem] lg:h-[2.9625rem] p-0! py-2! pl-5! pr-1.5! lg:py-3! lg:pl-[1.875rem]! lg:pr-2! [&>span:first-child]:size-[1.55rem] [&>span:last-child]:size-[1.55rem] lg:[&>span:first-child]:size-[1.9625rem] lg:[&>span:last-child]:size-[1.9625rem] font-semibold leading-[1.3em] shadow-[inset_4px_4px_8px_#FF5500,inset_-4px_-4px_8px_#FF4D00,0_4px_16px_rgba(255,77,0,0.5)] text-white! text-[1rem] lg:text-body-md font-inter bg-linear-to-br from-[#FF976B] via-15% via-[#FF8352] to-[#FF6929] border border-[#FF530A]'
+                      : 'w-[8.632rem] lg:w-[11.5546875rem] h-[3.0625rem] lg:h-[3.6875rem] p-0 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 rounded-4xl font-inter font-semibold leading-[1.3em] text-[1rem] lg:text-body-md',
                   )}
                   variant={button.variant}
                   onClick={() =>
@@ -214,7 +214,7 @@ export function HeroSection({
                       ))}
                     {note.text && (
                       <Description
-                        className="text-[0.9375rem]! lg:text-[1rem]! leading-[1.3em]"
+                        className="text-[0.9375rem]! lg:text-[1rem]! font-medium text-neutral-900! leading-[1.3em]"
                         description={note.text}
                       />
                     )}
@@ -258,19 +258,19 @@ export function HeroSection({
                 className="max-w-290"
               />
             </div>
-            <div
-              ref={mountainRef}
-              className="w-full hidden lg:flex [@media(max-height:850px)]:-top-[29.6875rem] [@media(max-width:1100px)_and_(max-height:800px)]:hidden justify-center absolute -top-148"
-            >
-              <Image
-                src={props.otherImages?.overlay.src || '/images/mountain.png'}
-                alt=""
-                width={1220}
-                height={770}
-                className="w-full"
-              />
-            </div>
           </div>
+        </div>
+        <div
+          ref={mountainRef}
+          className="pointer-events-none absolute bottom-[15.5rem] left-0 z-[2] hidden w-[calc(100%+1.25rem)] max-w-none justify-center lg:flex"
+        >
+          <Image
+            src={props.otherImages?.overlay.src || '/images/mountain.png'}
+            alt=""
+            width={1220}
+            height={770}
+            className="h-auto w-full"
+          />
         </div>
         <div className="absolute bottom-0 w-full h-25 md:h-40 lg:h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
 
