@@ -1,7 +1,8 @@
-import { ChatNavbar } from '@/components/chat-navbar';
+'use client';
+import { Navbar } from '@/components/chat-navbar';
+import SideBar from '@/components/dashboard/sidebar';
 import { DASHBOARD_DATA } from '@/constant/data/dashboard';
-
-import SideBar from './components/sidebar';
+import { PageProvider } from '@/context/PageContext';
 
 export default function DashboardLayout({
   children,
@@ -15,10 +16,12 @@ export default function DashboardLayout({
       <aside className="min-w-fit">
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
-      <main className="w-full h-full z-0">
-        <ChatNavbar />
-        <div className="h-full w-full">{children}</div>
-      </main>
+      <PageProvider>
+        <main className="w-full h-full z-0">
+          <Navbar />
+          <div className="h-full w-full">{children}</div>
+        </main>
+      </PageProvider>
     </section>
   );
 }

@@ -11,6 +11,7 @@ import { twMerge } from 'tailwind-merge';
 import ImagePreview from '@/components/ui/images-preview-grid';
 import UsageLimitNotification from '@/components/ui/usage-limit-notification';
 import { useAuth } from '@/context/AuthContext';
+import { usePage } from '@/context/PageContext';
 import { Api } from '@/lib/api';
 import { compressImage } from '@/lib/utils/compress-image';
 import { fileToBase64 } from '@/lib/utils/image-to-base64';
@@ -506,6 +507,20 @@ function ChatContent() {
 }
 
 export default function ChatPage() {
+  const { setPageInfo } = usePage();
+  useEffect(() => {
+    setPageInfo({
+      content: {
+        active: true,
+        title: { active: true, content: 'Chat' },
+        description: {
+          active: true,
+          content: 'Describe the job, get the quote',
+        },
+      },
+    });
+  }, [setPageInfo]);
+
   return (
     <Suspense
       fallback={
