@@ -159,9 +159,9 @@ export function Testimonial({
         />
 
         <div className="flex flex-col justify-center items-center w-full h-full gap-12.5">
-          <div className="px-5 lg:px-41.5 gap-12.5 w-full h-fit flex flex-col items-center justify-center">
+          <div className="px-5 lg:px-10 gap-12.5 w-full h-fit flex flex-col items-center justify-center">
             <div className="w-full flex flex-col items-start pb-5 gap-2.25">
-              <h2 className="font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-fit text-white leading-[1.2em] tracking-[-1px]">
+              <h2 className="font-bold text-[2.125rem] sm:text-[2.75rem] lg:text-[3.75rem] w-full max-w-300 text-balance text-white leading-[1.2em] tracking-[-1px]">
                 {title}
               </h2>
               <p className="text-[1rem] font-inter font-medium text-white flex justify-start items-center gap-1.5">

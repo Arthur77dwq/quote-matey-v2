@@ -71,7 +71,7 @@ export function VideoDemoSection({
         <div className="flex flex-col justify-center items-center">
           {title && (
             <Title
-              className="text-[2.125rem]! md:text-[3.75rem]!"
+              className="text-[2.125rem]! md:text-[3.75rem]! font-bold [&_*]:font-bold leading-[1.2em]! [&_*]:leading-[1.2em]!"
               {...{ title }}
             />
           )}

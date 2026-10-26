@@ -116,7 +116,7 @@ export function ComparisonCard({
         className,
       )}
     >
-      <TabsList className="relative sm:w-162.5 h-15 sm:h-22.5 flex gap-5 p-0">
+      <TabsList className="relative w-[15.2rem] sm:w-[38.75rem] lg:w-[44.0625rem] h-17.5 sm:h-22.5 flex gap-5 p-0">
         <div className="absolute bg-white w-35.5 sm:w-51 h-0.5 -bottom-0.5" />
         <div className="absolute bg-linear-to-b from-white to-white/0 w-1/2 h-1/2 top-0" />
 
@@ -125,11 +125,7 @@ export function ComparisonCard({
             <React.Fragment key={index}>
               <TabsTrigger
                 className={cn(
-                  'border-0 border-neutral-100 shadow-none! pb-5 rounded-none h-full flex justify-center items-end',
-                  each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem] pr-5',
-                  each.type === 'DANGER' &&
-                    'border-r rounded-br-[1.25rem] pl-5',
-                  'border-0 border-neutral-100 shadow-none! pb-5 rounded-none h-full flex justify-center items-end',
+                  'min-w-0 flex-1 border-0 border-neutral-100 shadow-none! pb-5 rounded-none h-full flex justify-center items-end',
                   each.type === 'SAFE' && 'border-l rounded-bl-[1.25rem] pr-5',
                   each.type === 'DANGER' &&
                     'border-r rounded-br-[1.25rem] pl-5',
@@ -140,7 +136,7 @@ export function ComparisonCard({
                 {each.head && (
                   <Description
                     className={cn(
-                      'h-full flex items-end text-neutral-900 leading-0! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
+                      'h-full flex items-end text-neutral-900! leading-[1.3em]! text-[.6rem] sm:text-[1rem]! font-inter font-medium!',
                       each.type === 'DANGER' && 'justify-end',
                       each.type === 'SAFE' && 'justify-start',
                     )}
@@ -174,23 +170,27 @@ export function ComparisonCard({
             }}
             key={index}
             value={each.id}
-            className="flex justify-center w-full h-full p-1.5 gap-5 rounded-[0.625rem] md:rounded-[1.875rem] border border-neutral-100"
+            className="-mt-px flex justify-center w-full h-full p-1.5 gap-5 rounded-[0.625rem] md:rounded-[1.875rem] border-0 ring-1 ring-inset ring-neutral-100"
           >
             <div
               className={cn(
-                'flex flex-col sm:flex-row justify-center w-full h-full gap-7.5 p-5 pt-10 md:pt-22.5 rounded-[0.375rem] md:rounded-2xl',
+                'flex flex-col sm:flex-row sm:items-start justify-start sm:justify-center w-full h-full gap-7.5 p-5 pt-10 md:p-7.5 md:pt-22.5 rounded-[0.375rem] md:rounded-2xl',
                 each.type === 'DANGER' && 'bg-neutral-50',
                 each.type === 'SAFE' &&
-                  'bg-linear-to-b from-[#102E60] via-60% via-[#102E60] to-black/80',
+                  'bg-linear-to-b from-[#061021] via-60% via-[#102E60] to-black/80',
               )}
             >
-              <div className="w-full sm:w-6/10 flex flex-col justify-start items-start h-full gap-5">
+              <div className="w-full sm:w-3/5 sm:self-start flex flex-col justify-start items-start gap-5">
                 {each.title && (
-                  <div data-tab-title className="w-full">
+                  <div
+                    data-tab-title
+                    className="w-full [&>h1]:leading-[1.2em]! [&>h2]:leading-[1.2em]! [&>h3]:leading-[1.2em]!"
+                  >
                     <Title
                       className={cn(
-                        'text-left leading-10 text-[2rem]! w-full ',
-                        each.type === 'SAFE' && 'text-white',
+                        'text-left leading-[1.2em]! text-[1.5rem]! sm:text-[1.875rem]! lg:text-[2rem]! w-full',
+                        each.type === 'SAFE' &&
+                          'text-white font-semibold! tracking-normal! [&_*]:font-semibold! [&_*]:tracking-normal!',
                       )}
                       title={each.title}
                     />
@@ -207,16 +207,16 @@ export function ComparisonCard({
                     <Description
                       className={cn(
                         'text-left font-inter',
-                        'text-left font-inter',
                         each.type === 'DANGER' && 'text-neutral-600',
-                        each.type === 'SAFE' && 'text-neutral-300',
+                        each.type === 'SAFE' &&
+                          'text-[#BABABA]! font-medium! [&_*]:text-[#BABABA]! [&_*]:font-medium!',
                       )}
                       description={each.description}
                     />
                   )}
                 </div>
               </div>
-              <div className="flex md:flex-col items-center md:items-start justify-between md:justify-center md:gap-7.5 w-full sm:w-3/10">
+              <div className="flex md:flex-col md:self-start items-center md:items-start justify-between md:justify-start md:gap-7.5 w-full sm:w-[36%]">
                 {each.content?.map(
                   (data, i) =>
                     data.type === 'STATS' &&
@@ -225,11 +225,9 @@ export function ComparisonCard({
                         data-tab-card
                         key={`${i}+${z}`}
                         className={cn(
-                          'w-35 md:w-50 p-0  border',
-                          each.type === 'DANGER' &&
-                            'border-[#FF0D0D]/30 bg-[#FF0D0D]/5',
-                          each.type === 'SAFE' &&
-                            'border-[#10B981]/30 bg-[#10B981]/10',
+                          'w-35 md:w-full p-0 border-0 rounded-[1.25rem]',
+                          each.type === 'DANGER' && 'bg-[#FF0D0D]/5',
+                          each.type === 'SAFE' && 'bg-[#10B981]/10',
                         )}
                       >
                         <CardContent className="flex flex-col gap-1.5 p-2.5 md:p-5">

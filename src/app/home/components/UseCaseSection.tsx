@@ -62,7 +62,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
         className,
       )}
     >
-      <div className="flex flex-col items-center gap-2.5 px-7.5">
+      <div className="flex flex-col items-center gap-2.5 px-4 md:px-7.5">
         {tag && (
           <Badge className="rounded-full py-2.5 px-5 bg-neutral-50 text-[0.87rem] font-medium font-inter text-neutral-900 flex items-center justify center border border-neutral-100">
             {tag}
@@ -71,7 +71,7 @@ export function UseCaseSection({ tag, title, className, ...props }: USECASES) {
 
         {title && (
           <Title
-            className="md:w-[75%] lg:w-full whitespace-normal font-bold text-[2.125rem] md:text-6xl! leading-[1.2em] tracking-[-1px] px-5"
+            className="w-full md:w-[75%] lg:w-full whitespace-normal font-bold [&_*]:font-bold text-[2.125rem] md:text-6xl! leading-[1.2em]! [&_*]:leading-[1.2em]! tracking-[-1px] px-0 md:px-5"
             {...{ title }}
           />
         )}
