@@ -8,6 +8,7 @@
     "bradlc.vscode-tailwindcss",
     "wix.vscode-import-cost",
     "fanaticpythoner.better-todo-tree",
-    "ionutvmi.path-autocomplete",
+    "ionutvmi.path-autocomplete",   
+    "mermaidchart.vscode-mermaid-chart"
   ]
 }

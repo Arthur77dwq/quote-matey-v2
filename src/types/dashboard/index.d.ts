@@ -51,6 +51,18 @@ export type SideBarType = {
   };
 };
 
+export type HeaderType = {
+  content: {
+    active: boolean;
+    icon?: IconType;
+    title: { active: boolean; content: string };
+    description: {
+      active: boolean;
+      content: string;
+    };
+  };
+};
+
 export type DashboardData = {
   sidebar?: SideBarType;
 };
@@ -105,4 +117,9 @@ export type SearchData = {
       close: 'Escape';
     };
   };
+};
+
+export type PageContextType = {
+  pageInfo: HeaderType | null;
+  setPageInfo: (x: HeaderType) => void;
 };
