@@ -328,28 +328,32 @@ export function Navbar() {
   const { pageInfo } = usePage();
 
   return (
-    <header className="flex items-center justify-between py-5 h-15 bg-white/80 backdrop-blur-xl border-b border-neutral-300 border-border/50">
-      {pageInfo?.content.active && (
-        <div className="flex items-center gap-2">
-          {pageInfo.content.icon && pageInfo.content.icon.active && (
-            <Icon
-              name={pageInfo.content.icon.icon}
-              strokeWidth={pageInfo.content.icon.strokeWidth}
-              style={{
-                stroke: pageInfo.content.icon.color,
-              }}
-            />
-          )}
-          <div className="flex flex-col justify-between">
-            {pageInfo.content.title.active && (
-              <p>{pageInfo.content.title.content}</p>
+    <header className="flex items-center justify-between py-5 h-15 bg-white/80 backdrop-blur-xl border-b  border-neutral-500/20">
+      <div className="min-w-md flex items-center">
+        {pageInfo?.content.active && (
+          <div className="flex items-center gap-2 w-fit">
+            {pageInfo.content.icon && pageInfo.content.icon.active && (
+              <Icon
+                name={pageInfo.content.icon.icon}
+                strokeWidth={pageInfo.content.icon.strokeWidth}
+                style={{
+                  stroke: pageInfo.content.icon.color,
+                }}
+              />
             )}
-            {pageInfo.content.description.active && (
-              <p>{pageInfo.content.description.content}</p>
-            )}
+            <div className="flex flex-col justify-between pl-5">
+              {pageInfo.content.title.active && (
+                <p className="font-bold">{pageInfo.content.title.content}</p>
+              )}
+              {pageInfo.content.description.active && (
+                <p className="text-xs font-semibold text-neutral-500">
+                  {pageInfo.content.description.content}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="flex items-center justify-end gap-5 ">
         {/* Dashboard Global search */}

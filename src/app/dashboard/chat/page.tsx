@@ -3,20 +3,95 @@
 import { SubscriptionStatus } from '@prisma/client';
 import { Bot, Check, Copy, Loader2, Plus, Send, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
-import { twMerge } from 'tailwind-merge';
 
+import { Icon } from '@/components/icon';
+import { Badge } from '@/components/ui/badge';
 import ImagePreview from '@/components/ui/images-preview-grid';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UsageLimitNotification from '@/components/ui/usage-limit-notification';
 import { useAuth } from '@/context/AuthContext';
 import { usePage } from '@/context/PageContext';
 import { Api } from '@/lib/api';
+import { cn } from '@/lib/utils';
 import { compressImage } from '@/lib/utils/compress-image';
 import { fileToBase64 } from '@/lib/utils/image-to-base64';
 import { Message, Part } from '@/types/chat';
 import { PreviewFile } from '@/types/global';
+
+import { changeChatTitle } from '../actions/chatPage';
+
+export function NoHistory({
+  className,
+  promptSetter,
+  promptSuggestion,
+}: {
+  className?: string;
+  promptSetter: (x: string) => void;
+  promptSuggestion: { suggest: string; fullPrompt: string }[];
+}) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col justify-center items-center gap-5 w-full max-w-90',
+        className,
+      )}
+    >
+      <div className="flex flex-col justify-center items-center gap-2">
+        <span className="size-20 bg-neutral-500/10 rounded-full flex items-center justify-center">
+          <Icon
+            name="MessageSquareMore"
+            className="text-neutral-500/60 size-8"
+          />
+        </span>
+        <h1 className="text-xl font-semibold text-center text-muted-foreground">
+          No chat history yet
+        </h1>
+        <p className="text-center w-59 text-wrap text-xs text-neutral-500/50 font-semibold">
+          Start a conversation with QuoteMatey to get your quote, ask questions
+          or make changes to your job details.
+        </p>
+      </div>
+      <div className="w-full flex bg-neutral-200/40 border border-neutral-500/10 rounded-md px-3 py-4 gap-4 text-neutral-500/85">
+        <Icon name="Sparkle" className="size-4" />
+        <div className="flex flex-col justify-center gap-2 font-semibold text-xs">
+          <span>Try asking something like:</span>
+          {promptSuggestion.map((each, i) => (
+            <button
+              onClick={() => promptSetter(each.fullPrompt)}
+              key={i}
+              className="hover:bg-neutral-500/5 cursor-pointer w-fit rounded-full flex items-center bg-white border-2 border-neutral-400/40 px-2 py-1"
+            >
+              {each.suggest}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ChatContent() {
   const searchParams = useSearchParams();
@@ -30,6 +105,21 @@ function ChatContent() {
   const hasInitializedRef = useRef(false);
   const isLoadingRef = useRef(false);
   const [files, setFiles] = useState<PreviewFile[]>([]);
+  const [suggestion] = useState([
+    {
+      suggest: 'create a quote for a bathroom renovation',
+      fullPrompt:
+        'create a quote for a bathroom renovation. Provide dimension of bathroom, and what needs to be done and how.',
+    },
+    {
+      suggest: 'What materials do i need for this job?',
+      fullPrompt: 'What materials do i need for this job? Explain job clearly.',
+    },
+    {
+      suggest: 'Update the job details',
+      fullPrompt: 'Update the job details. Provide details here:',
+    },
+  ]);
   const { user } = useAuth();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -280,33 +370,31 @@ function ChatContent() {
   }, [user?.subscription]);
 
   return (
-    <div className="bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex flex-col">
-      {isDragActive && (
-        <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
-          <div className="flex flex-col justify-center items-center">
-            <p className="text-lg font-medium">Drop images here</p>
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="bg-linear-to-br from-slate-50 via-white to-orange-50/30 w-full h-full flex flex-col justify-center">
+        {isDragActive && (
+          <div className="text-white fixed inset-0 bg-black/50 z-50 flex items-center justify-center  pointer-events-none ">
+            <div className="flex flex-col justify-center items-center">
+              <p className="text-lg font-medium">Drop here</p>
+            </div>
           </div>
-        </div>
-      )}
-
-      <div
-        {...getRootProps()}
-        className={twMerge(
-          'flex flex-col h-screen w-full',
-          messages?.length > 0 ? 'justify-start' : 'justify-center',
         )}
-      >
-        <input
-          {...getInputProps({
-            accept: 'image/*',
-            capture: 'environment',
-          })}
-        />
-        {/* Chat Container */}
-        {messages?.length > 0 ? (
-          <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full pt-20 lg:pt-24 pb-32">
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+        <div
+          {...getRootProps()}
+          // className={'flex flex-col items-center justify-center h-full w-full'}
+        >
+          <input
+            {...getInputProps({
+              accept: 'image/*',
+              capture: 'environment',
+            })}
+          />
+        </div>
+        <div className="flex flex-col items-center gap-5 h-full w-full">
+          {/* Chat Container */}
+          {messages?.length > 0 ? (
+            // {/* Messages Area */}
+            <div className="w-full h-full overflow-y-auto px-4 sm:px-6 pt-20 pb-40">
               <div className="space-y-6">
                 {messages.map((message) => {
                   const isUser = message.role === 'user';
@@ -432,84 +520,273 @@ function ChatContent() {
                 <div ref={messagesEndRef} />
               </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {/* Fixed Input Area */}
-        <div
-          className={twMerge(
-            'left-0 right-0 bg-linear-to-t from-white via-white to-white/80',
-            messages?.length > 0
-              ? 'fixed bottom-0 border-t border-border/50'
-              : 'flex w-full items-center justify-center',
+          {messages?.length <= 0 && (
+            <NoHistory
+              className="justify-self-start"
+              promptSetter={setInput}
+              promptSuggestion={suggestion}
+            />
           )}
-        >
-          <div className="flex flex-col w-full max-w-4xl mx-auto px-4 sm:px-6 py-4">
-            {messages?.length <= 0 ? (
-              <h1 className="text-4xl text-center text-muted-foreground mb-16">
-                What's the job about?
-              </h1>
-            ) : null}
 
-            <form onSubmit={handleSubmit}>
-              {/* Preview Grid */}
-              <div className="flex flex-col p-2 gap-3 bg-white border border-border/80 rounded-2xl shadow-lg">
-                <ImagePreview files={files} removeFile={handleRemoveFile} />
-                <div className="flex items-end gap-3 w-full">
-                  <button
-                    onClick={open}
-                    disabled={isLoading}
-                    className="cursor-pointer shrink-0 w-12 h-12 rounded-full text-black flex items-center justify-center hover:opacity-90 transition-all"
-                  >
-                    <Plus />
-                  </button>
-                  <textarea
-                    ref={inputRef}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Describe the job... (e.g., 'Leaking tap, need new fitting')"
-                    rows={1}
-                    disabled={isLoading}
-                    className="flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-12 max-h-32"
-                    style={{ height: 'auto' }}
-                    onInput={(e) => {
-                      const target = e.target as HTMLTextAreaElement;
-                      target.style.height = 'auto';
-                      target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
-                    }}
-                  />
-                  <button
-                    type="submit"
-                    disabled={
-                      (!input.trim() && files.length === 0) || isLoading
-                    }
-                    className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Send className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
+          {/* Fixed Input Area */}
+          <form
+            onSubmit={handleSubmit}
+            className="w-full h-fit px-5 flex flex-col items-center justify-center gap-3"
+          >
+            <p className="text-center text-xs font-semibold text-neutral-500/40 w-full">
+              AI can mistakes. Always review before sending to customers.
+            </p>
+            {/* Preview Grid */}
+            <div className="w-full flex flex-col p-2 gap-3 bg-neutral-200/10 border border-neutral-500/40 rounded-xl shadow-lg">
+              <ImagePreview files={files} removeFile={handleRemoveFile} />
+              <div className="flex items-end gap-3 w-full">
+                <button
+                  onClick={open}
+                  disabled={isLoading}
+                  className="cursor-pointer shrink-0 size-12 rounded-full text-black flex items-center justify-center hover:opacity-90 transition-all"
+                >
+                  <Plus />
+                </button>
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Describe the job... (e.g., 'Leaking tap, need new fitting')"
+                  rows={1}
+                  disabled={isLoading}
+                  className=" w-full flex-1 resize-none bg-transparent px-4 py-3 text-foreground placeholder:overflow-hidden placeholder:whitespace-nowrap placeholder:text-muted-foreground focus:outline-none min-h-12 max-h-32"
+                  style={{ height: 'auto' }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLTextAreaElement;
+                    target.style.height = 'auto';
+                    target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={(!input.trim() && files.length === 0) || isLoading}
+                  className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-r from-[#0a1628] to-[#1a3a5c] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
+                </button>
               </div>
-              <p className="text-center text-xs text-muted-foreground mt-3">
-                QuoteMatey provides rough estimates only. Always review before
-                sending to customers.
-              </p>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   );
 }
 
+export function AttachementView() {
+  return <></>;
+}
+
+export function JobDescription() {
+  return <></>;
+}
+
+const ComponentRender = ({ name }: { name: string }) => {
+  const componentMap: Record<string, () => ReactNode> = {
+    ChatContent,
+    AttachementView,
+    JobDescription,
+  };
+  const Component = componentMap[name];
+  return <Component />;
+};
+
+export function ChatHeader({
+  jobDetails,
+  className,
+}: {
+  className?: string;
+  jobDetails: {
+    jobId: string | null;
+    status?: 'Draft' | 'Sent' | 'Approved' | 'Accepted';
+  };
+}) {
+  return (
+    <div
+      className={cn(
+        'w-full h-13 pl-5 flex items-center bg-white border-b border-neutral-500/20',
+        className,
+      )}
+    >
+      <div className="w-fit h-full flex items-center justify-center gap-3">
+        <span className="text-xs font-semibold text-neutral-700 flex items-center gap-2">
+          <span>Job ID: </span>
+          {jobDetails.jobId ? (
+            <span>{jobDetails.jobId}</span>
+          ) : (
+            <Badge
+              variant="secondary"
+              className="rounded-full bg-neutral-200/40 shadow-xs font-semibold"
+            >
+              No job selected
+            </Badge>
+          )}
+        </span>
+        <Badge
+          variant="secondary"
+          className="rounded-full bg-[#62AC6F]/10 shadow-xs font-semibold text-[#62AC6F] text-xs"
+        >
+          Draft
+        </Badge>
+        <Separator
+          orientation="vertical"
+          className="bg-neutral-500/20 h-2/3!"
+        />
+        <span className="w-fit flex text-xs font-semibold text-neutral-500/80 gap-2">
+          <Icon name="CircleCheck" className="text-[#62AC6F] size-4.5" />
+          <span>Autosaved 2 sec ago</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export function ChatDescription({
+  className,
+  jobId,
+}: {
+  className?: string;
+  jobId: string | null;
+}) {
+  const [title, setTitle] = useState<string>('Bathroom renovation');
+  const [editable, setEditable] = useState(false);
+  const toggleEdit = () => setEditable((prev) => !prev);
+  const changeHandler = (
+    event: ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => setTitle(event.currentTarget.value);
+
+  return (
+    <div
+      className={cn(
+        'w-full h-15 pl-5 flex flex-col justify-center bg-white border-b border-neutral-500/20',
+        className,
+      )}
+    >
+      <p className="text-sm font-semibold flex items-center gap-2">
+        {editable ? (
+          <form
+            action={changeChatTitle}
+            onSubmit={() => toggleEdit()}
+            className="flex gap-2"
+          >
+            <input
+              name="jobId"
+              type="hiddden"
+              value={jobId ? jobId : ''}
+              className="hidden"
+            />
+            <Input
+              name="title"
+              type="text"
+              value={title}
+              onChange={changeHandler}
+              className="max-w-50 border border-neutral-500/30"
+            />
+            <button
+              type="submit"
+              className="cursor-pointer px-5 rounded-md border border-neutral-500/30 bg-neutral-200/50"
+            >
+              <Icon
+                name="Check"
+                className="size-3 text-neutral-500"
+                strokeWidth={3}
+              />
+            </button>
+          </form>
+        ) : (
+          <span className="max-w-50 text-nowrap overflow-hidden text-ellipsis">
+            {title}
+          </span>
+        )}
+
+        {!editable && (
+          <button onClick={toggleEdit} className="cursor-pointer">
+            <Icon
+              name="PencilLine"
+              className="size-3 text-neutral-500/90"
+              strokeWidth={3}
+            />
+          </button>
+        )}
+      </p>
+      <p className="text-[0.65rem] font-bold text-neutral-500/60">
+        Created today at 10:24 AM
+      </p>
+    </div>
+  );
+}
+
+export function ChatNavigation({
+  className,
+  link,
+}: {
+  className?: string;
+  link: {
+    id: string;
+    active: boolean;
+    name: string;
+    value: string;
+    linkTo: string;
+  }[];
+}) {
+  return (
+    <div className={cn('max-w-fit h-15 flex gap-2', className)}>
+      {link.map((each, i) => (
+        <TabsTrigger
+          key={i}
+          value={each.value}
+          className="cursor-pointer h-full min-w-fit flex items-center justify-center px-2 data-[state=active]:font-semibold border-b-3 data-[state=active]:shadow-none data-[state=active]:text-[#FF814C] data-[state=active]:border-b-[#FF814C] rounded-none hover:text-[#FF814C] transition-all ease-linear"
+        >
+          {each.name}
+        </TabsTrigger>
+      ))}
+    </div>
+  );
+}
+
+const CustomSideBarTrigger = ({ className }: { className?: string }) => {
+  const sidebar = useSidebar();
+  return (
+    <div
+      className={cn(
+        'px-1 flex items-center justify-center',
+        sidebar.open ? ' bg-neutral-300/10 h-full' : 'h-fit',
+        className,
+      )}
+    >
+      <SidebarTrigger
+        className={cn(
+          'rounded-full w-fit py-6 px-px bg-white shadow-sm cursor-pointer',
+          // !sidebar.open &&
+          'border border-neutral-500/20',
+        )}
+      >
+        <Icon
+          name="ChevronLeft"
+          className="text-neutral-500"
+          strokeWidth={2.5}
+        />
+      </SidebarTrigger>
+    </div>
+  );
+};
+
 export default function ChatPage() {
   const { setPageInfo } = usePage();
-  useEffect(() => {
-    setPageInfo({
+  const [DATA] = useState({
+    header: {
       content: {
         active: true,
         title: { active: true, content: 'Chat' },
@@ -518,13 +795,45 @@ export default function ChatPage() {
           content: 'Describe the job, get the quote',
         },
       },
-    });
-  }, [setPageInfo]);
+    },
+    navigation: {
+      link: [
+        {
+          id: '0',
+          active: true,
+          name: 'Chat',
+          value: 'chat',
+          linkTo: 'ChatContent',
+        },
+        {
+          id: '1',
+          active: true,
+          name: 'Files',
+          value: 'files',
+          linkTo: 'AttachementView',
+        },
+        {
+          id: '2',
+          active: true,
+          name: 'Job Description',
+          value: 'jobdesc',
+          linkTo: 'JobDescription',
+        },
+      ],
+    },
+    jobDetails: {
+      jobId: null,
+    },
+  });
+
+  useEffect(() => {
+    setPageInfo(DATA.header);
+  }, [setPageInfo, DATA]);
 
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex items-center justify-center">
+        <div className="min-h-full bg-linear-to-br from-slate-50 via-white to-orange-50/30 flex items-center justify-center">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Loading chat...</span>
@@ -532,7 +841,51 @@ export default function ChatPage() {
         </div>
       }
     >
-      <ChatContent />
+      <SidebarProvider
+        defaultOpen={false}
+        style={
+          {
+            '--sidebar-width': '40rem',
+            // '--sidebar-width-mobile': '20rem',
+          } as React.CSSProperties
+        }
+      >
+        <div className="w-full h-full flex flex-col items-center">
+          <ChatHeader {...{ jobDetails: DATA.jobDetails }} />
+
+          <div className="h-full w-full flex items-center">
+            <div className="h-full w-full">
+              <ChatDescription jobId={DATA.jobDetails.jobId} />
+              <Tabs defaultValue="chat" className="w-full h-full">
+                <TabsList
+                  variant="line"
+                  className="w-full h-10 px-5 flex flex-col items-start bg-white border-b border-neutral-500/20 rounded-none"
+                >
+                  <ChatNavigation link={DATA.navigation.link} />
+                </TabsList>
+                {DATA.navigation.link.map((each, i) => (
+                  <TabsContent
+                    key={i}
+                    value={each.value}
+                    // className="h-full w-full flex items-center justify-center"
+                  >
+                    <ComponentRender name={each.linkTo} />
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </div>
+            <CustomSideBarTrigger />
+            <Sidebar side="right" className="border-none">
+              <SidebarHeader />
+              <SidebarContent>
+                <SidebarGroup />
+                <SidebarGroup />
+              </SidebarContent>
+              <SidebarFooter />
+            </Sidebar>
+          </div>
+        </div>
+      </SidebarProvider>
     </Suspense>
   );
 }

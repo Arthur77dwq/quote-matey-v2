@@ -17,9 +17,9 @@ export default function DashboardLayout({
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
       <PageProvider>
-        <main className="w-full h-full z-0">
+        <main className="w-full h-screen z-0 flex flex-col">
           <Navbar />
-          <div className="h-full w-full">{children}</div>
+          <div className="h-full w-full flex overflow-hidden">{children}</div>
         </main>
       </PageProvider>
     </section>
