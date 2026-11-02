@@ -4,7 +4,7 @@ import { IconType, ImageType, LINK, NavBar } from '../global';
 import { RichText } from '../pages';
 
 export type ActionCallSignature =
-  keyof import('@/app/dashboard/actions').ACTIONS;
+  keyof typeof import('@/app/dashboard/actions').ACTIONS;
 
 export type DynamicValue =
   | {
@@ -19,7 +19,7 @@ export type CTA = {
   active: boolean;
   title: DynamicValue;
   description: DynamicValue;
-  action: LINK | ActionCallSignature;
+  action: ActionCallSignature;
   style: 'primary' | 'secondary' | 'tertiary'; // TODO: Add styles according to design system
 };
 
@@ -52,6 +52,10 @@ export type SideBarType = {
 };
 
 export type HeaderType = {
+  jobDetails: {
+    jobId: string;
+    status?: 'Draft' | 'Sent' | 'Approved' | 'Accepted';
+  };
   content: {
     active: boolean;
     icon?: IconType;

@@ -48,9 +48,22 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Logged in → block auth pages
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL('/', request.url));
+  if (token) {
+    const segments = pathname.split('/').filter(Boolean);
+    if (
+      segments.length === 2 &&
+      segments[0] === 'dashboard' &&
+      segments[1] === 'chat'
+    ) {
+      return NextResponse.redirect(
+        new URL(`/dashboard/chat/${crypto.randomUUID()}`, request.url),
+      );
+    }
+
+    // Logged in → block auth pages
+    if (isAuthPage) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   }
 
   return NextResponse.next();

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { HeaderType, PageContextType } from '@/types/dashboard';
 
@@ -7,10 +7,13 @@ const PageContext = createContext<PageContextType | null>(null);
 export function PageProvider({ children }: { children: ReactNode }) {
   const [contextData, setContextData] = useState<HeaderType | null>(null);
 
-  const value: PageContextType = {
-    pageInfo: contextData,
-    setPageInfo: setContextData,
-  };
+  const value: PageContextType = useMemo(
+    () => ({
+      pageInfo: contextData,
+      setPageInfo: setContextData,
+    }),
+    [contextData],
+  );
 
   return <PageContext value={value}>{children}</PageContext>;
 }

@@ -1,3 +1,9 @@
+import dns from 'node:dns';
+import net from 'node:net';
+
+dns.setDefaultResultOrder('ipv4first');
+net.setDefaultAutoSelectFamily(false);
+
 import { PrismaNeon } from '@prisma/adapter-neon';
 import { PrismaClient } from '@prisma/client';
 
