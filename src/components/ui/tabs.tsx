@@ -5,6 +5,10 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+type TabsListProps = React.ComponentProps<typeof TabsPrimitive.List> & {
+  variant?: 'default' | 'line';
+};
+
 function Tabs({
   className,
   ...props
@@ -20,13 +24,16 @@ function Tabs({
 
 function TabsList({
   className,
+  variant = 'default',
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.List>) {
+}: React.ComponentProps<typeof TabsPrimitive.List> & TabsListProps) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-0.75',
+        variant === 'default' &&
+          'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-0.75',
+        variant === 'line' && '',
         className,
       )}
       {...props}
