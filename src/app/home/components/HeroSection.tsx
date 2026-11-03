@@ -1,4 +1,5 @@
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
@@ -12,60 +13,74 @@ import { Button as ButtonType } from '@/types/global';
 import { FootNote, LANDINGHERO } from '@/types/pages';
 
 const useSectionAnimation = (
-  parentRef: React.RefObject<HTMLDivElement | null>,
+  heroRef: React.RefObject<HTMLElement | null>,
   sectionRefs: React.RefObject<(HTMLDivElement | null)[]>,
   imageRef: React.RefObject<HTMLDivElement | null>,
   mountainRef: React.RefObject<HTMLDivElement | null>,
 ) => {
-  useGSAP(() => {
-    // Animation Here
-    gsap.fromTo(
-      sectionRefs.current.map((x) => x),
-      {
-        opacity: 0,
-        y: 50,
-        duration: 0.75,
-      },
-      { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 },
-    );
-
-    gsap.set(mountainRef.current, {
-      yPercent: 0,
-      scale: 1,
-      opacity: 1,
-    });
-
-    const scrollTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: parentRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    scrollTimeline
-      .to(
-        mountainRef.current,
+  useGSAP(
+    () => {
+      // Animation Here
+      gsap.fromTo(
+        sectionRefs.current.map((x) => x),
         {
-          yPercent: 200,
-          scale: 2,
           opacity: 0,
-          ease: 'power1.out',
+          y: 50,
+          duration: 0.75,
         },
-        0,
-      )
-      .from(
-        imageRef.current,
-        {
-          y: -201,
-          scale: 0.584,
-          ease: 'power1.out',
-        },
-        0,
+        { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 },
       );
-  });
+
+      gsap.set(mountainRef.current, {
+        yPercent: 0,
+        scale: 1,
+        opacity: 1,
+      });
+
+      const scrollTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      scrollTimeline
+        .to(
+          mountainRef.current,
+          {
+            yPercent: 200,
+            scale: 2,
+            opacity: 0,
+            ease: 'power1.out',
+          },
+          0,
+        )
+        .from(
+          imageRef.current,
+          {
+            y: -201,
+            scale: 0.584,
+            ease: 'power1.out',
+          },
+          0,
+        );
+
+      const refresh = () => ScrollTrigger.refresh();
+      const frame = requestAnimationFrame(refresh);
+      const resizeObserver = new ResizeObserver(refresh);
+
+      if (heroRef.current) resizeObserver.observe(heroRef.current);
+
+      return () => {
+        cancelAnimationFrame(frame);
+        resizeObserver.disconnect();
+      };
+    },
+    { scope: heroRef },
+  );
 };
 
 export function HeroSection({
@@ -78,15 +93,17 @@ export function HeroSection({
   ...props
 }: LANDINGHERO) {
   const router = useRouter();
+  const heroRef = useRef<HTMLElement | null>(null);
   const parentRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const imageRef = useRef<HTMLDivElement | null>(null);
   const mountainRef = useRef<HTMLDivElement | null>(null);
-  useSectionAnimation(parentRef, sectionRefs, imageRef, mountainRef);
+  useSectionAnimation(heroRef, sectionRefs, imageRef, mountainRef);
 
   return (
     visible && (
       <section
+        ref={heroRef}
         className={cn(
           'relative flex flex-col justify-start md:justify-center items-center gap-2.5 w-full h-[53.58125rem] md:h-[62.46328125rem] lg:h-350 overflow-hidden',
           className,
@@ -102,6 +119,7 @@ export function HeroSection({
                 width={1200}
                 className="relative -top-[30px] w-full h-[calc(100%+30px)] object-cover md:-top-[10px] md:h-[calc(100%+10px)] lg:top-0 lg:h-350"
                 priority
+                onLoad={() => ScrollTrigger.refresh()}
               />
             )}
           </div>
@@ -251,6 +269,7 @@ export function HeroSection({
                 width={1200}
                 height={0}
                 className="max-w-265 w-full"
+                onLoad={() => ScrollTrigger.refresh()}
               />
             </div>
             <div
@@ -263,6 +282,7 @@ export function HeroSection({
                 width={1200}
                 height={0}
                 className="max-w-290"
+                onLoad={() => ScrollTrigger.refresh()}
               />
             </div>
           </div>
@@ -277,6 +297,7 @@ export function HeroSection({
             width={1220}
             height={770}
             className="h-auto w-full"
+            onLoad={() => ScrollTrigger.refresh()}
           />
         </div>
         <div className="absolute bottom-0 w-full h-25 md:h-40 lg:h-50 bg-linear-to-b from-white/0 via-25% via-white/70 to-50% to-white" />
