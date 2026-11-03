@@ -563,75 +563,77 @@ export function ChatDescription({ className }: { className?: string }) {
   const { pageInfo } = usePage();
 
   return (
-    <div
-      className={cn(
-        'w-full h-15 pl-5 flex flex-col justify-center bg-white border-b border-neutral-500/20',
-        className,
-      )}
-    >
-      <p className="text-sm font-semibold flex items-center gap-2">
-        {editable ? (
-          <form
-            action={ACTIONS['changeChatTitle']}
-            onSubmit={() => toggleEdit()}
-            className="flex gap-2 h-full"
-          >
-            <input
-              name="jobId"
-              type="hiddden"
-              value={pageInfo?.jobDetails?.jobId}
-              className="hidden"
-            />
-            <Input
-              name="title"
-              type="text"
-              value={title}
-              onChange={changeHandler}
-              className="max-w-50 h-full border border-neutral-500/30"
-            />
-            <div className="w-fit flex items-center justify-center">
-              <button
-                type="submit"
-                className="flex items-center justify-center cursor-pointer h-full aspect-square rounded-l-md border border-neutral-500/30 bg-neutral-200/50 border-r-0"
-              >
-                <Icon
-                  name="Check"
-                  className="size-3 text-neutral-500"
-                  strokeWidth={3}
-                />
-              </button>
-              <button
-                onClick={toggleEdit}
-                className="flex items-center justify-center cursor-pointer h-full aspect-square rounded-r-md border border-neutral-500/30 bg-red-500/50 border-l-0"
-              >
-                <Icon
-                  name="X"
-                  className="size-3 text-neutral-500/90"
-                  strokeWidth={3}
-                />
-              </button>
-            </div>
-          </form>
-        ) : (
-          <span className="max-w-50 h-full text-nowrap overflow-hidden text-ellipsis">
-            {title}
-          </span>
+    pageInfo?.jobDetails?.jobId && (
+      <div
+        className={cn(
+          'w-full h-15 pl-5 flex flex-col justify-center bg-white border-b border-neutral-500/20',
+          className,
         )}
+      >
+        <p className="text-sm font-semibold flex items-center gap-2">
+          {editable ? (
+            <form
+              action={ACTIONS['changeChatTitle']}
+              onSubmit={() => toggleEdit()}
+              className="flex gap-2 h-full"
+            >
+              <input
+                name="jobId"
+                type="hiddden"
+                value={pageInfo?.jobDetails?.jobId}
+                className="hidden"
+              />
+              <Input
+                name="title"
+                type="text"
+                value={title}
+                onChange={changeHandler}
+                className="max-w-50 h-full border border-neutral-500/30"
+              />
+              <div className="w-fit flex items-center justify-center">
+                <button
+                  type="submit"
+                  className="flex items-center justify-center cursor-pointer h-full aspect-square rounded-l-md border border-neutral-500/30 bg-neutral-200/50 border-r-0"
+                >
+                  <Icon
+                    name="Check"
+                    className="size-3 text-neutral-500"
+                    strokeWidth={3}
+                  />
+                </button>
+                <button
+                  onClick={toggleEdit}
+                  className="flex items-center justify-center cursor-pointer h-full aspect-square rounded-r-md border border-neutral-500/30 bg-red-500/50 border-l-0"
+                >
+                  <Icon
+                    name="X"
+                    className="size-3 text-neutral-500/90"
+                    strokeWidth={3}
+                  />
+                </button>
+              </div>
+            </form>
+          ) : (
+            <span className="max-w-50 h-full text-nowrap overflow-hidden text-ellipsis">
+              {title}
+            </span>
+          )}
 
-        {!editable && (
-          <button onClick={toggleEdit} className="cursor-pointer">
-            <Icon
-              name="PencilLine"
-              className="size-3 text-neutral-500/90"
-              strokeWidth={3}
-            />
-          </button>
-        )}
-      </p>
-      <p className="text-[0.65rem] font-bold text-neutral-500/60">
-        Created today at 10:24 AM
-      </p>
-    </div>
+          {!editable && (
+            <button onClick={toggleEdit} className="cursor-pointer">
+              <Icon
+                name="PencilLine"
+                className="size-3 text-neutral-500/90"
+                strokeWidth={3}
+              />
+            </button>
+          )}
+        </p>
+        <p className="text-[0.65rem] font-bold text-neutral-500/60">
+          Created today at 10:24 AM
+        </p>
+      </div>
+    )
   );
 }
 
