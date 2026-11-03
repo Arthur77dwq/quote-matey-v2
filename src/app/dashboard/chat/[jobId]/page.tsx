@@ -1,6 +1,6 @@
 import { ChatPage } from '@/components/dashboard/chat';
 
-import { DATA } from './data';
+import { DATA } from '../data';
 
 type PageProps = {
   params: Promise<{

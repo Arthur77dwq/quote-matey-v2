@@ -53,7 +53,7 @@ export type SideBarType = {
 
 export type HeaderType = {
   jobDetails: {
-    jobId: string;
+    jobId: string | null;
     status?: 'Draft' | 'Sent' | 'Approved' | 'Accepted';
   };
   content: {

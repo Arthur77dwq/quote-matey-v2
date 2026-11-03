@@ -14,7 +14,7 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 
 import { ACTIONS } from '@/app/dashboard/actions';
-import { DATA } from '@/app/dashboard/chat/[jobId]/data';
+import { DATA } from '@/app/dashboard/chat/data';
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +33,7 @@ import { compressImage } from '@/lib/utils/compress-image';
 import { fileToBase64 } from '@/lib/utils/image-to-base64';
 import { prepareMessage } from '@/lib/utils/message';
 import type { Message, Part } from '@/types/chat';
+import { HeaderType } from '@/types/dashboard';
 import { PreviewFile } from '@/types/global';
 
 import { Icon } from '../icon';
@@ -689,17 +690,20 @@ export function CustomSideBarTrigger({ className }: { className?: string }) {
 }
 
 export function ChatUI({ data }: { data: typeof DATA }) {
+  const { pageInfo } = usePage();
   return (
     <Tabs
       defaultValue="chat"
       className="w-full h-full flex items-center justify-center"
     >
-      <TabsList
-        variant="line"
-        className="w-full h-10 px-5 flex flex-col items-start bg-white border-b border-neutral-500/20 rounded-none"
-      >
-        <ChatNavigation link={data.navigation.link} />
-      </TabsList>
+      {pageInfo?.jobDetails.jobId && (
+        <TabsList
+          variant="line"
+          className="w-full h-10 px-5 flex flex-col items-start bg-white border-b border-neutral-500/20 rounded-none"
+        >
+          <ChatNavigation link={data.navigation.link} />
+        </TabsList>
+      )}
       {data.navigation.link.map((each, i) => (
         <TabsContent key={i} value={each.value} className="h-full w-full">
           <ComponentRender name={each.linkTo} />
@@ -714,12 +718,23 @@ export function ChatPage({
   jobId,
 }: {
   data: typeof DATA;
-  jobId: string;
+  jobId?: string;
 }) {
   const { setPageInfo } = usePage();
 
   useEffect(() => {
-    setPageInfo({ ...data.header, jobDetails: { jobId } });
+    let newData: HeaderType = {
+      ...data.header,
+      jobDetails: {
+        jobId: null,
+      },
+    };
+
+    if (jobId) {
+      newData = { ...newData, ...{ jobDetails: { jobId } } };
+    }
+
+    setPageInfo(newData);
   }, [data, jobId, setPageInfo]);
 
   return (
@@ -744,22 +759,26 @@ export function ChatPage({
         className="min-h-full w-full flex justify-center"
       >
         <div className="w-full h-full flex flex-col items-center">
-          <ChatHeader />
+          {jobId && <ChatHeader />}
 
           <div className="h-full w-full flex items-center">
             <div className="h-full w-full flex flex-col items-center">
-              <ChatDescription />
+              {jobId && <ChatDescription />}
               <ChatUI data={data} />
             </div>
-            <CustomSideBarTrigger />
-            <Sidebar side="right" className="border-none">
-              <SidebarHeader />
-              <SidebarContent>
-                <SidebarGroup />
-                <SidebarGroup />
-              </SidebarContent>
-              <SidebarFooter />
-            </Sidebar>
+            {jobId && (
+              <>
+                <CustomSideBarTrigger />
+                <Sidebar side="right" className="border-none">
+                  <SidebarHeader />
+                  <SidebarContent>
+                    <SidebarGroup />
+                    <SidebarGroup />
+                  </SidebarContent>
+                  <SidebarFooter />
+                </Sidebar>
+              </>
+            )}
           </div>
         </div>
       </SidebarProvider>
