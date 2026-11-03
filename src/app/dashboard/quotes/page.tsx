@@ -15,7 +15,7 @@ import {
   Send,
 } from 'lucide-react';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
@@ -209,6 +209,8 @@ function QuoteActions({
   onExport: () => void;
   onMarkSent: () => void;
 }) {
+  const [moreOpen, setMoreOpen] = useState(false);
+
   return (
     <div className="rounded-xl border border-[#E8EAED] bg-white p-3">
       <h3 className="mb-3 text-[0.8125rem] font-semibold">Actions</h3>
@@ -234,9 +236,19 @@ function QuoteActions({
         >
           <Send className="size-3.5" /> Mark as Sent
         </button>
-        <button className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold">
+        <button
+          type="button"
+          onClick={() => setMoreOpen((current) => !current)}
+          aria-expanded={moreOpen}
+          className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold"
+        >
           <Ellipsis className="size-3.5" /> More Actions
         </button>
+        {moreOpen && (
+          <p className="rounded-md border border-[#DFE3E8] bg-[#F8F9FA] p-2 text-[0.625rem] leading-4 text-[#68717D]">
+            Archive, delete, share actions connect with quote backend later.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -346,11 +358,25 @@ function QuoteDetails({
 }) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(quote.title);
+  const [activeDetailTab, setActiveDetailTab] = useState('Summary');
+  const [topMenuOpen, setTopMenuOpen] = useState(false);
+  const topMenuRef = useRef<HTMLDivElement>(null);
   const hasUnsavedChanges = name.trim() !== quote.title;
+
+  useEffect(() => {
+    const closeTopMenu = (event: MouseEvent) => {
+      if (!topMenuRef.current?.contains(event.target as Node)) {
+        setTopMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', closeTopMenu);
+    return () => document.removeEventListener('mousedown', closeTopMenu);
+  }, []);
 
   return (
     <section className="flex h-full min-w-0 flex-col bg-[#FCFCFD]">
-      <div className="flex h-13 shrink-0 items-center justify-between border-b border-[#E8EAED] px-5">
+      <div className="relative flex h-13 shrink-0 items-center justify-between border-b border-[#E8EAED] px-5">
         <button
           type="button"
           onClick={onBack}
@@ -358,7 +384,7 @@ function QuoteDetails({
         >
           <ArrowLeft className="size-3.5" /> Back to quotes
         </button>
-        <div className="flex gap-2">
+        <div ref={topMenuRef} className="flex gap-2">
           <button
             type="button"
             onClick={onDuplicate}
@@ -366,9 +392,32 @@ function QuoteDetails({
           >
             <Layers className="size-3.5" /> Duplicate
           </button>
-          <button className="flex size-8 items-center justify-center rounded-md border border-[#DFE3E8]">
+          <button
+            type="button"
+            onClick={() => setTopMenuOpen((current) => !current)}
+            aria-expanded={topMenuOpen}
+            className="flex size-8 items-center justify-center rounded-md border border-[#DFE3E8]"
+          >
             <Ellipsis className="size-4" />
           </button>
+          {topMenuOpen && (
+            <div className="absolute right-5 top-11 z-20 w-40 rounded-lg border border-[#DFE3E8] bg-white p-1 shadow-lg">
+              <button
+                type="button"
+                onClick={onCopy}
+                className="w-full rounded-md px-3 py-2 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+              >
+                Copy quote
+              </button>
+              <button
+                type="button"
+                onClick={onExport}
+                className="w-full rounded-md px-3 py-2 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+              >
+                Export quote
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -431,112 +480,132 @@ function QuoteDetails({
           </div>
         </div>
         <div className="mt-5 flex gap-8 text-[0.6875rem] font-medium text-[#5F6772]">
-          {['Summary', 'Versions (2)', 'Activity', 'Details'].map(
-            (tab, index) => (
-              <button
-                key={tab}
-                className={cn(
-                  'border-b-2 px-1 pb-3',
-                  index === 0
-                    ? 'border-[#FF5A1F] font-semibold text-[#FF5A1F]'
-                    : 'border-transparent',
-                )}
-              >
-                {tab}
-              </button>
-            ),
-          )}
+          {['Summary', 'Versions (2)', 'Activity', 'Details'].map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveDetailTab(tab)}
+              className={cn(
+                'border-b-2 px-1 pb-3',
+                activeDetailTab === tab
+                  ? 'border-[#FF5A1F] font-semibold text-[#FF5A1F]'
+                  : 'border-transparent',
+              )}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_10.5rem] gap-3 overflow-y-auto p-3">
-        <div className="overflow-hidden rounded-xl border border-[#E8EAED] bg-white">
-          <div className="border-b border-[#E8EAED] p-3">
-            <DetailHeading number={1}>Job Scope</DetailHeading>
-            <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
-              Supply and install new tiles, shower, vanity and toilet in small
-              bathroom. Includes waterproofing, plumbing, and cleanup.
-            </p>
-          </div>
-
-          <div className="border-b border-[#E8EAED] p-3">
-            <DetailHeading number={2}>Labour Estimate</DetailHeading>
-            <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
-              <span>2 × Plumbers @ $110/hr</span>
-              <span className="text-right">
-                <strong className="block text-[#2FAE54]">12 – 16 hours</strong>
-                <span className="mt-1 block font-semibold">
-                  $1,320 – $1,760
-                </span>
-              </span>
+      {activeDetailTab === 'Summary' ? (
+        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_10.5rem] gap-3 overflow-y-auto p-3">
+          <div className="overflow-hidden rounded-xl border border-[#E8EAED] bg-white">
+            <div className="border-b border-[#E8EAED] p-3">
+              <DetailHeading number={1}>Job Scope</DetailHeading>
+              <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
+                Supply and install new tiles, shower, vanity and toilet in small
+                bathroom. Includes waterproofing, plumbing, and cleanup.
+              </p>
             </div>
-          </div>
 
-          <div className="border-b border-[#E8EAED] p-3">
-            <DetailHeading number={3}>Materials</DetailHeading>
-            <div className="mt-2 space-y-2">
-              {MATERIALS.map(([name, price]) => (
-                <div
-                  key={name}
-                  className="flex items-center justify-between text-[0.6875rem]"
-                >
-                  <span className="flex items-center gap-2 text-[#4E5661]">
-                    <span className="grid size-3 grid-cols-2 gap-px">
-                      <i className="rounded-[1px] bg-[#8A929D]" />
-                      <i className="rounded-[1px] bg-[#8A929D]" />
-                      <i className="rounded-[1px] bg-[#8A929D]" />
-                      <i className="rounded-[1px] bg-[#8A929D]" />
-                    </span>
-                    {name}
+            <div className="border-b border-[#E8EAED] p-3">
+              <DetailHeading number={2}>Labour Estimate</DetailHeading>
+              <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
+                <span>2 × Plumbers @ $110/hr</span>
+                <span className="text-right">
+                  <strong className="block text-[#2FAE54]">
+                    12 – 16 hours
+                  </strong>
+                  <span className="mt-1 block font-semibold">
+                    $1,320 – $1,760
                   </span>
-                  <strong>{price}</strong>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
-              <span>Total Materials</span>
-              <span className="text-[#2FAE54]">$3,150 – $4,200</span>
-            </div>
-          </div>
-
-          <div className="border-b border-[#E8EAED] p-3">
-            <DetailHeading number={4}>Pricing Summary</DetailHeading>
-            <div className="mt-2 space-y-1.5 text-[0.6875rem]">
-              {[
-                ['Labour', '$1,320 – $1,760'],
-                ['Materials', '$3,150 – $4,200'],
-                ['Sub Total (ex. GST)', '$4,470 – $5,960'],
-                ['GST (10%)', '$447 – $596'],
-              ].map(([label, value]) => (
-                <div key={label} className="flex justify-between">
-                  <span>{label}</span>
-                  <strong>{value}</strong>
-                </div>
-              ))}
-              <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
-                <span>Total (inc. GST)</span>
-                <span>$4,917 – $6,556</span>
+                </span>
               </div>
             </div>
+
+            <div className="border-b border-[#E8EAED] p-3">
+              <DetailHeading number={3}>Materials</DetailHeading>
+              <div className="mt-2 space-y-2">
+                {MATERIALS.map(([name, price]) => (
+                  <div
+                    key={name}
+                    className="flex items-center justify-between text-[0.6875rem]"
+                  >
+                    <span className="flex items-center gap-2 text-[#4E5661]">
+                      <span className="grid size-3 grid-cols-2 gap-px">
+                        <i className="rounded-[1px] bg-[#8A929D]" />
+                        <i className="rounded-[1px] bg-[#8A929D]" />
+                        <i className="rounded-[1px] bg-[#8A929D]" />
+                        <i className="rounded-[1px] bg-[#8A929D]" />
+                      </span>
+                      {name}
+                    </span>
+                    <strong>{price}</strong>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
+                <span>Total Materials</span>
+                <span className="text-[#2FAE54]">$3,150 – $4,200</span>
+              </div>
+            </div>
+
+            <div className="border-b border-[#E8EAED] p-3">
+              <DetailHeading number={4}>Pricing Summary</DetailHeading>
+              <div className="mt-2 space-y-1.5 text-[0.6875rem]">
+                {[
+                  ['Labour', '$1,320 – $1,760'],
+                  ['Materials', '$3,150 – $4,200'],
+                  ['Sub Total (ex. GST)', '$4,470 – $5,960'],
+                  ['GST (10%)', '$447 – $596'],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex justify-between">
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                  </div>
+                ))}
+                <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
+                  <span>Total (inc. GST)</span>
+                  <span>$4,917 – $6,556</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3">
+              <DetailHeading number={5}>Customer Message</DetailHeading>
+              <p className="mt-2 text-[0.6875rem] leading-[1.55] text-[#4E5661]">
+                Thanks for the opportunity!
+                <br />
+                We pride ourselves on quality workmanship and reliable service.
+                If you have any questions, just let us know.
+              </p>
+            </div>
           </div>
 
-          <div className="p-3">
-            <DetailHeading number={5}>Customer Message</DetailHeading>
-            <p className="mt-2 text-[0.6875rem] leading-[1.55] text-[#4E5661]">
-              Thanks for the opportunity!
-              <br />
-              We pride ourselves on quality workmanship and reliable service. If
-              you have any questions, just let us know.
+          <aside className="space-y-3">
+            <QuoteActions {...{ onCopy, onExport, onMarkSent }} />
+            <QuoteHealth />
+            <JobDetails quote={quote} />
+          </aside>
+        </div>
+      ) : (
+        <div className="flex min-h-0 flex-1 items-center justify-center p-6">
+          <div className="max-w-sm text-center">
+            <h3 className="text-sm font-semibold text-[#20242A]">
+              {activeDetailTab}
+            </h3>
+            <p className="mt-2 text-xs leading-5 text-[#68717D]">
+              {activeDetailTab === 'Versions (2)' &&
+                'Version 2 is current. Version history loads from saved quote records later.'}
+              {activeDetailTab === 'Activity' &&
+                'No recent activity for this mock quote.'}
+              {activeDetailTab === 'Details' &&
+                'Quote metadata, customer details, job details show here when backend connects.'}
             </p>
           </div>
         </div>
-
-        <aside className="space-y-3">
-          <QuoteActions {...{ onCopy, onExport, onMarkSent }} />
-          <QuoteHealth />
-          <JobDetails quote={quote} />
-        </aside>
-      </div>
+      )}
     </section>
   );
 }
@@ -552,6 +621,8 @@ export default function QuotesPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [detailOpen, setDetailOpen] = useState(true);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 5;
 
   const filteredQuotes = useMemo(() => {
     return quotes.filter((quote) => {
@@ -579,6 +650,13 @@ export default function QuotesPage() {
       return second.jobId.localeCompare(first.jobId);
     });
   }, [filteredQuotes, sortOrder]);
+
+  const totalPages = Math.max(1, Math.ceil(visibleQuotes.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const paginatedQuotes = visibleQuotes.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
 
   const selectedQuote =
     quotes.find((quote) => quote.id === selectedId) ?? quotes[0] ?? QUOTES[0];
@@ -626,6 +704,7 @@ export default function QuotesPage() {
     setQuotes((current) => [copy, ...current]);
     setSelectedId(copy.id);
     setActiveTab('All Quotes');
+    setPage(1);
     toast.success('Quote duplicated as a draft.');
   };
 
@@ -650,6 +729,7 @@ export default function QuotesPage() {
     setQuoteType('All Types');
     setSortOrder('Date: Newest');
     setActiveTab('All Quotes');
+    setPage(1);
   };
 
   const copySelectedQuote = async () => {
@@ -685,7 +765,10 @@ export default function QuotesPage() {
               <button
                 key={tab.label}
                 type="button"
-                onClick={() => setActiveTab(tab.label)}
+                onClick={() => {
+                  setActiveTab(tab.label);
+                  setPage(1);
+                }}
                 className={cn(
                   'flex h-12 shrink-0 items-center gap-2 border-b-2 px-1 text-[0.6875rem] font-semibold',
                   activeTab === tab.label
@@ -709,14 +792,20 @@ export default function QuotesPage() {
             <Search className="size-4 text-[#818995]" />
             <input
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setPage(1);
+              }}
               placeholder="Search quotes..."
               className="min-w-0 flex-1 bg-transparent text-[0.6875rem] outline-none placeholder:text-[#9299A3]"
             />
           </label>
           <select
             value={status}
-            onChange={(event) => setStatus(event.target.value)}
+            onChange={(event) => {
+              setStatus(event.target.value);
+              setPage(1);
+            }}
             className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
           >
             <option>All Status</option>
@@ -727,7 +816,10 @@ export default function QuotesPage() {
           </select>
           <select
             value={quoteType}
-            onChange={(event) => setQuoteType(event.target.value)}
+            onChange={(event) => {
+              setQuoteType(event.target.value);
+              setPage(1);
+            }}
             className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
           >
             <option>All Types</option>
@@ -737,7 +829,10 @@ export default function QuotesPage() {
           </select>
           <select
             value={sortOrder}
-            onChange={(event) => setSortOrder(event.target.value)}
+            onChange={(event) => {
+              setSortOrder(event.target.value);
+              setPage(1);
+            }}
             className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
           >
             <option>Date: Newest</option>
@@ -766,8 +861,8 @@ export default function QuotesPage() {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6">
-          {visibleQuotes.length ? (
-            visibleQuotes.map((quote) => (
+          {paginatedQuotes.length ? (
+            paginatedQuotes.map((quote) => (
               <QuoteRow
                 key={quote.id}
                 quote={quote}
@@ -795,19 +890,46 @@ export default function QuotesPage() {
 
         <footer className="flex h-12 shrink-0 items-center justify-between border-t border-[#E8EAED] px-6 text-[0.6875rem] text-[#68717D]">
           <span>
-            Showing 1 to {visibleQuotes.length} of {quotes.length} quotes
+            Showing{' '}
+            {visibleQuotes.length ? (currentPage - 1) * pageSize + 1 : 0} to{' '}
+            {Math.min(currentPage * pageSize, visibleQuotes.length)} of{' '}
+            {visibleQuotes.length} quotes
           </span>
           <div className="flex items-center gap-3">
-            <button aria-label="Previous page">
+            <button
+              type="button"
+              aria-label="Previous page"
+              disabled={currentPage === 1}
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              className="disabled:cursor-not-allowed disabled:opacity-35"
+            >
               <ChevronLeft className="size-4" />
             </button>
-            <button className="flex size-7 items-center justify-center rounded-md border border-[#FF8B5B] bg-[#FFF7F3] font-semibold text-[#FF5A1F]">
-              1
-            </button>
-            <button className="flex size-7 items-center justify-center">
-              2
-            </button>
-            <button aria-label="Next page">
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (pageNumber) => (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => setPage(pageNumber)}
+                  className={cn(
+                    'flex size-7 items-center justify-center rounded-md',
+                    currentPage === pageNumber &&
+                      'border border-[#FF8B5B] bg-[#FFF7F3] font-semibold text-[#FF5A1F]',
+                  )}
+                >
+                  {pageNumber}
+                </button>
+              ),
+            )}
+            <button
+              type="button"
+              aria-label="Next page"
+              disabled={currentPage === totalPages}
+              onClick={() =>
+                setPage((current) => Math.min(totalPages, current + 1))
+              }
+              className="disabled:cursor-not-allowed disabled:opacity-35"
+            >
               <ChevronRight className="size-4" />
             </button>
           </div>
