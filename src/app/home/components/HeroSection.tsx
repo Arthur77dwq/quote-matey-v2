@@ -289,7 +289,7 @@ export function HeroSection({
         </div>
         <div
           ref={mountainRef}
-          className="pointer-events-none absolute bottom-[18.625rem] left-0 z-[2] hidden w-[calc(100%+1.25rem)] max-w-none justify-center lg:flex"
+          className="pointer-events-none absolute bottom-[16.625rem] left-0 z-[2] hidden w-[calc(100%+1.25rem)] max-w-none justify-center lg:flex"
         >
           <Image
             src={props.otherImages?.overlay.src || '/images/mountain.png'}
