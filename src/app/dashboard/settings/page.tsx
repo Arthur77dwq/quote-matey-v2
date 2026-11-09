@@ -6,14 +6,18 @@ import {
   CheckCircle2,
   ClipboardList,
   DollarSign,
+  FileText,
+  Mail,
   MessageCircle,
   Pencil,
   Plug,
+  Shield,
   Smile,
   Star,
   Store,
   Trash2,
   User,
+  Zap,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -28,6 +32,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 
 /* ---------- data ---------- */
 
@@ -141,15 +146,15 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] w-full overflow-y-auto bg-[#fafafa]">
-      <div className="flex flex-col lg:flex-row items-start">
-        {/* Settings sub-nav */}
-        <aside className="hidden lg:block w-[220px] shrink-0 self-stretch border-r border-[#eeeeee] bg-white px-4 py-6">
-          <SettingsMenu activeTab={activeTab} onChange={goTo} />
-        </aside>
+    <div className="flex w-full flex-col bg-[#fafafa] lg:h-[calc(100vh-4rem)] lg:flex-row lg:overflow-hidden">
+      {/* Settings sub-nav (fixed width, own scroll) */}
+      <aside className="w-full shrink-0 border-b border-[#eeeeee] bg-white px-4 py-6 lg:h-full lg:w-[220px] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+        <SettingsMenu activeTab={activeTab} onChange={goTo} />
+      </aside>
 
-        {/* Main column: all three cards stacked */}
-        <main className="flex-1 min-w-0 p-6 lg:p-8 space-y-4">
+      {/* Main column (flexible width, own scroll) */}
+      <main className="min-w-0 flex-1 lg:h-full lg:overflow-y-auto">
+        <div className="mx-auto w-full max-w-4xl space-y-4 p-6 lg:p-8">
           <section id="section-business-profile" className="scroll-mt-6">
             <h2 className="mb-4 text-lg font-semibold text-[#0a1628]">
               Business Profile
@@ -167,16 +172,28 @@ export default function SettingsPage() {
           <section id="section-ai-preferences" className="scroll-mt-6">
             <AIPreferences />
           </section>
-        </main>
 
-        {/* Right panel */}
-        <aside className="hidden lg:block w-[360px] shrink-0 border-l border-[#eeeeee] bg-white p-6 space-y-4 self-stretch">
-          <LivePreviewHeader />
-          <SampleQuotePreview businessName={businessName} />
-          <SystemStatusCard />
-          <DangerZoneCard />
-        </aside>
-      </div>
+          <section id="section-templates-defaults" className="scroll-mt-6">
+            <TemplatesDefaults />
+          </section>
+
+          <section id="section-notifications" className="scroll-mt-6">
+            <Notifications />
+          </section>
+
+          <section id="section-integrations" className="scroll-mt-6">
+            <Integrations />
+          </section>
+        </div>
+      </main>
+
+      {/* Right panel (fixed width, own scroll) */}
+      <aside className="w-full shrink-0 space-y-4 border-t border-[#eeeeee] bg-white p-6 lg:h-full lg:w-[360px] lg:overflow-y-auto lg:border-l lg:border-t-0">
+        <LivePreviewHeader />
+        <SampleQuotePreview businessName={businessName} />
+        <SystemStatusCard />
+        <DangerZoneCard />
+      </aside>
     </div>
   );
 }
@@ -298,7 +315,7 @@ function PricingRates() {
         Pricing &amp; Rates
       </h2>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 items-end">
         <FormField label="Hourly Rate">
           <SuffixInput defaultValue="$110.00" suffix="/hr" />
         </FormField>
@@ -406,6 +423,116 @@ function AIPreferences() {
             </SelectContent>
           </Select>
         </FormField>
+      </div>
+    </Panel>
+  );
+}
+
+function TemplatesDefaults() {
+  const template = 'Standard Repair';
+  const [content, setContent] = useState(
+    'Scope: [DESCRIPTION]\nLabour: [HOURS] hrs @ $[RATE]\nMaterials: [MATERIALS]\nTotal: $[TOTAL]',
+  );
+
+  return (
+    <Panel>
+      <h2 className="mb-5 text-lg font-semibold text-[#0a1628]">
+        Templates Defaults
+      </h2>
+
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <FormField label="Default Template">
+          <Select defaultValue={template}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Standard Repair">Standard Repair</SelectItem>
+              <SelectItem value="Quote">Quote</SelectItem>
+              <SelectItem value="Invoice">Invoice</SelectItem>
+              <SelectItem value="Work Order">Work Order</SelectItem>
+            </SelectContent>
+          </Select>
+        </FormField>
+
+        <FormField label="AI Template Instructions">
+          <Textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows={5}
+            className="w-full font-mono text-sm"
+          />
+        </FormField>
+      </div>
+    </Panel>
+  );
+}
+
+function Notifications() {
+  return (
+    <Panel>
+      <h2 className="mb-5 text-lg font-semibold text-[#0a1628]">
+        Notifications
+      </h2>
+      <div className="space-y-3 text-sm text-muted-foreground">
+        <p>No notification is currently enabled yet.</p>
+        <p>Toggle settings below to activate them.</p>
+      </div>
+    </Panel>
+  );
+}
+
+function Integrations() {
+  const integrations = [
+    { id: 'stripe', name: 'Stripe', desc: 'Payments & invoicing', icon: Zap },
+    { id: 'mailgun', name: 'Mailgun', desc: 'Email delivery', icon: Mail },
+    { id: 'xero', name: 'Xero', desc: 'Accounting sync', icon: FileText },
+    {
+      id: 'quickbooks',
+      name: 'QuickBooks',
+      desc: 'US accounting',
+      icon: Briefcase,
+    },
+  ];
+
+  return (
+    <Panel>
+      <h2 className="mb-5 text-lg font-semibold text-[#0a1628]">
+        Integrations
+      </h2>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {integrations.map(({ id, name, desc, icon: Icon }) => (
+          <div
+            key={id}
+            className="flex items-center gap-4 rounded-xl border border-[#eeeeee] p-5"
+          >
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#FFF0EA]">
+              <Icon className="h-6 w-6 text-[#FF4D00]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-semibold text-[#0a1628]">
+                {name}
+              </div>
+              <div className="truncate text-xs text-muted-foreground">
+                {desc}
+              </div>
+            </div>
+            <button
+              type="button"
+              className="shrink-0 rounded-lg bg-[#0a1628] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#0a1628]/90"
+            >
+              Connect
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 flex items-center gap-2 rounded-lg bg-[#FFF0EA] px-4 py-3">
+        <Shield className="h-5 w-5 shrink-0 text-[#FF4D00]" />
+        <span className="text-sm text-[#0a1628]/80">
+          Connected integrations sync securely via OAuth. No API keys stored in
+          plain text.
+        </span>
       </div>
     </Panel>
   );
