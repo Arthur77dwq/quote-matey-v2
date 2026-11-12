@@ -29,5 +29,5 @@ export async function apiJson<T>(
     },
   });
 
-  return (await res.json()) as T;
+  return res as T;
 }
