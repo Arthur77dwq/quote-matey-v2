@@ -23,13 +23,33 @@ export function VideoDemoSection({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  // Frame follows the video's real aspect ratio (no stretching)
+  const [ratio, setRatio] = useState('16 / 9');
+  const trackRef = useRef<HTMLDivElement>(null);
   const { startDrag } = useDragSeek();
 
   // Metadata can load before React attaches onLoadedMetadata, so check on mount too
   useEffect(() => {
     const v = videoRef.current;
-    if (v && v.readyState >= 1) setDuration(v.duration || 0);
+    if (v && v.readyState >= 1) {
+      setDuration(v.duration || 0);
+      if (v.videoWidth && v.videoHeight) {
+        setRatio(`${v.videoWidth} / ${v.videoHeight}`);
+      }
+    }
   }, []);
+
+  // Smooth progress bar while playing (timeupdate only fires ~4x/sec)
+  useEffect(() => {
+    let frame = 0;
+    const tick = () => {
+      const v = videoRef.current;
+      if (v) setCurrentTime(v.currentTime);
+      frame = requestAnimationFrame(tick);
+    };
+    if (isPlaying) frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [isPlaying]);
 
   const togglePlayPause = useCallback(() => {
     const video = videoRef.current;
@@ -69,8 +89,9 @@ export function VideoDemoSection({
   const seekTo = useCallback(
     (clientX: number) => {
       const video = videoRef.current;
-      if (!video || !duration) return;
-      const rect = video.getBoundingClientRect();
+      const track = trackRef.current;
+      if (!video || !track || !duration) return;
+      const rect = track.getBoundingClientRect();
       const percent = Math.max(
         0,
         Math.min(1, (clientX - rect.left) / rect.width),
@@ -89,7 +110,7 @@ export function VideoDemoSection({
   );
 
   const formatTime = useCallback((seconds: number) => {
-    if (!seconds || isNaN(seconds)) return '0:00';
+    if (!seconds || Number.isNaN(seconds)) return '0:00';
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
     return `${m}:${s.toString().padStart(2, '0')}`;
@@ -128,10 +149,13 @@ export function VideoDemoSection({
       </div>
 
       {/* Named group so it doesn't clash with the progress bar's own `group` */}
-      <div className="group/video relative w-full max-w-6xl rounded-[3.75rem] shadow-xl overflow-hidden bg-black">
+      <div
+        className="group/video relative isolate w-full max-w-6xl overflow-hidden rounded-3xl bg-black shadow-xl sm:rounded-[3.75rem] [transform:translateZ(0)]"
+        style={{ aspectRatio: ratio }}
+      >
         <video
           ref={videoRef}
-          className="block w-full h-53 sm:h-108.25 lg:h-146 object-fill"
+          className="absolute inset-0 block h-full w-full rounded-[inherit] object-contain"
           loop
           playsInline
           muted
@@ -144,6 +168,9 @@ export function VideoDemoSection({
             if (v) {
               setDuration(v.duration || 0);
               setCurrentTime(v.currentTime);
+              if (v.videoWidth && v.videoHeight) {
+                setRatio(`${v.videoWidth} / ${v.videoHeight}`);
+              }
             }
           }}
           onDurationChange={() => setDuration(videoRef.current?.duration || 0)}
@@ -155,7 +182,7 @@ export function VideoDemoSection({
         {!isPlaying && (
           <div
             onClick={togglePlayPause}
-            className="absolute inset-0 flex items-center justify-center bg-black/60 cursor-pointer"
+            className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] bg-black/60"
           >
             <button
               onClick={(e) => {
@@ -173,7 +200,7 @@ export function VideoDemoSection({
         {/* Bottom controls: hidden until hover, always visible while paused / on touch / on keyboard focus */}
         <div
           className={cn(
-            'absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent',
+            'absolute bottom-0 left-0 right-0 rounded-b-[inherit] p-4 sm:p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent',
             'transition-opacity duration-300 ease-out',
             'opacity-0 group-hover/video:opacity-100 focus-within:opacity-100',
             '[@media(hover:none)]:opacity-100',
@@ -194,18 +221,25 @@ export function VideoDemoSection({
             </button>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between text-[0.75rem] text-white mb-2">
+              <div className="mb-1 flex items-center justify-between text-[0.75rem] tabular-nums leading-none text-white">
                 <span>{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
+              {/* Tall hit area; the visible line is centred inside it */}
               <div
-                className="relative h-1.5 w-full cursor-pointer rounded-full group"
+                ref={trackRef}
+                className="group/seek relative flex h-5 w-full cursor-pointer items-center"
                 onMouseDown={handleMouseDown}
               >
-                <div className="absolute inset-0 rounded-full bg-white/30 group-hover:h-2.5 transition-all" />
+                <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-white/30 transition-[height] duration-150 group-hover/seek:h-2.5">
+                  <div
+                    className="h-full rounded-full bg-white"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
                 <div
-                  className="absolute left-0 top-0 h-1.5 rounded-full bg-white"
-                  style={{ width: `${progress}%` }}
+                  className="pointer-events-none absolute h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-white opacity-0 shadow transition-opacity group-hover/seek:opacity-100"
+                  style={{ left: `${progress}%` }}
                 />
               </div>
             </div>
