@@ -369,7 +369,7 @@ export const DATA: DataType = {
         },
       ],
       video: {
-        src: 'https://res.cloudinary.com/dyohffsp6/video/upload/v1780100162/QuoteMateyDEMO2_yewhtk.mp4',
+        src: 'https://res.cloudinary.com/dyohffsp6/video/upload/v1794002223/Final_Comp_4K__4_b6qooi.mp4',
         active: true,
       },
     },
