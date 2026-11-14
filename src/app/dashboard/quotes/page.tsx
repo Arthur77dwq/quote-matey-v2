@@ -11,8 +11,11 @@ import {
   Filter,
   Layers,
   Pencil,
+  Plus,
   Search,
   Send,
+  Trash2,
+  X,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -37,6 +40,47 @@ const statusStyles: Record<QuoteStatus, string> = {
 function generateQuoteCopyId(quoteId: string) {
   return `${quoteId}-copy-${Date.now()}`;
 }
+
+type MaterialItem = { id: string; name: string; price: string };
+type PricingRow = { label: string; value: string };
+
+type QuoteSections = {
+  jobScope: string;
+  labourRate: string;
+  labourHours: string;
+  labourCost: string;
+  materials: MaterialItem[];
+  materialsTotal: string;
+  pricingRows: PricingRow[];
+  pricingTotal: string;
+  customerMessage: string;
+};
+
+const DEFAULT_SECTIONS: QuoteSections = {
+  jobScope:
+    'Supply and install new tiles, shower, vanity and toilet in small bathroom. Includes waterproofing, plumbing, and cleanup.',
+  labourRate: '2 × Plumbers @ $110/hr',
+  labourHours: '12 – 16 hours',
+  labourCost: '$1,320 – $1,760',
+  materials: MATERIALS.map(([name, price], index) => ({
+    id: `material-${index}`,
+    name,
+    price,
+  })),
+  materialsTotal: '$3,150 – $4,200',
+  pricingRows: [
+    { label: 'Labour', value: '$1,320 – $1,760' },
+    { label: 'Materials', value: '$3,150 – $4,200' },
+    { label: 'Sub Total (ex. GST)', value: '$4,470 – $5,960' },
+    { label: 'GST (10%)', value: '$447 – $596' },
+  ],
+  pricingTotal: '$4,917 – $6,556',
+  customerMessage:
+    'Thanks for the opportunity!\nWe pride ourselves on quality workmanship and reliable service. If you have any questions, just let us know.',
+};
+
+const fieldClass =
+  'w-full rounded-md border border-[#DFE3E8] bg-white px-2 py-1.5 text-[0.6875rem] text-[#20242A] outline-none focus:border-[#FF5A1F]';
 
 function StatusBadge({ status }: { status: QuoteStatus }) {
   return (
@@ -185,9 +229,13 @@ function SectionNumber({ children }: { children: React.ReactNode }) {
 function DetailHeading({
   number,
   children,
+  editing,
+  onEdit,
 }: {
   number: number;
-  children: React.ReactNode;
+  children: string;
+  editing: boolean;
+  onEdit: () => void;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -195,7 +243,296 @@ function DetailHeading({
       <h3 className="text-[0.8125rem] font-semibold text-[#292D32]">
         {children}
       </h3>
-      <Pencil className="size-3 text-[#8A919B]" />
+      <button
+        type="button"
+        aria-label={editing ? `Cancel editing ${children}` : `Edit ${children}`}
+        aria-pressed={editing}
+        onClick={onEdit}
+        className={cn(
+          'flex size-5 items-center justify-center rounded transition hover:bg-[#F0F2F4] hover:text-[#4E5661]',
+          editing ? 'bg-[#FFF1EA] text-[#FF5A1F]' : 'text-[#8A919B]',
+        )}
+      >
+        {editing ? <X className="size-3" /> : <Pencil className="size-3" />}
+      </button>
+    </div>
+  );
+}
+
+function EditorFooter({
+  onCancel,
+  onSave,
+  saveDisabled = false,
+}: {
+  onCancel: () => void;
+  onSave: () => void;
+  saveDisabled?: boolean;
+}) {
+  return (
+    <div className="mt-3 flex justify-end gap-2">
+      <button
+        type="button"
+        onClick={onCancel}
+        className="h-7 rounded-md border border-[#DFE3E8] px-3 text-[0.6875rem] font-semibold text-[#4E5661] hover:bg-[#F5F7F9]"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        onClick={onSave}
+        disabled={saveDisabled}
+        className="h-7 rounded-md bg-[#FF4F12] px-3 text-[0.6875rem] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Save
+      </button>
+    </div>
+  );
+}
+
+function LabeledField({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-[0.625rem] font-semibold text-[#68717D]">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+function TextSectionEditor({
+  label,
+  value,
+  onSave,
+  onCancel,
+}: {
+  label: string;
+  value: string;
+  onSave: (value: string) => void;
+  onCancel: () => void;
+}) {
+  const [draft, setDraft] = useState(value);
+
+  return (
+    <div className="mt-2">
+      <textarea
+        aria-label={label}
+        rows={5}
+        value={draft}
+        onChange={(event) => setDraft(event.target.value)}
+        className={cn(fieldClass, 'resize-none leading-[1.45]')}
+      />
+      <EditorFooter
+        onCancel={onCancel}
+        onSave={() => onSave(draft.trim())}
+        saveDisabled={!draft.trim()}
+      />
+    </div>
+  );
+}
+
+function LabourEditor({
+  rate,
+  hours,
+  cost,
+  onSave,
+  onCancel,
+}: {
+  rate: string;
+  hours: string;
+  cost: string;
+  onSave: (values: { rate: string; hours: string; cost: string }) => void;
+  onCancel: () => void;
+}) {
+  const [draft, setDraft] = useState({ rate, hours, cost });
+  const update = (key: keyof typeof draft, value: string) =>
+    setDraft((current) => ({ ...current, [key]: value }));
+
+  return (
+    <div className="mt-2 space-y-2">
+      <LabeledField label="Crew & rate">
+        <input
+          value={draft.rate}
+          onChange={(event) => update('rate', event.target.value)}
+          className={fieldClass}
+        />
+      </LabeledField>
+      <div className="grid grid-cols-2 gap-2">
+        <LabeledField label="Hours">
+          <input
+            value={draft.hours}
+            onChange={(event) => update('hours', event.target.value)}
+            className={fieldClass}
+          />
+        </LabeledField>
+        <LabeledField label="Labour cost">
+          <input
+            value={draft.cost}
+            onChange={(event) => update('cost', event.target.value)}
+            className={fieldClass}
+          />
+        </LabeledField>
+      </div>
+      <EditorFooter
+        onCancel={onCancel}
+        onSave={() =>
+          onSave({
+            rate: draft.rate.trim(),
+            hours: draft.hours.trim(),
+            cost: draft.cost.trim(),
+          })
+        }
+        saveDisabled={
+          !draft.rate.trim() || !draft.hours.trim() || !draft.cost.trim()
+        }
+      />
+    </div>
+  );
+}
+
+function MaterialsEditor({
+  materials,
+  total,
+  onSave,
+  onCancel,
+}: {
+  materials: MaterialItem[];
+  total: string;
+  onSave: (materials: MaterialItem[], total: string) => void;
+  onCancel: () => void;
+}) {
+  const [rows, setRows] = useState(materials);
+  const [draftTotal, setDraftTotal] = useState(total);
+
+  const updateRow = (id: string, key: 'name' | 'price', value: string) =>
+    setRows((current) =>
+      current.map((row) => (row.id === id ? { ...row, [key]: value } : row)),
+    );
+  const removeRow = (id: string) =>
+    setRows((current) => current.filter((row) => row.id !== id));
+  const addRow = () =>
+    setRows((current) => [
+      ...current,
+      { id: crypto.randomUUID(), name: '', price: '' },
+    ]);
+
+  const cleaned = rows
+    .filter((row) => row.name.trim())
+    .map((row) => ({
+      ...row,
+      name: row.name.trim(),
+      price: row.price.trim(),
+    }));
+
+  return (
+    <div className="mt-2 space-y-2">
+      {rows.map((row) => (
+        <div
+          key={row.id}
+          className="grid grid-cols-[minmax(0,1fr)_7.5rem_1.75rem] items-center gap-2"
+        >
+          <input
+            aria-label="Material name"
+            placeholder="Material"
+            value={row.name}
+            onChange={(event) => updateRow(row.id, 'name', event.target.value)}
+            className={fieldClass}
+          />
+          <input
+            aria-label="Material price"
+            placeholder="$0 – $0"
+            value={row.price}
+            onChange={(event) => updateRow(row.id, 'price', event.target.value)}
+            className={fieldClass}
+          />
+          <button
+            type="button"
+            aria-label={`Remove ${row.name || 'material'}`}
+            onClick={() => removeRow(row.id)}
+            className="flex size-7 items-center justify-center rounded-md text-[#8A919B] hover:bg-[#FDECEC] hover:text-[#D93025]"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={addRow}
+        className="flex items-center gap-1.5 text-[0.6875rem] font-semibold text-[#FF5A1F]"
+      >
+        <Plus className="size-3.5" /> Add material
+      </button>
+      <LabeledField label="Total materials">
+        <input
+          value={draftTotal}
+          onChange={(event) => setDraftTotal(event.target.value)}
+          className={fieldClass}
+        />
+      </LabeledField>
+      <EditorFooter
+        onCancel={onCancel}
+        onSave={() => onSave(cleaned, draftTotal.trim())}
+        saveDisabled={!draftTotal.trim()}
+      />
+    </div>
+  );
+}
+
+function PricingEditor({
+  rows,
+  total,
+  onSave,
+  onCancel,
+}: {
+  rows: PricingRow[];
+  total: string;
+  onSave: (rows: PricingRow[], total: string) => void;
+  onCancel: () => void;
+}) {
+  const [draftRows, setDraftRows] = useState(rows);
+  const [draftTotal, setDraftTotal] = useState(total);
+
+  const updateRow = (label: string, value: string) =>
+    setDraftRows((current) =>
+      current.map((row) => (row.label === label ? { ...row, value } : row)),
+    );
+
+  return (
+    <div className="mt-2 space-y-2">
+      {draftRows.map((row) => (
+        <LabeledField key={row.label} label={row.label}>
+          <input
+            value={row.value}
+            onChange={(event) => updateRow(row.label, event.target.value)}
+            className={fieldClass}
+          />
+        </LabeledField>
+      ))}
+      <LabeledField label="Total (inc. GST)">
+        <input
+          value={draftTotal}
+          onChange={(event) => setDraftTotal(event.target.value)}
+          className={fieldClass}
+        />
+      </LabeledField>
+      <EditorFooter
+        onCancel={onCancel}
+        onSave={() =>
+          onSave(
+            draftRows.map((row) => ({ ...row, value: row.value.trim() })),
+            draftTotal.trim(),
+          )
+        }
+        saveDisabled={
+          !draftTotal.trim() || draftRows.some((row) => !row.value.trim())
+        }
+      />
     </div>
   );
 }
@@ -347,6 +684,8 @@ function QuoteDetails({
   onExport,
   onMarkSent,
   onUpdateName,
+  sections,
+  onUpdateSections,
 }: {
   quote: QuoteRecord;
   onBack: () => void;
@@ -355,13 +694,25 @@ function QuoteDetails({
   onExport: () => void;
   onMarkSent: () => void;
   onUpdateName: (name: string) => void;
+  sections: QuoteSections;
+  onUpdateSections: (patch: Partial<QuoteSections>) => void;
 }) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(quote.title);
   const [activeDetailTab, setActiveDetailTab] = useState('Summary');
   const [topMenuOpen, setTopMenuOpen] = useState(false);
+  const [editingSection, setEditingSection] = useState<number | null>(null);
   const topMenuRef = useRef<HTMLDivElement>(null);
   const hasUnsavedChanges = name.trim() !== quote.title;
+
+  const toggleSection = (section: number) =>
+    setEditingSection((current) => (current === section ? null : section));
+  const closeEditor = () => setEditingSection(null);
+  const saveSection = (patch: Partial<QuoteSections>, message: string) => {
+    onUpdateSections(patch);
+    setEditingSection(null);
+    toast.success(message);
+  };
 
   useEffect(() => {
     const closeTopMenu = (event: MouseEvent) => {
@@ -502,84 +853,181 @@ function QuoteDetails({
         <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_10.5rem] gap-3 overflow-y-auto p-3">
           <div className="overflow-hidden rounded-xl border border-[#E8EAED] bg-white">
             <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading number={1}>Job Scope</DetailHeading>
-              <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
-                Supply and install new tiles, shower, vanity and toilet in small
-                bathroom. Includes waterproofing, plumbing, and cleanup.
-              </p>
+              <DetailHeading
+                number={1}
+                editing={editingSection === 1}
+                onEdit={() => toggleSection(1)}
+              >
+                Job Scope
+              </DetailHeading>
+              {editingSection === 1 ? (
+                <TextSectionEditor
+                  label="Job scope"
+                  value={sections.jobScope}
+                  onCancel={closeEditor}
+                  onSave={(jobScope) =>
+                    saveSection({ jobScope }, 'Job scope updated.')
+                  }
+                />
+              ) : (
+                <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
+                  {sections.jobScope}
+                </p>
+              )}
             </div>
 
             <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading number={2}>Labour Estimate</DetailHeading>
-              <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
-                <span>2 × Plumbers @ $110/hr</span>
-                <span className="text-right">
-                  <strong className="block text-[#2FAE54]">
-                    12 – 16 hours
-                  </strong>
-                  <span className="mt-1 block font-semibold">
-                    $1,320 – $1,760
-                  </span>
-                </span>
-              </div>
-            </div>
-
-            <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading number={3}>Materials</DetailHeading>
-              <div className="mt-2 space-y-2">
-                {MATERIALS.map(([name, price]) => (
-                  <div
-                    key={name}
-                    className="flex items-center justify-between text-[0.6875rem]"
-                  >
-                    <span className="flex items-center gap-2 text-[#4E5661]">
-                      <span className="grid size-3 grid-cols-2 gap-px">
-                        <i className="rounded-[1px] bg-[#8A929D]" />
-                        <i className="rounded-[1px] bg-[#8A929D]" />
-                        <i className="rounded-[1px] bg-[#8A929D]" />
-                        <i className="rounded-[1px] bg-[#8A929D]" />
-                      </span>
-                      {name}
+              <DetailHeading
+                number={2}
+                editing={editingSection === 2}
+                onEdit={() => toggleSection(2)}
+              >
+                Labour Estimate
+              </DetailHeading>
+              {editingSection === 2 ? (
+                <LabourEditor
+                  rate={sections.labourRate}
+                  hours={sections.labourHours}
+                  cost={sections.labourCost}
+                  onCancel={closeEditor}
+                  onSave={({ rate, hours, cost }) =>
+                    saveSection(
+                      {
+                        labourRate: rate,
+                        labourHours: hours,
+                        labourCost: cost,
+                      },
+                      'Labour estimate updated.',
+                    )
+                  }
+                />
+              ) : (
+                <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
+                  <span>{sections.labourRate}</span>
+                  <span className="text-right">
+                    <strong className="block text-[#2FAE54]">
+                      {sections.labourHours}
+                    </strong>
+                    <span className="mt-1 block font-semibold">
+                      {sections.labourCost}
                     </span>
-                    <strong>{price}</strong>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
-                <span>Total Materials</span>
-                <span className="text-[#2FAE54]">$3,150 – $4,200</span>
-              </div>
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading number={4}>Pricing Summary</DetailHeading>
-              <div className="mt-2 space-y-1.5 text-[0.6875rem]">
-                {[
-                  ['Labour', '$1,320 – $1,760'],
-                  ['Materials', '$3,150 – $4,200'],
-                  ['Sub Total (ex. GST)', '$4,470 – $5,960'],
-                  ['GST (10%)', '$447 – $596'],
-                ].map(([label, value]) => (
-                  <div key={label} className="flex justify-between">
-                    <span>{label}</span>
-                    <strong>{value}</strong>
+              <DetailHeading
+                number={3}
+                editing={editingSection === 3}
+                onEdit={() => toggleSection(3)}
+              >
+                Materials
+              </DetailHeading>
+              {editingSection === 3 ? (
+                <MaterialsEditor
+                  materials={sections.materials}
+                  total={sections.materialsTotal}
+                  onCancel={closeEditor}
+                  onSave={(materials, materialsTotal) =>
+                    saveSection(
+                      { materials, materialsTotal },
+                      'Materials updated.',
+                    )
+                  }
+                />
+              ) : (
+                <>
+                  <div className="mt-2 space-y-2">
+                    {sections.materials.map((material) => (
+                      <div
+                        key={material.id}
+                        className="flex items-center justify-between text-[0.6875rem]"
+                      >
+                        <span className="flex items-center gap-2 text-[#4E5661]">
+                          <span className="grid size-3 grid-cols-2 gap-px">
+                            <i className="rounded-[1px] bg-[#8A929D]" />
+                            <i className="rounded-[1px] bg-[#8A929D]" />
+                            <i className="rounded-[1px] bg-[#8A929D]" />
+                            <i className="rounded-[1px] bg-[#8A929D]" />
+                          </span>
+                          {material.name}
+                        </span>
+                        <strong>{material.price}</strong>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
-                  <span>Total (inc. GST)</span>
-                  <span>$4,917 – $6,556</span>
+                  <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
+                    <span>Total Materials</span>
+                    <span className="text-[#2FAE54]">
+                      {sections.materialsTotal}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="border-b border-[#E8EAED] p-3">
+              <DetailHeading
+                number={4}
+                editing={editingSection === 4}
+                onEdit={() => toggleSection(4)}
+              >
+                Pricing Summary
+              </DetailHeading>
+              {editingSection === 4 ? (
+                <PricingEditor
+                  rows={sections.pricingRows}
+                  total={sections.pricingTotal}
+                  onCancel={closeEditor}
+                  onSave={(pricingRows, pricingTotal) =>
+                    saveSection(
+                      { pricingRows, pricingTotal },
+                      'Pricing summary updated.',
+                    )
+                  }
+                />
+              ) : (
+                <div className="mt-2 space-y-1.5 text-[0.6875rem]">
+                  {sections.pricingRows.map((row) => (
+                    <div key={row.label} className="flex justify-between">
+                      <span>{row.label}</span>
+                      <strong>{row.value}</strong>
+                    </div>
+                  ))}
+                  <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
+                    <span>Total (inc. GST)</span>
+                    <span>{sections.pricingTotal}</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="p-3">
-              <DetailHeading number={5}>Customer Message</DetailHeading>
-              <p className="mt-2 text-[0.6875rem] leading-[1.55] text-[#4E5661]">
-                Thanks for the opportunity!
-                <br />
-                We pride ourselves on quality workmanship and reliable service.
-                If you have any questions, just let us know.
-              </p>
+              <DetailHeading
+                number={5}
+                editing={editingSection === 5}
+                onEdit={() => toggleSection(5)}
+              >
+                Customer Message
+              </DetailHeading>
+              {editingSection === 5 ? (
+                <TextSectionEditor
+                  label="Customer message"
+                  value={sections.customerMessage}
+                  onCancel={closeEditor}
+                  onSave={(customerMessage) =>
+                    saveSection(
+                      { customerMessage },
+                      'Customer message updated.',
+                    )
+                  }
+                />
+              ) : (
+                <p className="mt-2 whitespace-pre-line text-[0.6875rem] leading-[1.55] text-[#4E5661]">
+                  {sections.customerMessage}
+                </p>
+              )}
             </div>
           </div>
 
@@ -622,6 +1070,10 @@ export default function QuotesPage() {
   const [detailOpen, setDetailOpen] = useState(true);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  // Per-quote editable sections (UI only until the backend is connected)
+  const [sectionsById, setSectionsById] = useState<
+    Record<string, QuoteSections>
+  >({});
   const pageSize = 5;
 
   const filteredQuotes = useMemo(() => {
@@ -660,6 +1112,18 @@ export default function QuotesPage() {
 
   const selectedQuote =
     quotes.find((quote) => quote.id === selectedId) ?? quotes[0] ?? QUOTES[0];
+
+  const selectedSections = sectionsById[selectedQuote.id] ?? DEFAULT_SECTIONS;
+
+  const updateSelectedSections = (patch: Partial<QuoteSections>) => {
+    setSectionsById((current) => ({
+      ...current,
+      [selectedQuote.id]: {
+        ...(current[selectedQuote.id] ?? DEFAULT_SECTIONS),
+        ...patch,
+      },
+    }));
+  };
 
   const markSelectedQuoteAsSent = () => {
     if (!selectedQuote || selectedQuote.status === 'Sent') {
@@ -702,6 +1166,10 @@ export default function QuotesPage() {
     };
 
     setQuotes((current) => [copy, ...current]);
+    setSectionsById((current) => ({
+      ...current,
+      [copy.id]: current[quote.id] ?? DEFAULT_SECTIONS,
+    }));
     setSelectedId(copy.id);
     setActiveTab('All Quotes');
     setPage(1);
@@ -946,6 +1414,8 @@ export default function QuotesPage() {
           onExport={exportSelectedQuote}
           onMarkSent={markSelectedQuoteAsSent}
           onUpdateName={updateSelectedQuoteName}
+          sections={selectedSections}
+          onUpdateSections={updateSelectedSections}
         />
       </div>
     </div>
