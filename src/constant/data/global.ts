@@ -341,7 +341,7 @@ export const GLOBAL_DATA: GlobalData = {
           variant: 'primary',
           action: 'authCustomSignup',
           link: null,
-          text: 'SignUp',
+          text: 'Sign Up',
           icon: null,
         },
         { id: 1, type: 'separator', text: 'or', active: true },
