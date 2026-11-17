@@ -10,11 +10,13 @@ import {
   updateProfile,
   type User as FirebaseUser,
 } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -35,6 +37,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const auth = getFirebaseAuth();
   const googleProvider = getGoogleProvider();
+  const router = useRouter();
+  // Skip redirect on initial session restore; only fire on fresh sign-in/sign-up
+  const initialAuthResolved = useRef(false);
 
   const authInitError = {
     code: 'auth/init',
@@ -71,6 +76,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           subscription: subscription?.result || null,
         });
       }
+
+      // Fresh sign-in/sign-up → straight to chat, no extra click
+      if (
+        initialAuthResolved.current &&
+        !window.location.pathname.startsWith('/dashboard')
+      ) {
+        router.push('/dashboard/chat');
+      }
+      initialAuthResolved.current = true;
     } catch {
       setUser(null);
 

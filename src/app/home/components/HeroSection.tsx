@@ -190,11 +190,32 @@ export function HeroSection({
                       : 'w-[8.632rem] lg:w-[11.5546875rem] h-[3.0625rem] lg:h-[3.6875rem] p-0 border border-[#E5E7EB] hover:border-neutral-900 transition-colors ease-in-out hover:bg-neutral-900 bg-white hover:text-white text-neutral-900 rounded-4xl font-inter font-semibold leading-[1.3em] text-[1rem] lg:text-body-md',
                   )}
                   variant={button.variant}
-                  onClick={() =>
-                    button.link && button.link.active
-                      ? router.push(button.link.href)
-                      : null
-                  }
+                  onClick={() => {
+                    if (!button.link || !button.link.active) return;
+                    if (button.link.href.startsWith('#')) {
+                      const el = document.querySelector(button.link.href);
+                      if (el) {
+                        window.dispatchEvent(
+                          new CustomEvent('qm:smooth-scroll-start'),
+                        );
+                        el.scrollIntoView({ behavior: 'smooth' });
+                        let done = false;
+                        const finish = () => {
+                          if (done) return;
+                          done = true;
+                          window.removeEventListener('scrollend', finish);
+                          window.dispatchEvent(
+                            new CustomEvent('qm:smooth-scroll-end'),
+                          );
+                        };
+                        window.addEventListener('scrollend', finish);
+                        // Fallback for browsers without scrollend
+                        setTimeout(finish, 1500);
+                      }
+                      return;
+                    }
+                    router.push(button.link.href);
+                  }}
                 >
                   {button?.text}
                 </Button>

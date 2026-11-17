@@ -93,7 +93,7 @@ export const GLOBAL_DATA: GlobalData = {
         },
         text: 'Login',
         link: {
-          href: '/login',
+          href: '/?auth=login',
           target: '_self',
           text: null,
           active: true,
@@ -105,7 +105,7 @@ export const GLOBAL_DATA: GlobalData = {
         variant: 'default',
         text: 'Start Free',
         link: {
-          href: '/dashboard/chat',
+          href: '/?auth=signup',
           target: '_self',
           text: null,
           active: true,
@@ -351,6 +351,139 @@ export const GLOBAL_DATA: GlobalData = {
           action: 'authWithPopUp',
           link: null,
           text: 'Sign up with Google',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'left',
+            icon: 'google',
+          },
+        },
+      ],
+    },
+  },
+  authDialogLogin: {
+    type: 'login',
+    variant: 'secondary',
+    onSuccess: '/dashboard/chat',
+    top: {
+      icon: {
+        active: true,
+        icon: 'X',
+        type: 'ICON',
+        position: 'center',
+      },
+      text: '',
+    },
+    header: {
+      title: {
+        type: 'HEADING',
+        level: 1,
+        content: [
+          {
+            active: true,
+            id: '1',
+            type: 'TEXT',
+            text: 'Welcome',
+            bold: true,
+            weight: 'bold',
+          },
+          {
+            active: true,
+            id: '2',
+            type: 'TEXT',
+            text: ' back',
+            strong: true,
+          },
+        ],
+      },
+      description: 'Login to access your quotes, templates and AI assistant.',
+      logo: {
+        type: 'IMG',
+        src: long_with_out_subtitle,
+        alt: 'QuoteMatey Logo',
+      },
+    },
+    body: {
+      inputs: [
+        {
+          id: 'alpha',
+          name: 'type',
+          type: 'text',
+          className: 'hidden',
+          value: 'login',
+        },
+        {
+          id: '0',
+          name: 'email',
+          type: 'email',
+          placeholder: 'Email address',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'left',
+            icon: 'Mail',
+          },
+        },
+        {
+          id: '1',
+          name: 'password',
+          type: 'password',
+          placeholder: 'Password',
+          icon: {
+            type: 'ICON',
+            active: true,
+            position: 'left',
+            icon: 'LockKeyhole',
+          },
+        },
+      ],
+      links: [
+        {
+          id: '0',
+          href: '/reset-password',
+          target: '_self',
+          text: 'Forgot password?',
+          active: true,
+        },
+      ],
+    },
+    footer: {
+      text: [
+        {
+          id: '0',
+          active: true,
+          type: 'TEXT',
+          text: 'Don’t have an account?',
+        },
+        {
+          id: '1',
+          active: true,
+          type: 'LINK',
+          href: '/signup',
+          text: ' Sign up now',
+          target: '_self',
+          bold: true,
+          weight: 'semibold',
+          strong: true,
+        },
+      ],
+      buttons: [
+        {
+          id: 0,
+          type: 'submit',
+          variant: 'primary',
+          action: 'authCustomLogin',
+          link: null,
+          text: 'Login',
+          icon: null,
+        },
+        { id: 1, type: 'separator', text: 'or', active: true },
+        {
+          id: 2,
+          variant: 'outline',
+          action: 'authWithPopUp',
+          link: null,
+          text: 'Continue with Google',
           icon: {
             type: 'ICON',
             active: true,
