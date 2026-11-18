@@ -84,7 +84,7 @@ export const DATA: DataType = {
           variant: 'secondary',
           text: 'Get started now',
           link: {
-            href: '/login',
+            href: '/?auth=signup',
             target: '_self',
             text: null,
             active: true,
@@ -101,7 +101,7 @@ export const DATA: DataType = {
           variant: 'outline',
           text: 'View Demo',
           link: {
-            href: '/dashboard/chat',
+            href: '#video-demo',
             target: '_self',
             text: null,
             active: true,

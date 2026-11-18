@@ -3,7 +3,7 @@ import { DataType } from '@/types/pages';
 export const DATA: DataType = {
   metadata: {
     title: 'Sign Up',
-    description: `Signup to generate Quotes faster using QuoteMatey.`,
+    description: `Sign up to generate Quotes faster using QuoteMatey.`,
     path: '/signup',
   },
   sections: [
@@ -175,7 +175,7 @@ export const DATA: DataType = {
               variant: 'primary',
               action: 'authCustomSignup',
               link: null,
-              text: 'SignUp',
+              text: 'Sign Up',
               icon: null,
             },
             { id: 1, type: 'separator', text: 'or', active: true },

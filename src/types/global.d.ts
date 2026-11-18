@@ -206,6 +206,7 @@ export type GlobalData = {
   metadata?: GlobalMetaDataType | null;
 
   authDialog: AUTHForm;
+  authDialogLogin: AUTHForm;
   headers?: headers | null;
   footer?: footer | null;
   notFound: NotFound;
