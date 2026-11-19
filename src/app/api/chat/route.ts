@@ -149,11 +149,14 @@ export async function POST(request: NextRequest) {
       const { index, msg, msgIndexInPart, data, hasImage } =
         extractCurrectMessage(messages);
 
+      // const id = crypto.randomUUID();
+
       if (
         index < 0 ||
         (!hasImage && (typeof msg !== 'string' || !msg.trim()))
       ) {
         return NextResponse.json({
+          id: crypto.randomUUID(),
           role: 'assistant',
           parts: [
             {
@@ -186,7 +189,6 @@ export async function POST(request: NextRequest) {
         }
 
         const stream = QuoteAI(data);
-
         const updateUsageData = [
           ...(hasImage ? ['image'] : []),
           ...(msg ? ['text'] : []),

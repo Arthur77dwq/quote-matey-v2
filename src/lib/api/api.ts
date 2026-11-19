@@ -22,5 +22,10 @@ export async function Api(input: RequestInfo, init?: RequestInit) {
     throw new Error(errorText || `API request failed (${res.status})`);
   }
 
-  return res;
+  if (!res.body) {
+    throw new Error('No response body');
+  }
+
+  if (res.status === 200) return res;
+  return { status: res.status, body: res.body };
 }

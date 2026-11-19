@@ -15,7 +15,7 @@ export default function ImagePreview({
   return (
     <>
       {files.length > 0 && (
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {files.map((file, i) => (
             <div
               // onClick={() => setZoomedIndex(i)}

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 
+import { ACTIONS } from '@/app/dashboard/actions';
 import { Button } from '@/components/button';
 import { DashboardGlobalSearch } from '@/components/chat-navbar';
 import { DomNode, DynamicNode } from '@/components/dome-node';
@@ -339,7 +340,7 @@ export default function SideBar({
           <div className={cn('flex flex-col gap-2 item-center w-full')}>
             {/* Primary CTA */}
             {primaryCta?.active && (
-              <div className="w-full">
+              <form className="w-full" action={ACTIONS[primaryCta.action]}>
                 <Button
                   variant="outline"
                   className="text-white bg-orange-600 w-full rounded-md"
@@ -348,7 +349,7 @@ export default function SideBar({
                     <DynamicNode {...primaryCta.title} />
                   )}
                 </Button>
-              </div>
+              </form>
             )}
 
             {/* Vertical Navigation Bar */}

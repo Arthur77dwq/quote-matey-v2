@@ -48,9 +48,11 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Logged in → block auth pages
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL('/', request.url));
+  if (token) {
+    // Logged in → block auth pages
+    if (isAuthPage) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   }
 
   return NextResponse.next();
