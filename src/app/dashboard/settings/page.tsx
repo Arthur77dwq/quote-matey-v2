@@ -148,7 +148,7 @@ export default function SettingsPage() {
   return (
     <div className="flex w-full flex-col bg-[#fafafa] lg:h-[calc(100vh-4rem)] lg:flex-row lg:overflow-hidden">
       {/* Settings sub-nav (fixed width, own scroll) */}
-      <aside className="w-full shrink-0 border-b border-[#eeeeee] bg-white px-4 py-6 lg:h-full lg:w-[220px] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+      <aside className="w-full shrink-0 border-b border-[#eeeeee] bg-white px-4 py-6 lg:h-full lg:w-[260px] lg:overflow-y-auto lg:border-b-0 lg:border-r">
         <SettingsMenu activeTab={activeTab} onChange={goTo} />
       </aside>
 
@@ -188,7 +188,7 @@ export default function SettingsPage() {
       </main>
 
       {/* Right panel (fixed width, own scroll) */}
-      <aside className="w-full shrink-0 space-y-4 border-t border-[#eeeeee] bg-white p-6 lg:h-full lg:w-[360px] lg:overflow-y-auto lg:border-l lg:border-t-0">
+      <aside className="w-full shrink-0 space-y-4 border-t border-[#eeeeee] bg-white p-6 lg:h-full lg:w-[440px] lg:overflow-y-auto lg:border-l lg:border-t-0">
         <LivePreviewHeader />
         <SampleQuotePreview businessName={businessName} />
         <SystemStatusCard />
@@ -357,44 +357,45 @@ function AIPreferences() {
         AI &amp; Preferences
       </h2>
 
-      <div className="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
-        <FormField label="Tone of Voice">
-          <div className="flex flex-wrap gap-3">
-            {TONES.map(({ value, icon: Icon }) => {
-              const selected = tone === value;
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setTone(value)}
-                  className={`flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
-                    selected
-                      ? 'border-[#FFD9C9] bg-[#FFF0EA] text-[#0a1628]'
-                      : 'border-[#eeeeee] bg-[#fafafa] text-[#0a1628]/80 hover:bg-[#FFF0EA]/50'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {value}
-                </button>
-              );
-            })}
-          </div>
-        </FormField>
-
-        <FormField label="AI Model Quality">
-          <Select defaultValue="Balanced (Recommended)">
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Balanced (Recommended)">
-                Balanced (Recommended)
-              </SelectItem>
-              <SelectItem value="Fast">Fast</SelectItem>
-              <SelectItem value="High Quality">High Quality</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormField>
+      <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:gap-x-2">
+        <div className="grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-2 lg:col-span-2">
+          <FormField label="Tone of Voice">
+            <div className="flex flex-wrap gap-2">
+              {TONES.map(({ value, icon: Icon }) => {
+                const selected = tone === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setTone(value)}
+                    className={`flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
+                      selected
+                        ? 'border-[#FFD9C9] bg-[#FFF0EA] text-[#0a1628]'
+                        : 'border-[#eeeeee] bg-[#fafafa] text-[#0a1628]/80 hover:bg-[#FFF0EA]/50'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {value}
+                  </button>
+                );
+              })}
+            </div>
+          </FormField>
+          <FormField label="AI Model Quality">
+            <Select defaultValue="Balanced (Recommended)">
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Balanced (Recommended)">
+                  Balanced (Recommended)
+                </SelectItem>
+                <SelectItem value="Fast">Fast</SelectItem>
+                <SelectItem value="High Quality">High Quality</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormField>
+        </div>
 
         <FormField label="Default Quote Language">
           <Select defaultValue="English (Australia)">
@@ -585,25 +586,27 @@ function SampleQuotePreview({ businessName }: { businessName: string }) {
         </div>
 
         <div className="mt-4 divide-y divide-[#eeeeee] border-t border-[#eeeeee] text-sm">
-          <div className="flex items-center justify-between py-3">
-            <span className="font-semibold text-[#0a1628]">
+          <div className="flex items-center justify-between gap-4 py-3">
+            <span className="whitespace-nowrap font-semibold text-[#0a1628]">
               Labour Estimate
             </span>
-            <span className="font-semibold text-green-600">
+            <span className="whitespace-nowrap text-right font-semibold text-green-600">
               {PREVIEW.labour}
             </span>
           </div>
-          <div className="flex items-center justify-between py-3">
-            <span className="font-semibold text-[#0a1628]">Materials</span>
-            <span className="font-semibold text-[#0a1628]">
+          <div className="flex items-center justify-between gap-4 py-3">
+            <span className="whitespace-nowrap font-semibold text-[#0a1628]">
+              Materials
+            </span>
+            <span className="whitespace-nowrap text-right font-semibold text-[#0a1628]">
               {PREVIEW.materials}
             </span>
           </div>
-          <div className="flex items-center justify-between pt-3">
-            <span className="font-semibold text-green-600">
+          <div className="flex items-center justify-between gap-4 pt-3">
+            <span className="whitespace-nowrap font-semibold text-green-600">
               Total (inc. GST)
             </span>
-            <span className="text-base font-bold text-green-600">
+            <span className="whitespace-nowrap text-right text-base font-bold text-green-600">
               {PREVIEW.total}
             </span>
           </div>
