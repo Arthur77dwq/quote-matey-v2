@@ -122,19 +122,113 @@ function QuoteRow({
       }}
       aria-pressed={selected}
       className={cn(
-        'grid min-h-[5.5rem] w-full grid-cols-[minmax(10rem,1fr)_4rem_6.5rem_4.25rem_1.75rem] items-center gap-2 border-b border-[#E8EAED] px-3 text-left transition-colors min-[1450px]:grid-cols-[minmax(13rem,1fr)_4.75rem_7.5rem_5.25rem_1.75rem] min-[1450px]:gap-3',
+        'w-full border-b border-[#E8EAED] px-3 py-3 text-left transition-colors',
+        'flex flex-col gap-2.5 sm:grid sm:min-h-[5.5rem] sm:grid-cols-[minmax(8rem,1fr)_4rem_5.5rem_4rem_1.75rem] md:grid-cols-[minmax(10rem,1fr)_4rem_6.5rem_4.25rem_1.75rem] sm:items-center sm:gap-2 min-[1450px]:grid-cols-[minmax(13rem,1fr)_4.75rem_7.5rem_5.25rem_1.75rem] min-[1450px]:gap-3',
         selected
           ? 'rounded-lg border border-[#FF8B5B] bg-[#FFF8F4] shadow-[0_0_0_1px_rgba(255,139,91,0.12)]'
           : 'hover:bg-neutral-50',
       )}
     >
-      <span className="flex min-w-0 items-center gap-3">
-        <span className="relative size-17 shrink-0 overflow-hidden rounded-md bg-neutral-100">
+      {/* Mobile-only view (< sm) */}
+      <div className="flex sm:hidden items-start gap-3">
+        <span className="relative size-14 shrink-0 overflow-hidden rounded-md bg-neutral-100">
           <Image
             src={quote.image}
             alt=""
             fill
-            sizes="68px"
+            sizes="56px"
+            className="object-cover"
+          />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <strong className="truncate text-[0.8125rem] font-semibold text-[#20242A]">
+              {quote.title}
+            </strong>
+            <span className="relative shrink-0">
+              <button
+                type="button"
+                aria-label={`Actions for ${quote.title}`}
+                aria-expanded={menuOpen}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggleMenu();
+                }}
+                className="flex size-7 items-center justify-center rounded-md bg-white text-[#5E6670] shadow-sm transition hover:bg-[#F3F5F7]"
+              >
+                <Ellipsis className="size-4" />
+              </button>
+              {menuOpen && (
+                <span className="absolute right-0 top-8 z-30 w-36 rounded-lg border border-[#E0E4E8] bg-white p-1 shadow-lg">
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onSelect();
+                      onToggleMenu();
+                    }}
+                    className="w-full rounded-md px-2 py-1.5 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+                  >
+                    Open quote
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDuplicate();
+                      onToggleMenu();
+                    }}
+                    className="w-full rounded-md px-2 py-1.5 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+                  >
+                    Duplicate
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onMarkSent();
+                      onToggleMenu();
+                    }}
+                    className="w-full rounded-md px-2 py-1.5 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+                  >
+                    Mark as sent
+                  </button>
+                </span>
+              )}
+            </span>
+          </div>
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[0.6875rem] text-[#68717D]">
+            <span>ID: {quote.jobId}</span>
+            <span>•</span>
+            <span className="truncate">{quote.customer}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex sm:hidden items-center justify-between pt-1 border-t border-[#F0F2F5] text-[0.6875rem]">
+        <StatusBadge status={quote.status} />
+        <div className="text-center">
+          <strong className="block text-[0.8125rem] font-semibold text-[#20242A]">
+            {quote.price}
+          </strong>
+          <span className="block text-[0.625rem] text-[#68717D]">
+            {quote.hours}
+          </span>
+        </div>
+        <div className="text-right text-[#68717D] text-[0.625rem] leading-4">
+          <span className="block">{quote.date}</span>
+          <span className="block">{quote.time}</span>
+        </div>
+      </div>
+
+      {/* Tablet & Desktop view (>= sm) */}
+      <span className="hidden sm:flex min-w-0 items-center gap-3">
+        <span className="relative size-16 shrink-0 overflow-hidden rounded-md bg-neutral-100">
+          <Image
+            src={quote.image}
+            alt=""
+            fill
+            sizes="64px"
             className="object-cover"
           />
         </span>
@@ -150,8 +244,10 @@ function QuoteRow({
           </span>
         </span>
       </span>
-      <StatusBadge status={quote.status} />
-      <span className="text-center">
+      <span className="hidden sm:inline-flex">
+        <StatusBadge status={quote.status} />
+      </span>
+      <span className="hidden sm:block text-center">
         <strong className="block text-[0.8125rem] font-semibold text-[#20242A]">
           {quote.price}
         </strong>
@@ -159,11 +255,11 @@ function QuoteRow({
           {quote.hours}
         </span>
       </span>
-      <span className="text-right text-[0.6875rem] leading-5 text-[#68717D]">
+      <span className="hidden sm:block text-right text-[0.6875rem] leading-5 text-[#68717D]">
         <span className="block">{quote.date}</span>
         <span className="block">{quote.time}</span>
       </span>
-      <span className="relative flex justify-end">
+      <span className="relative hidden sm:flex justify-end">
         <button
           type="button"
           aria-label={`Actions for ${quote.title}`}
@@ -435,7 +531,7 @@ function MaterialsEditor({
       {rows.map((row) => (
         <div
           key={row.id}
-          className="grid grid-cols-[minmax(0,1fr)_7.5rem_1.75rem] items-center gap-2"
+          className="grid grid-cols-[minmax(0,1fr)_5.5rem_1.75rem] sm:grid-cols-[minmax(0,1fr)_7.5rem_1.75rem] items-center gap-2"
         >
           <input
             aria-label="Material name"
@@ -551,25 +647,25 @@ function QuoteActions({
   return (
     <div className="rounded-xl border border-[#E8EAED] bg-white p-3">
       <h3 className="mb-3 text-[0.8125rem] font-semibold">Actions</h3>
-      <div className="space-y-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-1 gap-2">
         <button
           type="button"
           onClick={onExport}
-          className="flex h-8 w-full items-center justify-center gap-2 rounded-md bg-[#FF4F12] text-[0.6875rem] font-semibold text-white"
+          className="flex h-8 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-md bg-[#FF4F12] text-[0.6875rem] font-semibold text-white transition hover:bg-[#e0450f]"
         >
           <FileDown className="size-3.5" /> Export PDF
         </button>
         <button
           type="button"
           onClick={onCopy}
-          className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold"
+          className="flex h-8 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold transition hover:bg-neutral-50"
         >
           <Copy className="size-3.5" /> Copy Quote
         </button>
         <button
           type="button"
           onClick={onMarkSent}
-          className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold"
+          className="flex h-8 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold transition hover:bg-neutral-50"
         >
           <Send className="size-3.5" /> Mark as Sent
         </button>
@@ -577,16 +673,16 @@ function QuoteActions({
           type="button"
           onClick={() => setMoreOpen((current) => !current)}
           aria-expanded={moreOpen}
-          className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold"
+          className="flex h-8 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-[#DFE3E8] text-[0.6875rem] font-semibold transition hover:bg-neutral-50"
         >
           <Ellipsis className="size-3.5" /> More Actions
         </button>
-        {moreOpen && (
-          <p className="rounded-md border border-[#DFE3E8] bg-[#F8F9FA] p-2 text-[0.625rem] leading-4 text-[#68717D]">
-            Archive, delete, share actions connect with quote backend later.
-          </p>
-        )}
       </div>
+      {moreOpen && (
+        <p className="mt-2 rounded-md border border-[#DFE3E8] bg-[#F8F9FA] p-2 text-[0.625rem] leading-4 text-[#68717D]">
+          Archive, delete, share actions connect with quote backend later.
+        </p>
+      )}
     </div>
   );
 }
@@ -726,12 +822,12 @@ function QuoteDetails({
   }, []);
 
   return (
-    <section className="flex h-full min-w-0 flex-col bg-[#FCFCFD]">
-      <div className="relative flex h-13 shrink-0 items-center justify-between border-b border-[#E8EAED] px-5">
+    <section className="flex h-full min-h-0 w-full flex-1 flex-col bg-[#FCFCFD] overflow-hidden">
+      <div className="relative flex h-12 sm:h-13 shrink-0 items-center justify-between border-b border-[#E8EAED] bg-[#FCFCFD] px-3 sm:px-5 z-20">
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 text-[0.6875rem] font-medium text-[#4E5661]"
+          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[0.6875rem] font-semibold text-[#FF5A1F] hover:bg-[#FFF5F0] min-[1200px]:text-[#4E5661] min-[1200px]:font-medium min-[1200px]:hover:bg-transparent"
         >
           <ArrowLeft className="size-3.5" /> Back to quotes
         </button>
@@ -739,321 +835,340 @@ function QuoteDetails({
           <button
             type="button"
             onClick={onDuplicate}
-            className="flex h-8 items-center gap-2 rounded-md border border-[#DFE3E8] px-3 text-[0.6875rem] font-semibold"
+            className="flex h-8 items-center gap-1.5 sm:gap-2 rounded-md border border-[#DFE3E8] px-2.5 sm:px-3 text-[0.6875rem] font-semibold transition hover:bg-neutral-50"
           >
-            <Layers className="size-3.5" /> Duplicate
+            <Layers className="size-3.5" />
+            <span className="hidden sm:inline">Duplicate</span>
           </button>
           <button
             type="button"
             onClick={() => setTopMenuOpen((current) => !current)}
             aria-expanded={topMenuOpen}
-            className="flex size-8 items-center justify-center rounded-md border border-[#DFE3E8]"
+            className="flex size-8 items-center justify-center rounded-md border border-[#DFE3E8] transition hover:bg-neutral-50"
           >
             <Ellipsis className="size-4" />
           </button>
           {topMenuOpen && (
-            <div className="absolute right-5 top-11 z-20 w-40 rounded-lg border border-[#DFE3E8] bg-white p-1 shadow-lg">
+            <div className="absolute right-3 sm:right-5 top-11 z-20 w-40 rounded-lg border border-[#DFE3E8] bg-white p-1 shadow-lg">
               <button
                 type="button"
-                onClick={onCopy}
+                onClick={() => {
+                  onCopy();
+                  setTopMenuOpen(false);
+                }}
                 className="w-full rounded-md px-3 py-2 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
               >
                 Copy quote
               </button>
               <button
                 type="button"
-                onClick={onExport}
+                onClick={() => {
+                  onExport();
+                  setTopMenuOpen(false);
+                }}
                 className="w-full rounded-md px-3 py-2 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
               >
                 Export quote
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onMarkSent();
+                  setTopMenuOpen(false);
+                }}
+                className="w-full rounded-md px-3 py-2 text-left text-[0.6875rem] hover:bg-[#F5F7F9]"
+              >
+                Mark as sent
               </button>
             </div>
           )}
         </div>
       </div>
 
-      <div className="shrink-0 border-b border-[#E8EAED] bg-white px-5 pt-4">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              {isEditingName ? (
-                <input
-                  autoFocus
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Escape') {
-                      setName(quote.title);
-                      setIsEditingName(false);
-                    }
+      <div className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden">
+        <div className="border-b border-[#E8EAED] bg-white px-3 sm:px-5 pt-3 sm:pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 sm:gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                {isEditingName ? (
+                  <input
+                    autoFocus
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Escape') {
+                        setName(quote.title);
+                        setIsEditingName(false);
+                      }
+                    }}
+                    className="h-7 w-full max-w-xs rounded-md border border-[#C9D0D7] px-2 text-[0.9375rem] sm:text-[1rem] font-semibold text-[#20242A] outline-none focus:border-[#FF5A1F]"
+                  />
+                ) : (
+                  <h2 className="truncate text-[0.9375rem] sm:text-[1rem] font-semibold text-[#20242A]">
+                    {quote.title}
+                  </h2>
+                )}
+                <button
+                  type="button"
+                  aria-label="Edit quote name"
+                  onClick={() => setIsEditingName(true)}
+                  className="shrink-0 text-[#9299A3] transition hover:text-[#4E5661]"
+                >
+                  <Pencil className="size-3.5" />
+                </button>
+              </div>
+              <p className="mt-1.5 sm:mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.6875rem] text-[#68717D]">
+                <span>Job ID: {quote.jobId}</span>
+                <span className="hidden sm:inline h-3 w-px bg-[#D9DDE2]" />
+                <span>Created: Today, 10:24 AM</span>
+                <span className="hidden sm:inline h-3 w-px bg-[#D9DDE2]" />
+                <span>Valid for 30 days</span>
+              </p>
+            </div>
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              {hasUnsavedChanges && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onUpdateName(name.trim());
+                    setIsEditingName(false);
                   }}
-                  className="h-7 w-55 rounded-md border border-[#C9D0D7] px-2 text-[1rem] font-semibold text-[#20242A] outline-none focus:border-[#FF5A1F]"
-                />
-              ) : (
-                <h2 className="text-[1rem] font-semibold text-[#20242A]">
-                  {quote.title}
-                </h2>
+                  disabled={!name.trim()}
+                  className="rounded-md bg-[#FF4F12] px-3 py-1.5 sm:py-2 text-[0.6875rem] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Save updates
+                </button>
               )}
-              <button
-                type="button"
-                aria-label="Edit quote name"
-                onClick={() => setIsEditingName(true)}
-                className="text-[#9299A3] transition hover:text-[#4E5661]"
-              >
-                <Pencil className="size-3.5" />
+              <button className="rounded-md bg-[#E7F8EB] px-3 py-1.5 sm:py-2 text-[0.6875rem] font-semibold text-[#36A657]">
+                {quote.status}⌄
               </button>
             </div>
-            <p className="mt-2 flex items-center gap-3 text-[0.6875rem] text-[#68717D]">
-              <span>Job ID: {quote.jobId}</span>
-              <span className="h-3 w-px bg-[#D9DDE2]" />
-              <span>Created: Today, 10:24 AM</span>
-              <span className="h-3 w-px bg-[#D9DDE2]" />
-              <span>Valid for 30 days</span>
-            </p>
           </div>
-          <div className="flex items-center gap-2">
-            {hasUnsavedChanges && (
+          <div className="mt-3 sm:mt-5 flex gap-5 sm:gap-8 overflow-x-auto scrollbar-none text-[0.6875rem] font-medium text-[#5F6772]">
+            {['Summary', 'Versions (2)', 'Activity', 'Details'].map((tab) => (
               <button
+                key={tab}
                 type="button"
-                onClick={() => {
-                  onUpdateName(name.trim());
-                  setIsEditingName(false);
-                }}
-                disabled={!name.trim()}
-                className="rounded-md bg-[#FF4F12] px-3 py-2 text-[0.6875rem] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={() => setActiveDetailTab(tab)}
+                className={cn(
+                  'shrink-0 border-b-2 px-1 pb-2 sm:pb-3',
+                  activeDetailTab === tab
+                    ? 'border-[#FF5A1F] font-semibold text-[#FF5A1F]'
+                    : 'border-transparent',
+                )}
               >
-                Save updates
+                {tab}
               </button>
-            )}
-            <button className="rounded-md bg-[#E7F8EB] px-3 py-2 text-[0.6875rem] font-semibold text-[#36A657]">
-              {quote.status}⌄
-            </button>
+            ))}
           </div>
         </div>
-        <div className="mt-5 flex gap-8 text-[0.6875rem] font-medium text-[#5F6772]">
-          {['Summary', 'Versions (2)', 'Activity', 'Details'].map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => setActiveDetailTab(tab)}
-              className={cn(
-                'border-b-2 px-1 pb-3',
-                activeDetailTab === tab
-                  ? 'border-[#FF5A1F] font-semibold text-[#FF5A1F]'
-                  : 'border-transparent',
-              )}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {activeDetailTab === 'Summary' ? (
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_10.5rem] gap-3 overflow-y-auto p-3">
-          <div className="overflow-hidden rounded-xl border border-[#E8EAED] bg-white">
-            <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading
-                number={1}
-                editing={editingSection === 1}
-                onEdit={() => toggleSection(1)}
-              >
-                Job Scope
-              </DetailHeading>
-              {editingSection === 1 ? (
-                <TextSectionEditor
-                  label="Job scope"
-                  value={sections.jobScope}
-                  onCancel={closeEditor}
-                  onSave={(jobScope) =>
-                    saveSection({ jobScope }, 'Job scope updated.')
-                  }
-                />
-              ) : (
-                <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
-                  {sections.jobScope}
-                </p>
-              )}
-            </div>
+        {activeDetailTab === 'Summary' ? (
+          <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_10.5rem] xl:grid-cols-[minmax(0,1fr)_11.5rem] gap-3 p-2.5 sm:p-3">
+            <div className="overflow-hidden rounded-xl border border-[#E8EAED] bg-white">
+              <div className="border-b border-[#E8EAED] p-3">
+                <DetailHeading
+                  number={1}
+                  editing={editingSection === 1}
+                  onEdit={() => toggleSection(1)}
+                >
+                  Job Scope
+                </DetailHeading>
+                {editingSection === 1 ? (
+                  <TextSectionEditor
+                    label="Job scope"
+                    value={sections.jobScope}
+                    onCancel={closeEditor}
+                    onSave={(jobScope) =>
+                      saveSection({ jobScope }, 'Job scope updated.')
+                    }
+                  />
+                ) : (
+                  <p className="mt-2 text-[0.6875rem] leading-[1.45] text-[#4E5661]">
+                    {sections.jobScope}
+                  </p>
+                )}
+              </div>
 
-            <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading
-                number={2}
-                editing={editingSection === 2}
-                onEdit={() => toggleSection(2)}
-              >
-                Labour Estimate
-              </DetailHeading>
-              {editingSection === 2 ? (
-                <LabourEditor
-                  rate={sections.labourRate}
-                  hours={sections.labourHours}
-                  cost={sections.labourCost}
-                  onCancel={closeEditor}
-                  onSave={({ rate, hours, cost }) =>
-                    saveSection(
-                      {
-                        labourRate: rate,
-                        labourHours: hours,
-                        labourCost: cost,
-                      },
-                      'Labour estimate updated.',
-                    )
-                  }
-                />
-              ) : (
-                <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
-                  <span>{sections.labourRate}</span>
-                  <span className="text-right">
-                    <strong className="block text-[#2FAE54]">
-                      {sections.labourHours}
-                    </strong>
-                    <span className="mt-1 block font-semibold">
-                      {sections.labourCost}
+              <div className="border-b border-[#E8EAED] p-3">
+                <DetailHeading
+                  number={2}
+                  editing={editingSection === 2}
+                  onEdit={() => toggleSection(2)}
+                >
+                  Labour Estimate
+                </DetailHeading>
+                {editingSection === 2 ? (
+                  <LabourEditor
+                    rate={sections.labourRate}
+                    hours={sections.labourHours}
+                    cost={sections.labourCost}
+                    onCancel={closeEditor}
+                    onSave={({ rate, hours, cost }) =>
+                      saveSection(
+                        {
+                          labourRate: rate,
+                          labourHours: hours,
+                          labourCost: cost,
+                        },
+                        'Labour estimate updated.',
+                      )
+                    }
+                  />
+                ) : (
+                  <div className="mt-2 flex items-center justify-between text-[0.6875rem]">
+                    <span>{sections.labourRate}</span>
+                    <span className="text-right">
+                      <strong className="block text-[#2FAE54]">
+                        {sections.labourHours}
+                      </strong>
+                      <span className="mt-1 block font-semibold">
+                        {sections.labourCost}
+                      </span>
                     </span>
-                  </span>
-                </div>
-              )}
-            </div>
+                  </div>
+                )}
+              </div>
 
-            <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading
-                number={3}
-                editing={editingSection === 3}
-                onEdit={() => toggleSection(3)}
-              >
-                Materials
-              </DetailHeading>
-              {editingSection === 3 ? (
-                <MaterialsEditor
-                  materials={sections.materials}
-                  total={sections.materialsTotal}
-                  onCancel={closeEditor}
-                  onSave={(materials, materialsTotal) =>
-                    saveSection(
-                      { materials, materialsTotal },
-                      'Materials updated.',
-                    )
-                  }
-                />
-              ) : (
-                <>
-                  <div className="mt-2 space-y-2">
-                    {sections.materials.map((material) => (
-                      <div
-                        key={material.id}
-                        className="flex items-center justify-between text-[0.6875rem]"
-                      >
-                        <span className="flex items-center gap-2 text-[#4E5661]">
-                          <span className="grid size-3 grid-cols-2 gap-px">
-                            <i className="rounded-[1px] bg-[#8A929D]" />
-                            <i className="rounded-[1px] bg-[#8A929D]" />
-                            <i className="rounded-[1px] bg-[#8A929D]" />
-                            <i className="rounded-[1px] bg-[#8A929D]" />
+              <div className="border-b border-[#E8EAED] p-3">
+                <DetailHeading
+                  number={3}
+                  editing={editingSection === 3}
+                  onEdit={() => toggleSection(3)}
+                >
+                  Materials
+                </DetailHeading>
+                {editingSection === 3 ? (
+                  <MaterialsEditor
+                    materials={sections.materials}
+                    total={sections.materialsTotal}
+                    onCancel={closeEditor}
+                    onSave={(materials, materialsTotal) =>
+                      saveSection(
+                        { materials, materialsTotal },
+                        'Materials updated.',
+                      )
+                    }
+                  />
+                ) : (
+                  <>
+                    <div className="mt-2 space-y-2">
+                      {sections.materials.map((material) => (
+                        <div
+                          key={material.id}
+                          className="flex items-center justify-between text-[0.6875rem]"
+                        >
+                          <span className="flex items-center gap-2 text-[#4E5661]">
+                            <span className="grid size-3 grid-cols-2 gap-px">
+                              <i className="rounded-[1px] bg-[#8A929D]" />
+                              <i className="rounded-[1px] bg-[#8A929D]" />
+                              <i className="rounded-[1px] bg-[#8A929D]" />
+                              <i className="rounded-[1px] bg-[#8A929D]" />
+                            </span>
+                            {material.name}
                           </span>
-                          {material.name}
-                        </span>
-                        <strong>{material.price}</strong>
+                          <strong>{material.price}</strong>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
+                      <span>Total Materials</span>
+                      <span className="text-[#2FAE54]">
+                        {sections.materialsTotal}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="border-b border-[#E8EAED] p-3">
+                <DetailHeading
+                  number={4}
+                  editing={editingSection === 4}
+                  onEdit={() => toggleSection(4)}
+                >
+                  Pricing Summary
+                </DetailHeading>
+                {editingSection === 4 ? (
+                  <PricingEditor
+                    rows={sections.pricingRows}
+                    total={sections.pricingTotal}
+                    onCancel={closeEditor}
+                    onSave={(pricingRows, pricingTotal) =>
+                      saveSection(
+                        { pricingRows, pricingTotal },
+                        'Pricing summary updated.',
+                      )
+                    }
+                  />
+                ) : (
+                  <div className="mt-2 space-y-1.5 text-[0.6875rem]">
+                    {sections.pricingRows.map((row) => (
+                      <div key={row.label} className="flex justify-between">
+                        <span>{row.label}</span>
+                        <strong>{row.value}</strong>
                       </div>
                     ))}
-                  </div>
-                  <div className="mt-3 flex items-center justify-between border-t border-[#EEF0F2] pt-3 text-[0.6875rem] font-semibold">
-                    <span>Total Materials</span>
-                    <span className="text-[#2FAE54]">
-                      {sections.materialsTotal}
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="border-b border-[#E8EAED] p-3">
-              <DetailHeading
-                number={4}
-                editing={editingSection === 4}
-                onEdit={() => toggleSection(4)}
-              >
-                Pricing Summary
-              </DetailHeading>
-              {editingSection === 4 ? (
-                <PricingEditor
-                  rows={sections.pricingRows}
-                  total={sections.pricingTotal}
-                  onCancel={closeEditor}
-                  onSave={(pricingRows, pricingTotal) =>
-                    saveSection(
-                      { pricingRows, pricingTotal },
-                      'Pricing summary updated.',
-                    )
-                  }
-                />
-              ) : (
-                <div className="mt-2 space-y-1.5 text-[0.6875rem]">
-                  {sections.pricingRows.map((row) => (
-                    <div key={row.label} className="flex justify-between">
-                      <span>{row.label}</span>
-                      <strong>{row.value}</strong>
+                    <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
+                      <span>Total (inc. GST)</span>
+                      <span>{sections.pricingTotal}</span>
                     </div>
-                  ))}
-                  <div className="flex justify-between pt-1 font-semibold text-[#2FAE54]">
-                    <span>Total (inc. GST)</span>
-                    <span>{sections.pricingTotal}</span>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+
+              <div className="p-3">
+                <DetailHeading
+                  number={5}
+                  editing={editingSection === 5}
+                  onEdit={() => toggleSection(5)}
+                >
+                  Customer Message
+                </DetailHeading>
+                {editingSection === 5 ? (
+                  <TextSectionEditor
+                    label="Customer message"
+                    value={sections.customerMessage}
+                    onCancel={closeEditor}
+                    onSave={(customerMessage) =>
+                      saveSection(
+                        { customerMessage },
+                        'Customer message updated.',
+                      )
+                    }
+                  />
+                ) : (
+                  <p className="mt-2 whitespace-pre-line text-[0.6875rem] leading-[1.55] text-[#4E5661]">
+                    {sections.customerMessage}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="p-3">
-              <DetailHeading
-                number={5}
-                editing={editingSection === 5}
-                onEdit={() => toggleSection(5)}
-              >
-                Customer Message
-              </DetailHeading>
-              {editingSection === 5 ? (
-                <TextSectionEditor
-                  label="Customer message"
-                  value={sections.customerMessage}
-                  onCancel={closeEditor}
-                  onSave={(customerMessage) =>
-                    saveSection(
-                      { customerMessage },
-                      'Customer message updated.',
-                    )
-                  }
-                />
-              ) : (
-                <p className="mt-2 whitespace-pre-line text-[0.6875rem] leading-[1.55] text-[#4E5661]">
-                  {sections.customerMessage}
-                </p>
-              )}
+            <aside className="space-y-3">
+              <QuoteActions {...{ onCopy, onExport, onMarkSent }} />
+              <QuoteHealth />
+              <JobDetails quote={quote} />
+            </aside>
+          </div>
+        ) : (
+          <div className="flex min-h-60 items-center justify-center p-6">
+            <div className="max-w-sm text-center">
+              <h3 className="text-sm font-semibold text-[#20242A]">
+                {activeDetailTab}
+              </h3>
+              <p className="mt-2 text-xs leading-5 text-[#68717D]">
+                {activeDetailTab === 'Versions (2)' &&
+                  'Version 2 is current. Version history loads from saved quote records later.'}
+                {activeDetailTab === 'Activity' &&
+                  'No recent activity for this mock quote.'}
+                {activeDetailTab === 'Details' &&
+                  'Quote metadata, customer details, job details show here when backend connects.'}
+              </p>
             </div>
           </div>
-
-          <aside className="space-y-3">
-            <QuoteActions {...{ onCopy, onExport, onMarkSent }} />
-            <QuoteHealth />
-            <JobDetails quote={quote} />
-          </aside>
-        </div>
-      ) : (
-        <div className="flex min-h-0 flex-1 items-center justify-center p-6">
-          <div className="max-w-sm text-center">
-            <h3 className="text-sm font-semibold text-[#20242A]">
-              {activeDetailTab}
-            </h3>
-            <p className="mt-2 text-xs leading-5 text-[#68717D]">
-              {activeDetailTab === 'Versions (2)' &&
-                'Version 2 is current. Version history loads from saved quote records later.'}
-              {activeDetailTab === 'Activity' &&
-                'No recent activity for this mock quote.'}
-              {activeDetailTab === 'Details' &&
-                'Quote metadata, customer details, job details show here when backend connects.'}
-            </p>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 }
@@ -1067,9 +1182,24 @@ export default function QuotesPage() {
   const [quoteType, setQuoteType] = useState('All Types');
   const [sortOrder, setSortOrder] = useState('Date: Newest');
   const [showFilters, setShowFilters] = useState(false);
-  const [detailOpen, setDetailOpen] = useState(true);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const isLargeScreenRef = useRef(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      const isLarge = window.innerWidth >= 1200;
+      if (isLarge && !isLargeScreenRef.current) {
+        setDetailOpen(true);
+      }
+      isLargeScreenRef.current = isLarge;
+    };
+
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
   // Per-quote editable sections (UI only until the backend is connected)
   const [sectionsById, setSectionsById] = useState<
     Record<string, QuoteSections>
@@ -1221,14 +1351,22 @@ export default function QuotesPage() {
   return (
     <div
       className={cn(
-        'grid h-[calc(100vh-5rem)] min-h-0 grid-cols-1 overflow-hidden bg-white',
-        detailOpen &&
-          'min-[1200px]:grid-cols-[minmax(32rem,1.08fr)_minmax(29rem,0.92fr)]',
+        'h-full min-h-0 w-full overflow-hidden bg-white',
+        detailOpen
+          ? 'min-[1200px]:grid min-[1200px]:grid-cols-[minmax(30rem,1.08fr)_minmax(28rem,0.92fr)]'
+          : 'flex flex-col',
       )}
     >
-      <section className="flex min-h-0 flex-col border-r border-[#E3E6EA] bg-white">
-        <div className="shrink-0 border-b border-[#E8EAED] px-6 pt-3">
-          <div className="flex gap-4 overflow-x-auto min-[1450px]:gap-7">
+      <section
+        className={cn(
+          'flex h-full min-h-0 flex-1 flex-col border-r border-[#E3E6EA] bg-white',
+          detailOpen
+            ? 'hidden min-[1200px]:flex min-[1200px]:w-auto'
+            : 'flex w-full',
+        )}
+      >
+        <div className="shrink-0 border-b border-[#E8EAED] px-3 sm:px-6 pt-2 sm:pt-3">
+          <div className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-none min-[1450px]:gap-7">
             {QUOTE_TABS.map((tab) => (
               <button
                 key={tab.label}
@@ -1238,7 +1376,7 @@ export default function QuotesPage() {
                   setPage(1);
                 }}
                 className={cn(
-                  'flex h-12 shrink-0 items-center gap-2 border-b-2 px-1 text-[0.6875rem] font-semibold',
+                  'flex h-11 sm:h-12 shrink-0 items-center gap-1.5 sm:gap-2 border-b-2 px-1 text-[0.6875rem] font-semibold',
                   activeTab === tab.label
                     ? 'border-[#FF5A1F] text-[#FF5A1F]'
                     : 'border-transparent text-[#4E5661]',
@@ -1255,65 +1393,82 @@ export default function QuotesPage() {
           </div>
         </div>
 
-        <div className="flex shrink-0 flex-wrap items-center gap-2 px-6 py-4">
-          <label className="flex h-9 min-w-45 flex-1 items-center gap-2 rounded-md border border-[#DFE3E8] px-3">
-            <Search className="size-4 text-[#818995]" />
-            <input
-              value={query}
+        <div className="flex shrink-0 flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 px-3 sm:px-6 py-2.5 sm:py-4">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <label className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-md border border-[#DFE3E8] px-3">
+              <Search className="size-4 shrink-0 text-[#818995]" />
+              <input
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search quotes..."
+                className="min-w-0 flex-1 bg-transparent text-[0.6875rem] outline-none placeholder:text-[#9299A3]"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowFilters((current) => !current)}
+              aria-expanded={showFilters}
+              className={cn(
+                'flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-md border border-[#DFE3E8] px-3 text-[0.6875rem] font-semibold transition-colors',
+                showFilters
+                  ? 'bg-[#FFF1EA] border-[#FF8B5B] text-[#FF5A1F]'
+                  : 'bg-white text-[#4E5661]',
+              )}
+            >
+              <Filter className="size-3.5" />
+              <span>Filters</span>
+            </button>
+          </div>
+
+          <div
+            className={cn(
+              'grid grid-cols-3 gap-2 sm:flex sm:items-center',
+              showFilters ? 'grid' : 'hidden sm:flex',
+            )}
+          >
+            <select
+              value={status}
               onChange={(event) => {
-                setQuery(event.target.value);
+                setStatus(event.target.value);
                 setPage(1);
               }}
-              placeholder="Search quotes..."
-              className="min-w-0 flex-1 bg-transparent text-[0.6875rem] outline-none placeholder:text-[#9299A3]"
-            />
-          </label>
-          <select
-            value={status}
-            onChange={(event) => {
-              setStatus(event.target.value);
-              setPage(1);
-            }}
-            className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
-          >
-            <option>All Status</option>
-            <option>Draft</option>
-            <option>Sent</option>
-            <option>Accepted</option>
-            <option>Open</option>
-          </select>
-          <select
-            value={quoteType}
-            onChange={(event) => {
-              setQuoteType(event.target.value);
-              setPage(1);
-            }}
-            className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
-          >
-            <option>All Types</option>
-            <option>Bathroom</option>
-            <option>Kitchen</option>
-            <option>Repair</option>
-          </select>
-          <select
-            value={sortOrder}
-            onChange={(event) => {
-              setSortOrder(event.target.value);
-              setPage(1);
-            }}
-            className="h-9 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
-          >
-            <option>Date: Newest</option>
-            <option>Date: Oldest</option>
-          </select>
-          <button
-            type="button"
-            onClick={() => setShowFilters((current) => !current)}
-            aria-expanded={showFilters}
-            className="flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-md border border-[#DFE3E8] px-3 text-[0.6875rem] font-semibold"
-          >
-            <Filter className="size-3.5" /> Filters
-          </button>
+              className="h-9 min-w-0 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
+            >
+              <option>All Status</option>
+              <option>Draft</option>
+              <option>Sent</option>
+              <option>Accepted</option>
+              <option>Open</option>
+            </select>
+            <select
+              value={quoteType}
+              onChange={(event) => {
+                setQuoteType(event.target.value);
+                setPage(1);
+              }}
+              className="h-9 min-w-0 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
+            >
+              <option>All Types</option>
+              <option>Bathroom</option>
+              <option>Kitchen</option>
+              <option>Repair</option>
+            </select>
+            <select
+              value={sortOrder}
+              onChange={(event) => {
+                setSortOrder(event.target.value);
+                setPage(1);
+              }}
+              className="h-9 min-w-0 rounded-md border border-[#DFE3E8] bg-white px-2 text-[0.6875rem] font-medium outline-none"
+            >
+              <option>Date: Newest</option>
+              <option>Date: Oldest</option>
+            </select>
+          </div>
+
           {showFilters && (
             <div className="flex w-full items-center justify-between rounded-md bg-[#F7F8FA] px-3 py-2 text-[0.6875rem] text-[#5F6772]">
               <span>Use search, status, type, and date to refine quotes.</span>
@@ -1328,7 +1483,7 @@ export default function QuotesPage() {
           )}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-6">
+        <div className="min-h-0 flex-1 overflow-y-auto px-3 sm:px-6">
           {paginatedQuotes.length ? (
             paginatedQuotes.map((quote) => (
               <QuoteRow
@@ -1356,20 +1511,20 @@ export default function QuotesPage() {
           )}
         </div>
 
-        <footer className="flex h-12 shrink-0 items-center justify-between border-t border-[#E8EAED] px-6 text-[0.6875rem] text-[#68717D]">
-          <span>
+        <footer className="flex shrink-0 flex-col sm:flex-row items-center justify-between gap-2 border-t border-[#E8EAED] px-3 sm:px-6 py-2.5 sm:py-0 h-auto sm:h-12 text-[0.6875rem] text-[#68717D]">
+          <span className="text-center sm:text-left">
             Showing{' '}
             {visibleQuotes.length ? (currentPage - 1) * pageSize + 1 : 0} to{' '}
             {Math.min(currentPage * pageSize, visibleQuotes.length)} of{' '}
             {visibleQuotes.length} quotes
           </span>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <button
               type="button"
               aria-label="Previous page"
               disabled={currentPage === 1}
               onClick={() => setPage((current) => Math.max(1, current - 1))}
-              className="disabled:cursor-not-allowed disabled:opacity-35"
+              className="p-1 disabled:cursor-not-allowed disabled:opacity-35"
             >
               <ChevronLeft className="size-4" />
             </button>
@@ -1396,7 +1551,7 @@ export default function QuotesPage() {
               onClick={() =>
                 setPage((current) => Math.min(totalPages, current + 1))
               }
-              className="disabled:cursor-not-allowed disabled:opacity-35"
+              className="p-1 disabled:cursor-not-allowed disabled:opacity-35"
             >
               <ChevronRight className="size-4" />
             </button>
@@ -1404,7 +1559,12 @@ export default function QuotesPage() {
         </footer>
       </section>
 
-      <div className={cn('hidden min-h-0', detailOpen && 'min-[1200px]:block')}>
+      <div
+        className={cn(
+          'h-full min-h-0 flex-1 w-full flex-col bg-[#FCFCFD] overflow-hidden',
+          detailOpen ? 'flex min-[1200px]:flex' : 'hidden',
+        )}
+      >
         <QuoteDetails
           key={selectedQuote.id}
           quote={selectedQuote}
