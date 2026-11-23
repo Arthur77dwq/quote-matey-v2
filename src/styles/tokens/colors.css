@@ -110,4 +110,25 @@
   --color-status-warning: var(--status-warning);
   --color-status-danger: var(--status-danger);
   --color-status-info: var(--status-info);
+
+  /* shadcn/ui semantic tokens */
+  --color-background: var(--surface-primary);
+  --color-foreground: var(--text-primary);
+  --color-popover: var(--surface-primary);
+  --color-popover-foreground: var(--text-primary);
+  --color-card: var(--surface-primary);
+  --color-card-foreground: var(--text-primary);
+  --color-primary: var(--action-primary);
+  --color-primary-foreground: var(--text-inverse);
+  --color-secondary: var(--surface-secondary);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--surface-tertiary);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--surface-secondary);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: var(--status-danger);
+  --color-destructive-foreground: var(--text-inverse);
+  --color-border: var(--border-default);
+  --color-input: var(--border-default);
+  --color-ring: var(--color-primary-500);
 }
