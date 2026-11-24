@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { search } from '@/app/dashboard/actions/dashboardGlobalSearch';
@@ -12,7 +12,13 @@ import { AccountMenu } from './account-menu';
 import { Icon } from './icon';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 
-export function DashboardGlobalSearch({ className }: { className?: string }) {
+export function DashboardGlobalSearch({
+  className,
+  placeholder = 'Search quotes, jobs, templates...',
+}: {
+  className?: string;
+  placeholder?: string;
+}) {
   const [query, setQuery] = useState<string>('');
   const [open, setOpen] = useState(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -120,7 +126,7 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
           ref={inputRef}
           onFocus={() => setOpen(true)}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search quotes, jobs, templates..."
+          placeholder={placeholder}
           className="text-xs"
         />
         <InputGroupAddon>
@@ -324,24 +330,56 @@ export function DashboardGlobalSearch({ className }: { className?: string }) {
 
 export function ChatNavbar() {
   const { user, logOut } = useAuth();
-  return (
-    <header className="flex items-center justify-end gap-5 py-5 h-15 bg-white/80 backdrop-blur-xl border-b border-neutral-300 border-border/50">
-      {/* Dashboard Global search */}
-      <DashboardGlobalSearch className="w-80 hidden md:flex" />
-      {/* Points */}
-      <span className="flex items-center justify-between gap-2 px-3 w-fit h-10 bg-white ring-1 ring-neutral-200 p-1 rounded-md">
-        <span className="w-fit h-full flex items-center justify-center">
-          <Icon name="Bolt" className="text-[#FF814C] size-5" strokeWidth={4} />
-        </span>
-        <span className="w-full h-full flex items-center justify-center text-xs font-bold">
-          900 pts
-        </span>
-      </span>
+  const pathname = usePathname();
+  const isQuotesPage = pathname === '/dashboard/quotes';
 
-      {/* seperator */}
-      <span className="h-10 w-px rounded-full bg-neutral-300/60" />
-      {/* profile */}
-      {!!user && <AccountMenu user={user} logOut={logOut} />}
+  return (
+    <header
+      className={cn(
+        'flex shrink-0 items-center gap-3 sm:gap-5 bg-white/80 backdrop-blur-xl border-b border-neutral-300 border-border/50',
+        isQuotesPage
+          ? 'h-13 sm:h-16 md:h-20 px-3 sm:px-6'
+          : 'h-13 sm:h-15 py-2 sm:py-5 px-3 sm:px-5',
+      )}
+    >
+      {isQuotesPage && (
+        <div className="min-w-fit">
+          <h1 className="text-sm sm:text-[0.9375rem] font-semibold text-[#20242A]">
+            Quotes
+          </h1>
+          <p className="hidden md:block mt-0.5 text-[0.6875rem] text-[#68717D]">
+            View, manage and track all your quotes
+          </p>
+        </div>
+      )}
+
+      <div className="ml-auto flex items-center gap-2.5 sm:gap-5">
+        {/* Dashboard Global search */}
+        <DashboardGlobalSearch
+          className="w-80 hidden md:flex"
+          placeholder={
+            isQuotesPage ? 'Search quotes, jobs, customers...' : undefined
+          }
+        />
+        {/* Points */}
+        <span className="flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 w-fit h-8 sm:h-10 bg-white ring-1 ring-neutral-200 rounded-md">
+          <span className="w-fit h-full flex items-center justify-center">
+            <Icon
+              name="Bolt"
+              className="text-[#FF814C] size-4 sm:size-5"
+              strokeWidth={4}
+            />
+          </span>
+          <span className="w-full h-full flex items-center justify-center text-[0.6875rem] sm:text-xs font-bold">
+            {isQuotesPage ? '568 pts' : '900 pts'}
+          </span>
+        </span>
+
+        {/* separator */}
+        <span className="h-8 sm:h-10 w-px rounded-full bg-neutral-300/60" />
+        {/* profile */}
+        {!!user && <AccountMenu user={user} logOut={logOut} />}
+      </div>
     </header>
   );
 }
