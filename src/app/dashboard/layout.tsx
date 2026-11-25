@@ -11,13 +11,13 @@ export default function DashboardLayout({
   const { sidebar } = DASHBOARD_DATA;
 
   return (
-    <section className="relative flex max-h-screen max-w-screen overflow-hidden">
-      <aside className="min-w-fit">
+    <section className="relative flex flex-col md:flex-row h-screen w-screen overflow-hidden">
+      <aside className="min-w-fit shrink-0">
         {sidebar?.active && <SideBar {...sidebar} />}
       </aside>
-      <main className="w-full h-full z-0">
+      <main className="min-w-0 h-full flex-1 z-0 flex flex-col pt-[72px] md:pt-0">
         <ChatNavbar />
-        <div className="h-full w-full">{children}</div>
+        <div className="min-h-0 flex-1 w-full overflow-hidden">{children}</div>
       </main>
     </section>
   );

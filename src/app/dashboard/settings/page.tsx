@@ -146,54 +146,75 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex w-full flex-col bg-[#fafafa] lg:h-[calc(100vh-4rem)] lg:flex-row lg:overflow-hidden">
-      {/* Settings sub-nav (fixed width, own scroll) */}
-      <aside className="w-full shrink-0 border-b border-[#eeeeee] bg-white px-4 py-6 lg:h-full lg:w-[260px] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+    <div className="flex h-full w-full flex-col bg-[#fafafa] overflow-y-auto xl:overflow-hidden xl:flex-row">
+      {/* Settings sub-nav: sticky horizontal scroll on mobile & tablet (< xl), vertical sticky sidebar on desktop (xl) */}
+      <aside className="sticky top-0 z-20 w-full shrink-0 border-b border-[#eeeeee] bg-white/95 backdrop-blur-xs px-3 py-3 sm:px-4 sm:py-4 xl:static xl:h-full xl:w-[260px] xl:overflow-y-auto xl:border-b-0 xl:border-r xl:p-6">
         <SettingsMenu activeTab={activeTab} onChange={goTo} />
       </aside>
 
-      {/* Main column (flexible width, own scroll) */}
-      <main className="min-w-0 flex-1 lg:h-full lg:overflow-y-auto">
-        <div className="mx-auto w-full max-w-4xl space-y-4 p-6 lg:p-8">
-          <section id="section-business-profile" className="scroll-mt-6">
-            <h2 className="mb-4 text-lg font-semibold text-[#0a1628]">
-              Business Profile
-            </h2>
-            <BusinessProfile
-              businessName={businessName}
-              onNameChange={setBusinessName}
-            />
-          </section>
+      {/* Content wrapper: 2-column or stacked on tablet, 3-column on desktop */}
+      <div className="flex flex-col lg:flex-row flex-1 min-w-0 xl:h-full">
+        {/* Main column */}
+        <main className="min-w-0 flex-1 xl:h-full xl:overflow-y-auto">
+          <div className="mx-auto w-full max-w-4xl space-y-4 p-4 sm:p-6 lg:p-8">
+            <section
+              id="section-business-profile"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <h2 className="mb-4 text-lg font-semibold text-[#0a1628]">
+                Business Profile
+              </h2>
+              <BusinessProfile
+                businessName={businessName}
+                onNameChange={setBusinessName}
+              />
+            </section>
 
-          <section id="section-pricing-rates" className="scroll-mt-6">
-            <PricingRates />
-          </section>
+            <section
+              id="section-pricing-rates"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <PricingRates />
+            </section>
 
-          <section id="section-ai-preferences" className="scroll-mt-6">
-            <AIPreferences />
-          </section>
+            <section
+              id="section-ai-preferences"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <AIPreferences />
+            </section>
 
-          <section id="section-templates-defaults" className="scroll-mt-6">
-            <TemplatesDefaults />
-          </section>
+            <section
+              id="section-templates-defaults"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <TemplatesDefaults />
+            </section>
 
-          <section id="section-notifications" className="scroll-mt-6">
-            <Notifications />
-          </section>
+            <section
+              id="section-notifications"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <Notifications />
+            </section>
 
-          <section id="section-integrations" className="scroll-mt-6">
-            <Integrations />
-          </section>
-        </div>
-      </main>
+            <section
+              id="section-integrations"
+              className="scroll-mt-24 sm:scroll-mt-28 xl:scroll-mt-6"
+            >
+              <Integrations />
+            </section>
+          </div>
+        </main>
 
-      {/* Right panel (fixed width, own scroll) */}
-      <aside className="w-full shrink-0 space-y-4 border-t border-[#eeeeee] bg-white p-6 lg:h-full lg:w-[440px] lg:overflow-y-auto lg:border-l lg:border-t-0">
-        <LivePreviewHeader />
-        <SampleQuotePreview businessName={businessName} />
-        <SystemStatusCard />
-        <DangerZoneCard />
-      </aside>
+        {/* Right panel: stacks below on mobile/tablet portrait, side-by-side on tablet landscape (lg), right column on desktop (xl) */}
+        <aside className="w-full lg:w-[380px] xl:w-[440px] shrink-0 space-y-4 border-t lg:border-t-0 lg:border-l border-[#eeeeee] bg-white p-4 sm:p-6 xl:h-full xl:overflow-y-auto">
+          <LivePreviewHeader />
+          <SampleQuotePreview businessName={businessName} />
+          <SystemStatusCard />
+          <DangerZoneCard />
+        </aside>
+      </div>
     </div>
   );
 }
@@ -208,9 +229,16 @@ function SettingsMenu({
   onChange: (key: string) => void;
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="px-3 text-lg font-semibold text-[#0a1628]">Settings</h2>
-      <nav className="space-y-1">
+    <div className="space-y-2.5 xl:space-y-4">
+      <div className="flex items-center justify-between px-1 xl:px-3">
+        <h2 className="text-base sm:text-lg font-semibold text-[#0a1628]">
+          Settings
+        </h2>
+        <span className="text-[11px] text-muted-foreground xl:hidden">
+          Swipe tabs to jump
+        </span>
+      </div>
+      <nav className="flex xl:flex-col gap-1.5 xl:gap-0 xl:space-y-1 overflow-x-auto pb-1 xl:pb-0 scrollbar-none -mx-1 px-1 xl:mx-0 xl:px-0">
         {NAV_ITEMS.map((item) => {
           const active = activeTab === item.key;
           return (
@@ -218,16 +246,16 @@ function SettingsMenu({
               key={item.key}
               disabled={item.disabled}
               onClick={() => onChange(item.key)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+              className={`flex items-center gap-2 xl:gap-3 rounded-lg px-3 py-2 text-xs sm:text-sm whitespace-nowrap shrink-0 xl:w-full transition-colors ${
                 active
                   ? 'bg-[#FFF0EA] font-semibold text-[#FF4D00]'
-                  : 'text-[#0a1628]/80 hover:bg-[#FFF0EA]/60 hover:text-[#FF4D00]'
-              } ${item.disabled ? 'cursor-not-allowed opacity-70' : ''}`}
+                  : 'bg-neutral-100/70 xl:bg-transparent text-[#0a1628]/80 hover:bg-[#FFF0EA]/60 hover:text-[#FF4D00]'
+              } ${item.disabled ? 'cursor-not-allowed opacity-60' : ''}`}
             >
-              <item.icon className="h-5 w-5 shrink-0" />
+              <item.icon className="h-4 w-4 xl:h-5 xl:w-5 shrink-0" />
               <span>{item.label}</span>
               {item.comingSoon && (
-                <span className="text-xs font-normal text-muted-foreground">
+                <span className="text-[10px] sm:text-xs font-normal text-muted-foreground">
                   (Coming soon)
                 </span>
               )}
