@@ -17,7 +17,7 @@ export default function DashboardLayout({
       </aside>
       <main className="min-w-0 h-full flex-1 z-0 flex flex-col pt-[72px] md:pt-0">
         <ChatNavbar />
-        <div className="min-h-0 flex-1 w-full">{children}</div>
+        <div className="min-h-0 flex-1 w-full overflow-hidden">{children}</div>
       </main>
     </section>
   );
