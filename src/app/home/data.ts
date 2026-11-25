@@ -84,7 +84,7 @@ export const DATA: DataType = {
           variant: 'secondary',
           text: 'Get started now',
           link: {
-            href: '/login',
+            href: '/?auth=signup',
             target: '_self',
             text: null,
             active: true,
@@ -101,7 +101,7 @@ export const DATA: DataType = {
           variant: 'outline',
           text: 'View Demo',
           link: {
-            href: '/dashboard/chat',
+            href: '#video-demo',
             target: '_self',
             text: null,
             active: true,
@@ -369,7 +369,7 @@ export const DATA: DataType = {
         },
       ],
       video: {
-        src: 'https://res.cloudinary.com/dyohffsp6/video/upload/v1780100162/QuoteMateyDEMO2_yewhtk.mp4',
+        src: 'https://res.cloudinary.com/dyohffsp6/video/upload/v1794002223/Final_Comp_4K__4_b6qooi.mp4',
         active: true,
       },
     },

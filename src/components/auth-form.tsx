@@ -100,7 +100,8 @@ export function AuthFormSection({
   footer,
   variant = 'primary',
   className,
-}: AUTHForm & { className?: string }) {
+  onClose,
+}: AUTHForm & { className?: string; onClose?: () => void }) {
   const { error, user, signIn, signUp, resetPassword } = useAuth();
   const router = useRouter();
 
@@ -147,7 +148,7 @@ export function AuthFormSection({
       )}
     >
       <Button
-        onClick={() => router.back()}
+        onClick={() => (onClose ? onClose() : router.back())}
         className={cn(
           'absolute top-3 right-3 flex w-fit h-fit items-center justify-center rounded-[0.56rem] shadow-sm text-neutral-900 cursor-pointer',
           top?.text

@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/all';
-import { RefObject, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 import { ComparisonCard } from '@/components/comparison';
 import { Title } from '@/components/section-header';
@@ -35,7 +35,36 @@ const useSectionAnimation = (
 export function ProductSection({ title, comparison }: PRODUCT) {
   const [active, setActive] = useState('0');
   const sectionRef = useRef<HTMLDivElement>(null);
-  useSectionAnimation(sectionRef, setActive);
+  const suppressedRef = useRef(false);
+
+  // Gate ScrollTrigger callbacks during View Demo smooth scroll so the heavy
+  // ComparisonCard animation runs once after scrolling settles. Normal scroll
+  // never sets the flag, so its animation is untouched.
+  const handleActive = (value: string) => {
+    if (suppressedRef.current) return;
+    setActive(value);
+  };
+  useSectionAnimation(sectionRef, handleActive);
+
+  useEffect(() => {
+    const onStart = () => {
+      suppressedRef.current = true;
+    };
+    const onEnd = () => {
+      if (!suppressedRef.current) return;
+      suppressedRef.current = false;
+      const rect = sectionRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      // Mirror ScrollTrigger start '40% top'
+      setActive(rect.top < window.innerHeight * 0.4 ? '1' : '0');
+    };
+    window.addEventListener('qm:smooth-scroll-start', onStart);
+    window.addEventListener('qm:smooth-scroll-end', onEnd);
+    return () => {
+      window.removeEventListener('qm:smooth-scroll-start', onStart);
+      window.removeEventListener('qm:smooth-scroll-end', onEnd);
+    };
+  }, []);
 
   return (
     <section
