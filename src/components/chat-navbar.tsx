@@ -163,46 +163,42 @@ export function DashboardGlobalSearch({
                       )}
                     >
                       <div className="flex items-center gap-2 min-w-8/10">
-                        <div
-                          className={cn(
-                            'p-2 rounded-md flex items-center justify-center w-fit',
-                            active.id === item.id ? 'bg-white' : 'bg-[#F5F6F8]',
-                          )}
-                        >
-                          {item.type === 'quote' && (
-                            <Icon
-                              name="FileText"
+                        {(() => {
+                          const iconColor =
+                            active.id === item.id
+                              ? 'text-[#FF5000]'
+                              : 'text-[#747B85]';
+
+                          return (
+                            <div
                               className={cn(
-                                'size-4',
+                                'p-2 rounded-md flex items-center justify-center w-fit',
                                 active.id === item.id
-                                  ? 'text-[#FF5000]'
-                                  : 'text-[#747B85]',
+                                  ? 'bg-white'
+                                  : 'bg-[#F5F6F8]',
                               )}
-                            />
-                          )}
-                          {item.type === 'job' && (
-                            <Icon
-                              name="Wrench"
-                              className={cn(
-                                'size-4',
-                                active.id === item.id
-                                  ? 'text-[#FF5000]'
-                                  : 'text-[#747B85]',
+                            >
+                              {item.type === 'quote' && (
+                                <Icon
+                                  name="FileText"
+                                  className={cn('size-4', iconColor)}
+                                />
                               )}
-                            />
-                          )}
-                          {item.type === 'quote_template' && (
-                            <Icon
-                              name="LayoutPanelTop"
-                              className={cn(
-                                'size-4',
-                                active.id === item.id
-                                  ? 'text-[#FF5000]'
-                                  : 'text-[#747B85]',
+                              {item.type === 'job' && (
+                                <Icon
+                                  name="Wrench"
+                                  className={cn('size-4', iconColor)}
+                                />
                               )}
-                            />
-                          )}
-                        </div>
+                              {item.type === 'quote_template' && (
+                                <Icon
+                                  name="LayoutPanelTop"
+                                  className={cn('size-4', iconColor)}
+                                />
+                              )}
+                            </div>
+                          );
+                        })()}
                         <div className="flex flex-col items-start justify-center gap-1 w-fit">
                           <p className="text-xs text-neutral-900 text-nowrap">
                             {item.title}
@@ -332,12 +328,14 @@ export function ChatNavbar() {
   const { user, logOut } = useAuth();
   const pathname = usePathname();
   const isQuotesPage = pathname === '/dashboard/quotes';
+  const isPlanPage = pathname === '/dashboard/plan';
+  const hasPageHeader = isQuotesPage || isPlanPage;
 
   return (
     <header
       className={cn(
         'flex shrink-0 items-center gap-3 sm:gap-5 bg-white/80 backdrop-blur-xl border-b border-neutral-300 border-border/50',
-        isQuotesPage
+        hasPageHeader
           ? 'h-13 sm:h-16 md:h-20 px-3 sm:px-6'
           : 'h-13 sm:h-15 py-2 sm:py-5 px-3 sm:px-5',
       )}
@@ -353,12 +351,27 @@ export function ChatNavbar() {
         </div>
       )}
 
+      {isPlanPage && (
+        <div className="min-w-fit">
+          <h1 className="text-sm sm:text-[0.9375rem] font-semibold text-[#20242A]">
+            Plan & Billing
+          </h1>
+          <p className="hidden md:block mt-0.5 text-[0.6875rem] text-[#68717D]">
+            Manage your subscription, usage and billing details
+          </p>
+        </div>
+      )}
+
       <div className="ml-auto flex items-center gap-2.5 sm:gap-5">
         {/* Dashboard Global search */}
         <DashboardGlobalSearch
           className="w-80 hidden md:flex"
           placeholder={
-            isQuotesPage ? 'Search quotes, jobs, customers...' : undefined
+            isQuotesPage
+              ? 'Search quotes, jobs, customers...'
+              : isPlanPage
+                ? 'Search quotes, jobs, templates...'
+                : undefined
           }
         />
         {/* Points */}
@@ -371,7 +384,7 @@ export function ChatNavbar() {
             />
           </span>
           <span className="w-full h-full flex items-center justify-center text-[0.6875rem] sm:text-xs font-bold">
-            {isQuotesPage ? '568 pts' : '900 pts'}
+            {isQuotesPage || isPlanPage ? '568 pts' : '900 pts'}
           </span>
         </span>
 
