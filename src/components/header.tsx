@@ -95,7 +95,7 @@ export function Header() {
                               button.hidden &&
                               button.hidden.auth === isAuthenticated
                                 ? 'none'
-                                : 'flex',
+                                : undefined,
                           }}
                           onClick={() =>
                             button.link && button.link.active

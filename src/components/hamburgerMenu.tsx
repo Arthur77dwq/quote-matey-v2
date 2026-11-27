@@ -12,8 +12,10 @@ export function HamBurgerMenu({
   return (
     <div className="lg:hidden h-full aspect-square rounded-full border-none bg-neutral-900">
       <Button
+        type="button"
         onClick={onClick}
-        className="p-1.5 w-full h-full flex flex-col justify-center items-between gap-2"
+        aria-label="Toggle navigation menu"
+        className="p-1.5 w-full h-full flex flex-col justify-center items-center gap-2 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white transition-colors cursor-pointer border-0 shadow-none"
       >
         <span
           className={twMerge(

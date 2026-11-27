@@ -79,7 +79,7 @@ function PrimaryButton({
     <Comp
       {...props}
       className={cn(
-        'p-2.5 pl-6 relative overflow-clip cursor-pointer flex items-center justify-between gap-1.25 w-fit h-full rounded-full text-white',
+        'p-2 sm:p-2.5 pl-4 sm:pl-6 text-xs sm:text-sm relative overflow-clip cursor-pointer flex items-center justify-between gap-1.25 w-fit h-full rounded-full text-white',
         className,
       )}
       onMouseEnter={() => animation && rollMove.current?.play()}
@@ -121,8 +121,9 @@ function OutlineButton({
   return (
     <Comp
       {...props}
+      variant="outline"
       className={cn(
-        'flex bg-white border border-[#E5E7EB] w-23 rounded-2xl cursor-pointer',
+        'flex items-center justify-center bg-white border border-[#E5E7EB] text-neutral-900 hover:text-neutral-900 hover:bg-neutral-50 w-20 sm:w-23 h-9 rounded-2xl font-semibold text-xs sm:text-sm cursor-pointer transition-colors',
         className,
       )}
     >
